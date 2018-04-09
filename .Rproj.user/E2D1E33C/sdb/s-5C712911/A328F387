@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "###Testing script of mineMS2 funtionnality\n\n\nlibrary(MSnbase)\n\n\nPATH_TEST <- \"C:/Users/AD244905/Documents/Donnes_mass_spec/Donnees_toulouse/donnees_toxalim/mgf_soft/HR_Champi_A_ESI_neg_fichier_1_I14_MZ523_260_RT25_7.mgf\"\nsp <- MSnbase::readMgfData(PATH_TEST)\n\n\nstr(sp)\ntemp_spec <- sp[[\"X1\"]]\nmz(temp_spec)\nintensity(temp_spec)\n",
+    "created" : 1523265202806.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2597309271",
+    "id" : "A328F387",
+    "lastKnownWriteTime" : 1523298273,
+    "last_content_update" : 1523298273211,
+    "path" : "~/dev/helpers/test_msn_base_mineMS2.R",
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\nPATH_PACKAGE <- \"C:/Users/AD244905/Documents/dev/mineMS2\"\n\n\n###Removing the package if existing.\ndetach(\"package:mineMS2\",unload=TRUE)\ndetach(\"package:roxygen2\",unload=TRUE)\n# Removing the current version of the package\nremove.packages(\"mineMS2\")\n\n###Rebuilding the package\nlibrary(devtools)\n\ndocument(PATH_PACKAGE)\n\n###The vignette is not rebuilt\nname_package <- build(pkg = PATH_PACKAGE, path = NULL, binary = FALSE, vignettes = FALSE,\n\t\t\t\t\t  manual = TRUE, args = NULL, quiet = FALSE)\n\n\n###Installing the built package\ninstall.packages(name_package,repo=NULL)\n#install.packages(PATH_PACKAGE,repos=NULL,type=\"source\")\nlibrary(mineMS2)\nlibrary(xcms)\n",
+    "created" : 1523298078406.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1116448186",
+    "id" : "4F754983",
+    "lastKnownWriteTime" : 1523298238,
+    "last_content_update" : 1523298238646,
+    "path" : "~/dev/helpers/installing_testing_mineMS2.R",
+    "project_path" : null,
+    "properties" : {
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
