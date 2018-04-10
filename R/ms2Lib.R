@@ -79,7 +79,7 @@ parseMS2file_line <- function(x){
 
 #' ms2Lib constructor
 #'
-#' Populate an MS-MS spectra with the correct dataset using the population.
+#' Create a ms2Lib object from files in suppoerted input formats.
 #'
 #' @export
 #' @param x May be one of the following \itemize{
