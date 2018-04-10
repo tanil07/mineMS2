@@ -4,12 +4,15 @@ Title: Mining of MS-MS spectra by frequent subgraph mining method.
 Version: 0.1.0
 Author: Alexis Delabriere
 Maintainer: Alexis Delabriere <alexis.delabriere@hotmail.fr>
+VignetteBuilder: knitr
 Description: Mine MS-MS spectra using a frequent usbgraph mining approach. 
 Depends:
     R (>= 3.3.0),
 	BH
+Imports: Rcpp (>= 0.12.13),
+    MSnbase
+LinkingTo: Rcpp,BH
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Imports: Rcpp (>= 0.12.13)
-LinkingTo: Rcpp,BH
+RoxygenNote: 6.0.1
