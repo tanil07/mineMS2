@@ -6,7 +6,10 @@
 #'
 #' @docType package
 #' @importFrom MSnbase readMgfData precursorMz mz intensity
+#' @importFrom stringr str_detect str_split fixed
+#' @importFrom Matrix Matrix
 #' @importFrom igraph graph.empty set_vertex_attr add_edges adjacent_vertices V E get.edge.ids edge_attr
+#' edge_attr<-
 #' @import Rcpp
 #' @name mineMS2-package
 #' @useDynLib mineMS2

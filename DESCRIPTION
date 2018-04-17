@@ -11,7 +11,9 @@ Depends:
 	BH
 Imports: Rcpp (>= 0.12.13),
     MSnbase,
-	igraph
+	igraph,
+	stringr,
+	Matrix
 LinkingTo: Rcpp,BH
 License: What license is it under?
 Encoding: UTF-8

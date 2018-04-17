@@ -24,6 +24,8 @@
 peaks with a masses lower than the lower term will be ignored while peak with a mass higher than the
 higher term won't have formula check.}
 
+\item{maxFrags}{The maximum number of fragment allower on the spectra.}
+
 \item{maxOverlap}{The degree of overlap allowed between bins. Bins which overlap more are fused.}
 
 \item{strictMatching}{Shall the formula matching be strict, or approximated.}
@@ -40,8 +42,6 @@ If it is NULL, the default list is C:limMzFormula[2]%/%12, H:50, N:6 ,O:6.}
 \item{mzDigits}{The number of decimals to write as an information in the graphs.}
 
 \item{penalizedLosses}{A chracter vector, the losses which will be penalized. If NULL the table penalizedLossDefault() is used.}
-
-\item{maxFrag}{The maximum number of fragment allower on the spectra.}
 }
 \value{
 An ms2Lib object with filled fileds and constructed dags.

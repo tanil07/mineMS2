@@ -50,6 +50,12 @@ m2l
 
 #Building the graphs
 The graph are built by discrtiezing the mass losses.
+```{r edge_discrtization}
+
+m2l <- discretizeMassLosses(m2l,8,0.008,2/length(m2l),precPpm=20,precDmz=0.03,maxFrags=15)
+
+```
+
 
 # Session info
 

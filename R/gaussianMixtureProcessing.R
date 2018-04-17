@@ -13,10 +13,9 @@ overlap_n1_n2<- function(mu1,sig1,mu2,sig2,fac_sig=2){
 
 	bmin <- mu2-fac_sig*sqrt(sig2)
 	bmax <- mu1+fac_sig*sqrt(sig1)
-		##We check that any of the masses is superior to this hsit.
 
+	##We check that any of the masses is superior to this hsit.
 	if(bmax < bmin){
-		# cat("res",0,"\n")
 		return(0)
 	}
 
@@ -24,10 +23,6 @@ overlap_n1_n2<- function(mu1,sig1,mu2,sig2,fac_sig=2){
 	area2 <- pnorm(bmax,mu2,sqrt(sig2))-pnorm(bmin,mu2,sqrt(sig2))
 	mval <- max(area1,area2)
 	return(max(area1,area2))
-
-	# npar <- dnorm_product(mu1,sig1,mu2,sig2)
-	# area <- (pnorm(bmax,npar[1],sqrt(npar[2]))-pnorm(bmin,npar[1],sqrt(npar[2])))*npar[3]
-	# return((pnorm(bmax,npar[1],sqrt(npar[2]))-pnorm(bmin,npar[1],sqrt(npar[2])))*npar[3])
 }
 
 mergeGaussian <- function(mu,sig,fac_sig=2){
@@ -81,7 +76,6 @@ gaussianMerging<- function(mu,sig,alpha=0.01,fac_sig=3){
 			res$fused[nres]<-FALSE
 		}
 	}
-	cat("Passed from",length(mu),"to",nres,"points.\n")
 	res$mu <- res$mu[1:nres]
 	res$sig <- res$sig[1:nres]
 	res$fused<-res$fused[1:nres]

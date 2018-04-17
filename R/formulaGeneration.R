@@ -1,5 +1,85 @@
 
 
+
+
+#check existence of a molecular graph.
+checkGraph <- function(fo,t_atoms=NULL,singleComponent=TRUE){
+	if(is.null(t_atoms)) t_atoms <- tabAtoms()
+	ref <- names(fo)
+	pRef <- NULL
+	if(is.null(ref)&length(fo)==nrow(t_atoms)){
+		ref <- t_atoms$name
+		pRef <- 1:length(ref)
+
+	}else{
+		pok <- ref %in% t_atoms$name
+		if(any(!pok)){
+			stop("invalid atoms furnished :",paste(ref[!pok],collapse = ",",sep=" "))
+		}
+		pRef <- match(ref[pok],t_atoms$name)
+
+	}
+	beta <- as.numeric(fo)
+	vals <- t_atoms$valence[pRef]
+
+	posbeta <- beta>0
+
+	beta_vals <- beta*vals
+
+	##conds_1
+	sbv <- sum(beta_vals)
+	if(sbv%%2==1) return(FALSE)
+
+	##conds_2
+	if(((sbv - 2*max(vals[posbeta]))<0)) return(FALSE)
+
+	##conds_3
+	if(singleComponent && (sbv-2*sum(beta)+2)<0) return(FALSE)
+	return(TRUE)
+}
+
+
+###SUsed for golen rules checking.
+checkSevenGoldenRules <- function(tAtoms,solution,tol=c("low","high"),rules=rep(TRUE,7)){
+	tol <- match.arg(tol)
+	###rules 1 naturally present in the algorithm.
+
+
+	if(rules[2]){
+		vval <- sum(tAtoms$valence*solution)
+		n_atoms <- sum(solution)
+		#Rule 2
+		#.1 checking that the total valence is even.
+		if(vval%%2==1)
+			return(FALSE)
+
+		#Checking the maximum valence.
+		if(vval<2*max(tAtoms$valence[solution!=0])){
+			return(FALSE)
+		}
+
+		#.2 checking the ratio of n atoms on valence.
+		if(vval<(2*(n_atoms-1)))
+			return(FALSE)
+	}
+
+	if(rules[4]){
+		pH <- which(tAtoms$name=="H")
+		pC <- which(tAtoms$name=="C")
+		if(length(pH)==0|length(pC)==0){
+			stop("H or C not found, impossible to use rule 4.")
+		}
+		bsup <- ifelse(tol=="low",2,3)
+		bmin <- ifelse(tol=="low",0.5,0.2)
+		if(bsup*solution[pH]>solution[pC]&
+		   bmin*solution[pH]<bmin*solution[pC]){
+			return(FALSE)
+		}
+	}
+	return(TRUE)
+}
+
+
 #' findFormula function
 #'
 #'Fast formula generator using the algoirthm descirbed by Bocker
@@ -121,6 +201,14 @@ formulaToString <- function(vformula,vnames = NULL){
 	vnums <- ifelse(vformula>1,vformula,"")
 	vnames <- ifelse(as.character(vformula)=="0","",vnames)
 	paste(paste(vnames,vnums,sep=""),collapse="")
+}
+
+stringToFormula <- function (fstring, vnames = character(0))
+{
+	res <- formulaFromString(as.character(fstring),as.character(vnames))
+	vres <- res[[2]]
+	names(vres) <- res[[1]]
+	vres
 }
 
 lossesFormulaGeneration <- function(mzrange,atoms=list("C"=15,"H"=50,"O"=20,"N"=6,"P"=2,"S"=1,"Cl"=1),catoms = 1,maxh=1){

@@ -173,7 +173,6 @@ List formulaFromString(std::string formula,std::vector<std::string> names_atoms)
 
 // [[Rcpp::export]]
 NumericVector disjointBins(NumericVector points, NumericVector lower_lim, NumericVector upper_lim, NumericVector mean_bin) {
-	//Rprintf("In");
 	int N = points.size();
 	NumericVector bins(N);
 	for(int j=0;j<N;j++) bins[j]=0;

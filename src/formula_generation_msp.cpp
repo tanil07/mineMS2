@@ -225,10 +225,8 @@ List formulaExtension(NumericVector masses,NumericVector mzlim, IntegerMatrix fo
 	int crow = nf;
 
 	//index of th newly found molecules
-	Rprintf("Iteration : ");
 	int nitr = 0;
 	do{
-		Rprintf("%d ",nitr);
 		if(nitr==100){
 			List bug;
 			return bug;

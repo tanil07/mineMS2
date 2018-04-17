@@ -123,7 +123,7 @@ penalizedLossesDefault <- function() {
 #' @param limMzFormula An interval giving the range in which the formula will be calculated.
 #' peaks with a masses lower than the lower term will be ignored while peak with a mass higher than the
 #' higher term won't have formula check.
-#' @param maxFrag The maximum number of fragment allower on the spectra.
+#' @param maxFrags The maximum number of fragment allower on the spectra.
 #' @param maxOverlap The degree of overlap allowed between bins. Bins which overlap more are fused.
 #' @param strictMatching Shall the formula matching be strict, or approximated.
 #' @param precPpm The ppm tolerance used ot match the precursor mz to the fragments.
@@ -159,9 +159,9 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	message("Discretization of the mass losses...")
 
 	###Paameters checking
-	if(maxFrag>20){
+	if(maxFrags>20){
 		stop("mineMS2 is not made to process more than 20 fragments by spectra, please lower
-			 the maxFrag parameters")
+			 the maxFrags parameters")
 	}
 	if(maxOverlap>0.15){
 		warning("maxOverlap is superior to 0.15, this can lead to incoherent labels.")
@@ -198,7 +198,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	res_list <- discretizeMassesDifferences(mm2Spectra(m2l),
 								ppm = ppm, dmz = dmz,
 								freq = freq, mzdigits = mzDigits,
-								limFormula = limMzFormula, maxFrag = maxFrag,
+								limFormula = limMzFormula, maxFrag = maxFrags,
 								max_overlap = maxOverlap, strictMatching = strictMatching,
 								prec.ppm = precPpm,prec.dmz = precDmz, atoms = atoms,
 								floss = penalizedLosses, nfloss = majoredLosses, ...)
@@ -477,17 +477,6 @@ discretizeMassesDifferences <- function(list_spec,
 	tol <- diff(limFormula)/2
 	l_atoms <- atoms
 
-	if(is.null(floss)){
-		data("freq_loss")
-		floss <- sapply(freq_loss[,2],stringToFormula,vnames=names(l_atoms),simplify=FALSE)
-		floss <- sapply(floss,formulaToString)
-	}
-	if(is.null(nfloss)){
-		data("non_freq_loss")
-		nfloss <- sapply(non_freq_loss[,2],stringToFormula,vnames=names(l_atoms),simplify=FALSE)
-		nfloss <- sapply(nfloss,formulaToString)
-	}
-
 	ndiff <- length(list_masses)
 	thresh <- checkFracParam(freq, ndiff)
 	list_matrix <- lapply(list_masses,generateMatDiff)
@@ -508,7 +497,6 @@ discretizeMassesDifferences <- function(list_spec,
 		cbind(pvec, pcord[x, ])
 	}
 
-	cat("First discretization\n")
 	###We start by discretizing all the values
 	resdisc <-
 		discretizeSequenceByClasses(
@@ -532,7 +520,7 @@ discretizeMassesDifferences <- function(list_spec,
 
 	fac_sig <- 2
 	###Merging overlapping values.
-	message("Masses merging\n")
+	message("Masses merging")
 
 	merged_masses <- gaussianMerging(masses,sds^2,alpha=max_overlap,fac_sig = fac_sig)
 	high_mz_idx <- which(merged_masses$mu>limFormula[2])
@@ -540,7 +528,7 @@ discretizeMassesDifferences <- function(list_spec,
 
 
 	###Generation of all the neutral formula
-	message("Formula generation\n")
+	message("Formula generation")
 
 	###How ot handle heteroatoms, maximum nuimber of different heteroatoms.
 	allFormula <- lossesFormulaGeneration(limFormula,atoms=l_atoms,...)
@@ -560,8 +548,6 @@ discretizeMassesDifferences <- function(list_spec,
 
 	###Now we need to check the overlap between the interval.
 	##Function to parse the Cpp function.
-	cat("Interval checking\n")
-	# resinter <- Rcpp::sourceCpp('~/ms-ms/Cpp/IntervalMatching.cpp')
 	matched_inter <- checkInter(minm,maxm,merginf,mergmax)
 	vec_inter <- do.call("cbind",matched_inter)
 
@@ -584,19 +570,19 @@ discretizeMassesDifferences <- function(list_spec,
 	})
 	###Finding penalized and advantaged formula.
 	freq_f <- sapply(str_formula,function(x){
-		if(is.na(x)) return(FALSE)
+		if(is.na(x[1])) return(FALSE)
 		any(x %in% floss)
 	})
 
 	non_freq_f <- sapply(str_formula,function(x){
-		if(is.na(x)) return(FALSE)
+		if(is.na(x[1])) return(FALSE)
 		any(x %in% nfloss)
 	})
 
 
 	###Final strings
 	str_formula <- sapply(str_formula,function(x){
-		if(is.na(x)) return(NA_character_)
+		if((length(x)==1) && is.na(x)) return(NA_character_)
 		paste(x,collapse = "|")
 	})
 
@@ -782,7 +768,7 @@ fuseElem <- function(elems,dags,atoms=NULL){
 		nreduc <- sapply(storval[pmistake],length)-3
 	}
 
-	warning("There is ",length(vmul),"incompatibilities, this may be caused by a too high accuraccy in mass.",sum(nreduc),"labels will be removed.")
+	# warning("There is ",length(vmul)," incompatibilities, this may be caused by a too high accuraccy in mass. ",sum(nreduc)," labels will be removed.")
 
 	###We we fuse the dataset if necessary
 	to_rm <- numeric(0)
@@ -860,7 +846,7 @@ fuseElem <- function(elems,dags,atoms=NULL){
 	###Relabeling of the graph
 	for(igl in 1:length(dags)){
 		g <- dags[[igl]]
-		if(is.null(gl)||is.na(gl)){
+		if(is.null(g)||is.na(g)){
 			next
 		}
 		eg_lab <- edge_attr(g,"lab")
@@ -876,5 +862,5 @@ fuseElem <- function(elems,dags,atoms=NULL){
 		elems <- elems[-to_rm,]
 	}
 	elems$lab <- 1:nrow(elems)
-	return(list(elem=elems,dag=dags,change=anyChange))
+	return(list(elems=elems,dags=dags,change=anyChange))
 }
