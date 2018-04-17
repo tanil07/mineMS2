@@ -8,6 +8,11 @@ setMethod("mm2SpectraInfos","ms2Lib",function(m2l){
 	return(m2l@spectraInfo)
 })
 
+setMethod("mm2Dags","ms2Lib",function(m2l){
+	return(m2l@dags)
+})
+
+
 setMethod("mm2EdgesLabels","ms2Lib",function(m2l){
 	return(m2l@edges.labels)
 })
@@ -23,6 +28,11 @@ setMethod("mm2Spectra<-","ms2Lib",function(m2l,value){
 
 setMethod("mm2SpectraInfos<-","ms2Lib",function(m2l,value){
 	m2l@spectraInfo <- value
+	m2l
+})
+
+setMethod("mm2Dags<-","ms2Lib",function(m2l,value){
+	m2l@dags <- value
 	m2l
 })
 
@@ -82,17 +92,18 @@ parseMS2file_line <- function(x){
 #' Create a ms2Lib object from files in suppoerted input formats.
 #'
 #' @export
-#' @param x May be one of the following \itemize{
+#' @param x May be one of the following
+#' \itemize{
 #' \item A character vector giving the path to a drictory full of readable format.
 #' \item A list of spectrum2 object which will be integrated directly.
 #' \item A single .mgfspectrum regrouping multiple files.
 #' }
-#' @param supp_infos Supplementary information to be associated to the spectra.
+#' @param suppInfos Supplementary information to be associated to the spectra.
 #' It should be of the same size as the number of spectra. If there is a "file" column, this
 #' column is used to match the file.
 #' @examples
 #' print("examples to be put here")
-ms2Lib <- function(x, supp_infos = NULL){
+ms2Lib <- function(x, suppInfos = NULL){
 
 	m2l <- new("ms2Lib")
 
@@ -149,19 +160,19 @@ ms2Lib <- function(x, supp_infos = NULL){
 	}
 
 	##Adding the supplementary information if necessary.
-	if(!is.null(supp_infos)){
-		if(nrow(supp_infos)!= length(m2l@spectra)){
-			stop("The number of supp_infos rows (",nrow(supp_infos),
+	if(!is.null(suppInfos)){
+		if(nrow(suppInfos)!= length(m2l@spectra)){
+			stop("The number of suppInfos rows (",nrow(suppInfos),
 				 ") do not match the number of spectra (",
 				 length(m2l@spectra),")furnished")
 		}else{
-			if("file" %in% colnames(supp_infos)){
-				pm <- match(temp_df$file,supp_infos$file)
+			if("file" %in% colnames(suppInfos)){
+				pm <- match(temp_df$file,suppInfos$file)
 				if(any(is.na(pm))) stop('"file" column furnished, but there was an error matching it against files.')
 
-				temp_df <- cbind(temp_df,supp_infos[pm,])
+				temp_df <- cbind(temp_df,suppInfos[pm,])
 			}else{
-				temp_df <- cbind(temp_df,supp_infos)
+				temp_df <- cbind(temp_df,suppInfos)
 			}
 		}
 
@@ -178,6 +189,6 @@ setMethod("show","ms2Lib",function(object){
 })
 
 #' @export
-setMethod("length","ms2Lib",function(object){
-	return(length(mm2Spectra(object)))
+setMethod("length","ms2Lib",function(x){
+	return(length(mm2Spectra(x)))
 })

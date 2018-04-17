@@ -10,7 +10,8 @@ Depends:
     R (>= 3.3.0),
 	BH
 Imports: Rcpp (>= 0.12.13),
-    MSnbase
+    MSnbase,
+	igraph
 LinkingTo: Rcpp,BH
 License: What license is it under?
 Encoding: UTF-8

@@ -4,21 +4,22 @@
 \alias{ms2Lib}
 \title{ms2Lib constructor}
 \usage{
-ms2Lib(x, supp_infos = NULL)
+ms2Lib(x, suppInfos = NULL)
 }
 \arguments{
-\item{x}{May be one of the following \itemize{
+\item{x}{May be one of the following
+\itemize{
 \item A character vector giving the path to a drictory full of readable format.
 \item A list of spectrum2 object which will be integrated directly.
 \item A single .mgfspectrum regrouping multiple files.
 }}
 
-\item{supp_infos}{Supplementary information to be associated to the spectra.
+\item{suppInfos}{Supplementary information to be associated to the spectra.
 It should be of the same size as the number of spectra. If there is a "file" column, this
 column is used to match the file.}
 }
 \description{
-Populate an MS-MS spectra with the correct dataset using the population.
+Create a ms2Lib object from files in suppoerted input formats.
 }
 \examples{
 print("examples to be put here")

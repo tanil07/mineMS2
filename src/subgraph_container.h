@@ -54,6 +54,9 @@ class subgraph_container
         void removePattern_latt(std::string& key);
         void removePattern_latt(std::vector< std::string>& to_rm);
 
+        //Cleaning the lattice
+        void cleanLattice();
+
         //Take as input the key to the precursor,
         //The key to the succesors and perform the operation if necessary.
 

@@ -47,6 +47,10 @@ m2l
 
 ```
 
+
+#Building the graphs
+The graph are built by discrtiezing the mass losses.
+
 # Session info
 
 Here is the output of `sessionInfo()` on the system on which this document was

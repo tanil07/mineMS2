@@ -616,6 +616,34 @@ void removeNull(std::map<short,std::vector <frag_pattern> >& pmap){
 }
 
 
+void subgraph_container::cleanLattice(){
+	graphTraitl::vertex_iterator bv,ev;
+	boost::tie(bv,ev) = boost::vertices(lat);
+	for(; bv!=ev ; bv++){
+		graphTraitl::adjacency_iterator ba,ea;
+		boost::tie(ba,ea) = boost::adjacent_vertices(*bv,lat);
+		std::set<Vertexl> adj_nodes(ba,ea);
+		std::vector<Vertexl> to_rm;
+		for(;ba!=ea;ba++){
+			graphTraitl::adjacency_iterator baa,eaa;
+			boost::tie(baa,eaa) = boost::adjacent_vertices(*ba,lat);
+			for(;baa!=eaa;baa++){
+				auto ppos = adj_nodes.find(*baa);
+				if(ppos!=adj_nodes.end()){
+					adj_nodes.erase(ppos);
+					to_rm.push_back(*baa);
+				}
+			}
+		}
+
+		//Removing the edge
+		for(auto it = to_rm.begin();it!=to_rm.end();it++){
+			boost::remove_edge(*bv,*it,lat);
+		}
+	}
+}
+
+
 void subgraph_container::postProcessing(int num_graphs,std::ostream& of){
     //This part add the objects to the graph.
 
@@ -697,7 +725,7 @@ void subgraph_container::postProcessing(int num_graphs,std::ostream& of){
                     break;
                 }
                 auto & occs_succ = get(map_pat[*ba]).get_occs();
-                for(auto io = occs.begin(); io != occs.end();io++){
+                for(auto io = occs_succ.begin(); io != occs_succ.end();io++){
                     auto te = temp_set.find((*io).gid);
                     if(te!=temp_set.end()){
                         temp_set.erase(te);

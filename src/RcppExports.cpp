@@ -5,19 +5,109 @@
 
 using namespace Rcpp;
 
-// rcpp_hello
-List rcpp_hello();
-RcppExport SEXP _mineMS2_rcpp_hello() {
+// decomposeMass
+List decomposeMass(double mass, double tolerance, int b, std::vector<double> components);
+RcppExport SEXP _mineMS2_decomposeMass(SEXP massSEXP, SEXP toleranceSEXP, SEXP bSEXP, SEXP componentsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(rcpp_hello());
+    Rcpp::traits::input_parameter< double >::type mass(massSEXP);
+    Rcpp::traits::input_parameter< double >::type tolerance(toleranceSEXP);
+    Rcpp::traits::input_parameter< int >::type b(bSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type components(componentsSEXP);
+    rcpp_result_gen = Rcpp::wrap(decomposeMass(mass, tolerance, b, components));
+    return rcpp_result_gen;
+END_RCPP
+}
+// formulaExtension
+List formulaExtension(NumericVector masses, NumericVector mzlim, IntegerMatrix formula, LogicalVector hatoms, IntegerVector hhatom);
+RcppExport SEXP _mineMS2_formulaExtension(SEXP massesSEXP, SEXP mzlimSEXP, SEXP formulaSEXP, SEXP hatomsSEXP, SEXP hhatomSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type masses(massesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mzlim(mzlimSEXP);
+    Rcpp::traits::input_parameter< IntegerMatrix >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< LogicalVector >::type hatoms(hatomsSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type hhatom(hhatomSEXP);
+    rcpp_result_gen = Rcpp::wrap(formulaExtension(masses, mzlim, formula, hatoms, hhatom));
+    return rcpp_result_gen;
+END_RCPP
+}
+// FindEqualGreaterM
+IntegerVector FindEqualGreaterM(NumericVector inv, NumericVector values);
+RcppExport SEXP _mineMS2_FindEqualGreaterM(SEXP invSEXP, SEXP valuesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type inv(invSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type values(valuesSEXP);
+    rcpp_result_gen = Rcpp::wrap(FindEqualGreaterM(inv, values));
+    return rcpp_result_gen;
+END_RCPP
+}
+// findLimDensity
+IntegerVector findLimDensity(NumericVector seq, int istart, int state);
+RcppExport SEXP _mineMS2_findLimDensity(SEXP seqSEXP, SEXP istartSEXP, SEXP stateSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type seq(seqSEXP);
+    Rcpp::traits::input_parameter< int >::type istart(istartSEXP);
+    Rcpp::traits::input_parameter< int >::type state(stateSEXP);
+    rcpp_result_gen = Rcpp::wrap(findLimDensity(seq, istart, state));
+    return rcpp_result_gen;
+END_RCPP
+}
+// formulaFromString
+List formulaFromString(std::string formula, std::vector<std::string> names_atoms);
+RcppExport SEXP _mineMS2_formulaFromString(SEXP formulaSEXP, SEXP names_atomsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type formula(formulaSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type names_atoms(names_atomsSEXP);
+    rcpp_result_gen = Rcpp::wrap(formulaFromString(formula, names_atoms));
+    return rcpp_result_gen;
+END_RCPP
+}
+// disjointBins
+NumericVector disjointBins(NumericVector points, NumericVector lower_lim, NumericVector upper_lim, NumericVector mean_bin);
+RcppExport SEXP _mineMS2_disjointBins(SEXP pointsSEXP, SEXP lower_limSEXP, SEXP upper_limSEXP, SEXP mean_binSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type points(pointsSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type lower_lim(lower_limSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type upper_lim(upper_limSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type mean_bin(mean_binSEXP);
+    rcpp_result_gen = Rcpp::wrap(disjointBins(points, lower_lim, upper_lim, mean_bin));
+    return rcpp_result_gen;
+END_RCPP
+}
+// checkInter
+List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, NumericVector b_max);
+RcppExport SEXP _mineMS2_checkInter(SEXP a_minSEXP, SEXP a_maxSEXP, SEXP b_minSEXP, SEXP b_maxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type a_min(a_minSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type a_max(a_maxSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type b_min(b_minSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type b_max(b_maxSEXP);
+    rcpp_result_gen = Rcpp::wrap(checkInter(a_min, a_max, b_min, b_max));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_mineMS2_rcpp_hello", (DL_FUNC) &_mineMS2_rcpp_hello, 0},
+    {"_mineMS2_decomposeMass", (DL_FUNC) &_mineMS2_decomposeMass, 4},
+    {"_mineMS2_formulaExtension", (DL_FUNC) &_mineMS2_formulaExtension, 5},
+    {"_mineMS2_FindEqualGreaterM", (DL_FUNC) &_mineMS2_FindEqualGreaterM, 2},
+    {"_mineMS2_findLimDensity", (DL_FUNC) &_mineMS2_findLimDensity, 3},
+    {"_mineMS2_formulaFromString", (DL_FUNC) &_mineMS2_formulaFromString, 2},
+    {"_mineMS2_disjointBins", (DL_FUNC) &_mineMS2_disjointBins, 4},
+    {"_mineMS2_checkInter", (DL_FUNC) &_mineMS2_checkInter, 4},
     {NULL, NULL, 0}
 };
 
