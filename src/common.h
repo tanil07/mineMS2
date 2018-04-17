@@ -18,14 +18,14 @@
 //Properties of mass_graph
 struct node_info{
     //TODO change it to short value when graphml bug is fixed.
-    double lab;
+    short lab;
     double mz;
     double intensity;
 };
 
 struct edge_info{
     //TODO change it to short value when graphml bug is fixed.
-    double lab;
+    short lab;
 };
 
 //properties of k-tree

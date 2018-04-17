@@ -18,8 +18,17 @@ mass_dag_miner::~mass_dag_miner()
 }
 
 
+void mass_dag_miner::setSizeMin(int smin){
+	sizeMin = smin;
+}
+
+int mass_dag_miner::getSizeMin(){
+	return sizeMin;
+}
+
 mass_dag_miner::mass_dag_miner(std::vector<mass_graph>& vmasses, int k, bool prec_only, std::ostream& os) : kt(k) {
 
+	sizeMin = 2;
     num_graph = vmasses.size();
     os << "Reading the "<< num_graph <<" graphs." << std::endl;
     int counter = 0;
@@ -172,7 +181,9 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
             counter++;
             if(!frequent_children){
                 if(is_root){
-                    container.insert_closed_pattern(current_node,inserted,of);
+                	if(sizeMin<=1){
+                    	container.insert_closed_pattern(current_node,inserted,of);
+                	}
                     break;
                 }else{
 

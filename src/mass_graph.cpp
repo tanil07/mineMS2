@@ -105,6 +105,37 @@ mass_graph::mass_graph(int i)
 }
 
 
+mass_graph::mass_graph(Rcpp::DataFrame df_nodes,Rcpp::DataFrame df_edges){
+	graph g;
+	Rcpp::NumericVector mz = df_nodes["mz"];
+	Rcpp::NumericVector rel_int = df_nodes["rel_int"];
+	Rcpp::LogicalVector prec = df_nodes["prec"];
+
+	//Adding the nodes.
+	std::vector<Vertex> mapped_vec(mz.size());
+	for(int i=0;i<mz.size();i++){
+		Vertex nvert = boost::add_vertex(g);
+		g[nvert].intensity = rel_int[i];
+		g[nvert].mz = mz[i];
+		g[nvert].lab = i+1;
+		mapped_vec[i] = nvert;
+		if(prec[i]){
+			precursor = nvert;
+		}
+	}
+
+	//We start by adding the files as nodes.
+	Rcpp::IntegerVector from = df_edges["from"];
+	Rcpp::IntegerVector to = df_edges["to"];
+	Rcpp::IntegerVector elab = df_edges["lab"];
+	for(int i=0;i<mz.size();i++){
+		graphTraits::edge_descriptor nedge = boost::add_edge(mapped_vec[from[i]-1],
+                                                       mapped_vec[to[i]-1],g).first;
+		g[nedge].lab = elab[i];
+	}
+}
+
+
 
 mass_graph::~mass_graph()
 {

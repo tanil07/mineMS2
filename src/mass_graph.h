@@ -4,6 +4,8 @@
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
+#include <Rcpp.h>
+
 #include "common.h"
 
 
@@ -13,6 +15,7 @@ class mass_graph
     //Constructors
         //Test graphs
         mass_graph(int);
+    	mass_graph(Rcpp::DataFrame df_nodes,Rcpp::DataFrame df_edges);
 
 
         //TODO constructor form a R object.

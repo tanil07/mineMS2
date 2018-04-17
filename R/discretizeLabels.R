@@ -629,10 +629,10 @@ discretizeMassesDifferences <- function(list_spec,
 		###We keep only the matched edges.
 		pok <- which(!is.na(matched))
 
-		if(length(pok)==0){
-			toReturn[[i]]<-NA
-			next
-		}
+		# if(length(pok)==0){
+		# 	toReturn[[i]]<-NA
+		# 	next
+		# }
 		###We keep only the labeled edges.
 		list_matrix[[i]]$mz <- list_matrix[[i]]$mz[pok]
 		list_matrix[[i]]$idx <- list_matrix[[i]]$idx[pok,,drop=FALSE]
@@ -767,8 +767,6 @@ fuseElem <- function(elems,dags,atoms=NULL){
 		anyChange <- TRUE
 		nreduc <- sapply(storval[pmistake],length)-3
 	}
-
-	# warning("There is ",length(vmul)," incompatibilities, this may be caused by a too high accuraccy in mass. ",sum(nreduc)," labels will be removed.")
 
 	###We we fuse the dataset if necessary
 	to_rm <- numeric(0)

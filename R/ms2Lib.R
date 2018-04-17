@@ -192,3 +192,27 @@ setMethod("show","ms2Lib",function(object){
 setMethod("length","ms2Lib",function(x){
 	return(length(mm2Spectra(x)))
 })
+
+#' Mine recurrent subgraph from a set of graphs.
+#'
+#' Mine all the complete recurring subgraphs.
+#'
+#' @param m2l An m2Lib object to be processed.
+#' @param num The number of spectra in which the spectrum need to be sampled.
+#' @param kTree The depth of the tree used for graph mining.
+#' @param sizeMin The minimum size of the mined patterns.
+#' @param precursor Should only the occurences coming form the root be conserved.
+#'
+#' @return The filled ms2Lib object.
+#' @export
+#'
+#' @examples
+#' print("examples to be put here")
+setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, kTree = 3, sizeMin = NULL, precursor = FALSE){
+	###Get the data.frame correspoding to the sizes.
+	df_dags <-sapply(mm2Dags(m2l),fromIgraphToDf)
+	processing <- sapply(mm2Dags(m2l),function(x){
+		ecount(x)>1
+	})
+	mineClosedDags(df_dags,processing,num,kTree,sizeMin,precursor)
+})

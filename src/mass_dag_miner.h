@@ -20,6 +20,8 @@ class mass_dag_miner
         void mineFrequentCompleteDag(int freq,std::ostream& of);
         void mineFrequentCompleteDag(int freq,std::set<short> vals,std::ostream& of);
         subgraph_container& get_container();
+        void setSizeMin(int smin);
+        int getSizeMin();
 
     protected:
     private:
@@ -28,6 +30,7 @@ class mass_dag_miner
         triangles_list tl;
         int num_graph;
         std::stack<lattice_node> lattice_stack;
+        int sizeMin;
 };
 
 #endif // MASS_DAG_MINER_H
