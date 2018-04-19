@@ -335,6 +335,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 
 
 
+
 /*** R
 ###Test ifnd equalGreaterM
 FindEqualGreaterM(1:100,c(10.2,56.1,89))
