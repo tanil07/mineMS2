@@ -23,5 +23,11 @@ and informations added by the user eventually.}
 \item{\code{edges.labels}}{The discretized edges labels.}
 
 \item{\code{nodes.labels}}{The discretized nodes labels.}
+
+\item{\code{patterns}}{A list storing the fragPattern objects.}
+
+\item{\code{lattice}}{The graph reprsentation of the lattice of the patterns.}
+
+\item{\code{latticeIdxItems}}{The ids of the nodes which are items in MS2process.}
 }}
 

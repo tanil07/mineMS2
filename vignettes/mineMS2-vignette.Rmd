@@ -55,7 +55,7 @@ m2l <- discretizeMassLosses(m2l,8,0.008,2/length(m2l),precPpm=20,precDmz=0.03,ma
 ```
 #Mining the frequent subgraphs
 ```{r graph_mining}
-res <- mineClosedSubgraphs(m2l,num=2,kTree=3,sizeMin = 2, precursor = FALSE)
+res <- mineClosedSubgraphs(m2l,num=2,sizeMin = 2, precursor = FALSE)
 ```
 
 

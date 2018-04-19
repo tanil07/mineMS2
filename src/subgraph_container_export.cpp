@@ -111,7 +111,6 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 	resetIdxMap();
 
 	//Initialisation
-	Rcpp::Rcout <<"Mapping."<<std::endl;
 	std::map<Vertexl, int>  vmap = latticeMapping();
 
 	//We generate the ids, on for the datasets, one for the nodes.
@@ -133,10 +132,12 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 
 
 	//The id of the pattern or the position of the pattern.
-	Rcpp::IntegerVector id(vmap.size());
+	Rcpp::IntegerVector sid(vmap.size());
+	Rcpp::IntegerVector gid(vmap.size());
+
 
 	//Score can be directly initalised
-	Rcpp::IntegerVector score(0,vmap.size());
+	Rcpp::NumericVector score(vmap.size(),0.0);
 
 
 
@@ -149,7 +150,6 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 	std::map< Vertexl, patternIdx> map_l_pat = getMapping();
 	//A mapping which link node is on the original
 
-	Rcpp::Rcout <<"Beginning loop."<<std::endl;
 	for(auto it = vmap.begin();it != vmap.end();it++){
 		int pos = it-> second;
 		//The new value is generated
@@ -162,7 +162,7 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 			is_item[pos] = true;
 
 			//The motif ID
-			id[pos] = count_I;
+			sid[pos] = count_I;
 
 			//If it was extracted into the lattice.
 			// elat[pinf.first].noccs  = 1;
@@ -191,7 +191,7 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 			num_occs_unique[pos] = cp.numUniqueOccs().size();
 			num_losses[pos] = cp.sizeGraph()-1;
 			is_item[pos] = false;
-			id[pos] = count_M+1;
+			sid[pos] = count_M+1;
 
 
 			//Pattern information are obtained.
@@ -218,20 +218,23 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 			//boost::add_edge(nsource,ntarget,elat);
 			count_edge++;
 		}
+
+		gid[pos] = pos+1;
 		tot_count++;
 	}
 
-	Rcpp::Rcout <<"DataFrame creation."<<std::endl;
 
 	//The node_infos data.frame is created
 	Rcpp::DataFrame nodes_infos = Rcpp::DataFrame::create(
-		Rcpp::Named("id") = id,
+		Rcpp::Named("gid") = gid,
+		Rcpp::Named("sid") = sid,
 		Rcpp::Named("item") = is_item,
 		Rcpp::Named("num_occs") = num_occs,
 		Rcpp::Named("num_occs_unique") = num_occs_unique,
 		Rcpp::Named("num_losses") = num_losses,
 		Rcpp::Named("score") = score
 	);
+
 
 	//The edge infos data.frame is created
 	Rcpp::DataFrame edges_infos = Rcpp::DataFrame::create(

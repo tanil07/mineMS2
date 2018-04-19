@@ -1,5 +1,5 @@
 
-###Accessors and setters.
+###Accessors
 setMethod("mm2Spectra","ms2Lib",function(m2l){
 	return(m2l@spectra)
 })
@@ -21,6 +21,20 @@ setMethod("mm2NodesLabels","ms2Lib",function(m2l){
 	return(m2l@nodesLabels)
 })
 
+setMethod("mm2Patterns","ms2Lib",function(m2l){
+	return(m2l@patterns)
+})
+
+setMethod("mm2Lattice","ms2Lib",function(m2l){
+	return(m2l@lattice)
+})
+
+setMethod("mm2LatticeIdxItems","ms2Lib",function(m2l){
+	return(m2l@lattice)
+})
+
+
+###Setter
 setMethod("mm2Spectra<-","ms2Lib",function(m2l,value){
 	m2l@spectra <- value
 	m2l
@@ -43,6 +57,21 @@ setMethod("mm2EdgesLabels<-","ms2Lib",function(m2l,value){
 
 setMethod("mm2NodesLabels<-","ms2Lib",function(m2l,value){
 	m2l@nodesLabels <- value
+	m2l
+})
+
+setMethod("mm2Patterns<-","ms2Lib",function(m2l,value){
+	m2l@patterns<- value
+	m2l
+})
+
+setMethod("mm2Lattice<-","ms2Lib",function(m2l,value){
+	m2l@lattice<- value
+	m2l
+})
+
+setMethod("mm2LatticeIdxItems<-","ms2Lib",function(m2l,value){
+	m2l@latticeIdxItems<- value
 	m2l
 })
 
@@ -185,7 +214,8 @@ ms2Lib <- function(x, suppInfos = NULL){
 setMethod("show","ms2Lib",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
 	cat("It has",nrow(mm2EdgesLabels(object)),"edges labels.\n")
-	cat("The available supplemntary informations are: ",colnames(mm2SpectraInfos(m2l)),"\n")
+	cat("The available supplementary informations are:",colnames(mm2SpectraInfos(m2l)),"\n")
+	cat("It contains: ",length(mm2Patterns(object)),"patterns")
 })
 
 #' @export
@@ -219,18 +249,33 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, pre
 	})
 
 	kTree <- 2
-	if(nrow(mm2EdgesLabels())<600){
+	if(nrow(mm2EdgesLabels(m2l))<600){
 		kTree <- 3
 	}else{
 		kTree <- 2
 	}
 
-	if(sizeMin==1&nrow(mm2EdgesLabels())>600){
+	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
 		###Wide variety of mass losses.
 		warning("sizeMin parameters set to",sizeMin,"risk of computational overhead.")
 	}
 
+	###Converting the dags into data.frame.
 	df_edges <- sapply(mm2Dags(m2l),fromIgraphToDf_edges,simplify = FALSE)
 	df_vertices <-sapply(mm2Dags(m2l),fromIgraphToDf_vertices,simplify = FALSE)
-	mineClosedDags(df_vertices,df_edges,processing,num,kTree,sizeMin,precursor)
+
+	###Mining the patterns.
+	resRcpp <- mineClosedDags(df_vertices,df_edges,processing,num,kTree,sizeMin,precursor)
+
+	mm2LatticeIdxItems(m2l) <- resRcpp$items
+
+	###Construction via fragPatternc constructor.
+	mm2Patterns(m2l) <- sapply(resRcpp$patterns,fragPattern,USE.NAMES = FALSE)
+
+	###Buillding of the lattice
+	mm2Lattice(m2l) <- graph_from_data_frame(resRcpp$edges,directed=TRUE,resRcpp$nodes)
+
+
+	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
+	m2l
 })

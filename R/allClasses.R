@@ -10,6 +10,9 @@
 #' @slot dags A list storing the set of graphs object corresponding to the MS-MS spectra.
 #' @slot edges.labels The discretized edges labels.
 #' @slot nodes.labels The discretized nodes labels.
+#' @slot patterns A list storing the fragPattern objects.
+#' @slot lattice The graph reprsentation of the lattice of the patterns.
+#' @slot latticeIdxItems The ids of the nodes which are items in MS2process.
 #' @aliases ms2Lib
 #' @exportClass ms2Lib
 setClass(
@@ -19,22 +22,23 @@ setClass(
 		spectra = "list",
 		dags = "list",
 		edgesLabels = "data.frame",
-		nodesLabels = "data.frame"
+		nodesLabels = "data.frame",
+		patterns = "list",
+		lattice = "ANY",
+		latticeIdxItems = "integer"
 	),
 	prototype = list(
 		spectraInfo = data.frame(),
 		spectra = list(),
 		dags = list(),
 		edges.labels = data.frame(),
-		noddes.labels = data.frame()
+		nodes.labels = data.frame(),
+		patterns = list(),
+		lattice = make_empty_graph(),
+		latticeIdxItems = integer()
 	)
-
 )
 
-setClass(
-	"latticePatterns",
-
-)
 
 
 setClass(

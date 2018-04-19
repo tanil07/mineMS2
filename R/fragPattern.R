@@ -29,9 +29,38 @@ setMethod("mm2Root<-","fragPattern", function(pat,value){
 
 #' @export
 setMethod("show","fragPattern",function(object){
-	cat("A fragPattern object with",length(mm2Graph(object))-1,"losses occuring ",
+	cat("A fragPattern object with",vcount(mm2Graph(object))-1,"losses occuring ",
 		nrow(mm2Occurences(object)),"times.\n")
 })
+
+
+#' fragPattern constructor
+#'
+#' This is an internal constructor which is used to pass form the rcpp
+#' output to a fragPattern object including the occurences. It should not be
+#' called directly by the user.
+#'
+#' @param rlist rlist is a list containg 2 fields,
+#' \begin{itemize}
+#' \item \textbf{edges:} An edge list which includes the "from","to" and "lab" fileds, which by processed
+#' by the graph_from_data_frame function.
+#' \item \textbf{occurences:} A matrix with 2 column, the first giving the id in which the patterns are found
+#' and the second giving the nodes.
+#' \end{itemize}
+#'
+#' @return
+#'
+#' @examples
+#' print("Exmaples to be put here")
+fragPattern <- function(rlist){
+	fp <- new("fragPattern")
+	mm2Graph(fp) <- graph_from_data_frame(rlist$edges)
+	mm2Occurences(fp) <- rlist$occurences
+
+	##The root is always 0
+	mm2Root(fp) <- as.integer(0)
+	fp
+}
 
 
 
