@@ -58,3 +58,5 @@ setGeneric("discretizeMassLosses", function(m2l,...) standardGeneric("discretize
 setGeneric("discretizeFragments", function(m2l,...) standardGeneric("discretizeFragments"))
 
 setGeneric("mineClosedSubgraphs",function(m2l,...) standardGeneric("mineClosedSubgraphs"))
+
+setGeneric("plotOccurences",function(m2l,fp,...) standardGeneric("plotOccurences"))

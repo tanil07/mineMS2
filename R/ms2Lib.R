@@ -223,6 +223,7 @@ setMethod("length","ms2Lib",function(x){
 	return(length(mm2Spectra(x)))
 })
 
+
 #' Mine recurrent subgraph from a set of graphs.
 #'
 #' Mine all the complete recurring subgraphs.
@@ -239,7 +240,7 @@ setMethod("length","ms2Lib",function(x){
 #' print("examples to be put here")
 setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, precursor = FALSE){
 	if(num<2){
-		warning("num parameters set to",num,"it is therefore set to 2.")
+		warning("num parameters set to ",num," it is therefore set to 2.")
 		num <- 2
 	}
 
@@ -257,7 +258,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, pre
 
 	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
 		###Wide variety of mass losses.
-		warning("sizeMin parameters set to",sizeMin,"risk of computational overhead.")
+		warning("sizeMin parameters set to ",sizeMin," risk of computational overhead.")
 	}
 
 	###Converting the dags into data.frame.
@@ -272,10 +273,43 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, pre
 	###Construction via fragPatternc constructor.
 	mm2Patterns(m2l) <- sapply(resRcpp$patterns,fragPattern,USE.NAMES = FALSE)
 
+
+
 	###Buillding of the lattice
 	mm2Lattice(m2l) <- graph_from_data_frame(resRcpp$edges,directed=TRUE,resRcpp$nodes)
+
+	###We add a label filed which give all the values of this.
 
 
 	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
 	m2l
 })
+
+
+
+#' Return the dag correspodning to a spectra or the modif.
+#'
+#' Indexing function.
+#'
+#' @param x An ms2Lib oject.
+#' @param i The index, a string starting by S if it a spectrum, P if it's a pattern or D if it's a dag.
+#'
+#' @return a fragPattern object of an igraph graph object.
+#' @export
+#'
+#' @examples
+setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
+	prefix <- substring(i,1,1)
+	number <- as.integer(substring(i,2))
+	if(prefix=="P"){ ##motif
+		return(x@patterns[[number]])
+	}else if(prefix=="D"){
+		return(x@dags[[number]])
+	}else if(prefix=="S"){
+		return(x@spectra[[number]])
+	}else{
+		stop("Wrong prefix to 'i' ",prefix)
+	}
+})
+#
+# setMethod('[[','MSMSacquisition',function(x,i,j,...,drop=TRUE){

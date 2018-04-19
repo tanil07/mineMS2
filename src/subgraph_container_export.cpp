@@ -17,13 +17,20 @@ std::map<Vertexl,int> subgraph_container::latticeMapping(){
     graphTraitl::vertex_iterator bv,ev;
     boost::tie(bv,ev) = boost::vertices(lat);
 
-    int count=0;
+    //Ensuring that items are lawyas the first nodes.
+    int countI=0;
+    int countM = num_items;
+
 
     //A node is added for each node of the old lattice.
     for(;bv != ev; bv++){
-        //if(lat[*bv].key=="2.180.238") std::cout << *bv <<"_" << lat[*bv].key;
-        res.insert(std::make_pair(*bv,count));
-        count++;
+    	if(lat[*bv].item){
+        	res.insert(std::make_pair(*bv,countI));
+    		countI++;
+    	}else{
+    		res.insert(std::make_pair(*bv,countM));
+    		countM++;
+    	}
     }
     return res;
 }
@@ -172,7 +179,7 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 			// elat[pinf.first].id = pinf.second;
 
 			//We append the index of the item to the data.
-			vec_items[count_I] = pos;
+			vec_items[count_I] = pos+1;
 			count_I++;
 
 		}else{
