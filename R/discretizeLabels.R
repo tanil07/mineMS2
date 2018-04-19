@@ -644,7 +644,7 @@ discretizeMassesDifferences <- function(list_spec,
 		dag <- set_vertex_attr(dag,name="mz",value = list_masses[[i]])
 		dag <- set_vertex_attr(dag,name="rel_int",value = list_int[[i]])
 		dag <- set_vertex_attr(dag,name="label",value = as.integer(idxnodes))
-		dag <- set_vertex_attr(dag,name="prec",value=as.character(list_spec[[i]]$prec))
+		dag <- set_vertex_attr(dag,name="prec",value=as.logical(list_spec[[i]]$prec))
 		pf <- which(!is.na(toReturn[[i]]),arr.ind = TRUE)
 		to_remove <- numeric(100)
 

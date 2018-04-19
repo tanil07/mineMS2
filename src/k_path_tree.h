@@ -50,7 +50,7 @@ class k_path_tree
 
 
         //pure utility function.
-        void to_string(std::ostream& of);
+        //void to_string(std::ostream& of);
     protected:
         //TO DO code the update pos
         //Find the position of a path.

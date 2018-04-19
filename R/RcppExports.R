@@ -9,8 +9,8 @@ formulaExtension <- function(masses, mzlim, formula, hatoms, hhatom) {
     .Call('_mineMS2_formulaExtension', PACKAGE = 'mineMS2', masses, mzlim, formula, hatoms, hhatom)
 }
 
-mineClosedDags <- function(mass_dags_df_list, processing, num, k, size_min, prec_only) {
-    invisible(.Call('_mineMS2_mineClosedDags', PACKAGE = 'mineMS2', mass_dags_df_list, processing, num, k, size_min, prec_only))
+mineClosedDags <- function(vertices_list, edges_list, processing, num, k, size_min, prec_only) {
+    .Call('_mineMS2_mineClosedDags', PACKAGE = 'mineMS2', vertices_list, edges_list, processing, num, k, size_min, prec_only)
 }
 
 FindEqualGreaterM <- function(inv, values) {

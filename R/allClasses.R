@@ -18,8 +18,8 @@ setClass(
 		spectraInfo = "data.frame",
 		spectra = "list",
 		dags = "list",
-		edges.labels = "data.frame",
-		nodes.labels = "data.frame"
+		edgesLabels = "data.frame",
+		nodesLabels = "data.frame"
 	),
 	prototype = list(
 		spectraInfo = data.frame(),
@@ -28,6 +28,11 @@ setClass(
 		edges.labels = data.frame(),
 		noddes.labels = data.frame()
 	)
+
+)
+
+setClass(
+	"latticePatterns",
 
 )
 

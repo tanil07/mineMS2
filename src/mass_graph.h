@@ -12,9 +12,7 @@
 class mass_graph
 {
     public:
-    //Constructors
-        //Test graphs
-        mass_graph(int);
+    //Constructor
     	mass_graph(Rcpp::DataFrame df_nodes,Rcpp::DataFrame df_edges);
 
 
@@ -30,10 +28,6 @@ class mass_graph
         VisitMap buildVisitMap();
         std::vector<Vertex> roots();
 
-        //visu function
-        std::string to_string();
-
-        //
     protected:
     private:
         //The boost graph object.

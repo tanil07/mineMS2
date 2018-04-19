@@ -51,14 +51,11 @@ m2l
 #Building the graphs
 The graph are built by discretizing the mass losses.
 ```{r edge_discretization}
-
 m2l <- discretizeMassLosses(m2l,8,0.008,2/length(m2l),precPpm=20,precDmz=0.03,maxFrags=15)
-
 ```
 #Mining the frequent subgraphs
 ```{r graph_mining}
-mineClosedSubgraphs(m2l,num=2,kTree=3,sizeMin = 2, precursor = FALSE)
-
+res <- mineClosedSubgraphs(m2l,num=2,kTree=3,sizeMin = 2, precursor = FALSE)
 ```
 
 

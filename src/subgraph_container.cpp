@@ -7,6 +7,7 @@
 
 subgraph_container::subgraph_container()
 {
+	num_patterns=0;
     //ctor
 }
 
@@ -38,7 +39,7 @@ patternIdx subgraph_container::find_pattern_idx(frag_pattern& pat){
 
     //If the pattern is found
     if(it!=pmap.end()){
-        for(int i = 0; i < (*it).second.size();i++){
+        for(int i = 0; i < int((*it).second.size());i++){
             if((*it).second[i].null) continue;
             if(is_isomorphic(pat,(*it).second[i])){
                 return(std::make_pair(key,i));
@@ -104,7 +105,7 @@ void subgraph_container::insert_pattern(frag_pattern& pat,std::ostream& of){
         std::vector<frag_pattern> temp;
         temp.push_back(pat);
         (temp[0]).clearPattern();
-        auto it = pmap.insert(std::make_pair(key,temp));
+        pmap.insert(std::make_pair(key,temp));
     }
 
     patternIdx pv = std::make_pair(key,(pmap[key]).size()-1);
@@ -198,8 +199,6 @@ std::vector<patternIdx> subgraph_container::findSubgraph(frag_pattern& pat){
 
     //Results
     std::vector<patternIdx> res;
-
-    patternKey key = pat.get_key();
 
     //For each found possible subpatterns evaluate if there is a common subpattern.
     for(auto it = econt.begin();it!=econt.end();it++){
@@ -406,7 +405,7 @@ void subgraph_container::removePatternIndex(frag_pattern& pat,patternIdx& idx){
 
     graphTraitsp::out_edge_iterator bo,eo;
     //Each edge which don't originate form the first compounds is inserted.
-    for(int i=0;i<boost::num_vertices(g);i++){
+    for(int i=0;i<int(boost::num_vertices(g));i++){
         //All the out edges are considered
         boost::tie(bo,eo) = boost::out_edges(i,g);
         for(;bo!=eo;bo++){
@@ -443,8 +442,6 @@ void subgraph_container::removeIdx(std::vector<patternIdx>& to_remove){
         });
 
     //Now that the extensions are sorted we remove them.
-    patternKey current_key = 0;
-    int shift = 0;
     auto it=to_remove.end();
     for(it--;;it--){
         //We directly remove the elements.
@@ -568,7 +565,7 @@ std::map< Vertexl, patternIdx> subgraph_container::getMapping(){
     //Associate a value to a node at each step.
     for(auto it=pmap.begin();it != pmap.end(); it++){
                 //Associate a value to a node at each step.
-        for(int i=0; i < it->second.size();i++){
+        for(int i=0; i < int(it->second.size());i++){
             patternIdx cpair = std::make_pair(it->first,i);
 
             //We get the label of the current node
@@ -592,7 +589,7 @@ std::vector<Vertexl> subgraph_container::getLeafs(){
     graphTraitl::vertex_iterator bv,ev;
     std::vector<Vertexl> res;
     boost::tie(bv,ev) = boost::vertices(lat);
-    for(bv;bv!=ev;bv++){
+    for(;bv!=ev;bv++){
         //We check the number of incoming edge.
         if(boost::in_degree(*bv,lat)==0){
             res.push_back(*bv);
@@ -606,7 +603,7 @@ void removeNull(std::map<short,std::vector <frag_pattern> >& pmap){
     for(auto pit = pmap.begin();pit!=pmap.end();pit++){
         int maxSize = pit->second.size()-1;
         while(maxSize>=0){
-            if(maxSize<pit->second.size()&&pit->second[maxSize].null){
+            if(maxSize<int(pit->second.size())&&pit->second[maxSize].null){
                 pit->second.erase(pit->second.begin()+maxSize);
             }else{
                 maxSize--;
@@ -648,34 +645,35 @@ void subgraph_container::postProcessing(int num_graphs,std::ostream& of){
     //This part add the objects to the graph.
 
     //The pattenr list is cleared.
-    of<<"Cleaning pattern list...";
+    //of<<"Cleaning pattern list...";
 
     removeNull(pmap);
+	num_items = num_graphs;
 
-    of << " remaining "<<numPatterns()<<std::endl;
+    //of << " remaining "<<numPatterns()<<std::endl;
     std::vector< Vertexl > mg_nodes;
-    of << "Post-processing of the lattice with "<<boost::num_vertices(lat) <<
-    " vertices and "<< boost::num_edges(lat)<<" edges: "<<std::endl;
+    ////of << "Post-processing of the lattice with "<<boost::num_vertices(lat) <<
+    //" vertices and "<< boost::num_edges(lat)<<" edges: "<<std::endl;
     for(int i = 0;i<num_graphs;i++){
         Vertexl temp = boost::add_vertex(lat);
         lat[temp].item = true;
+        lat[temp].id = i;
         mg_nodes.push_back(temp);
     }
 
 
     //HYPOTHESIS: AN ITEM MAY ONLY BE ADDED TO A LEAF.
     //auto leafs = getLeafs();
-    of <<"mapping...";
+    //of <<"mapping...";
     resetIdxMap();
     std::map< Vertexl, patternIdx> map_pat = getMapping();
-    of <<"done..."<<std::endl;
+    //of <<"done..."<<std::endl;
     //An occurences is bad if it is not found in any of the successors of the data, except if the root is a leaf.
     int counter = 0;
     int current_percent = 0;
     int max_val = boost::num_vertices(lat);
 
     lab_idx.clear();
-
 
     graphTraitl::vertex_iterator bv,ev;
     boost::tie(bv,ev) = boost::vertices(lat);
@@ -685,6 +683,7 @@ void subgraph_container::postProcessing(int num_graphs,std::ostream& of){
         Vertexl cnode = *bv;
         //of << "there"<<lat[cnode].key<<" "<<lat[cnode].item <<" addr: "<<cnode;
         if(lat[cnode].item) continue;
+        num_patterns++;
         auto pos = map_pat.find(cnode);
         if(pos == map_pat.end()){
             //std::cout << "NEXT !";
@@ -695,7 +694,7 @@ void subgraph_container::postProcessing(int num_graphs,std::ostream& of){
         counter++;
         int ppercent = (counter*10)/max_val;
         if(ppercent!=current_percent){
-            of<< ppercent*10 << " ";
+            //of<< ppercent*10 << " ";
             current_percent = ppercent;
         }
 
@@ -735,7 +734,7 @@ void subgraph_container::postProcessing(int num_graphs,std::ostream& of){
                 ba++;
             }while(ba!=ea);
 
-            bempty = (bempty|ba==ea);
+            bempty = (bempty|(ba==ea));
             if(bempty){
                 continue;
             }
@@ -748,8 +747,8 @@ void subgraph_container::postProcessing(int num_graphs,std::ostream& of){
         //of << "done !";
 
     }
-    of <<"100"<< std::endl;
-    of << "Post-processing finished: "<<boost::num_vertices(lat) <<" vertices and "<< boost::num_edges(lat)<<" edges."<<std::endl;
+    //of <<"100"<< std::endl;
+    //of << "Post-processing finished: "<<boost::num_vertices(lat) <<" vertices and "<< boost::num_edges(lat)<<" edges."<<std::endl;
 }
 
 
@@ -828,7 +827,7 @@ void subgraph_container::printPatternsB(std::ostream& of){
     auto it = nform.begin();
 //    auto itadr = addrnform.begin();
 //    auto itadr2 = addrnform2.begin();
-    for(auto it2 = nform2.begin();it!=nform.end()&it2 != nform2.end();it2++,it++){
+    for(auto it2 = nform2.begin();(it!=nform.end()) && (it2 != nform2.end());it2++,it++){
         of << *it <<"   "<<*it2 <<std::endl;
     }
 }
@@ -869,7 +868,7 @@ void subgraph_container::printPatternsB(){
     auto it = nform.begin();
 //    auto itadr = addrnform.begin();
 //    auto itadr2 = addrnform2.begin();
-    for(auto it2 = nform2.begin();it!=nform.end()&it2 != nform2.end();it2++,it++){
+    for(auto it2 = nform2.begin();(it!=nform.end()) && (it2 != nform2.end());it2++,it++){
         std::cout << *it <<"__"<<*it2 <<"  ";
     }
 }

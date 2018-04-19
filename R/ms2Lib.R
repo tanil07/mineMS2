@@ -14,11 +14,11 @@ setMethod("mm2Dags","ms2Lib",function(m2l){
 
 
 setMethod("mm2EdgesLabels","ms2Lib",function(m2l){
-	return(m2l@edges.labels)
+	return(m2l@edgesLabels)
 })
 
 setMethod("mm2NodesLabels","ms2Lib",function(m2l){
-	return(m2l@nodes.labels)
+	return(m2l@nodesLabels)
 })
 
 setMethod("mm2Spectra<-","ms2Lib",function(m2l,value){
@@ -37,12 +37,12 @@ setMethod("mm2Dags<-","ms2Lib",function(m2l,value){
 })
 
 setMethod("mm2EdgesLabels<-","ms2Lib",function(m2l,value){
-	m2l@edges.labels <- value
+	m2l@edgesLabels <- value
 	m2l
 })
 
 setMethod("mm2NodesLabels<-","ms2Lib",function(m2l,value){
-	m2l@nodes.labels <- value
+	m2l@nodesLabels <- value
 	m2l
 })
 
@@ -199,7 +199,6 @@ setMethod("length","ms2Lib",function(x){
 #'
 #' @param m2l An m2Lib object to be processed.
 #' @param num The number of spectra in which the spectrum need to be sampled.
-#' @param kTree The depth of the tree used for graph mining.
 #' @param sizeMin The minimum size of the mined patterns.
 #' @param precursor Should only the occurences coming form the root be conserved.
 #'
@@ -208,11 +207,30 @@ setMethod("length","ms2Lib",function(x){
 #'
 #' @examples
 #' print("examples to be put here")
-setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, kTree = 3, sizeMin = NULL, precursor = FALSE){
+setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, precursor = FALSE){
+	if(num<2){
+		warning("num parameters set to",num,"it is therefore set to 2.")
+		num <- 2
+	}
+
 	###Get the data.frame correspoding to the sizes.
-	df_dags <-sapply(mm2Dags(m2l),fromIgraphToDf)
 	processing <- sapply(mm2Dags(m2l),function(x){
 		ecount(x)>1
 	})
-	mineClosedDags(df_dags,processing,num,kTree,sizeMin,precursor)
+
+	kTree <- 2
+	if(nrow(mm2EdgesLabels())<600){
+		kTree <- 3
+	}else{
+		kTree <- 2
+	}
+
+	if(sizeMin==1&nrow(mm2EdgesLabels())>600){
+		###Wide variety of mass losses.
+		warning("sizeMin parameters set to",sizeMin,"risk of computational overhead.")
+	}
+
+	df_edges <- sapply(mm2Dags(m2l),fromIgraphToDf_edges,simplify = FALSE)
+	df_vertices <-sapply(mm2Dags(m2l),fromIgraphToDf_vertices,simplify = FALSE)
+	mineClosedDags(df_vertices,df_edges,processing,num,kTree,sizeMin,precursor)
 })

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <Rcpp.h>
 
 #include <boost/graph/graphml.hpp>
 
@@ -77,6 +78,10 @@ class frag_pattern
         void clearPatternFull();
 
         bool null=false;
+
+        //Export function used by Rcpp
+        Rcpp::List as_igraph_data_frame();
+
 
     protected:
         //extensions is in left-mostg depth-first.

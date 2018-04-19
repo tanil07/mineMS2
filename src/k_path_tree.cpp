@@ -82,7 +82,7 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
                 if(pos[pi-2].size()!=0){
                     Vertext vn = this->get_node(pos[pi-2].back(),plabs[lpath-1]);
                     pos[pi-1].push_back(vn);
-                    occ oc = {gid,idx_vertex[pfr[lpath-pi]]};
+                    occ oc = {short(gid),short(idx_vertex[pfr[lpath-pi]])};
                     addOccs(moccs,vn,oc);
 //                    if(pi==3){
 //                    //std::cout <<"pi: "<<pi<<"size3f_"<<plabs[lpath-1]<<"lpfr: "<<pfr.size()<<"_"<<t[pos[pi-2].back()].lab<<"_"<<t[vn].lab<<std::endl;
@@ -95,11 +95,11 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
         if(pi!=k){
             Vertext old_vertice = pos[pi-2].back();
             //String obtained by adding the value.
-            Vertext vn = this->get_node(old_vertice,plabs[lpath-1]);
+            Vertext vn = this->get_node(old_vertice,short(plabs[lpath-1]));
             pos[pi-1].push_back(vn);
 
             //We create the occurence :
-            occ oc = {gid,idx_vertex[pfr[lpath-pi]]};
+            occ oc = {short(gid),short(idx_vertex[pfr[lpath-pi]])};
             addOccs(moccs,vn,oc);
 //            if(pi>=2){
 //                //std::cout <<"pi: "<<pi<<"size3_"<<plabs[lpath-1]<<"_"<<t[old_vertice].lab<<"_"<<t[vn].lab<<std::endl;
@@ -113,7 +113,7 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
 
 
     //The path of size 1 is alway sadded to the root.
-    occ oc = {gid,idx_vertex[pfr[lpath-1]]};
+    occ oc = {short(gid),short(idx_vertex[pfr[lpath-1]])};
     Vertext vn = this->get_node(root,plabs[lpath-1]);
     pos[0].push_back(vn);
     addOccs(moccs,vn,oc);
@@ -121,7 +121,7 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
 
 void k_path_tree::update_pos_back(){
     //We just need to remove the last element of every node if there is one.
-    for(int pi=0;pi<pos.size();pi++){
+    for(int pi=0;pi<int(pos.size());pi++){
         if(pos[pi].size()>0){
             pos[pi].pop_back();
         }else{
@@ -140,10 +140,13 @@ Vertext k_path_tree::get_root(){
 
 void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
 {
-    //std::cout <<"Reading: "<<gid<<std::endl;
+
 
     //We find all the possible root nodes.
     graph& g = G.get_g();
+
+	//If the graph have no edge we stop right there.
+	if(boost::num_edges(g)==0) return;
 
     //We get the visitor map on the value.
     VisitMap vm = G.buildVisitMap();
@@ -167,7 +170,7 @@ void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
     std::vector<int> edgesLabels(boost::num_vertices(g)-1);
 
 
-    for(int i=0; i<roots.size(); i++)
+    for(int i=0; i<int(roots.size()); i++)
     {
         //Root initialization.
         Vertex root = roots[i];
@@ -179,7 +182,7 @@ void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
         dnode = nextNode(vm,root);
         cnode = root;
         nvertex = graphTraits::null_vertex();
-        while(cnode!=root|dnode!=nvertex)
+        while( (cnode!=root) | (dnode!=nvertex) )
         {
             //Case where we have to go up
             //Or we are mining from the precrusor only.
@@ -246,7 +249,7 @@ std::vector<Extension> k_path_tree::getExtensions(Vertexp v,Vertext vt){
 //UTILITY FUNCTION
 Vertext k_path_tree::find_pos(std::vector<short>path){
     Vertext cnode = get_root();
-    for(int i = 0; i < path.size();i++){
+    for(int i = 0; i < int(path.size());i++){
         short clab = path[i];
         graphTraitst::adjacency_iterator vb,ve;
         for(boost::tie(vb,ve)=boost::adjacent_vertices(cnode,t) ; vb!=ve ; vb++){
@@ -272,17 +275,17 @@ void k_path_tree::filter_frequent_nodes(int noccs){
     Vertext root_v = get_root();
     boost::tie(vb,ve)=boost::vertices(t);
     //TODO pass this in one pass possibly if it's slow.
-    for(vb;vb!=ve;vb++){
+    for(;vb!=ve;vb++){
         //Never remove the root.
         if((*vb)==root_v){
             continue;
         }
-        if(moccs[*vb].size()<noccs){
+        if(int(moccs[*vb].size())<noccs){
             to_rm.push_back(*vb);
         }
     }
     //Now we remove the chosen node.
-    for(int ir=0;ir<to_rm.size();ir++){
+    for(int ir=0;ir<int(to_rm.size());ir++){
         Vertext v= to_rm[ir];
         boost::clear_vertex(v,t);
         boost::remove_vertex(v,t);
@@ -327,34 +330,34 @@ std::vector<Vertext> k_path_tree::find_predecessors(Vertext v){
 }
 
 //to_string function used to debug.
-void k_path_tree::to_string(std::ostream& of){
-    graphTraitst::vertex_iterator bv,ev;
-
-    //For each edge we plot the correspoding path.
-    for(boost::tie(bv,ev)=boost::vertices(t);bv!=ev;bv++){
-        //of <<"nn";
-        if(*bv==root) continue;
-        //of << "node " << t[*bv].lab << std::endl;  //DEBUG
-        std::vector<Vertext> cpath = find_predecessors(*bv);
-        //We print all the correspoding labes
-        of << "path : ";
-
-        std::vector<int> pstr(cpath.size());
-        std::transform(cpath.begin(),cpath.end(),pstr.begin(),
-                       [this](Vertext v) -> int {return t[v].lab;});
-        for(int ist=0;ist<pstr.size();ist++){
-            of << pstr[ist];
-            if(ist<pstr.size()-1) of << "_";
-        }
-        //We the number of occurences
-        of << " noccs : " << moccs[*bv].size()<<std::endl;
-        of << "occs : ";
-        for(auto it=(moccs[*bv]).begin();it!=(moccs[*bv]).end();it++) of<<(*it).gid<<"_"<<(*it).idx<<" ";
-        of << std::endl;
-
-        //TODO add the occurences enveutally.
-    }
-}
+// void k_path_tree::to_string(std::ostream& of){
+//     graphTraitst::vertex_iterator bv,ev;
+//
+//     //For each edge we plot the correspoding path.
+//     for(boost::tie(bv,ev)=boost::vertices(t);bv!=ev;bv++){
+//         //of <<"nn";
+//         if(*bv==root) continue;
+//         //of << "node " << t[*bv].lab << std::endl;  //DEBUG
+//         std::vector<Vertext> cpath = find_predecessors(*bv);
+//         //We print all the correspoding labes
+//         of << "path : ";
+//
+//         std::vector<int> pstr(cpath.size());
+//         std::transform(cpath.begin(),cpath.end(),pstr.begin(),
+//                        [this](Vertext v) -> int {return t[v].lab;});
+//         for(int ist=0;ist<pstr.size();ist++){
+//             of << pstr[ist];
+//             if(ist<pstr.size()-1) of << "_";
+//         }
+//         //We the number of occurences
+//         of << " noccs : " << moccs[*bv].size()<<std::endl;
+//         of << "occs : ";
+//         for(auto it=(moccs[*bv]).begin();it!=(moccs[*bv]).end();it++) of<<(*it).gid<<"_"<<(*it).idx<<" ";
+//         of << std::endl;
+//
+//         //TODO add the occurences enveutally.
+//     }
+// }
 
 
 

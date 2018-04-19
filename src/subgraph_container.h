@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include <boost/functional/hash.hpp>
+#include <Rcpp.h>
 
 #include "common.h"
 #include "frag_pattern.h"
@@ -76,10 +77,13 @@ class subgraph_container
         void printPatternsB();
 
         //Functions used for exporting purpose only
-        void exportResultingLattice(std::string path_lattice,std::string path_patterns,
-                                                std::ostream& of);
-        std::map<Vertexl,Vertexel> createExportLattice(latticeexport& elat);
-        std::map<Vertexl,Vertexel> latticeMapping(latticeexport& exlat);
+        Rcpp::List exportMinedPatternsRcpp();
+
+        //Functions used only otuside of R.
+        // void exportResultingLattice(std::string path_lattice,std::string path_patterns,
+        //                                         std::ostream& of);
+        // std::map<Vertexl,Vertexel> createExportLattice(latticeexport& elat);
+        std::map<Vertexl, int> latticeMapping();
 
     protected:
     private:
@@ -88,6 +92,8 @@ class subgraph_container
         std::map<patternKey,std::vector<frag_pattern> > pmap;
 
         int numbers;
+        int num_patterns;
+        int num_items;
 
         //Other possible implmentation using vector.
         std::map<short,std::vector<patternIdx> > lab_idx;

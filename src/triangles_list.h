@@ -34,7 +34,7 @@ class triangles_list
         std::vector<short> get_a_b(short a) const;
         //std::vector<short> get_c(short c);
 
-        void to_string();
+        //void to_string();
     protected:
     private:
         std::set<boost::array<short, 3> > triplets;

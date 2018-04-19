@@ -36,8 +36,8 @@ class lattice_node : public frag_pattern{
         short current_ext;
 
         //The number of occurences of the parent, and of the child.
-        short occs_parent;
-        short occs_child;
+        //short occs_parent;
+        //short occs_child;
 
         //Cleaning
         void clean_up();

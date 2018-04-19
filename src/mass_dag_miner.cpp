@@ -2,7 +2,7 @@
 #include <fstream>
 
 //DEBUG ONLY
-#include <windows.h>
+#include <Rcpp.h>
 
 #include "mass_dag_miner.h"
 #include "lattice_node.h"
@@ -30,9 +30,10 @@ mass_dag_miner::mass_dag_miner(std::vector<mass_graph>& vmasses, int k, bool pre
 
 	sizeMin = 2;
     num_graph = vmasses.size();
-    os << "Reading the "<< num_graph <<" graphs." << std::endl;
+    //os << "Reading the "<< num_graph <<" graphs." << std::endl;
     int counter = 0;
     for(auto it=vmasses.begin();it!=vmasses.end();it++){
+		//Rcpp::Rcout << "processing graph " << counter << std::endl;
 
         //Each graph is added to the k path tree which also store the occurences.
         kt.add_graph(*it,counter,prec_only);
@@ -40,7 +41,7 @@ mass_dag_miner::mass_dag_miner(std::vector<mass_graph>& vmasses, int k, bool pre
     }
 
     kt.post_processing();
-    os <<"Preprocessing finished."<<std::endl;
+    //os <<"Preprocessing finished."<<std::endl;
     //kt.to_string();
 }
 
@@ -140,7 +141,6 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
     std::stack<short> max_child_occs;
 
     //Used for the closeness predicates.
-    int num_occs_child = 0;
     for(auto it=initialPatterns.begin();it!=initialPatterns.end();it++){
 
         //We empty the current stack
@@ -169,7 +169,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
             //We print the label of the current node
             of << std::endl;
             current_node.to_reduced_string(of);
-            if((counv%1000)==0&((counv/1000)!=indicator)){
+            if(((counv%1000)==0)&(((counv/1000)!=indicator))){
                 indicator = counv/1000;
                 of <<"Patterns explored: "<< counv <<" closed motifs found: "<<container.numSubgraphs()<<" in structure: " << container.numSubgraphsLattice()<<std::endl;
             }
@@ -232,13 +232,13 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
 //All the messaging take place in this function.
 void mass_dag_miner::mineFrequentCompleteDag(int freq,std::set<short> vals,std::ostream& of){
     ktree& t = kt.get_t();
-    kt.to_string(of);
+    //kt.to_string(of);
     of <<"Filtering k-tree with an initial number of "<<boost::num_vertices(t) <<" nodes."<< std::endl;
     kt.filter_frequent_nodes(freq);
     of <<"Remainings nodes: "<<boost::num_vertices(t) <<" nodes."<< std::endl;
     //kt.to_string(of);
     //We start by generating all the frequent dag.
-    of <<"Constructing initial patterns...";
+    //of <<"Constructing initial patterns...";
     std::vector<lattice_node> initialPatterns = kt.constructOneEdgeGraphs(of);
     of <<"done !"<<std::endl;
 
@@ -248,7 +248,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::set<short> vals,std::
                    [vals](lattice_node & p)-> bool{
                         return (vals.find(p.get_key())==vals.end());
                    }),initialPatterns.end());
-    of << "Remaining: "<<initialPatterns.size()<<std::endl;
+    //of << "Remaining: "<<initialPatterns.size()<<std::endl;
 
 
     bool frequent_children = true;
@@ -256,7 +256,6 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::set<short> vals,std::
     std::stack<short> max_child_occs;
 
     //Used for the closeness predicates.
-    int num_occs_child = 0;
     for(auto it=initialPatterns.begin();it!=initialPatterns.end();it++){
 
         //We empty the current stack
@@ -283,11 +282,11 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::set<short> vals,std::
             bool is_root = current_node.is_root();
 
             //We print the label of the current node
-            of << std::endl;
+            //of << std::endl;
             current_node.to_reduced_string(of);
-            if((counv%1000)==0&((counv/1000)!=indicator)){
+            if(((counv%1000)==0)&(((counv/1000)!=indicator))){
                 indicator = counv/1000;
-                of <<"Patterns explored: "<< counv <<" closed motifs found: "<<container.numSubgraphs()<<" in structure: " << container.numSubgraphsLattice()<<std::endl;
+                //of <<"Patterns explored: "<< counv <<" closed motifs found: "<<container.numSubgraphs()<<" in structure: " << container.numSubgraphsLattice()<<std::endl;
             }
 
             //We try to get the next node.

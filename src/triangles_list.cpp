@@ -32,13 +32,13 @@ void triangles_list::add_mass_graph(mass_graph& mg){
                                             const Vertex b) -> bool {return g[a].mz>g[b].mz;});
 
     //Now we get all the triangles
-    for(int ia=0;ia<(vvecs.size()-2);ia++){
+    for(int ia=0;ia<int(vvecs.size()-2);ia++){
         graphTraits::adjacency_iterator bva,eva;
         boost::tie(bva,eva) = boost::adjacent_vertices(vvecs[ia],g);
         std::vector<Vertex> vadj_a(bva,eva);
         //std::cout << "a succs : "<<vadj_a.size()<<" "<<g[vvecs[ia]].mz<<std::endl;
         if(vadj_a.size()==0){ continue;}
-        for(int ib=0;ib<(vadj_a.size()-1);ib++){
+        for(int ib=0;ib<int(vadj_a.size()-1);ib++){
             //std::cout << "  b : "<<g[vadj_a[ib]].lab<<std::endl;
             graphTraits::adjacency_iterator bvb,evb;
             boost::tie(bvb,evb) = boost::adjacent_vertices(vadj_a[ib],g);
@@ -79,14 +79,12 @@ void triangles_list::add_mass_graph(mass_graph& mg){
 //All the index are constructed there.
 void triangles_list::construct_mapping(){
 
-    for(int i=0;i<vtriplets.size();i++){
+    for(int i=0;i<int(vtriplets.size());i++){
         short alab = std::get<0>(vtriplets[i]);
         short blab = std::get<1>(vtriplets[i]);
         short clab = std::get<2>(vtriplets[i]);
         std::pair<short,short> ablab = std::make_pair(alab,blab);
         std::pair<short,short> aclab = std::make_pair(alab,clab);
-
-        if(alab==44&clab==116) std::cout << std::endl << alab << "|" << blab << "|" << clab << std::endl;
 
         //Construction of a index.
         auto ita = idxa.find(alab);
@@ -257,17 +255,17 @@ std::vector<short> triangles_list::get_a_b(short a) const {
 //}
 
 
-void triangles_list::to_string(){
-    std::cout << "Triangles : "<<triplets.size()<<std::endl;
-    if(triplets.size()<10){
-        for(auto it_arr=triplets.begin();it_arr!=triplets.end();it_arr++){
-            for(int j=0;j<(*it_arr).size();j++){
-                std::cout<<(*it_arr)[j]<<"_";
-            }
-            std::cout << std::endl;
-        }
-    }
-}
+// void triangles_list::to_string(){
+//     std::cout << "Triangles : "<<triplets.size()<<std::endl;
+//     if(triplets.size()<10){
+//         for(auto it_arr=triplets.begin();it_arr!=triplets.end();it_arr++){
+//             for(int j=0;j<(*it_arr).size();j++){
+//                 std::cout<<(*it_arr)[j]<<"_";
+//             }
+//             std::cout << std::endl;
+//         }
+//     }
+// }
 //
 //void triangles_list::resize_triplets(){
 //    //We double the SIze of the vectoR;

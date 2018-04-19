@@ -17,30 +17,17 @@ lattice_node::~lattice_node()
 
 //The 2 standard constructors.
 
-lattice_node::lattice_node(Vertext v,k_path_tree& kt,std::ostream& os): current_ext(0),frag_pattern(v,kt,os){
-    root = true;
-    //We avoid letting an empty pointer
-
-    //The current and last extension are initalized.
-    current_ext=0;
-    occs_parent=0;
-    occs_child=0;
-    //for(int it = current_ext;it!=numExts();it++){std::cout << std::get<0>(extensions[it]) << "_" <<std::get<2>(extensions[it])<<" ";}//DEBUG
+lattice_node::lattice_node(Vertext v,k_path_tree& kt,std::ostream& os): frag_pattern(v,kt,os),
+root(true), current_ext(0){
 
 };
 
 //Pattern extension.
 lattice_node::lattice_node(lattice_node& fp,k_path_tree& kt,int iext,
-            int fthreshold,bool& created,std::ostream& os): current_ext(0),frag_pattern(fp,kt,iext,fthreshold,created,os){
-    //std::cout << "creating";
+            int fthreshold,bool& created,std::ostream& os): frag_pattern(fp,kt,iext,fthreshold,created,os) {
     if(created){
         root = false;
-        current_ext = 0;
-        //We quickly print the list of extensions
-       //std::cout << "crea_exts : ";//DEBUG
-    //for(int it = current_ext;it!=numExts();it++){std::cout << std::get<0>(extensions[it]) << "_" <<std::get<2>(extensions[it])<<" ";}//DEBUG
- //std::cout << " crea_exts_done ";//DEBUG
-
+    	current_ext = 0;
     }
 }
 

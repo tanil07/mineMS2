@@ -12,6 +12,7 @@
 #define NULL_LABEL -1
 #define REMOVE_EXTENSION true
 #define PATH_TREE_ROOT -1
+#define ITEM_ID = 0;
 
 
 
@@ -130,6 +131,7 @@ typedef boost::graph_traits<graphadj>::vertex_descriptor Vertexadj;
 
 struct lat_info{
     std::string key;
+	int id;
     //indicate if the node is an object or None.
     bool item;
 };
@@ -180,15 +182,15 @@ struct less_than
 
 //The information stored on the node
 struct export_node_info{
-    export_node_info(std::string id="",int noccs=0,int num_losses=0,float score=0.0,
+    export_node_info(int id=0,int noccs=0,int num_losses=0,float score=0.0,
                      bool item=true): id(id),noccs(noccs),num_losses(num_losses),score(score),item(item) {};
     //The id associated to the pattern.
-    std::string id;
+    int id;
     int noccs;
     int noccs_unique;
     int num_losses;
     float score;
-    int item;
+    bool item;
 };
 
 typedef boost::adjacency_list<

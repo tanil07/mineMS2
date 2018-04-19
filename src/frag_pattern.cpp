@@ -8,6 +8,7 @@
 
 #include <boost/graph/copy.hpp>
 #include <boost/graph/graphml.hpp>
+#include<Rcpp.h>
 
 
 
@@ -32,7 +33,7 @@ std::vector<Extension>::iterator pos_extension(std::vector<Extension>& exts, Ext
     auto it = exts.begin();
     auto ie = exts.end();
 
-    for(it;it!=ie;it++){
+    for(;it!=ie;it++){
         if((std::get<0> (*it)==std::get<0>(ext)) &
            (std::get<2> (*it)==std::get<2>(ext))){
                 break;
@@ -90,11 +91,6 @@ void add_dist(graphp& g,std::vector<Extension>& exts,
         short odist = g[std::get<0>(*ie)].lab;
         if(odist==0){
             dist.insert(std::get<2>(*ie));
-            //auto fdist = tl.get_a_c(std::get<2>(*ie));
-            //std::cout << "fdo : "<<odist<<" "<<std::get<2>(*ie)<<" : ";
-            //for(auto it = fdist.begin(); it != fdist.end();it++){std::cout<<*it<<" ";}
-            //std::cout <<std::endl;
-            //dist.insert(fdist.begin(),fdist.end());
         }else{
             short fdist = tl.get_ab(odist,std::get<2>(*ie));
             //std::cout << "fdi : "<<odist<<" "<<std::get<2>(*ie)<<" "<<fdist<<std::endl;
@@ -143,7 +139,6 @@ void removeExtensions(std::vector<Extension>& exts, std::vector<short> labs, Ver
     for(auto it = past_the_end_it; it != exts.end(); it++){ //DEBUG
         counter++; //DEBUG
     } //DEBUG
-    //std::cout << "erasing "<<counter<<std::endl; //DEBUG
 
     exts.erase(past_the_end_it,idx_end);
 }
@@ -159,7 +154,6 @@ frag_pattern::frag_pattern(Vertext v,k_path_tree& kt, std::ostream& of){
     std::vector<occ> toccs(moccs[v].begin(),moccs[v].end());
     occurences = toccs;
     short lab = t[v].lab;
-    //std::cout << "lab ext : "<< lab << std::endl; //DEBUG
     short k = kt.get_k();
 
     //For indexing purpose at the moment.
@@ -189,18 +183,12 @@ frag_pattern::frag_pattern(Vertext v,k_path_tree& kt, std::ostream& of){
                         return std::make_tuple(this->root,pv.first,pv.second);
                    });
     //We sort the list of extensions.
-    //std::cout << "non sorted : ";//DEBUG
-//    for(auto it = extensions.begin();it!=extensions.end();it++) {std::cout << (std::get<0>(*it)) << "_" <<(std::get<2>(*it)) << " ";}//DEBUG
-//    std::cout << std::endl; //DEBUG
     std::sort(extensions.begin(),extensions.end(),
     [](const Extension & a, const Extension & b) -> bool
     {
     return ((std::get<2>(a))<(std::get<2>(b)));
     });
     //We remove the extension with a lower label.
-//    std::cout << "sorted : ";//DEBUG
-//    for(auto it = extensions.begin();it!=extensions.end();it++) {std::cout << (std::get<0>(*it)) << "_" <<(std::get<2>(*it)) << " ";}//DEBUG
-//    std::cout << std::endl; //DEBUG
 
     //an iterator is defined on the selected position.
     std::vector<Extension>::iterator limExts = extensions.begin();
@@ -216,14 +204,11 @@ frag_pattern::frag_pattern(Vertext v,k_path_tree& kt, std::ostream& of){
     auto vlast = extensions.end();
     std::vector<Extension> vext_origin(vfirst,vlast);
     extensions = vext_origin;
-    //std::cout << "filtered : ";//DEBUG
-//    for(auto it = extensions.begin();it!=extensions.end();it++) {std::cout << (std::get<0>(*it)) << "_" <<(std::get<2>(*it)) << " ";}//DEBUG
-//    std::cout << std::endl; //DEBUG
-
 
     //Now a vector of new extensions is added to the value.
     graphTraitst::adjacency_iterator bo,be;
     boost::tie(bo,be)=boost::adjacent_vertices(v,t);
+
     //Now we add all the extension if possible.
     std::vector<Extension> temp_exts;
     std::transform(bo,be,std::back_inserter(temp_exts),
@@ -235,16 +220,9 @@ frag_pattern::frag_pattern(Vertext v,k_path_tree& kt, std::ostream& of){
     //If k is big enough we can add the new value.
     std::vector<Extension> exts_n1 = kt.getExtensions(n1,v);
 
-   // std::cout << "n1raw : ";//DEBUG
-//    for(auto it = exts_n1.begin();it!=exts_n1.end();it++) {std::cout << (std::get<0>(*it)) << "_" <<(std::get<2>(*it)) << " ";}//DEBUG
-//    std::cout << std::endl; //DEBUG
-
     if(REMOVE_EXTENSION){
         rfilterExtensions(g,exts_n1,dist_prec,tl);
     }
-//    std::cout << "n1removed : ";//DEBUG
-//    for(auto it = exts_n1.begin();it!=exts_n1.end();it++) {std::cout << (std::get<0>(*it)) << "_" <<(std::get<2>(*it)) << " ";}//DEBUG
-//    std::cout << std::endl; //DEBUG
 
     //Now if we are nto at the last level of the arborescnece
     //we remove the extensions. We remove the extension.
@@ -252,11 +230,7 @@ frag_pattern::frag_pattern(Vertext v,k_path_tree& kt, std::ostream& of){
         //We get all the C value for the added distance
         //We get all the extension which could be attained from the new vertex..
         std::vector<short> pc = tl.get_a_c(lab);
-//        std::cout << "removing : "<<root<<" : ";//DEBUG
-//        for(auto itt = pc.begin();itt < pc.end();itt++){//DEBUG
-//           std::cout << (*itt) << " "; //DEBUG
-//        } //DEBUG
-//        std::cout << std::endl; //DEBUG
+
         //Now remove all the extensions which include a c in the predecessor node.
         removeExtensions(extensions, pc, root, of);
     }
@@ -306,10 +280,8 @@ frag_pattern::frag_pattern(frag_pattern& fp,k_path_tree& kt,
     }else{
         new_dist = tl.get_ab(dprec_source,new_lab);
     }
-    //std::cout << "ndist ";
     //We check if the extension is not in the forbidden dist
     if((fp.dist_prec.find(new_dist) != fp.dist_prec.end())|(new_dist==NULL_LABEL)){
-//        of <<"inval_ext"<<std::endl;//DEBUG
         created = false;
         return;
     }
@@ -322,7 +294,7 @@ frag_pattern::frag_pattern(frag_pattern& fp,k_path_tree& kt,
                   std::inserter(noccs,noccs.begin()));
 
     //Creation only if the number of occurences is sufficient.
-    if(noccs.size()< fthreshold){
+    if(int(noccs.size())< fthreshold){
         created = false;
         return;
     }else{
@@ -344,8 +316,7 @@ frag_pattern::frag_pattern(frag_pattern& fp,k_path_tree& kt,
     g[current_vertex].depth = (g[source_vertex].depth)+1;
     g[current_vertex].lab = new_dist;
     pedge_info info_new_edge = {true,new_lab};
-    graphTraitsp::edge_descriptor added_edge = (boost::add_edge(source_vertex,
-                                                                current_vertex,info_new_edge,g)).first;
+    boost::add_edge(source_vertex,current_vertex,info_new_edge,g);
     dist_prec.insert(new_dist);
 
 
@@ -376,11 +347,6 @@ frag_pattern::frag_pattern(frag_pattern& fp,k_path_tree& kt,
                    });
     std::sort(temp_exts.begin(),temp_exts.end(),less_than());
 
-    auto bek = temp_exts.begin();
-    auto eek = temp_exts.end();
-
-    //We add the new precursor distance.
-    auto pos = update_dist_prec(temp_exts,ext,tl);
 
     //Now we add the correct subvector
     if(k>g[current_vertex].depth){
@@ -410,13 +376,8 @@ std::vector<Extension>::iterator frag_pattern::update_dist_prec(std::vector<Exte
         return pexts.begin();
     }
     //We get the label of the current node
-    Vertexp v = std::get<0>(ext);
     short vlab =  std::get<2>(ext);
 
-    //The distance ebtween the precursor node and the origin.
-    short dist_origin = g[v].lab;
-
-    short dprec = g[v].lab;
     for(auto bext = pexts.begin();bext!=pexts.end();bext++){
         short ext_lab = g[std::get<0>(*bext)].lab;
         auto cval = lt.get_ab(vlab,ext_lab);
@@ -806,5 +767,41 @@ void frag_pattern::write_graphml(std::string path_graphml)
     //std::cout << "written...";
 }
 
+
+//Return the pattern as an edge matrix and an occurences matrix.
+Rcpp::List frag_pattern::as_igraph_data_frame(){
+
+	int nedges = boost::num_edges(g);
+
+	//Edges matrix
+	Rcpp::IntegerMatrix mat_edges(nedges,3);
+	Rcpp::colnames(mat_edges) = Rcpp::CharacterVector({"from","to","lab"});
+
+	//Filling the edge data.frame.
+	graphTraitsp::edge_iterator be,ee;
+	boost::tie(be,ee)=boost::edges(g);
+	int count_edge = 0;
+	for(;be != ee; be++){
+		//Vertex descriptors are integer because of vector choise.
+		mat_edges(count_edge,0) = int(boost::source(*be,g));
+		mat_edges(count_edge,1) = int(boost::target(*be,g));
+		mat_edges(count_edge,2) = int(g[*be].lab);
+		count_edge++;
+	}
+
+	//Filling the occurences matrix
+	Rcpp::IntegerMatrix mat_occs(occurences.size(),2);
+	Rcpp::colnames(mat_occs) = Rcpp::CharacterVector({"gid","idx"});
+	int posmat = 0;
+	for(auto it = occurences.begin(); it != occurences.end(); it++){
+		mat_occs(posmat,0) = (*it).gid+1;
+		mat_occs(posmat,1) = (*it).idx;
+		posmat++;
+	}
+
+	Rcpp::List res = Rcpp::List::create(Rcpp::Named("edges")=mat_edges,
+                               Rcpp::Named("occurences")=mat_occs);
+	return(res);
+}
 
 

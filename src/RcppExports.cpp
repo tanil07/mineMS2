@@ -35,18 +35,20 @@ BEGIN_RCPP
 END_RCPP
 }
 // mineClosedDags
-void mineClosedDags(List mass_dags_df_list, LogicalVector processing, IntegerVector num, IntegerVector k, IntegerVector size_min, LogicalVector prec_only);
-RcppExport SEXP _mineMS2_mineClosedDags(SEXP mass_dags_df_listSEXP, SEXP processingSEXP, SEXP numSEXP, SEXP kSEXP, SEXP size_minSEXP, SEXP prec_onlySEXP) {
+Rcpp::List mineClosedDags(List& vertices_list, List& edges_list, LogicalVector& processing, IntegerVector num, IntegerVector k, IntegerVector size_min, LogicalVector prec_only);
+RcppExport SEXP _mineMS2_mineClosedDags(SEXP vertices_listSEXP, SEXP edges_listSEXP, SEXP processingSEXP, SEXP numSEXP, SEXP kSEXP, SEXP size_minSEXP, SEXP prec_onlySEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type mass_dags_df_list(mass_dags_df_listSEXP);
-    Rcpp::traits::input_parameter< LogicalVector >::type processing(processingSEXP);
+    Rcpp::traits::input_parameter< List& >::type vertices_list(vertices_listSEXP);
+    Rcpp::traits::input_parameter< List& >::type edges_list(edges_listSEXP);
+    Rcpp::traits::input_parameter< LogicalVector& >::type processing(processingSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type num(numSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type k(kSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type size_min(size_minSEXP);
     Rcpp::traits::input_parameter< LogicalVector >::type prec_only(prec_onlySEXP);
-    mineClosedDags(mass_dags_df_list, processing, num, k, size_min, prec_only);
-    return R_NilValue;
+    rcpp_result_gen = Rcpp::wrap(mineClosedDags(vertices_list, edges_list, processing, num, k, size_min, prec_only));
+    return rcpp_result_gen;
 END_RCPP
 }
 // FindEqualGreaterM
@@ -118,7 +120,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_mineMS2_decomposeMass", (DL_FUNC) &_mineMS2_decomposeMass, 4},
     {"_mineMS2_formulaExtension", (DL_FUNC) &_mineMS2_formulaExtension, 5},
-    {"_mineMS2_mineClosedDags", (DL_FUNC) &_mineMS2_mineClosedDags, 6},
+    {"_mineMS2_mineClosedDags", (DL_FUNC) &_mineMS2_mineClosedDags, 7},
     {"_mineMS2_FindEqualGreaterM", (DL_FUNC) &_mineMS2_FindEqualGreaterM, 2},
     {"_mineMS2_findLimDensity", (DL_FUNC) &_mineMS2_findLimDensity, 3},
     {"_mineMS2_formulaFromString", (DL_FUNC) &_mineMS2_formulaFromString, 2},
