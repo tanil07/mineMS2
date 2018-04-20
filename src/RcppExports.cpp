@@ -5,6 +5,22 @@
 
 using namespace Rcpp;
 
+// closeMatch
+IntegerVector closeMatch(NumericVector x, NumericVector y, IntegerVector xidx, IntegerVector yidx, double ppm, double dmz);
+RcppExport SEXP _mineMS2_closeMatch(SEXP xSEXP, SEXP ySEXP, SEXP xidxSEXP, SEXP yidxSEXP, SEXP ppmSEXP, SEXP dmzSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type x(xSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type xidx(xidxSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type yidx(yidxSEXP);
+    Rcpp::traits::input_parameter< double >::type ppm(ppmSEXP);
+    Rcpp::traits::input_parameter< double >::type dmz(dmzSEXP);
+    rcpp_result_gen = Rcpp::wrap(closeMatch(x, y, xidx, yidx, ppm, dmz));
+    return rcpp_result_gen;
+END_RCPP
+}
 // decomposeMass
 List decomposeMass(double mass, double tolerance, int b, std::vector<double> components);
 RcppExport SEXP _mineMS2_decomposeMass(SEXP massSEXP, SEXP toleranceSEXP, SEXP bSEXP, SEXP componentsSEXP) {
@@ -118,6 +134,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_mineMS2_closeMatch", (DL_FUNC) &_mineMS2_closeMatch, 6},
     {"_mineMS2_decomposeMass", (DL_FUNC) &_mineMS2_decomposeMass, 4},
     {"_mineMS2_formulaExtension", (DL_FUNC) &_mineMS2_formulaExtension, 5},
     {"_mineMS2_mineClosedDags", (DL_FUNC) &_mineMS2_mineClosedDags, 7},

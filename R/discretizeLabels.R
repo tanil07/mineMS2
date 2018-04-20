@@ -1,5 +1,36 @@
 
 
+###Function used to construct the edges labels dataset.
+make_label_loss <- function(lab_edges){
+
+	formula <- lab_edges$formula
+
+	str_formula <- str_split(formula,pattern = fixed("|"))
+
+	str_formula <- sapply(str_formula,function(x){
+
+		###If no label have been found.
+		if(anyNA(x)) return(HIGH_MASS)
+		if(length(x)==1) return(x)
+		if(length(x)>1) return(MULTIPLE_FORMULA)
+	})
+
+	# full_labs <- paste("-",sprintf("%0.3f",info_tab$mz))
+	full_labs <-  paste("- ",sprintf("%0.3f",lab_edges$mz),"\n",str_formula,sep="")
+	# pok <- ((str_formula!=HIGH_MASS) && (str_formula!=MULTIPLE_FORMULA))
+	# phm <- (str_formula==HIGH_MASS)
+	# pmf <- (str_formula==MULTIPLE_FORMULA)
+	# full_labs[pok] <- paste(full_labs[pok],str_formula[pok],sep="\n")
+	# full_labs[phm] <- HIGH_MASS
+
+
+	labs <- ifelse(((str_formula==HIGH_MASS)|(str_formula==MULTIPLE_FORMULA)),
+				   sprintf("%0.3f",lab_edges$mz),str_formula)
+	return(data.frame(labs=labs,full_labs=full_labs))
+}
+
+
+
 
 #' Default table of penalized loss
 #'
@@ -215,9 +246,16 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 		niter <- niter+1
 	}
 
+	###Constructing the edges labels
+	templabs <- make_label_loss(res_list$elem)
+	print(head(templabs))
+	res_list$elem$full_labels <- templabs$full_labs
+	res_list$elem$labs <- templabs$labs
 
 	mm2EdgesLabels(m2l) <- res_list$elem
 	mm2Dags(m2l) <- res_list$dags
+
+
 	message("Discretization finished.")
 	m2l
 })

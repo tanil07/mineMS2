@@ -12,6 +12,11 @@ setMethod("mm2Root", "fragPattern",function(pat){
 	return(pat@root)
 })
 
+setMethod("mm2Name", "fragPattern",function(pat){
+	return(pat@name)
+})
+
+
 setMethod("mm2Graph<-", "fragPattern", function(pat,value){
 	pat@graph <- value
 	pat
@@ -23,6 +28,11 @@ setMethod("mm2Occurences<-", "fragPattern", function(pat,value){
 })
 setMethod("mm2Root<-","fragPattern", function(pat,value){
 	pat@root <- value
+	pat
+})
+
+setMethod("mm2Name<-", "fragPattern",function(pat,value){
+	pat@name <- value
 	pat
 })
 

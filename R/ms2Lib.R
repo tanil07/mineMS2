@@ -1,3 +1,7 @@
+###CORRESPONDANCE TABLE
+CORR_TABLE <- list("D"="dags","S"="spectra","P"="patterns")
+
+
 
 ###Accessors
 setMethod("mm2Spectra","ms2Lib",function(m2l){
@@ -224,6 +228,9 @@ setMethod("length","ms2Lib",function(x){
 })
 
 
+
+
+
 #' Mine recurrent subgraph from a set of graphs.
 #'
 #' Mine all the complete recurring subgraphs.
@@ -244,17 +251,23 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, pre
 		num <- 2
 	}
 
+
 	###Get the data.frame correspoding to the sizes.
 	processing <- sapply(mm2Dags(m2l),function(x){
 		ecount(x)>1
 	})
 
+	if(nrow(mm2EdgesLabels(m2l))==0){
+		stop("No labels constructed, use the DiscretizeMallLosses function first.")
+	}
 	kTree <- 2
 	if(nrow(mm2EdgesLabels(m2l))<600){
 		kTree <- 3
 	}else{
 		kTree <- 2
 	}
+
+
 
 	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
 		###Wide variety of mass losses.
@@ -273,6 +286,8 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, pre
 	###Construction via fragPatternc constructor.
 	mm2Patterns(m2l) <- sapply(resRcpp$patterns,fragPattern,USE.NAMES = FALSE)
 
+	###Initializing the names of the patterns.
+	for(i in 1:length(m2l@patterns)) mm2Name(m2l@patterns[[i]]) <- paste("P",i,sep="")
 
 
 	###Buillding of the lattice
@@ -286,6 +301,24 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, pre
 })
 
 
+###Parse an id.
+parseId <- function(m2l,idx){
+	prefix <- substring(idx,1,1)
+	number <- as.integer(substring(idx,2))
+	# browser()
+	if(!(prefix %in% names(CORR_TABLE))) stop("Invalid prefix",prefix,"authorized prefix are",
+											  paste(names(CORR_TABLE),sep=", "))
+	if( (number<length(slot(m2l,CORR_TABLE[[prefix]])))&
+		(number>=1)){
+		return(list(type=CORR_TABLE[[prefix]],num=number))
+	}else{
+		stop("Invalid id for ",CORR_TABLE[[prefix]],":",number,".")
+	}
+}
+
+mm2get <- function(m2l,arglist){
+	(slot(m2l,arglist[[1]]))[[arglist[[2]]]]
+}
 
 #' Return the dag correspodning to a spectra or the modif.
 #'
@@ -299,17 +332,42 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, pre
 #'
 #' @examples
 setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
-	prefix <- substring(i,1,1)
-	number <- as.integer(substring(i,2))
-	if(prefix=="P"){ ##motif
-		return(x@patterns[[number]])
-	}else if(prefix=="D"){
-		return(x@dags[[number]])
-	}else if(prefix=="S"){
-		return(x@spectra[[number]])
-	}else{
-		stop("Wrong prefix to 'i' ",prefix)
-	}
+	mm2get(x,parseId(x,i))
 })
+
+
+#' Plot an element given an idx
+#'
+#' The method depends of the tyep of the ID furnished. The following prefixes are supported :
+#' \begin{itemize}
+#' \item \textbf{P} A pattern is called plot method of fragPattern object.
+#' \item \textbf{S} A spectrum is plotted calling the Plot method of spectrum 2 object.
+#' \end{itemize}
+#' Any other value will be removed.
+#'
+#' @param x An ms2Lib oject.
+#' @param y The index, a string starting by S if it a spectrum, P if it's a pattern or D if it's a dag.
+#' @param ... supplementary arguments to be passed by the method.
+#'
+#' @return a fragPattern object of an igraph graph object.
+#' @export
+#'
+#' @examples
+setMethod("plot", "ms2Lib",
+		  function(x,
+		  		 y,
+		  		 ...) {
+		  	rid <- parseId(x,y)
+		  	if(rid[[1]]=="patterns"){
+				plot(x[y],edgeLabels=(mm2EdgesLabels(x)),...)
+		  	}else if(rid[[1]]=="spectra"){
+		  		plot(x[y],full=TRUE,...)
+		  	}else if(rid[[1]]=="dags"){
+		  		stop("DAGS plotting not implemented at the moment.")
+		  	}
+})
+
+
+
 #
 # setMethod('[[','MSMSacquisition',function(x,i,j,...,drop=TRUE){

@@ -46,11 +46,13 @@ setClass(
 	slot = list(
 		graph = "ANY",
 		occurences = "matrix",
-		root = "integer"
+		root = "integer",
+		name = "character"
 	),
 	prototype = list(
 		graph = make_empty_graph(),
 		occurences = matrix(0,nrow=0,ncol=2),
-		root = as.integer(1)
+		root = as.integer(1),
+		name = character()
 	)
 )

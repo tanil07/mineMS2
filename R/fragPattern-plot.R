@@ -1,11 +1,12 @@
-###Filed used for the plotting of motifs uniquely.
+###Motif plotting function uniquely.
 
+
+###CONSTANTS
+HIGH_MASS <- "high m/z"
+MULTIPLE_FORMULA <- "2+ formula"
 
 
 ###Function which map a pattern on an occurences.
-
-library(MS2discrete)
-
 matchMzs <- function(mz1,mz2,ppm=15,dmz=0.03){
 	o1 <- order(mz1)
 	o2 <- order(mz2)
@@ -55,97 +56,114 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.005,ppm=10){
 
 
 
-make_label_loss <- function(m2l){
-
-	lab_edges <- mm2EdgesLabels(m2l)[,c("mz","formula")]
-
-	formula <- info_tab$formula
-	# MS2process:::RDBE(MS2process:::stringToFormula(formula[[5]]))
-
-	str_formula <- str_split(formula,pattern = fixed("|"))
-
-	str_formula <- sapply(str_formula,function(x){
-
-		###If no label have been found.
-		if(x=="NA") return("No formula")
-		if(length(x)==1) return(x)
-		if(length(x)>1) return(NA_character_)
-	})
-
-	###
-	labs <- ifelse(is.na(str_formula),sprintf("%0.3f",info_tab$mz),str_formula)
-	return(data.frame(mz=info_tab[,"mz"],labs=labs))
-}
 
 
-###TODO pass it in a class
-plot_pattern <- function(pattern,loss_lab,
-						 node_lab = c("diffmz","formula","both"),
-						 edge_lab = c("none","formula"),
-						 mzdigits = 3,vertex_size=30,...){
-	node_lab <- match.arg(node_lab)
-	edge_lab <- match.arg(edge_lab)
-
-
-	if(class(pattern)!="igraph"){
-		pattern <- read_graph(pattern,format = "graphml")
-	}
-
-	###We determine the edge label
-	elabs <- edge_attr(pattern,"lab")
-	txtlabs <- rep("",length(elabs))
-	if(edge_lab=="formula") txtlabs <- loss_lab[elabs,"labs"]
-
-	###Node labels.
-	nlabs <- vertex_attr(pattern,"dist_prec")
-	p0 <- which(nlabs==0)
-	pnon0 <- which(nlabs!=0)
-	if(node_lab=="diffmz"){
-		nlabs[p0] <- "M"
-		nlabs[pnon0] <- paste("M -\n",sprintf(paste("%0.",mzdigits,"f",sep=""),loss_lab[nlabs[pnon0],"mz"]))
-
-	}else if(node_lab=="formula"){
-		ostr <- rep("M",length(nlabs))
-		diff_str <- rep("",length(nlabs))
-		diff_str[pnon0] <- paste("-\n",loss_lab[nlabs[pnon0],"labs"],sep="")
-	}else if(node_lab=="both"){
-
-		ostr <- rep("M",length(nlabs))
-		diff_str <- rep("",length(nlabs))
-		diff_str[pnon0] <- paste("-\n",loss_lab[nlabs[pnon0],"labs"],sep="")
-		tnlabs <- paste(ostr,diff_str)
-		temp = rep("",length(nlabs))
-		nlabs[pnon0] <- paste(tnlabs[pnon0],"\n(-",sprintf(paste("%0.",mzdigits,"f",sep=""),loss_lab[nlabs[pnon0],"mz"]),")",sep="")
-		nlabs[p0] <- "M"
-	}
-
-
-	###Title
-	title <- paste("Pattern: ",graph_attr(pattern,"norm"))
+# plot_pattern <- function(fp,edgeLabels,
+# 						 nodeLab = c("default","label"),
+# 						 edgeLab = c("none","formula"),
+# 						 mzdigits = 3,vertex_size=30,tkplot=FALSE,...){
+# 	nodeLab <- match.arg(nodeLab)
+# 	edgeLab <- match.arg(edgeLab)
+#
+# 	g <- mm2Graph(fp)
+#
+# 	###We determine the edge label
+# 	elabs <- edge_attr(g,"lab")
+# 	txtlabs <- rep("",length(elabs))
+# 	if(edgeLab=="formula")	txtlabs <- edgeLabels[elabs,"labs"]
+#
+# 	###Node labels, nodes are always in the right order
+# 	nodes0 <- g[[1,]]
+# 	labs0 <- edge_attr(g,"lab",g[[1,,edges=TRUE]][[1]])
+# 	p0 <- 1
+# 	pnon0 <- as.numeric(nodes0)
+# 	nlabs <- rep("M",length(nodes0)+1)
+# 	if(nodeLab=="label"){
+# 		nlabs[pnon0] <- paste(nlabs[pnon0],labs0)
+# 	}else if(nodeLab=="default"){
+# 		nlabs[pnon0] <- edgeLabels[full_labs[labs0]]
+# 	}
+#
+#
+# 	###Title
+# 	title <- paste("Pattern: ",mm2Name(fp))
+#
+# 	if(tkplot){
+# 		tkplot(g,layout=(layout_with_sugiyama(g)$layout),canvas.width = 600,
+# 			   canvas.height = 600,vertex.label=nlabs,
+# 			   vertex.size=vertex_size,edge.label = txtlabs,
+# 			   vertex.color="orange",...)
+#
+# 	}else{
+# 		plot.igraph(g,layout=(layout_with_sugiyama(g)$layout),
+# 					vertex.label=nlabs,vertex.size=vertex_size,edge.label = txtlabs,
+# 					vertex.color="orange",...)
+# 	}
+# }
 
 
 
-	plot.igraph(pattern,layout=(layout_with_sugiyama(pattern)$layout),
-				vertex.label=nlabs,vertex.size=vertex_size,edge.label = txtlabs,
-				vertex.color="orange",...)
-}
+setMethod("plot", "fragPattern",
+		  function(x,
+		  		 y = NULL,
+		  		 edgeLabels = NULL,
+		  		 nodeLab = c("default", "label"),
+		  		 edgeLab = c("formula","none"),
+		  		 mzdigits = 3,
+		  		 vertex_size = 30,
+		  		 tkplot = FALSE,
+		  		 ...) {
+		  	nodeLab <- match.arg(nodeLab)
+		  	edgeLab <- match.arg(edgeLab)
 
+		  	g <- mm2Graph(x)
+		  	###We determine the edge label
+		  	elabs <- edge_attr(g, "lab")
+		  	txtlabs <- rep("", length(elabs))
+		  	if (edgeLab == "formula")
+		  		txtlabs <- edgeLabels[elabs, "labs"]
 
+		  	###Node labels, nodes are always in the right order
+		  	nodes0 <- g[[1,]][[1]]
+		  	labs0 <- edge_attr(g, "lab", g[[1, , edges = TRUE]][[1]])
+		  	p0 <- 1
+		  	pnon0 <- as.numeric(nodes0)
+		  	nlabs <- rep("M", length(nodes0) + 1)
+		  	if (nodeLab == "label") {
+		  		nlabs[pnon0] <- paste(nlabs[pnon0], labs0)
+		  	} else if (nodeLab == "default") {
+		  		nlabs[pnon0] <- paste(nlabs[pnon0],edgeLabels[labs0,"full_labels"])
+		  	}
 
-#' Ploting the graph of a fragPattern object.
-#'
-#' Plot the graph of a fragPattern object.
-#'
-#' @param x a fragPattern object.
-#' @param ... supplementary arguement to be passed ot plot.igraph.
-#'
-#' @return
-#' @export
-#'
-#' @examples
-setMethod("plot","fragPattern",function(x,y=NULL,edgeLabels=NULL,...){
+		  	###Title
+		  	title <- paste("Pattern: ", mm2Name(x))
 
-})
+		  	if (tkplot) {
+		  		tkplot(
+		  			g,
+		  			layout = (layout_with_sugiyama(g)$layout),
+		  			canvas.width = 600,
+		  			canvas.height = 600,
+		  			vertex.label = nlabs,
+		  			vertex.size = vertex_size,
+		  			edge.label = txtlabs,
+		  			vertex.color = "orange",
+		  			...
+		  		)
+
+		  	} else{
+		  		plot.igraph(
+		  			g,
+		  			layout = (layout_with_sugiyama(g)$layout),
+		  			vertex.label = nlabs,
+		  			vertex.size = vertex_size,
+		  			edge.label = txtlabs,
+		  			vertex.color = "orange",
+		  			...
+		  		)
+		  	}
+
+		  })
 
 
 setMethod("plotOccurences","ms2Lib",function(m2l,patternidx,...){

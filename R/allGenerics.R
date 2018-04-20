@@ -43,6 +43,9 @@ setGeneric("mm2Occurences", function(pat) standardGeneric("mm2Occurences"))
 
 setGeneric("mm2Root", function(pat) standardGeneric("mm2Root"))
 
+setGeneric("mm2Name", function(pat) standardGeneric("mm2Name"))
+
+
 ###fragPattern object setter
 setGeneric("mm2Graph<-", function(pat,value) standardGeneric("mm2Graph<-"))
 
@@ -50,7 +53,7 @@ setGeneric("mm2Occurences<-", function(pat,value) standardGeneric("mm2Occurences
 
 setGeneric("mm2Root<-", function(pat,value) standardGeneric("mm2Root<-"))
 
-
+setGeneric("mm2Name<-", function(pat,value) standardGeneric("mm2Name<-"))
 
 ###ms2Lib specific generic.
 setGeneric("discretizeMassLosses", function(m2l,...) standardGeneric("discretizeMassLosses"))
