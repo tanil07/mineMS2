@@ -8,8 +8,8 @@
 #' and informations added by the user eventually.
 #' @slot spectra A list of spectra sotred under the form of Spectrum2 object.
 #' @slot dags A list storing the set of graphs object corresponding to the MS-MS spectra.
-#' @slot edges.labels The discretized edges labels.
-#' @slot nodes.labels The discretized nodes labels.
+#' @slot edgesLabels The discretized edges labels.
+#' @slot nodesLabels The discretized nodes labels.
 #' @slot patterns A list storing the fragPattern objects.
 #' @slot lattice The graph reprsentation of the lattice of the patterns.
 #' @slot latticeIdxItems The ids of the nodes which are items in MS2process.
@@ -31,8 +31,8 @@ setClass(
 		spectraInfo = data.frame(),
 		spectra = list(),
 		dags = list(),
-		edges.labels = data.frame(),
-		nodes.labels = data.frame(),
+		edgesLabels = data.frame(),
+		nodesLabels = data.frame(),
 		patterns = list(),
 		lattice = make_empty_graph(),
 		latticeIdxItems = integer()

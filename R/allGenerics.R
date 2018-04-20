@@ -55,6 +55,7 @@ setGeneric("mm2Root<-", function(pat,value) standardGeneric("mm2Root<-"))
 
 setGeneric("mm2Name<-", function(pat,value) standardGeneric("mm2Name<-"))
 
+
 ###ms2Lib specific generic.
 setGeneric("discretizeMassLosses", function(m2l,...) standardGeneric("discretizeMassLosses"))
 
@@ -62,4 +63,6 @@ setGeneric("discretizeFragments", function(m2l,...) standardGeneric("discretizeF
 
 setGeneric("mineClosedSubgraphs",function(m2l,...) standardGeneric("mineClosedSubgraphs"))
 
-setGeneric("plotOccurences",function(m2l,fp,...) standardGeneric("plotOccurences"))
+setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurences"))
+
+

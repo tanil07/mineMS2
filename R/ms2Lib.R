@@ -118,6 +118,11 @@ parseMS2file_line <- function(x){
 	do.call(paste("parse",x[2],"spectrum2",sep="_"),list(filename=x[1]))
 }
 
+make_initial_title <- function(spec_infos){
+	mz_str <- sprintf("%0.3f",spec_infos[,"mz.precursor"])
+	paste("Precursor : ",mz_str," (S",1:nrow(spec_infos),")",sep="")
+}
+
 
 
 #' ms2Lib constructor
@@ -191,6 +196,8 @@ ms2Lib <- function(x, suppInfos = NULL){
 			temp_df$file <- lfiles
 		}
 	}
+
+	temp_df$title <- make_initial_title(temp_df)
 
 	##Adding the supplementary information if necessary.
 	if(!is.null(suppInfos)){
@@ -306,8 +313,8 @@ parseId <- function(m2l,idx){
 	prefix <- substring(idx,1,1)
 	number <- as.integer(substring(idx,2))
 	# browser()
-	if(!(prefix %in% names(CORR_TABLE))) stop("Invalid prefix",prefix,"authorized prefix are",
-											  paste(names(CORR_TABLE),sep=", "))
+	if(!(prefix %in% names(CORR_TABLE))) stop("Invalid prefix ",prefix," authorized prefix are ",
+											  paste(names(CORR_TABLE),collapse=", "))
 	if( (number<length(slot(m2l,CORR_TABLE[[prefix]])))&
 		(number>=1)){
 		return(list(type=CORR_TABLE[[prefix]],num=number))
