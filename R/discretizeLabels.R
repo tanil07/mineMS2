@@ -248,13 +248,12 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 
 	###Constructing the edges labels
 	templabs <- make_label_loss(res_list$elem)
-	print(head(templabs))
+	# print(head(templabs))
 	res_list$elem$full_labels <- templabs$full_labs
 	res_list$elem$labs <- templabs$labs
 
 	mm2EdgesLabels(m2l) <- res_list$elem
 	mm2Dags(m2l) <- res_list$dags
-
 
 	message("Discretization finished.")
 	m2l

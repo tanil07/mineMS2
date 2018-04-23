@@ -6,6 +6,53 @@ HIGH_MASS <- "high m/z"
 MULTIPLE_FORMULA <- "2+ formula"
 
 
+layoutMatrix <- function(n)
+{
+	if (n == 1) {
+		return(matrix(c(1)))
+	}
+	if (n == 2) {
+		return(matrix(c(1, 2), nrow = (2)))
+	}
+	if (n == 3) {
+		return(matrix(c(1, 2, 3), nrow = (3)))
+	}
+	if (n == 4) {
+		return(matrix(c(1, 2, 3, 4), nrow = (2), byrow = TRUE))
+	}
+	if (n == 5) {
+		return(matrix(c(1, 2, 3, 4, 5, 6), nrow = (2), byrow = TRUE))
+	}
+	if (n == 6) {
+		return(matrix(c(1, 2, 3, 4, 5, 6), nrow = (2), byrow = TRUE))
+	}
+	if (n == 7) {
+		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow = (3),
+					  byrow = TRUE))
+	}
+	if (n == 8) {
+		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8), nrow = (2),
+					  byrow = TRUE))
+	}
+	if (n == 9) {
+		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow = (3),
+					  byrow = TRUE))
+	}
+	if (n == 10) {
+		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+					  nrow = (4), byrow = TRUE))
+	}
+	if (n == 11) {
+		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+					  nrow = (4), byrow = TRUE))
+	}
+	if (n == 12) {
+		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+					  nrow = (4), byrow = TRUE))
+	}
+}
+
+
 ###Function which map a pattern on an occurences.
 matchMzs <- function(mz1,mz2,ppm=15,dmz=0.03){
 	o1 <- order(mz1)
@@ -77,7 +124,7 @@ setMethod("plot", "fragPattern",
 		  		 nodeLab = c("default", "label"),
 		  		 edgeLab = c("formula","none"),
 		  		 mzdigits = 3,
-		  		 vertex_size = 30,
+		  		 vertex_size = 55,
 		  		 tkplot = FALSE,
 		  		 ...) {
 		  	nodeLab <- match.arg(nodeLab)
@@ -138,7 +185,7 @@ setMethod("plot", "fragPattern",
 #' @param pidx A pattern id or a frag_pattern object.
 #' @param titles A vector of titles to be used. A default tile include id
 #' and precursor will bne used by default
-#' @param byPageMax The maximum number of spectra to be plotted by page.
+#' @param byPage The maximum number of spectra to be plotted by page.
 #' @param ... supplementary function to be passed to theplot function.
 #'
 #' @return
@@ -148,7 +195,7 @@ setMethod("plot", "fragPattern",
 setMethod("plotOccurences", "ms2Lib", function(m2l,
 											   pidx,
 											   titles = NULL,
-											   byPageMax = 6,
+											   byPage = 6,
 											   ...) {
 	###Verifying that a correct id have been queried.
 	fp <- NULL
@@ -178,7 +225,7 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	occs_gid <- occs[, 1]
 	occs_pos <- occs[, 2]
 
-	layout(proFIA:::layoutMatrix(min(byPageMax, length(occs_gid))))
+	layout(layoutMatrix(min(byPage, length(occs_gid))))
 
 	col_vec <- rainbow(length(occs_gid))
 

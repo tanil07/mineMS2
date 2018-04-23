@@ -172,11 +172,6 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 			sid[pos] = count_I;
 
 			//If it was extracted into the lattice.
-			// elat[pinf.first].noccs  = 1;
-			// elat[pinf.first].num_losses  = 0;
-			// elat[pinf.first].noccs_unique = 1;
-			// elat[pinf.first].item = true;
-			// elat[pinf.first].id = pinf.second;
 
 			//We append the index of the item to the data.
 			vec_items[count_I] = pos+1;
@@ -199,13 +194,6 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 			num_losses[pos] = cp.sizeGraph()-1;
 			is_item[pos] = false;
 			sid[pos] = count_M+1;
-
-
-			//Pattern information are obtained.
-			// elat[pinf.first].noccs  = cp.numOccs();
-			// elat[pinf.first].num_losses  =  cp.sizeGraph()-1;
-			// elat[pinf.first].noccs_unique  =  cp.numUniqueOccs().size();
-			// elat[pinf.first].id = count_M;
 
 			//Pattern is transformed into a list and pushed ot the list of motifs.
 			list_patterns[count_M] = cp.as_igraph_data_frame();

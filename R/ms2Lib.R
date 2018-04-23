@@ -34,7 +34,15 @@ setMethod("mm2Lattice","ms2Lib",function(m2l){
 })
 
 setMethod("mm2LatticeIdxItems","ms2Lib",function(m2l){
-	return(m2l@lattice)
+	return(m2l@latticeIdxItems)
+})
+
+setMethod("mm2ReducedPatterns","ms2Lib",function(m2l){
+	return(m2l@reducedPatterns)
+})
+
+setMethod("mm2ReducedLattice","ms2Lib",function(m2l){
+	return(m2l@reducedLattice)
 })
 
 
@@ -79,7 +87,15 @@ setMethod("mm2LatticeIdxItems<-","ms2Lib",function(m2l,value){
 	m2l
 })
 
+setMethod("mm2ReducedPatterns<-","ms2Lib",function(m2l,value){
+	m2l@reducedPatterns<- value
+	m2l
+})
 
+setMethod("mm2ReducedLattice<-","ms2Lib",function(m2l,value){
+	m2l@reducedLattice<- value
+	m2l
+})
 
 ###Function to get a spectrum.
 
@@ -373,8 +389,6 @@ setMethod("plot", "ms2Lib",
 		  		stop("DAGS plotting not implemented at the moment.")
 		  	}
 })
-
-
 
 #
 # setMethod('[[','MSMSacquisition',function(x,i,j,...,drop=TRUE){

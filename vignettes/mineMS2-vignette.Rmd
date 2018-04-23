@@ -57,7 +57,22 @@ m2l <- discretizeMassLosses(m2l,8,0.008,2/length(m2l),precPpm=20,precDmz=0.03,ma
 ```{r graph_mining}
 m2l <- mineClosedSubgraphs(m2l,num=2,sizeMin = 2, precursor = FALSE)
 ```
-#Visualisation
+#IDs
+The *mineMS2* package include 4 differents data, the spectra, the dags correspoding to these spectra, the losses and and the mined patterns. An ID is associated with each of these elements. When judicious they can be visualized using the *plot* function and searched using the *search*(not implemented) and *exported* functions.
+
+* *Spectra* IDs starts by the *S* letter, they can be plot using the *plot* function, which call the plot function of the msnBase package. They can also be searched against the patterns
+```{r spec_plot_example}
+plot(m2l,"S45")
+```
+
+
+* *Losses* IDs start by the *L* letter. They can be searched against patterns (*P*) or dags (*D*).
+
+* *DAGs* IDs start by the *D* they can be searched against patterns (*P*). 
+
+* *Patterns* IDs start by the *P* letter, they can be plotted using the *plot* and *plotOccurences functions.
+
+
 
 # Session info
 

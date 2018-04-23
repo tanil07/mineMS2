@@ -20,14 +20,20 @@ and informations added by the user eventually.}
 
 \item{\code{dags}}{A list storing the set of graphs object corresponding to the MS-MS spectra.}
 
-\item{\code{edges.labels}}{The discretized edges labels.}
+\item{\code{edgesLabels}}{The discretized edges labels.}
 
-\item{\code{nodes.labels}}{The discretized nodes labels.}
+\item{\code{nodesLabels}}{The discretized nodes labels.}
 
 \item{\code{patterns}}{A list storing the fragPattern objects.}
 
 \item{\code{lattice}}{The graph reprsentation of the lattice of the patterns.}
 
 \item{\code{latticeIdxItems}}{The ids of the nodes which are items in MS2process.}
+
+\item{\code{ReducedPatterns}}{The ids of the reduced patterns.}
+
+\item{\code{ReducedLattice}}{The graph of the reduced lattice.}
+
+\item{\code{k}}{The count of reduced patterns.}
 }}
 

@@ -50,6 +50,46 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vecInitialisation
+IntegerVector vecInitialisation(List& patterns, NumericVector& scores_pat, int num_objects);
+RcppExport SEXP _mineMS2_vecInitialisation(SEXP patternsSEXP, SEXP scores_patSEXP, SEXP num_objectsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List& >::type patterns(patternsSEXP);
+    Rcpp::traits::input_parameter< NumericVector& >::type scores_pat(scores_patSEXP);
+    Rcpp::traits::input_parameter< int >::type num_objects(num_objectsSEXP);
+    rcpp_result_gen = Rcpp::wrap(vecInitialisation(patterns, scores_pat, num_objects));
+    return rcpp_result_gen;
+END_RCPP
+}
+// reduceLatticeK_greedy
+Rcpp::IntegerVector reduceLatticeK_greedy(DataFrame df_nodes, DataFrame df_edges, NumericVector scores, NumericVector n, int k);
+RcppExport SEXP _mineMS2_reduceLatticeK_greedy(SEXP df_nodesSEXP, SEXP df_edgesSEXP, SEXP scoresSEXP, SEXP nSEXP, SEXP kSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df_nodes(df_nodesSEXP);
+    Rcpp::traits::input_parameter< DataFrame >::type df_edges(df_edgesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type scores(scoresSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    rcpp_result_gen = Rcpp::wrap(reduceLatticeK_greedy(df_nodes, df_edges, scores, n, k));
+    return rcpp_result_gen;
+END_RCPP
+}
+// complementIdx
+IntegerVector complementIdx(int num_object, IntegerVector rm);
+RcppExport SEXP _mineMS2_complementIdx(SEXP num_objectSEXP, SEXP rmSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type num_object(num_objectSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type rm(rmSEXP);
+    rcpp_result_gen = Rcpp::wrap(complementIdx(num_object, rm));
+    return rcpp_result_gen;
+END_RCPP
+}
 // mineClosedDags
 Rcpp::List mineClosedDags(List& vertices_list, List& edges_list, LogicalVector& processing, IntegerVector num, IntegerVector k, IntegerVector size_min, LogicalVector prec_only);
 RcppExport SEXP _mineMS2_mineClosedDags(SEXP vertices_listSEXP, SEXP edges_listSEXP, SEXP processingSEXP, SEXP numSEXP, SEXP kSEXP, SEXP size_minSEXP, SEXP prec_onlySEXP) {
@@ -64,6 +104,32 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< IntegerVector >::type size_min(size_minSEXP);
     Rcpp::traits::input_parameter< LogicalVector >::type prec_only(prec_onlySEXP);
     rcpp_result_gen = Rcpp::wrap(mineClosedDags(vertices_list, edges_list, processing, num, k, size_min, prec_only));
+    return rcpp_result_gen;
+END_RCPP
+}
+// MST
+DataFrame MST(DataFrame edges, NumericVector scores, int num_vertices);
+RcppExport SEXP _mineMS2_MST(SEXP edgesSEXP, SEXP scoresSEXP, SEXP num_verticesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type edges(edgesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type scores(scoresSEXP);
+    Rcpp::traits::input_parameter< int >::type num_vertices(num_verticesSEXP);
+    rcpp_result_gen = Rcpp::wrap(MST(edges, scores, num_vertices));
+    return rcpp_result_gen;
+END_RCPP
+}
+// scorePattern
+double scorePattern(DataFrame edges, NumericVector scores, int num_vertices);
+RcppExport SEXP _mineMS2_scorePattern(SEXP edgesSEXP, SEXP scoresSEXP, SEXP num_verticesSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type edges(edgesSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type scores(scoresSEXP);
+    Rcpp::traits::input_parameter< int >::type num_vertices(num_verticesSEXP);
+    rcpp_result_gen = Rcpp::wrap(scorePattern(edges, scores, num_vertices));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -137,7 +203,12 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mineMS2_closeMatch", (DL_FUNC) &_mineMS2_closeMatch, 6},
     {"_mineMS2_decomposeMass", (DL_FUNC) &_mineMS2_decomposeMass, 4},
     {"_mineMS2_formulaExtension", (DL_FUNC) &_mineMS2_formulaExtension, 5},
+    {"_mineMS2_vecInitialisation", (DL_FUNC) &_mineMS2_vecInitialisation, 3},
+    {"_mineMS2_reduceLatticeK_greedy", (DL_FUNC) &_mineMS2_reduceLatticeK_greedy, 5},
+    {"_mineMS2_complementIdx", (DL_FUNC) &_mineMS2_complementIdx, 2},
     {"_mineMS2_mineClosedDags", (DL_FUNC) &_mineMS2_mineClosedDags, 7},
+    {"_mineMS2_MST", (DL_FUNC) &_mineMS2_MST, 3},
+    {"_mineMS2_scorePattern", (DL_FUNC) &_mineMS2_scorePattern, 3},
     {"_mineMS2_FindEqualGreaterM", (DL_FUNC) &_mineMS2_FindEqualGreaterM, 2},
     {"_mineMS2_findLimDensity", (DL_FUNC) &_mineMS2_findLimDensity, 3},
     {"_mineMS2_formulaFromString", (DL_FUNC) &_mineMS2_formulaFromString, 2},

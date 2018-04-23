@@ -15,7 +15,6 @@ Rcpp::List mineClosedDags(List& vertices_list,List& edges_list,LogicalVector& pr
 
 	for(int i = 0; i < num_graphs; i++){
 		Rcpp::DataFrame df_vertices(vertices_list[i]);
-		CharacterVector names = df_vertices.names();
 		Rcpp::DataFrame df_edges(edges_list[i]);
 		mass_graph temp_mg(df_vertices,df_edges);
 		mgs.push_back(temp_mg);

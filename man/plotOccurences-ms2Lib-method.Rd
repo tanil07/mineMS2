@@ -6,8 +6,7 @@
 \title{PLotting the occurences of a fragPattern object inside
 an ms2Lib object.}
 \usage{
-\S4method{plotOccurences}{ms2Lib}(m2l, pidx, titles = NULL, byPageMax = 6,
-  ...)
+\S4method{plotOccurences}{ms2Lib}(m2l, pidx, titles = NULL, byPage = 6, ...)
 }
 \arguments{
 \item{m2l}{An ms2lib object.}
@@ -17,7 +16,7 @@ an ms2Lib object.}
 \item{titles}{A vector of titles to be used. A default tile include id
 and precursor will bne used by default}
 
-\item{byPageMax}{The maximum number of spectra to be plotted by page.}
+\item{byPage}{The maximum number of spectra to be plotted by page.}
 
 \item{...}{supplementary function to be passed to theplot function.}
 }

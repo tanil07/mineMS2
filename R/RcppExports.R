@@ -13,8 +13,28 @@ formulaExtension <- function(masses, mzlim, formula, hatoms, hhatom) {
     .Call('_mineMS2_formulaExtension', PACKAGE = 'mineMS2', masses, mzlim, formula, hatoms, hhatom)
 }
 
+vecInitialisation <- function(patterns, scores_pat, num_objects) {
+    .Call('_mineMS2_vecInitialisation', PACKAGE = 'mineMS2', patterns, scores_pat, num_objects)
+}
+
+reduceLatticeK_greedy <- function(df_nodes, df_edges, scores, n, k) {
+    .Call('_mineMS2_reduceLatticeK_greedy', PACKAGE = 'mineMS2', df_nodes, df_edges, scores, n, k)
+}
+
+complementIdx <- function(num_object, rm) {
+    .Call('_mineMS2_complementIdx', PACKAGE = 'mineMS2', num_object, rm)
+}
+
 mineClosedDags <- function(vertices_list, edges_list, processing, num, k, size_min, prec_only) {
     .Call('_mineMS2_mineClosedDags', PACKAGE = 'mineMS2', vertices_list, edges_list, processing, num, k, size_min, prec_only)
+}
+
+MST <- function(edges, scores, num_vertices) {
+    .Call('_mineMS2_MST', PACKAGE = 'mineMS2', edges, scores, num_vertices)
+}
+
+scorePattern <- function(edges, scores, num_vertices) {
+    .Call('_mineMS2_scorePattern', PACKAGE = 'mineMS2', edges, scores, num_vertices)
 }
 
 FindEqualGreaterM <- function(inv, values) {

@@ -13,6 +13,9 @@
 #' @slot patterns A list storing the fragPattern objects.
 #' @slot lattice The graph reprsentation of the lattice of the patterns.
 #' @slot latticeIdxItems The ids of the nodes which are items in MS2process.
+#' @slot ReducedPatterns The ids of the reduced patterns.
+#' @slot ReducedLattice The graph of the reduced lattice.
+#' @slot k The count of reduced patterns.
 #' @aliases ms2Lib
 #' @exportClass ms2Lib
 setClass(
@@ -25,7 +28,10 @@ setClass(
 		nodesLabels = "data.frame",
 		patterns = "list",
 		lattice = "ANY",
-		latticeIdxItems = "integer"
+		latticeIdxItems = "integer",
+		reducedPatterns = "integer",
+		reducedLattice = "ANY",
+		k = "integer"
 	),
 	prototype = list(
 		spectraInfo = data.frame(),
@@ -35,7 +41,11 @@ setClass(
 		nodesLabels = data.frame(),
 		patterns = list(),
 		lattice = make_empty_graph(),
-		latticeIdxItems = integer()
+		latticeIdxItems = integer(),
+		reducedPatterns = integer(),
+		reducedLattice = make_empty_graph(),
+		k = as.integer(1)
+
 	)
 )
 

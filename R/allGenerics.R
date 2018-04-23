@@ -16,6 +16,10 @@ setGeneric("mm2Lattice", function(m2l) standardGeneric("mm2Lattice"))
 
 setGeneric("mm2LatticeIdxItems", function(m2l) standardGeneric("mm2LatticeIdxItems"))
 
+setGeneric("mm2ReducedPatterns", function(m2l) standardGeneric("mm2ReducedPatterns"))
+
+setGeneric("mm2ReducedLattice", function(m2l) standardGeneric("mm2ReducedLattice"))
+
 
 ###ms2Lib object setter
 setGeneric("mm2Spectra<-", function(m2l,value) standardGeneric("mm2Spectra<-"))
@@ -34,6 +38,9 @@ setGeneric("mm2Lattice<-", function(m2l,value) standardGeneric("mm2Lattice<-"))
 
 setGeneric("mm2LatticeIdxItems<-", function(m2l,value) standardGeneric("mm2LatticeIdxItems<-"))
 
+setGeneric("mm2ReducedPatterns<-", function(m2l,value) standardGeneric("mm2ReducedPatterns<-"))
+
+setGeneric("mm2ReducedLattice<-", function(m2l,value) standardGeneric("mm2ReducedLattice<-"))
 
 
 ###fragPattern object getter
@@ -64,5 +71,12 @@ setGeneric("discretizeFragments", function(m2l,...) standardGeneric("discretizeF
 setGeneric("mineClosedSubgraphs",function(m2l,...) standardGeneric("mineClosedSubgraphs"))
 
 setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurences"))
+
+setGeneric("exportLattice",function(m2l,filename,...) standardGeneric("exportLattice"))
+
+setGeneric("scoresLosses",function(m2l,...) standardGeneric("scoresLosses"))
+
+setGeneric("scorePatterns",function(m2l,...) standardGeneric("scorePatterns"))
+
 
 
