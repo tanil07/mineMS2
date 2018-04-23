@@ -11,7 +11,7 @@ using namespace Rcpp;
 struct latt_info{
 	//TODO change it to short value when graphml bug is fixed.
 	short name;
-	double score;
+	//double score;
 };
 
 //A new kind of graph is defined jsut to perform the reduction
@@ -55,10 +55,12 @@ void min_common_nodes(List& patterns,NumericVector& scores_pat,
                       int num_objects){
 
 	for(size_t i = 0; i < int(patterns.size()); i++){
+		Rcout<<i<<" ";
 		//We get the s4 object
 		S4 pat = patterns[i];
 		update_dist(pat,names,scores,i,scores_pat[i+num_objects]);
 	}
+	Rcout<<"...done...";
 // 	return List::create(Named("names")=names,
 //                      Named("scores")=scores);
 }
@@ -70,14 +72,17 @@ IntegerVector vecInitialisation(List& patterns,NumericVector& scores_pat,int num
 	std::fill(names.begin(),names.end(),IntegerVector::get_na());
 	NumericMatrix scores(num_objects,num_objects);
 	std::fill(scores.begin(),scores.end(),0);
-
+	Rcout<<"min_common_nodes: ";
 	min_common_nodes(patterns,scores_pat,
                   names,scores,num_objects);
 
 	//Now we computes the values.
 	IntegerVector n(patterns.size(),0);
+	Rcout <<"next loop";
 
 	for(auto it=names.begin() ; it!=names.end() ; it++){
+		if(IntegerMatrix::is_na(*it)) continue;
+		Rcout << " i:"<<*it<<" ";
 		n[*it]++;
 	}
 	return n;
@@ -236,16 +241,16 @@ void update_score_removal(latt& l, NumericVector& current_scores,
 
 // Creation of the lattice
 void fillLattice(DataFrame& df_nodes,DataFrame& df_edges, latt& l, std::set<VertexLatt>& items){
-	NumericVector scores = df_nodes["scores"];
+	//NumericVector scores = df_nodes["scores"];
 
 	IntegerVector names = df_nodes["name"];
 	LogicalVector is_item = df_nodes["item"];
 
 	//Adding the nodes.
-	std::vector<VertexLatt> mapped_vec(scores.size());
-	for(int i=0;i<scores.size();i++){
+	std::vector<VertexLatt> mapped_vec(names.size());
+	for(int i=0;i<names.size();i++){
 		VertexLatt nvert = boost::add_vertex(l);
-		l[nvert].score = scores[i];
+		//l[nvert].score = scores[i];
 		//This gives an ID to identify the object.
 		l[nvert].name =names[i]-1;
 		mapped_vec[i] = nvert;

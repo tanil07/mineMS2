@@ -123,10 +123,12 @@ kLatticeReduction <- function(m2l,k){
     n <- vecInitialisation(mm2Patterns(m2l),sc,num_objects)
 
     df_vertices <- as_data_frame(lat,"vertices")
+    df_vertices$name <- as.integer(df_vertices$name)
+
     df_edges <- as_data_frame(lat,"edges")
+    df_edges$from <- as.integer(df_edges$from)
+    df_edges$to <- as.integer(df_edges$to)
 
-
-    reduceLatticeK_greedy
     message("Lattice reductions")
 	removed <-  reduceLatticeK_greedy(df_vertices,df_edges, sc,n,k)
 

@@ -7,7 +7,7 @@
 \usage{
 \S4method{plot}{fragPattern,ANY}(x, y = NULL, edgeLabels = NULL,
   nodeLab = c("default", "label"), edgeLab = c("formula", "none"),
-  mzdigits = 3, vertex_size = 30, tkplot = FALSE, ...)
+  mzdigits = 3, vertex_size = 55, tkplot = FALSE, ...)
 }
 \arguments{
 \item{y}{= NULL,}
