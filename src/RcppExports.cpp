@@ -133,6 +133,30 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// select_patterns_from_spectra
+IntegerVector select_patterns_from_spectra(List pat_list, int sid);
+RcppExport SEXP _mineMS2_select_patterns_from_spectra(SEXP pat_listSEXP, SEXP sidSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type pat_list(pat_listSEXP);
+    Rcpp::traits::input_parameter< int >::type sid(sidSEXP);
+    rcpp_result_gen = Rcpp::wrap(select_patterns_from_spectra(pat_list, sid));
+    return rcpp_result_gen;
+END_RCPP
+}
+// patterns_from_spectra
+List patterns_from_spectra(List pat_list, int num_spectra);
+RcppExport SEXP _mineMS2_patterns_from_spectra(SEXP pat_listSEXP, SEXP num_spectraSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type pat_list(pat_listSEXP);
+    Rcpp::traits::input_parameter< int >::type num_spectra(num_spectraSEXP);
+    rcpp_result_gen = Rcpp::wrap(patterns_from_spectra(pat_list, num_spectra));
+    return rcpp_result_gen;
+END_RCPP
+}
 // FindEqualGreaterM
 IntegerVector FindEqualGreaterM(NumericVector inv, NumericVector values);
 RcppExport SEXP _mineMS2_FindEqualGreaterM(SEXP invSEXP, SEXP valuesSEXP) {
@@ -209,6 +233,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mineMS2_mineClosedDags", (DL_FUNC) &_mineMS2_mineClosedDags, 7},
     {"_mineMS2_MST", (DL_FUNC) &_mineMS2_MST, 3},
     {"_mineMS2_scorePattern", (DL_FUNC) &_mineMS2_scorePattern, 3},
+    {"_mineMS2_select_patterns_from_spectra", (DL_FUNC) &_mineMS2_select_patterns_from_spectra, 2},
+    {"_mineMS2_patterns_from_spectra", (DL_FUNC) &_mineMS2_patterns_from_spectra, 2},
     {"_mineMS2_FindEqualGreaterM", (DL_FUNC) &_mineMS2_FindEqualGreaterM, 2},
     {"_mineMS2_findLimDensity", (DL_FUNC) &_mineMS2_findLimDensity, 3},
     {"_mineMS2_formulaFromString", (DL_FUNC) &_mineMS2_formulaFromString, 2},

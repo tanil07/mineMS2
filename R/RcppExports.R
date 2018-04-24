@@ -37,6 +37,14 @@ scorePattern <- function(edges, scores, num_vertices) {
     .Call('_mineMS2_scorePattern', PACKAGE = 'mineMS2', edges, scores, num_vertices)
 }
 
+select_patterns_from_spectra <- function(pat_list, sid) {
+    .Call('_mineMS2_select_patterns_from_spectra', PACKAGE = 'mineMS2', pat_list, sid)
+}
+
+patterns_from_spectra <- function(pat_list, num_spectra) {
+    .Call('_mineMS2_patterns_from_spectra', PACKAGE = 'mineMS2', pat_list, num_spectra)
+}
+
 FindEqualGreaterM <- function(inv, values) {
     .Call('_mineMS2_FindEqualGreaterM', PACKAGE = 'mineMS2', inv, values)
 }

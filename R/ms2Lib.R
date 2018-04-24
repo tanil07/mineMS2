@@ -110,8 +110,9 @@ recognisedFormat <- function(){
 parse_mgf_spectrum2 <- function(filename){
 	msnexp <- MSnbase::readMgfData(filename)
 	lspec <- vector(mode="list",length=length(msnexp))
-	for(i in length(msnexp)){
-		lspec <- msnexp[[i]]
+	for(i in 1:length(msnexp)){
+
+		lspec[[i]] <- msnexp[[paste("X",i,sep="")]]
 	}
 	return(lspec)
 }
@@ -183,9 +184,9 @@ ms2Lib <- function(x, suppInfos = NULL){
 				mm2Spectra(m2l) <- apply(matrix(c(lfiles,exts),ncol=2,byrow = FALSE),1,parseMS2file_line)
 
 			}else{ ###Case of a single spectra.
-				ext <- checkFormat(x)
+				exts <- checkFormat(x)
 				message("Reading ",length(exts)," files with format(s): ",unique(exts))
-				mm2Spectra(m2l) <- parseMS2file_line(c(x,ext))
+				mm2Spectra(m2l) <- parseMS2file_line(c(x,exts))
 			}
 		}else{
 			###Case of multiples singles spectra
@@ -392,11 +393,13 @@ setMethod("plot", "ms2Lib",
 		  		 ...) {
 		  	rid <- parseId(x,y)
 		  	if(rid[[1]]=="patterns"){
-				plot(x[y],edgeLabels=(mm2EdgesLabels(x)),...)
+				plot(x[y],title = y,edgeLabels=(mm2EdgesLabels(x)),...)
 		  	}else if(rid[[1]]=="spectra"){
 		  		plot(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){
 		  		stop("DAGS plotting not implemented at the moment.")
+		  	}else if(rid[[1]]=="losses"){
+
 		  	}
 })
 

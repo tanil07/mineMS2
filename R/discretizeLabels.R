@@ -211,9 +211,9 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 
 	if(is.null(atoms)){
 		if(heteroAtoms){
-			atoms <- list("C"= max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6)
-		}else{
 			atoms <- list("C"=max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2)
+		}else{
+			atoms <- list("C"= max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6)
 		}
 	}
 

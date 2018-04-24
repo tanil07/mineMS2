@@ -120,6 +120,7 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.005,ppm=10){
 setMethod("plot", "fragPattern",
 		  function(x,
 		  		 y = NULL,
+		  		 title="Frag pattern",
 		  		 edgeLabels = NULL,
 		  		 nodeLab = c("default", "label"),
 		  		 edgeLab = c("formula","none"),
@@ -162,6 +163,7 @@ setMethod("plot", "fragPattern",
 		  			vertex.size = vertex_size,
 		  			edge.label = txtlabs,
 		  			vertex.color = "orange",
+		  			main="title",
 		  			...
 		  		)
 
@@ -173,6 +175,7 @@ setMethod("plot", "fragPattern",
 		  			vertex.size = vertex_size,
 		  			edge.label = txtlabs,
 		  			vertex.color = "orange",
+		  			main=title,
 		  			...
 		  		)
 		  	}

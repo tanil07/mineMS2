@@ -135,7 +135,7 @@ kLatticeReduction <- function(m2l,k){
 	removed <-  reduceLatticeK_greedy(df_vertices,df_edges, sc,n,k)
 
 	###We get the indices of the conserved patterns
-	mm2ReducedPatterns(m2l) <- complementIdx(length(mm2Patterns(m2l)),removed)
+	mm2ReducedPatterns(m2l) <- as.integer(complementIdx(length(mm2Patterns(m2l)),removed)+1)
 
 	m2l
 }

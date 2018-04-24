@@ -5,9 +5,10 @@
 \alias{plot,fragPattern,ANY-method}
 \title{plotting a fargPattern object.}
 \usage{
-\S4method{plot}{fragPattern,ANY}(x, y = NULL, edgeLabels = NULL,
-  nodeLab = c("default", "label"), edgeLab = c("formula", "none"),
-  mzdigits = 3, vertex_size = 55, tkplot = FALSE, ...)
+\S4method{plot}{fragPattern,ANY}(x, y = NULL, title = "Frag pattern",
+  edgeLabels = NULL, nodeLab = c("default", "label"),
+  edgeLab = c("formula", "none"), mzdigits = 3, vertex_size = 55,
+  tkplot = FALSE, ...)
 }
 \arguments{
 \item{y}{= NULL,}

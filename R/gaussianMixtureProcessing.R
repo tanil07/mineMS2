@@ -50,7 +50,7 @@ gaussianMerging<- function(mu,sig,alpha=0.01,fac_sig=3){
 	nres <- 0
 	nmerge <- 0
 	if(length(mu)==1)
-		return(mu_si)
+		return(list(mu=mu,sig=sig,fused=FALSE))
 	for(i in 1:(length(sig)-1)){
 		###We get the value of the parameter
 		mu1 <- mu[i];sig1 <- sig[i]

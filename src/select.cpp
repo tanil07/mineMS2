@@ -3,11 +3,24 @@ using namespace Rcpp;
 
 //C++ function used by the select function.
 
-//
-// IntegerVector select_patterns_from_spectra(List pat_list){
-//
-//
-// }
+// [[Rcpp::export]]
+IntegerVector select_patterns_from_spectra(List pat_list, int sid){
+	//IntegerVector res;
+	std::set<int> res;
+
+	for(int pi = 0;pi <pat_list.size();pi++){
+		S4 pat = pat_list[pi];
+		IntegerMatrix occs = pat.slot("occurences");
+		IntegerVector gid = occs(_,0);
+		for(IntegerVector::iterator it=gid.begin();it!=gid.end();it++){
+			if((*it)==sid) (res).insert(pi+1);
+		}
+	}
+
+
+	IntegerVector res_int(res.begin(),res.end());
+	return res_int;
+}
 
 // [[Rcpp::export]]
 List patterns_from_spectra(List pat_list,int num_spectra){
