@@ -78,5 +78,13 @@ setGeneric("scoresLosses",function(m2l,...) standardGeneric("scoresLosses"))
 
 setGeneric("scorePatterns",function(m2l,...) standardGeneric("scorePatterns"))
 
+###ms2Lib research function.
+setGeneric("findMz",function(m2l,...) standardGeneric("findMz"))
+
+setGeneric("select",function(m2l,...) standardGeneric("select"))
+
+setGeneric("getInfo",function(m2l,...) standardGeneric("getInfo"))
+
+
 
 

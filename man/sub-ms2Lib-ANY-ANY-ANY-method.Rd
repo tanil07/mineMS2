@@ -10,7 +10,8 @@
 \arguments{
 \item{x}{An ms2Lib oject.}
 
-\item{i}{The index, a string starting by S if it a spectrum, P if it's a pattern or D if it's a dag.}
+\item{i}{The index, a string starting by S if it a spectrum, P if it's a pattern D if it's a dag, L if it's a loss
+F if it's a fragment.}
 }
 \value{
 a fragPattern object of an igraph graph object.

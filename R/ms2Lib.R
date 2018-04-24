@@ -1,5 +1,5 @@
 ###CORRESPONDANCE TABLE
-CORR_TABLE <- list("D"="dags","S"="spectra","P"="patterns")
+CORR_TABLE <- list("D"="dags","S"="spectra","P"="patterns","L"="losses")#"F"="fragments"
 
 
 
@@ -18,11 +18,11 @@ setMethod("mm2Dags","ms2Lib",function(m2l){
 
 
 setMethod("mm2EdgesLabels","ms2Lib",function(m2l){
-	return(m2l@edgesLabels)
+	return(m2l@losses)
 })
 
 setMethod("mm2NodesLabels","ms2Lib",function(m2l){
-	return(m2l@nodesLabels)
+	return(m2l@fragments)
 })
 
 setMethod("mm2Patterns","ms2Lib",function(m2l){
@@ -63,12 +63,12 @@ setMethod("mm2Dags<-","ms2Lib",function(m2l,value){
 })
 
 setMethod("mm2EdgesLabels<-","ms2Lib",function(m2l,value){
-	m2l@edgesLabels <- value
+	m2l@losses <- value
 	m2l
 })
 
 setMethod("mm2NodesLabels<-","ms2Lib",function(m2l,value){
-	m2l@nodesLabels <- value
+	m2l@fragments <- value
 	m2l
 })
 
@@ -331,15 +331,24 @@ parseId <- function(m2l,idx){
 	# browser()
 	if(!(prefix %in% names(CORR_TABLE))) stop("Invalid prefix ",prefix," authorized prefix are ",
 											  paste(names(CORR_TABLE),collapse=", "))
-	if( (number<length(slot(m2l,CORR_TABLE[[prefix]])))&
+	###The case of the L prfix is handled directly.
+	if(prefix=="L"){
+		if(nrow(mm2EdgesLabels(m2l))<number) stop("Invalid id for mass_losses: ",number,".")
+		return(list(type=CORR_TABLE[[prefix]],num=number))
+	}
+
+	if( (number<=length(slot(m2l,CORR_TABLE[[prefix]])))&
 		(number>=1)){
 		return(list(type=CORR_TABLE[[prefix]],num=number))
 	}else{
-		stop("Invalid id for ",CORR_TABLE[[prefix]],":",number,".")
+		stop("Invalid id for ",CORR_TABLE[[prefix]]," : ",number,".")
 	}
 }
 
 mm2get <- function(m2l,arglist){
+	if(class(slot(m2l,arglist[[1]]))=="data.frame"){
+		return(slot(m2l,arglist[[1]])[arglist[[2]],])
+	}
 	(slot(m2l,arglist[[1]]))[[arglist[[2]]]]
 }
 
@@ -348,7 +357,8 @@ mm2get <- function(m2l,arglist){
 #' Indexing function.
 #'
 #' @param x An ms2Lib oject.
-#' @param i The index, a string starting by S if it a spectrum, P if it's a pattern or D if it's a dag.
+#' @param i The index, a string starting by S if it a spectrum, P if it's a pattern D if it's a dag, L if it's a loss
+#' F if it's a fragment.
 #'
 #' @return a fragPattern object of an igraph graph object.
 #' @export
@@ -392,3 +402,112 @@ setMethod("plot", "ms2Lib",
 
 #
 # setMethod('[[','MSMSacquisition',function(x,i,j,...,drop=TRUE){
+
+
+####Search and info functions
+findMz.S <- function(m2l,mz,tol){
+	infos <- mm2SpectraInfos(m2l)
+	matched <- which(abs(infos$mz.precursor-mz)<tol)
+	if(length(matched)==0) return(character(0))
+	paste("S",matched,sep="")
+}
+
+findMz.L <- function(m2l,mz,tol){
+	infos <- mm2EdgesLabels(m2l)
+	matched <- which(abs(infos$mz-mz)<tol)
+	if(length(matched)==0) return(character(0))
+	paste("L",matched,sep="")
+}
+
+#' Search in an ms2Lib object?
+#'
+#' Search an ms2Lib object givena tolerance in ppm or dmz.
+#'
+#' @param m2l ms2Lib object
+#' @param mz A double giving the mass to be searched.
+#' @param type The data to be search, "S" for spectra and "L" for losses
+#' @param ppm The tolerance in ppm
+#' @param dmz The minimum tolerance in Da, if the ppm tolerance is lower in Da than this threshold, this threshold is selected.
+#'
+#' @return A character vector giving the IDs of the found losses or elements.
+#' @export
+#'
+#' @examples
+#' print("examples to be put here")
+setMethod("findMz","ms2Lib",function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
+	type <- match.arg(type)
+	tol <- max(dmz,mz*ppm*1e-6)
+	if(type=="S"){
+		if(length(mz)>1){
+			return(sapply(mz,findMz.S,m2l=m2l,tol=tol,simplify=FALSE))
+		}
+		return(findMz.S(m2l,mz,tol))
+	}else{
+		if(length(mz)>1){
+			return(sapply(mz,findMz.L,m2l=m2l,tol=tol,simplify=FALSE))
+		}
+		return(findMz.L(m2l,mz,tol))
+	}
+})
+
+# setMethod("select","ms2Lib",function(m2l,...){})
+
+getInfo.L <- function(num){
+	titles <- colnames(mm2EdgesLabels(m2l))
+	titles <- titles[!(titles %in% 	c("sig", "fused",
+									  "adv_loss", "pen_loss", "carb_only", "nitrogen_only", "ch_only",
+									  "full_labels", "labs"))]
+
+
+
+
+	return(mm2EdgesLabels(m2l)[
+		num,titles,drop=FALSE])
+
+}
+
+getInfo.S <- function(num){
+	titles <- colnames(mm2SpectraInfos(m2l))
+	titles <- titles[!(titles %in% 	c("title"))]
+	return(mm2SpectraInfos(m2l)[
+		num,c(titles),drop=FALSE])
+}
+
+#' Return the available informationon a lost of a spectra.
+#'
+#' @param m2l An ms2Lib object
+#' @param ids A vector of IDs
+#' @param ... Supplementary information ot be passed to the getInfo function.
+#'
+#' @return A data.frame giving informations about the queried elements.
+#' @export
+#'
+#' @examples
+#' print("Examples to be put here")
+setMethod("getInfo","ms2Lib", function(m2l,ids){
+	authorizedValue <- c("losses","spectra")
+
+	pids <- sapply(ids,parseId,m2l=m2l,simplify=FALSE)
+
+	type <- sapply(pids,'[[',i=1)
+
+	if(all(type %in% authorizedValue)){
+		num <- sapply(pids,'[[',i=2)
+		res <- sapply(pids,function(x){
+			if(x[[1]] == "losses"){
+				return(getInfo.L(x[[2]]))
+			}
+			if(x[[1]] == "spectra"){
+				return(getInfo.S(x[[2]]))
+			}
+		},simplify=FALSE)
+		if(length(unique(type))==1){
+			return(do.call("rbind",res))
+		}else{
+			return(res)
+		}
+
+	}else{
+		stop("Invalid type for getInfo: ",unique(type[!(type %in% authorizedValue)]))
+	}
+})

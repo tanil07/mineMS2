@@ -129,6 +129,8 @@ kLatticeReduction <- function(m2l,k){
     df_edges$from <- as.integer(df_edges$from)
     df_edges$to <- as.integer(df_edges$to)
 
+    sc <- sc[(num_objects+1):length(sc)]
+    # browser()
     message("Lattice reductions")
 	removed <-  reduceLatticeK_greedy(df_vertices,df_edges, sc,n,k)
 

@@ -12,6 +12,6 @@
 #' @examples
 #' print("Examples to be put here")
 setMethod("exportLattice","ms2Lib",function(m2l,filename,format="graphml",...){
-	if(vcount(mm2Lattice(m2l))) stop("The lattice is empty. Please mine graphs before exporting.")
-	write_graph(mm2Lattice(m2l),file,format=format)
+	if(vcount(mm2Lattice(m2l))==0) stop("The lattice is empty. Please mine graphs before exporting.")
+	write_graph(mm2Lattice(m2l),filename,format=format)
 })

@@ -55,7 +55,7 @@ m2l <- discretizeMassLosses(m2l,8,0.008,2/length(m2l),precPpm=20,precDmz=0.03,ma
 ```
 #Mining the frequent subgraphs
 ```{r graph_mining}
-m2l <- mineClosedSubgraphs(m2l,num=5,sizeMin = 2, precursor = FALSE)
+m2l <- mineClosedSubgraphs(m2l,num=10,sizeMin = 2, precursor = FALSE)
 ```
 #IDs
 The *mineMS2* package include 4 differents data, the spectra, the dags correspoding to these spectra, the losses and and the mined patterns. An ID is associated with each of these elements. When judicious they can be visualized using the *plot* function and searched using the *search*(not implemented) and *exported* functions.
@@ -76,7 +76,7 @@ plot(m2l,"P10")
 
 ```
 ```{r patterns_plot_occs_example}
-plotOccurences(m2l,"P10",byPageMax=6)
+plotOccurences(m2l,"P10",byPage=6)
 
 ```
 #Scoring the patterns
@@ -92,7 +92,7 @@ m2l <- scorePatterns(m2l)
 
 #Reducing the lattice
 ```{r lattice_reduction}
-m2l <- kLatticeReduction(m2l,20)
+m2l <- kLatticeReduction(m2l,10)
 ```
 
 
