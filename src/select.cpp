@@ -25,6 +25,7 @@ IntegerVector select_patterns_from_spectra(List pat_list, int sid){
 // [[Rcpp::export]]
 List patterns_from_spectra(List pat_list,int num_spectra){
 	std::vector< std::set < int > > res(num_spectra);
+	//Rcout << "num_spectra:"<<num_spectra<<std::endl;
 
 
 	for(int i =0;i<num_spectra;i++){
@@ -34,17 +35,25 @@ List patterns_from_spectra(List pat_list,int num_spectra){
 
 
 	for(int pi = 0;pi <pat_list.size();pi++){
+		//Rcout << pi <<"_";
 		S4 pat = pat_list[pi];
+		//Rcout<<"pat_sel";
 		IntegerMatrix occs = pat.slot("occurences");
 		IntegerVector gid = occs(_,0);
+		//Rcout << gid.size() <<"_";
 		for(IntegerVector::iterator it=gid.begin();it!=gid.end();it++){
-			(res[*it]).insert(pi+1);
+			//Rcout <<" ii"<< (*it) <<"_";
+			(res[(*it)-1]).insert(pi+1);
+			//Rcout <<" ins"<< (*it) <<"_";
 		}
+		//Rcout << std::endl;
 	}
 
+	//Rcout <<std::endl<<"res : ";
 
 	List res_list = List(num_spectra);
 	for(size_t i = 0;i < res.size();i++){
+		//Rcout <<i<<"_";
 		IntegerVector temp(res[i].begin(),res[i].end());
 		res_list[i]=temp;
 	}

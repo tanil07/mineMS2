@@ -4,7 +4,7 @@
 
 #' Selection function
 #'
-#' @param m2l AN ms2Lib object.
+#' @param m2l An ms2Lib object.
 #' @param ids Valid IDs of objects.
 #'
 #' @return The objects of the correspodning type.
@@ -12,7 +12,9 @@
 #'
 #' @examples
 #' print("Examples to be put here")
-setMethod("select","ms2Lib",function(m2l,ids,vals=c("P","S","L","F"),...){
+select <- function(m2l,ids,vals=c("P","S","L","F"),...){
+	if(class(m2l)!="ms2Lib") stop("m2l should be an ms2Lib object.")
+
 	vals <- match.arg(vals)
 
 	ids <- sapply(ids,parseId,m2l=m2l,simplify = FALSE)
@@ -42,16 +44,62 @@ setMethod("select","ms2Lib",function(m2l,ids,vals=c("P","S","L","F"),...){
 	}else if(type=="fragments"){
 		stop("not implemented")
 	}
-})
+}
 
 
 
 ###select.DATAQUERIED.IDSTYPE
 
-all.patterns.spectra <- function(m2l){
-	sapply(patterns_from_spectra(mm2Patterns(m2l),
-								 length(mm2Spectra(m2l))),
-		   function(x){paste("P",x,sep="")})
+all.patterns.spectra <- function(m2l,reduced=TRUE){
+	ids <- vrange(m2l,"P",reduced=reduced)
+	tp <- m2l[ids]
+	sapply(patterns_from_spectra(tp,
+								 length(m2l)),
+		   function(x,ids){if(length(x)>0){
+		   	return(ids[x])
+		   	}else{
+		   		return(x)
+		   	}},ids=ids)
+}
+
+
+checkSize <- function(vec,pos){
+	if(length(vec)<pos){
+		vec <- c(vec,do.call(typeof(vec),args=list(length(vec))))
+	}
+	return(vec)
+}
+
+all.patterns.losses <- function(m2l,reduced=TRUE){
+	ids <- vrange(m2l,"P",reduced=reduced)
+	tp <- m2l[ids]
+	num_losses <- nrow(mm2EdgesLabels(m2l))
+	reslist <- vector(mode = "list",length = num_losses)
+	for(i in seq_along(reslist)){
+		reslist[[i]] <- character(3)
+	}
+	idxvec <- rep(1,num_losses)
+
+	###Replace by C++ code.
+	for(i in seq_along(tp)){
+		labs <- edge_attr(mm2Graph(tp[[i]]),"lab")
+		for(l in labs){
+			reslist[[l]] <- checkSize(reslist[[l]],idxvec[l])
+			reslist[[l]][idxvec[l]] <- ids[i]
+			idxvec[l] <- idxvec[l]+1
+		}
+	}
+
+	###pos processing
+	for(i in seq_along(reslist)){
+		if(idxvec[i]>1){
+			reslist[[i]] <- reslist[[i]][1:(idxvec[i]-1)]
+		}else{
+			reslist[[i]] <- character(0)
+		}
+	}
+
+	return(reslist)
 }
 
 select.patterns.spectra <- function(m2l,id){

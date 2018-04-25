@@ -74,17 +74,20 @@ setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurenc
 
 setGeneric("exportLattice",function(m2l,filename,...) standardGeneric("exportLattice"))
 
-setGeneric("scoresLosses",function(m2l,...) standardGeneric("scoresLosses"))
+setGeneric("score",function(m2l,...) standardGeneric("score"))
+
+setGeneric("scoreLosses",function(m2l,...) standardGeneric("scoreLosses"))
 
 setGeneric("scorePatterns",function(m2l,...) standardGeneric("scorePatterns"))
 
 ###ms2Lib research function.
-setGeneric("findMz",function(m2l,...) standardGeneric("findMz"))
+# setGeneric("findMz",function(m2l,...) standardGeneric("findMz"))
+#
+# setGeneric("select",function(m2l,...) standardGeneric("select"))
+#
+# setGeneric("getInfo",function(m2l,...) standardGeneric("getInfo"))
 
-setGeneric("select",function(m2l,...) standardGeneric("select"))
-
-setGeneric("getInfo",function(m2l,...) standardGeneric("getInfo"))
-
+setGeneric("vrange",function(m2l,type,...) standardGeneric("vrange"))
 
 
 

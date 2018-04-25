@@ -12,9 +12,11 @@
 
 \item{i}{The index, a string starting by S if it a spectrum, P if it's a pattern D if it's a dag, L if it's a loss
 F if it's a fragment.}
+
+\item{drop}{}
 }
 \value{
-a fragPattern object of an igraph graph object.
+A list containg the object.
 }
 \description{
 Indexing function.

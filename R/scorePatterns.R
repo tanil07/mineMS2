@@ -5,6 +5,24 @@ sigmoid <- function(x,weigth=3.5){
 	return(1/(1+exp(-weigth*(x-0.5))))
 }
 
+#' Determine scores
+#'
+#' @param m2l An ms2Lib object
+#' @param knownLoss THe pnality to use for know losses.
+#' @param selectedLosses The majorition to use for known loss.
+#' @param monoAtom THe panality associated to known loss.
+#' @param weigth The weight associated to the sigmoid function.
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' print("exmaples to be put here")
+setMethod("score","ms2Lib",function(m2l,knownLoss=0.2,selectedLosses=3,monoAtom=-1,weigth=3.5){
+	m2l <- scoreLosses(m2l,knownLoss,selectedLosses,monoAtom,weigth)
+	m2l <- scorePatterns(m2l)
+	m2l
+})
 
 #' Determine edges scores
 #'
@@ -19,7 +37,7 @@ sigmoid <- function(x,weigth=3.5){
 #'
 #' @examples
 #' print("exmaples to be put here")
-setMethod("scoresLosses","ms2Lib",function(m2l,knownLoss=0.2,selectedLosses=3,monoAtom=-1,weigth=3.5){
+setMethod("scoreLosses","ms2Lib",function(m2l,knownLoss=0.2,selectedLosses=3,monoAtom=-1,weigth=3.5){
 	elabs <- mm2EdgesLabels(m2l)
 
 	m_known <- ifelse(elabs$adv_loss,knownLoss,1)

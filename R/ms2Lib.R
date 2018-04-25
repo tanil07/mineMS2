@@ -360,13 +360,22 @@ mm2get <- function(m2l,arglist){
 #' @param x An ms2Lib oject.
 #' @param i The index, a string starting by S if it a spectrum, P if it's a pattern D if it's a dag, L if it's a loss
 #' F if it's a fragment.
+#' @param drop
 #'
-#' @return a fragPattern object of an igraph graph object.
+#' @return A list containg the object.
 #' @export
 #'
 #' @examples
 setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
-	mm2get(x,parseId(x,i))
+	if(length(i)==1){
+		 temp <- mm2get(x,parseId(x,i))
+		 # if(drop){
+		 	return(temp)
+		 # }
+	}else{
+		res <- lapply(lapply(i,parseId,m2l=x),mm2get,m2l=x)
+		return(res)
+	}
 })
 
 
@@ -391,6 +400,10 @@ setMethod("plot", "ms2Lib",
 		  function(x,
 		  		 y,
 		  		 ...) {
+		  	if(length(y)>1){
+		  		warning("A single if may be plotted on each call, plotting the first element only")
+		  		y <- y[1]
+		  	}
 		  	rid <- parseId(x,y)
 		  	if(rid[[1]]=="patterns"){
 				plot(x[y],title = y,edgeLabels=(mm2EdgesLabels(x)),...)
@@ -399,7 +412,9 @@ setMethod("plot", "ms2Lib",
 		  	}else if(rid[[1]]=="dags"){
 		  		stop("DAGS plotting not implemented at the moment.")
 		  	}else if(rid[[1]]=="losses"){
-
+		  		stop("Impossible to plot a loss")
+		  	}else if(rid[[1]]=="fragments"){
+		  		stop("Impossible to plot a fragment")
 		  	}
 })
 
@@ -437,7 +452,8 @@ findMz.L <- function(m2l,mz,tol){
 #'
 #' @examples
 #' print("examples to be put here")
-setMethod("findMz","ms2Lib",function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
+findMz <- function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
+	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
 	type <- match.arg(type)
 	tol <- max(dmz,mz*ppm*1e-6)
 	if(type=="S"){
@@ -451,9 +467,8 @@ setMethod("findMz","ms2Lib",function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
 		}
 		return(findMz.L(m2l,mz,tol))
 	}
-})
+}
 
-# setMethod("select","ms2Lib",function(m2l,...){})
 
 getInfo.L <- function(num){
 	titles <- colnames(mm2EdgesLabels(m2l))
@@ -487,7 +502,8 @@ getInfo.S <- function(num){
 #'
 #' @examples
 #' print("Examples to be put here")
-setMethod("getInfo","ms2Lib", function(m2l,ids){
+getInfo <- function(m2l,ids){
+	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
 	authorizedValue <- c("losses","spectra")
 
 	pids <- sapply(ids,parseId,m2l=m2l,simplify=FALSE)
@@ -512,5 +528,41 @@ setMethod("getInfo","ms2Lib", function(m2l,ids){
 
 	}else{
 		stop("Invalid type for getInfo: ",unique(type[!(type %in% authorizedValue)]))
+	}
+}
+
+
+#' Return the range of iteration on an ms2Lib object.
+#'
+#' @param m2l AN ms2Lib object
+#' @param type "S","L","P" or "F"
+#' @param reduced Used only if "type" is set to "P".
+#'
+#' @return A character vector giving the existing ids.
+#' @export
+#'
+#' @examples
+#' print("Examples to be put here")
+setMethod("vrange","ms2Lib",function(m2l,type=c("S","L","P","F"), reduced=TRUE){
+	type <- match.arg(type)
+	if(type=="S"){
+		if(length(m2l)==0) return(character(0))
+		return(paste("S",1:length(m2l),sep=""))
+	}
+	if(type=="P"){
+		if(length(mm2Patterns(m2l))==0) return(character(0))
+		if(reduced){
+			return(paste("P",mm2ReducedPatterns(m2l),sep=""))
+		}else{
+			return(paste("P",1:length(mm2Patterns(m2l)),sep=""))
+		}
+	}
+	if(type=="L"){
+		if(nrow(mm2EdgesLabels(m2l))==0) return(character(0))
+		return(paste("L",1:nrow(mm2EdgesLabels(m2l)),sep=""))
+	}
+	if(type=="F"){
+		if(nrow(mm2NodesLabels(m2l))==0) return(character(0))
+		return(paste("L",1:nrow(mm2NodesLabels(m2l)),sep=""))
 	}
 })
