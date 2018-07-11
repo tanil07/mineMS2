@@ -32,6 +32,7 @@ struct edge_info{
 //properties of k-tree
 struct k_tree_info{
     short lab=0;
+    short dist=0;
 };
 
 
@@ -99,6 +100,7 @@ typedef boost::adjacency_list<
     node_info, edge_info> graph;
 typedef boost::graph_traits<graph> graphTraits;
 typedef boost::graph_traits<graph>::vertex_descriptor Vertex;
+typedef boost::graph_traits<graph>::edge_descriptor Edge;
 typedef std::map<Vertex,std::vector<std::pair<Vertex,short> > > VisitMap;
 
 //Property map

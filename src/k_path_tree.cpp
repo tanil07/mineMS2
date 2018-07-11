@@ -17,7 +17,8 @@ k_path_tree::k_path_tree(int k): k(k)
     //ctor
 
     std::vector<std::vector<Vertext> > tvec(k);
-    for(int i =0;i<k;i++){
+    for(int i =0; i<k; i++)
+    {
         std::vector<Vertext> temp;
         tvec[i]=temp;
     }
@@ -34,32 +35,40 @@ k_path_tree::~k_path_tree()
 }
 
 
-int k_path_tree::get_k(){
+int k_path_tree::get_k()
+{
     return k;
 }
 
-ktree& k_path_tree::get_t(){
+ktree& k_path_tree::get_t()
+{
     //std::cout <<"addr const "<< &t << std::endl;
     return t;
 }
 
-triangles_list& k_path_tree::get_tl(){
+triangles_list& k_path_tree::get_tl()
+{
     return tl;
 }
 
-MapOccurrences& k_path_tree::get_occs(){
+MapOccurrences& k_path_tree::get_occs()
+{
     return moccs;
 }
 
-adjacencyGraph& k_path_tree::get_adj(){
+adjacencyGraph& k_path_tree::get_adj()
+{
     return adj;
 }
 
-Vertext k_path_tree::get_node(Vertext origin,int lab){
+Vertext k_path_tree::get_node(Vertext origin,int lab, int dist)
+{
     //We iterate on the successors of origin and fin the node if it exsits
     graphTraitst::adjacency_iterator bv,ev;
-    for(boost::tie(bv,ev) = boost::adjacent_vertices(origin,t); bv!=ev ; bv++){
-        if(t[*bv].lab==lab){
+    for(boost::tie(bv,ev) = boost::adjacent_vertices(origin,t); bv!=ev ; bv++)
+    {
+        if(t[*bv].lab==lab)
+        {
             return *bv;
         }
     }
@@ -67,73 +76,92 @@ Vertext k_path_tree::get_node(Vertext origin,int lab){
     Vertext nnode = boost::add_vertex(t);
     boost::add_edge(origin,nnode,t);
     t[nnode].lab = lab;
+    t[nnode].dist = dist;
     return nnode;
 }
 
 
+//Modification to add only the frequent path.
+
 //Utility function used to add a node.
 //We add the the occurences values
 void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<int>& plabs,
-                                 int lpath, IndexMap& idx_vertex, VisitMap& vm,int gid){
+                                 int lpath, IndexMap& idx_vertex, VisitMap& vm,int gid, mass_graph& G)
+{
 
-    //We consider that pi is the size of the substring considered.
-    for(int pi=k;pi>1;pi--){
-        if(pos[pi-1].size()==0){
-                if(pos[pi-2].size()!=0){
-                    Vertext vn = this->get_node(pos[pi-2].back(),plabs[lpath-1]);
-                    pos[pi-1].push_back(vn);
-                    occ oc = {short(gid),short(idx_vertex[pfr[lpath-pi]])};
-                    addOccs(moccs,vn,oc);
+    //The path of size 1 is always added.
+    occ oc = {short(gid),short(idx_vertex[pfr[lpath-1]])};
+    Vertext vn = this->get_node(root,plabs[lpath-1],plabs[lpath-1]);
+    pos[0].push_back(vn);
+    addOccs(moccs,vn,oc);
+    bool pres;
+    Edge e;
+    short elab;
+
+
+    //We consider that pi is the size of the added path.
+    ///for(int pi=k; pi>1; pi--)
+    for(int pi=2;pi<=k;pi++)
+    {
+        //We check that this occurences needs to be added.
+        boost::tie(e,pres)=boost::edge(pfr[lpath-pi],pfr[lpath-1],G);
+        if(pres){
+            elab = G[e.first].lab;
+        }else{//TODO check if it is possible to return directly.
+            continue;
+        }
+
+        //if(pos[pi-1].size()==0)
+        if(pos[pi-1].size()==0)
+        {
+            ///if(pos[pi-2].size()!=0){
+            if(pos[pi-2].size()!=0)
+            {
+                Vertext vn = this->get_node(pos[pi-2].back(),plabs[lpath-1],elab);
+                pos[pi-1].push_back(vn);
+                occ oc = {short(gid),short(idx_vertex[pfr[lpath-pi]])};
+                addOccs(moccs,vn,oc);
 //                    if(pi==3){
 //                    //std::cout <<"pi: "<<pi<<"size3f_"<<plabs[lpath-1]<<"lpfr: "<<pfr.size()<<"_"<<t[pos[pi-2].back()].lab<<"_"<<t[vn].lab<<std::endl;
 //                    }
-                }
-                continue;
+            }
+            continue;
         }
 
-        if(vm[pfr[lpath-pi]].second==)
-
-        //This is done only if it is not the last element
-        if(pi!=k){
+        //Case where the last element is added.
+        if(pi!=k)
+        {
             Vertext old_vertice = pos[pi-2].back();
             //String obtained by adding the value.
-            Vertext vn = this->get_node(old_vertice,short(plabs[lpath-1]));
+            Vertext vn = this->get_node(old_vertice,plabs[lpath-1],elab);
             pos[pi-1].push_back(vn);
 
             //We create the occurence :
             occ oc = {short(gid),short(idx_vertex[pfr[lpath-pi]])};
             addOccs(moccs,vn,oc);
-//            if(pi>=2){
-//                //std::cout <<"pi: "<<pi<<"size3_"<<plabs[lpath-1]<<"_"<<t[old_vertice].lab<<"_"<<t[vn].lab<<std::endl;
-//            }
         }
-
-
-
-
     }
-
-
-    //The path of size 1 is alway sadded to the root.
-    occ oc = {short(gid),short(idx_vertex[pfr[lpath-1]])};
-    Vertext vn = this->get_node(root,plabs[lpath-1]);
-    pos[0].push_back(vn);
-    addOccs(moccs,vn,oc);
 }
 
-void k_path_tree::update_pos_back(){
+void k_path_tree::update_pos_back()
+{
     //We just need to remove the last element of every node if there is one.
-    for(int pi=0;pi<int(pos.size());pi++){
-        if(pos[pi].size()>0){
+    for(int pi=0; pi<int(pos.size()); pi++)
+    {
+        if(pos[pi].size()>0)
+        {
             pos[pi].pop_back();
-        }else{
+        }
+        else
+        {
             return;
         }
     }
 }
 
 //Normally we never have to find path.
-Vertext k_path_tree::get_root(){
+Vertext k_path_tree::get_root()
+{
     return root;
 }
 
@@ -147,8 +175,8 @@ void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
     //We find all the possible root nodes.
     graph& g = G.get_g();
 
-	//If the graph have no edge we stop right there.
-	if(boost::num_edges(g)==0) return;
+    //If the graph have no edge we stop right there.
+    if(boost::num_edges(g)==0) return;
 
     //We get the visitor map on the value.
     VisitMap vm = G.buildVisitMap();
@@ -156,9 +184,12 @@ void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
     //Finding the roots of a graph.
     std::vector<Vertex> roots;
 
-    if(!prec_only){
+    if(!prec_only)
+    {
         roots = G.roots();
-    }else{
+    }
+    else
+    {
         roots.push_back(G.get_precursor());
     }
 
@@ -189,7 +220,7 @@ void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
             //Case where we have to go up
             //Or we are mining from the precrusor only.
             if((dnode==nvertex)|
-               (prec_only&(cnode != root))) //We mine hte precusor only and hte current node is not the graph.
+                    (prec_only&(cnode != root))) //We mine hte precusor only and hte current node is not the graph.
             {
                 //We goes back to the last
                 ppath--;
@@ -205,15 +236,13 @@ void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
                 ppath++;
                 pathFromRoot[ppath] = cnode;
 
-                //TODO remove std round.
-                edgesLabels[ppath-1] = std::round(g[boost::edge(pathFromRoot[ppath-1],cnode,g).first].lab);
+                edgesLabels[ppath-1] = g[boost::edge(pathFromRoot[ppath-1],cnode,g).first].lab;
                 backward = false;
-                //In this case we justC:\Users\AD244905\Documents\ms-ms\Cpp\mass_graph\mass_graph.cbp print the path to check that it exists.
                 if(!backward)
                 {
 
                     this->update_pos_adv(edgesLabels[ppath-1], pathFromRoot,
-                                  edgesLabels,ppath, imap, gid);
+                                         edgesLabels,ppath, imap, gid);
 
                 }
             }
@@ -225,14 +254,16 @@ void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
     tl.add_mass_graph(G);
     adj.add_graph(g);
 }
-void k_path_tree::post_processing(){
+void k_path_tree::post_processing()
+{
 //We construct the triangle list mappin
     tl.construct_mapping();
     adj.addKTreeVertices(*this);
 }
 
 
-std::vector<Extension> k_path_tree::getExtensions(Vertexp v,Vertext vt){
+std::vector<Extension> k_path_tree::getExtensions(Vertexp v,Vertext vt)
+{
 
     //Now we create the extension.
     graphTraitst::adjacency_iterator bo,be;
@@ -240,22 +271,27 @@ std::vector<Extension> k_path_tree::getExtensions(Vertexp v,Vertext vt){
     //Now we add all the extension if possible.
     std::vector<Extension> temp_exts;
     std::transform(bo,be,std::back_inserter(temp_exts),
-               [v,this](Vertext ve)->Extension{
-                   Extension t_ext = std::make_tuple(v,ve,this->t[ve].lab);
-                   return t_ext;
-                   });
+                   [v,this](Vertext ve)->Extension
+    {
+        Extension t_ext = std::make_tuple(v,ve,this->t[ve].lab);
+        return t_ext;
+    });
     std::sort(temp_exts.begin(),temp_exts.end(),less_than());
     return temp_exts;
 }
 
 //UTILITY FUNCTION
-Vertext k_path_tree::find_pos(std::vector<short>path){
+Vertext k_path_tree::find_pos(std::vector<short>path)
+{
     Vertext cnode = get_root();
-    for(int i = 0; i < int(path.size());i++){
+    for(int i = 0; i < int(path.size()); i++)
+    {
         short clab = path[i];
         graphTraitst::adjacency_iterator vb,ve;
-        for(boost::tie(vb,ve)=boost::adjacent_vertices(cnode,t) ; vb!=ve ; vb++){
-            if(t[*vb].lab==clab){
+        for(boost::tie(vb,ve)=boost::adjacent_vertices(cnode,t) ; vb!=ve ; vb++)
+        {
+            if(t[*vb].lab==clab)
+            {
                 cnode = *vb;
                 break;
             }
@@ -266,7 +302,8 @@ Vertext k_path_tree::find_pos(std::vector<short>path){
 };
 
 //Filter out the non frequent nodes.
-void k_path_tree::filter_frequent_nodes(int noccs){
+void k_path_tree::filter_frequent_nodes(int noccs)
+{
     graphTraitst::vertex_iterator vb,ve;
     boost::tie(vb,ve)=boost::vertices(t);
 
@@ -277,17 +314,21 @@ void k_path_tree::filter_frequent_nodes(int noccs){
     Vertext root_v = get_root();
     boost::tie(vb,ve)=boost::vertices(t);
     //TODO pass this in one pass possibly if it's slow.
-    for(;vb!=ve;vb++){
+    for(; vb!=ve; vb++)
+    {
         //Never remove the root.
-        if((*vb)==root_v){
+        if((*vb)==root_v)
+        {
             continue;
         }
-        if(int(moccs[*vb].size())<noccs){
+        if(int(moccs[*vb].size())<noccs)
+        {
             to_rm.push_back(*vb);
         }
     }
     //Now we remove the chosen node.
-    for(int ir=0;ir<int(to_rm.size());ir++){
+    for(int ir=0; ir<int(to_rm.size()); ir++)
+    {
         Vertext v= to_rm[ir];
         boost::clear_vertex(v,t);
         boost::remove_vertex(v,t);
@@ -300,35 +341,38 @@ void k_path_tree::filter_frequent_nodes(int noccs){
     graphTraitst::adjacency_iterator bv,ev;
     boost::tie(bv,ev) = boost::adjacent_vertices(root_v,t);
     std::transform(bv,ev,std::back_inserter(r0),
-        [this](Vertext v) -> short {return this->t[v].lab;});
+                   [this](Vertext v) -> short {return this->t[v].lab;});
     adj.keep_nodes(r0);
 }
 
 
 
 //Return the path from the root of the vertex v
-std::vector<Vertext> k_path_tree::find_predecessors(Vertext v){
-        Vertext cnode = v;
-        Vertext dest = get_root();
-        std::vector<Vertext> pathRoot;
-        pathRoot.push_back(v);
-        int num_it = 0;
-        while(cnode!=dest){
-            //std::cout << "cnode "<< t[cnode].lab << std::endl; //DEBUG
-            if(num_it>=k){
-                //std::cout << "issue"; //DEBUG
-                std::vector<Vertext> tav;
-                return tav;
-            }
-            graphTraitst::in_edge_iterator eb,ee;
-            boost::tie(eb,ee)=boost::in_edges(cnode,t);
-            //std::cout << "iedge found : "<<(eb==ee)<<" "; //DEBUG
-            cnode = boost::source(*eb,t);
-            //std::cout <<"pred: "<< cnode<<std::endl; //DEBUG
-            pathRoot.insert(pathRoot.begin(),cnode);
-            num_it++;
+std::vector<Vertext> k_path_tree::find_predecessors(Vertext v)
+{
+    Vertext cnode = v;
+    Vertext dest = get_root();
+    std::vector<Vertext> pathRoot;
+    pathRoot.push_back(v);
+    int num_it = 0;
+    while(cnode!=dest)
+    {
+        //std::cout << "cnode "<< t[cnode].lab << std::endl; //DEBUG
+        if(num_it>=k)
+        {
+            //std::cout << "issue"; //DEBUG
+            std::vector<Vertext> tav;
+            return tav;
         }
-        return pathRoot;
+        graphTraitst::in_edge_iterator eb,ee;
+        boost::tie(eb,ee)=boost::in_edges(cnode,t);
+        //std::cout << "iedge found : "<<(eb==ee)<<" "; //DEBUG
+        cnode = boost::source(*eb,t);
+        //std::cout <<"pred: "<< cnode<<std::endl; //DEBUG
+        pathRoot.insert(pathRoot.begin(),cnode);
+        num_it++;
+    }
+    return pathRoot;
 }
 
 //to_string function used to debug.
@@ -365,14 +409,16 @@ std::vector<Vertext> k_path_tree::find_predecessors(Vertext v){
 
 //Function used to construct one edged values
 //Construct the set of one edge fragment
-std::vector<lattice_node> k_path_tree::constructOneEdgeGraphs(std::ostream& of,bool sorted){
+std::vector<lattice_node> k_path_tree::constructOneEdgeGraphs(std::ostream& of,bool sorted)
+{
     //We first get a list of all the labels.
     graphTraitst::adjacency_iterator vb,ve;
     boost::tie(vb,ve)=boost::adjacent_vertices(root,t);
 
     //Counter for commodity purpose.
     int nadj = 0;
-    while(vb!=ve){
+    while(vb!=ve)
+    {
         vb++;
         nadj++;
     }
@@ -383,10 +429,12 @@ std::vector<lattice_node> k_path_tree::constructOneEdgeGraphs(std::ostream& of,b
 
     int num = 0; //DEBUG
     int percent10 = 0;
-    for(;vb!=ve;vb++){
+    for(; vb!=ve; vb++)
+    {
         //We create the pattern;
         int dec = ((double)num*10)/nadj;
-        if(dec!=percent10){
+        if(dec!=percent10)
+        {
             percent10 = dec;
             of << percent10*10 << " ";
         }
@@ -395,11 +443,13 @@ std::vector<lattice_node> k_path_tree::constructOneEdgeGraphs(std::ostream& of,b
     }
 
     //Sorting the patterns.
-    if(sorted){
+    if(sorted)
+    {
         std::sort(single_e_patterns.begin(),single_e_patterns.end(),
-                  [](const lattice_node& a,const lattice_node& b)->bool{
-                  return a.get_key()<b.get_key();
-                  });
+                  [](const lattice_node& a,const lattice_node& b)->bool
+        {
+            return a.get_key()<b.get_key();
+        });
     }
     return single_e_patterns;
 }
