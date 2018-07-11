@@ -19,7 +19,7 @@ A list of the valid formula.
 }
 \description{
 Fast formula generator using the algoirthm descirbed by Bocker
-2010. 100 times faster than the mgf used.
+2010. 100 times faster than rcdk.
 }
 \examples{
 cat("examples ot be put there")

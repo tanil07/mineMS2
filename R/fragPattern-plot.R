@@ -126,6 +126,7 @@ setMethod("plot", "fragPattern",
 		  		 edgeLab = c("formula","none"),
 		  		 mzdigits = 3,
 		  		 vertex_size = 55,
+		  		 subNodes = NULL,
 		  		 tkplot = FALSE,
 		  		 ...) {
 		  	nodeLab <- match.arg(nodeLab)
@@ -138,6 +139,7 @@ setMethod("plot", "fragPattern",
 		  	if (edgeLab == "formula")
 		  		txtlabs <- edgeLabels[elabs, "labs"]
 
+
 		  	###Node labels, nodes are always in the right order
 		  	nodes0 <- g[[1,]][[1]]
 		  	labs0 <- edge_attr(g, "lab", g[[1, , edges = TRUE]][[1]])
@@ -148,6 +150,20 @@ setMethod("plot", "fragPattern",
 		  		nlabs[pnon0] <- paste(nlabs[pnon0], labs0)
 		  	} else if (nodeLab == "default") {
 		  		nlabs[pnon0] <- paste(nlabs[pnon0],edgeLabels[labs0,"full_labels"])
+		  	}
+
+		  	if(!is.null(subNodes)){
+		  		compN <- 1:length(nlabs)
+		  		compN <- compN[-subNodes]
+		  		nlabs[compN] <- ""
+
+		  		se <- head_of(g,E(g))
+		  		te <- tail_of(g,E(g))
+		  		w_edges <- which((!(se %in% subNodes))&
+		  								(!(te %in% subNodes)))
+				if(length(w_edges)>0){
+		  			txtlabs[w_edge] <- ""
+				}
 		  	}
 
 		  	###Title
@@ -199,6 +215,7 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 											   pidx,
 											   titles = NULL,
 											   byPage = 6,
+											   subOccs=NULL,
 											   ...) {
 	###Verifying that a correct id have been queried.
 	fp <- NULL
@@ -224,13 +241,23 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	###Mass loss are used for matching.
 	loss_mz <- mm2EdgesLabels(m2l)$mz
 
+
+	col_vec <- rainbow(nrow(occs))
+
+	if(is.null(subOccs)){
+		subOccs <- 1:nrow(occs)
+	}else{
+		if(all(subOccs>=1)&all(subOccs<=nrow(occs))){
+			occs <- occs[subOccs,,drop=FALSE]
+		}
+	}
+
+
 	###THE IDX IS HANDLED BY C++ AND SHOULD BE CORRECT.
 	occs_gid <- occs[, 1]
 	occs_pos <- occs[, 2]
 
 	layout(layoutMatrix(min(byPage, length(occs_gid))))
-
-	col_vec <- rainbow(length(occs_gid))
 
 	for (i in 1:length(occs_gid)) {
 		gid <- occs_gid[i]
@@ -262,7 +289,7 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 		points(mzs[matched_peaks_idx],
 			   intv[matched_peaks_idx],
 			   type = "h",
-			   col =col_vec[i],
+			   col =col_vec[subOccs[i]],
 			   lwd = 3)
 	}
 	layout(1)

@@ -57,7 +57,7 @@ class k_path_tree
 
         //Here the number of value to store.
         void update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<int>& plabs,
-                                 int lpath, IndexMap& idx_vertex, int gid);
+                                 int lpath, IndexMap& idx_vertex,VisitMap& vm, int gid);
 
         //Here the number of value to roll_back
         void update_pos_back();

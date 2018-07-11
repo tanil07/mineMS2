@@ -56,7 +56,7 @@ void min_common_nodes(List& patterns,NumericVector& scores_pat,
                       IntegerMatrix& names,NumericMatrix& scores,
                       int num_objects){
 
-	for(size_t i = 0; i < patterns.size(); i++){
+	for(int i = 0; i < patterns.size(); i++){
 		//We get the s4 object
 		S4 pat = patterns[i];
 		update_dist(pat,names,scores,i,scores_pat[i+num_objects]);
@@ -246,7 +246,7 @@ std::map<int,VertexLatt> fillLattice(DataFrame& df_nodes,DataFrame& df_edges, la
 	LogicalVector is_item = df_nodes["item"];
 	IntegerVector sids = df_nodes["sid"];
 	std::map<int,VertexLatt> nodes_ids;
-	int cnode=0;
+	//int cnode=0;
 
 	//Adding the nodes.
 	std::vector<VertexLatt> mapped_vec(names.size());
@@ -281,7 +281,7 @@ std::map<int,VertexLatt> fillLattice(DataFrame& df_nodes,DataFrame& df_edges, la
 
 //NOW ALL THE VECTORS ARE STORED USING THEIR SIDS.
 NumericVector initialCosts(latt& l,NumericVector& n,NumericVector& scores, int num_items){
-	NumericVector icosts(n.size(),0);
+	NumericVector icosts(n.size(),0.0);
 
 	graphTraitLatt::vertex_iterator bv,ev;
 	graphTraitLatt::in_edge_iterator bi,ei;

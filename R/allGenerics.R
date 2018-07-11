@@ -66,7 +66,7 @@ setGeneric("mm2Name<-", function(pat,value) standardGeneric("mm2Name<-"))
 ###ms2Lib specific generic.
 setGeneric("discretizeMassLosses", function(m2l,...) standardGeneric("discretizeMassLosses"))
 
-setGeneric("discretizeFragments", function(m2l,...) standardGeneric("discretizeFragments"))
+setGeneric("discretizeMassFragments", function(m2l,...) standardGeneric("discretizeMassFragments"))
 
 setGeneric("mineClosedSubgraphs",function(m2l,...) standardGeneric("mineClosedSubgraphs"))
 
@@ -81,12 +81,6 @@ setGeneric("scoreLosses",function(m2l,...) standardGeneric("scoreLosses"))
 setGeneric("scorePatterns",function(m2l,...) standardGeneric("scorePatterns"))
 
 ###ms2Lib research function.
-# setGeneric("findMz",function(m2l,...) standardGeneric("findMz"))
-#
-# setGeneric("select",function(m2l,...) standardGeneric("select"))
-#
-# setGeneric("getInfo",function(m2l,...) standardGeneric("getInfo"))
-
 setGeneric("vrange",function(m2l,type,...) standardGeneric("vrange"))
 
 

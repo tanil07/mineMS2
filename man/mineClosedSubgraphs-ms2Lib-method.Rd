@@ -5,15 +5,17 @@
 \alias{mineClosedSubgraphs,ms2Lib-method}
 \title{Mine recurrent subgraph from a set of graphs.}
 \usage{
-\S4method{mineClosedSubgraphs}{ms2Lib}(m2l, num = 2, sizeMin = 2,
-  precursor = FALSE)
+\S4method{mineClosedSubgraphs}{ms2Lib}(m2l, count = 2, sizeMin = 2,
+  kTree = NULL, precursor = FALSE)
 }
 \arguments{
 \item{m2l}{An m2Lib object to be processed.}
 
-\item{num}{The number of spectra in which the spectrum need to be sampled.}
+\item{count}{The number of spectra in which the spectrum need to be sampled.}
 
 \item{sizeMin}{The minimum size of the mined patterns.}
+
+\item{kTree}{The maximum depth of the path tree.}
 
 \item{precursor}{Should only the occurences coming form the root be conserved.}
 }

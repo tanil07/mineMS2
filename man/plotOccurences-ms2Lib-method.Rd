@@ -6,7 +6,8 @@
 \title{PLotting the occurences of a fragPattern object inside
 an ms2Lib object.}
 \usage{
-\S4method{plotOccurences}{ms2Lib}(m2l, pidx, titles = NULL, byPage = 6, ...)
+\S4method{plotOccurences}{ms2Lib}(m2l, pidx, titles = NULL, byPage = 6,
+  subOccs = NULL, ...)
 }
 \arguments{
 \item{m2l}{An ms2lib object.}

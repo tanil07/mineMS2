@@ -9,13 +9,13 @@
 //Function which take a vertex a visitorMap and return
 //the first values in the graph if necessary.
 Vertex nextNode(VisitMap& vm,Vertex v){
-    std::vector<std::pair<Vertex,bool> >::iterator vb,ve;
+    std::vector<std::pair<Vertex,short> >::iterator vb,ve;
     vb = vm[v].begin();
     ve = vm[v].end();
     //We get a list of the possible sucessors
-    for(std::vector<std::pair<Vertex,bool> >::iterator it=vb;it!=ve;it++){
+    for(std::vector<std::pair<Vertex,short> >::iterator it=vb;it!=ve;it++){
         if(!(*it).second){
-            (*it).second = true;
+            (*it).second = 1;
             return (*it).first ;
         }
     }
@@ -23,7 +23,7 @@ Vertex nextNode(VisitMap& vm,Vertex v){
     ve = vm[v].end();
     //If no sucessors is found we get a list.
     for(auto it=vb;it!=ve;it++){
-        it->second = false;
+        it->second = 2;
     }
     return graphTraits::null_vertex();
 }

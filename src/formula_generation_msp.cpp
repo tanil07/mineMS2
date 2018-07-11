@@ -209,6 +209,9 @@ List formulaExtension(NumericVector masses,NumericVector mzlim, IntegerMatrix fo
 	std::set<double> found_masses(masses.begin(),masses.end());
 	std::map<std::string,int> found_formula;
 
+	//Adding the initial set of formula.
+
+
 	//test changing the value of masses to a haschcode of formula
 
 	double lim = mzlim[0];
@@ -222,8 +225,14 @@ List formulaExtension(NumericVector masses,NumericVector mzlim, IntegerMatrix fo
 
 	int posnew=0;
 	IntegerMatrix new_formula = formula(Range(0,2*nf-1),Range(0,nelems-1));
-	int crow = nf;
+    //Adding hte current formula ot the found formula.
+	for(int i=0;i<nf;i++){
+        IntegerVector tkey = formula(i , _);
+        std::string(tk) = to_str(tkey);
+        found_formula.insert(std::pair<std::string,int>(tk,i));
+	}
 
+    int crow = nf;
 	//index of th newly found molecules
 	int nitr = 0;
 	do{
@@ -247,7 +256,8 @@ List formulaExtension(NumericVector masses,NumericVector mzlim, IntegerMatrix fo
 				IntegerVector nkey = new_formula(pos , _)+new_formula(fi , _);
 				std::string(skey) = to_str(nkey);
 
-				const bool is_in_map = found_formula.find(skey) == found_formula.end();
+				const bool is_in_map = (found_formula.find(skey) != found_formula.end());
+				// Rcout << "p ";
 
 				if(is_in_map){
 					continue;

@@ -1,7 +1,4 @@
 
-
-
-
 #check existence of a molecular graph.
 checkGraph <- function(fo,t_atoms=NULL,singleComponent=TRUE){
 	if(is.null(t_atoms)) t_atoms <- tabAtoms()
@@ -83,7 +80,7 @@ checkSevenGoldenRules <- function(tAtoms,solution,tol=c("low","high"),rules=rep(
 #' findFormula function
 #'
 #'Fast formula generator using the algoirthm descirbed by Bocker
-#'2010. 100 times faster than the mgf used.
+#'2010. 100 times faster than rcdk.
 #' @param mz The mass to b decomposed.
 #' @param tol The tolerance in ppm.
 #' @param atoms A of constraint on the number of atoms.
@@ -156,44 +153,7 @@ findFormula <-
 
 
 
-###Reference for atoms mass etc...
-tabAtoms <- function(){
-	n_atoms <- c("H", "C", "O", "N", "F", "Cl", "Br", "I", "Si",
-				 "S", "P", "Se")
-	m_atoms <- c(1.00783, 12, 15.994915, 14.003074, 18.998403,
-				 34.0968853, 78.918336, 126.904477, 27.976928, 31.972071,
-				 30.973763, 73.922477)
-	val_atoms <- c(1, 4, 2, 3, 1, 1, 1, 1, 4, 2, 3, 6)
-	return(data.frame(name = n_atoms, mass = m_atoms, valence = val_atoms,
-					  stringsAsFactors = FALSE))
-}
 
-###Construct a reference table form a lsit of atoms.
-makeDfValidAtoms <- function (clist, mz = NULL)
-{
-	tAtoms <- tabAtoms()
-	ref <- names(clist)
-	pok <- ref %in% tAtoms$name
-	if (any(!pok)) {
-		stop("invalid atoms furnished :", paste(ref[!pok], collapse = ",",
-												sep = " "))
-	}
-	pRef <- match(ref[pok], tAtoms$name)
-	nmaxAtoms <- ceiling(mz/tAtoms$mass[pRef])
-	vnum <- NULL
-	if (class(clist) == "list") {
-		vnum <- unlist(clist)
-	}
-	else {
-		vnum <- clist
-	}
-	dfres <- data.frame(name = ref, mass = tAtoms$mass[pRef],
-						valence = tAtoms$valence[pRef])
-	if (!is.null(mz))
-		dfres$nums <- apply(rbind(unlist(clist), nmaxAtoms),
-							2, min)
-	return(dfres)
-}
 
 formulaToString <- function(vformula,vnames = NULL){
 	if(is.null(vnames))	vnames <- names(vformula)
@@ -242,11 +202,47 @@ lossesFormulaGeneration <- function(mzrange,atoms=list("C"=15,"H"=50,"O"=20,"N"=
 	masses <- mat_f %*% tatoms$mass
 
 	res <- formulaExtension(masses,mzrange[2],mat_f, have_heteroatoms,catoms )
-
 	oh <- order(res$masses,decreasing=FALSE)
 	res$masses <- res$masses[oh]
 	res$formula <- res$formula[oh,]
 	colnames(res$formula)<-tatoms$name
 
+	return(res)
+}
+
+fragmentsFormulaGeneration <- function(mzrange,atoms=list("C"=15,"H"=50,"O"=20,"N"=6,"P"=2,"S"=1,"Cl"=1),catoms = 1,maxh=1){
+	###Res a list with formula as columns and atoms names and formula as labels.
+
+	if(!(catoms %in% 0:2)) stop("catoms should be between 0 and 2.")
+
+	tatoms <- makeDfValidAtoms(atoms)
+
+	sig <- diff(mzrange)/2
+	mu <- sig+mzrange[1]
+
+
+	###Finding the formula.
+	l_formula <- findFormula(mu,sig,atoms=atoms,mgraph=TRUE,scomp=TRUE)
+
+	if(length(l_formula)==0) return(list())
+	###Finding all the heteroatoms
+	heteroAtoms <- as.character(tabAtoms()$name[5:11])
+
+	###Now we get the position on the first found formula
+	idxHAtoms <- na.omit(match(heteroAtoms,names(l_formula[[1]])))
+
+	to_rm <- which(sapply(l_formula,function(x){sum(x[idxHAtoms]>0)>maxh}))
+	if(length(to_rm)!=0){
+		l_formula <- l_formula[-to_rm]
+	}
+
+	mat_f <- do.call(rbind,l_formula)
+	masses <- mat_f %*% tatoms$mass
+
+	oh <- order(masses,decreasing=FALSE)
+	res <- list()
+	res$masses <- masses[oh]
+	res$formula <- mat_f[oh,]
+	colnames(res$formula)<-tatoms$name
 	return(res)
 }

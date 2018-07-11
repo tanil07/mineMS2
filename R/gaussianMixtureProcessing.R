@@ -49,6 +49,7 @@ gaussianMerging<- function(mu,sig,alpha=0.01,fac_sig=3){
 	res$fused <- logical(length(mu))
 	nres <- 0
 	nmerge <- 0
+	to_rm <- numeric(0)
 	if(length(mu)==1)
 		return(list(mu=mu,sig=sig,fused=FALSE))
 	for(i in 1:(length(sig)-1)){
@@ -62,6 +63,9 @@ gaussianMerging<- function(mu,sig,alpha=0.01,fac_sig=3){
 		}else if(ov<alpha & !is.na(start)){
 			stop <- i
 			ng <- mergeGaussian(mu[start:stop],sig[start:stop],fac_sig)
+			# cat("merging mz : ",paste(sprintf("%0.4f",mu[start:stop]),sep=" "),"\nsig :",paste(sprintf("%2g",sig[start:stop]),sep=""),"\n")
+			# cat("merged",ng,"\n\n")
+
 			nres <- nres+1
 			nmerge <- nmerge+1
 			res$mu[nres]<-ng[1]

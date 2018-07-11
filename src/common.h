@@ -99,7 +99,7 @@ typedef boost::adjacency_list<
     node_info, edge_info> graph;
 typedef boost::graph_traits<graph> graphTraits;
 typedef boost::graph_traits<graph>::vertex_descriptor Vertex;
-typedef std::map<Vertex,std::vector<std::pair<Vertex,bool> > > VisitMap;
+typedef std::map<Vertex,std::vector<std::pair<Vertex,short> > > VisitMap;
 
 //Property map
 typedef boost::property_map<graph,boost::vertex_index_t>::type IndexMap;

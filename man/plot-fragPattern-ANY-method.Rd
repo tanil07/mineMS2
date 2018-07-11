@@ -8,7 +8,7 @@
 \S4method{plot}{fragPattern,ANY}(x, y = NULL, title = "Frag pattern",
   edgeLabels = NULL, nodeLab = c("default", "label"),
   edgeLab = c("formula", "none"), mzdigits = 3, vertex_size = 55,
-  tkplot = FALSE, ...)
+  subNodes = NULL, tkplot = FALSE, ...)
 }
 \arguments{
 \item{y}{= NULL,}

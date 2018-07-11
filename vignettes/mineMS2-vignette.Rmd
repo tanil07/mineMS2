@@ -17,82 +17,148 @@ knitr::opts_chunk$set(fig.width=6, fig.height=6, fig.path='figures/')
 ```
 
 # Context
+
 Mining interest blablablabla
 	* Grpha natural representation. 
 	* Efficient algorithm
 	* Blablabla
 	
-# Importing the files
+# Input
+
+The package takes as input a value to 
 ```{r loading, echo=TRUE, warning=FALSE, message=FALSE}
 # loading the package
 library(mineMS2)
 ```
 ```{r paths}
-# Findinf the data
-path_demo <- system.file("mgf",package="mineMS2")
-print(head(list.files(path_demo)))
+# Finding the data
+path_demo <- system.file("dataset",package="mineMS2")
+ex_file <- file.path(path_demo,"ex_mgf.mgf")
 ```
 The spectra information are centralized in an *ms2Lib* object. It can take 3 kind of inputs :
 
-	* A vector of filename with compatible format (`mineMS2:::recognisedFormat()`)
+* A vector of filename with compatible format (`mineMS2:::recognisedFormat()`)
 	
-	* A single directory name in which the files in supported format are stored.
+* A single directory name in which the files in supported format are stored.
 	
-	* A list containg Spectrum2 objects.
+* A list containg Spectrum2 objects.
+	
+This object store all the supplementary information
 	
 
-```{r constructor_ms2lib,fig.show="hide",message=FALSE}
-m2l <- ms2Lib(path_demo)
+```{r constructor_ms2lib}
+m2l <- ms2Lib(ex_file)
 m2l
-
+```
+At this step some supplementary informations may be added to the spectra using the _spectraInfo_ arguments. It should be a table with as much row as spectra, in the same order.
+```{r constructor_ms2lib_supp_info}
+###Loading the suppelmentary information
+supp_infos_path <- file.path(path_demo,"ex_supp_infos.csv")
+supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
+m2l <- ms2Lib(ex_file,suppInfos = supp_infos)
+m2l
 ```
 
-
-#Building the graphs
-The graph are built by discretizing the mass losses.
-```{r edge_discretization}
-m2l <- discretizeMassLosses(m2l,8,0.008,2/length(m2l),precPpm=20,precDmz=0.03,maxFrags=15)
+The extracted spectrum may be plot using the *plot* function of the *msnBase* package :
+```{r plotSpec}
+plot(m2l["S10"],full=TRUE)
 ```
-#Mining the frequent subgraphs
+Here the "S10" index correspond to the first spectra. These indexes will be discussed later.
+
+
+#Losses dicretization
+The graphs are built by discretizing the mass losses. This algorithm use a density with a varying bandwidth to take into account the fact that the mass accuraccy of mass spectrometers are in ppm. This step is very important, as it determine the initial set of graphs. The most important parameters and their meaning are listed here :
+
+* _ppm_: The accuracy of the mass spectrometer in ppm used to determine the bandwidth of the density.
+
+* _dmz_: The minimum deviation use for bandwidth in dalton.
+
+* _count_: The minimum number of spectra in which a loss needs to be present.
+
+* _precPpm_: The ppm tolerance used to match the precursor.
+
+* _precDmz_: The minimum tolerance used to match the precursor.
+
+* _heteroAtoms_: Shall hetero atoms (*P*,*S*,*Cl*) be used when generating ofrmula for mass losses.
+
+* _maxFrags_: Only the _maxFrags_ most intense will be ocnsidered to build the graph. At most 20.
+
+
+The _precPpm_ and _precDmz_ arguments are used to find a peak corresponding to the precursor on the MS-MS spectra. If it is not present an artificial peak is added.
+
+```{r edge_discretization,message=FALSE}
+m2l <- discretizeMassLosses(m2l,ppm=8,dmz=0.008,count=2,
+							precPpm=20,precDmz=0.03,maxFrags=15)
+```
+After this step, the discretized losses labels may be extracted :
+```{r tab_losses}
+head(lossesTable(m2l))
+```
+After this steps the graphs correspoding to the spectra have been constructed. 
+
+It is good to note that at this step supplementary information may using the penalizedLosses informations.
+
+#Mining frequent subgraphs 
+To generate the frequent subgraph we will use the *mineClosedSubgraphs* function. Two important parameters are the _count_ parameter which is the minimum number of occurences of a patterns, and the _sizeMin_ parameter which determine the minimum size of the mined graphs. Here we set _sizeMin_ to 1 to mine single losses.
+
 ```{r graph_mining}
-m2l <- mineClosedSubgraphs(m2l,num=10,sizeMin = 2, precursor = FALSE)
+m2l <- mineClosedSubgraphs(m2l,count=2,sizeMin = 1)
 ```
+This step can be quite time consuming.
+
 #IDs
-The *mineMS2* package include 4 differents data, the spectra, the dags correspoding to these spectra, the losses and and the mined patterns. An ID is associated with each of these elements. When judicious they can be visualized using the *plot* function and searched using the *search*(not implemented) and *exported* functions.
+The *ms2Lib* object include 3 different data types an they can be queried using their IDs which include a prefix specifying the data type and a number. These data types are the spectra (S), the patterns (P) and the losses (L). Further information on the functionality of these package are given in the next subsection :
 
-* *Spectra* IDs starts by the *S* letter, they can be plot using the *plot* function, which call the plot function of the msnBase package. They can also be searched against the patterns
+##Spectra
+Spectra may be queried using id starting by "S", they may be visualised using the "plot" method of "Spectrum2" object form the "msnBase" package. It is possible to find a specific spectra by using the _findMz_ function, with the "S" parameter.
 ```{r spec_plot_example}
-plot(m2l,"S45")
+sid <- findMz(m2l,147.0,type="S",ppm=8,dmz=0.2)
+sid
+```
+Informations about the spectra may be queried using the *getInfo* function :
+```{r get_info_s}
+getInfo(m2l,sid)
+```
+The patterns in which the psectra is present may be extracted using the the *select* function : 
+
+```{r select_s_p}
+pids <- select(m2l,sid,"P")
+pids
 ```
 
+##Losses
 
-* *Losses* IDs start by the *L* letter. They can be searched against patterns (*P*) or dags (*D*).
+Losses IDs start by the *L* letter. The can be searched using the *findMz* function to. Some information may be extracted using the *getInfo* function. We don't demonstrate it as they are similar to those of spectra. They can be searched against patterns (*P*) or dags (*D*) using the *select* function :
+```{r select_l_p}
+pids <- select(m2l,"L5","P")
+```
 
-* *DAGs* IDs start by the *D* they can be searched against patterns (*P*). 
+##Patterns
 
-* *Patterns* IDs start by the *P* letter, they can be plotted using the *plot* and *plotOccurences functions.
+* Patterns IDs start by the *P* letter, they can be plotted using the *plot* and *plotOccurences* functions.
 ```{r patterns_plot_example}
-plot(m2l,"P10")
+plot(m2l,"P80")
 
 ```
 ```{r patterns_plot_occs_example}
-plotOccurences(m2l,"P10",byPage=6)
-
+plotOccurences(m2l,"P10",byPage=9)
 ```
 #Scoring the patterns
-Two scores are calculated by *mineMS2* a score for each individual loss and a score for each pattern :
+The scores of each pattern is determined by the scores of the losses included in the pattern. This score include mutliple components :
+
+* A penalization term form common losses, (_H2O_, _NH3_)
+* A penalization term for loss formula including only one type of atoms (_C2_).
+* A weigth term determining the degree of penalization of frequent losses in the dataset.  
 ```{r scoring_edge}
-m2l <- scoresLosses(m2l)
+m2l <- score(m2l)
 
 ```
 
-```{r scoring_patterns}
-m2l <- scorePatterns(m2l)
-```
+#Lattice reduction
+The lattice information may be summarized using the *kLatticeReduction* function, which select the _k_ reprsentative patterns :
+```{r k_latt_red}
+m2l <- kLatticeReduction(m2l,40)
 
-#Reducing the lattice
-```{r lattice_reduction}
-m2l <- kLatticeReduction(m2l,10)
 ```
 
 

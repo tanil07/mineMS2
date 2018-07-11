@@ -74,7 +74,7 @@ Vertext k_path_tree::get_node(Vertext origin,int lab){
 //Utility function used to add a node.
 //We add the the occurences values
 void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<int>& plabs,
-                                 int lpath, IndexMap& idx_vertex, int gid){
+                                 int lpath, IndexMap& idx_vertex, VisitMap& vm,int gid){
 
     //We consider that pi is the size of the substring considered.
     for(int pi=k;pi>1;pi--){
@@ -90,6 +90,8 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
                 }
                 continue;
         }
+
+        if(vm[pfr[lpath-pi]].second==)
 
         //This is done only if it is not the last element
         if(pi!=k){

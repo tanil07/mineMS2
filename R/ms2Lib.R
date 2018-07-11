@@ -97,8 +97,9 @@ setMethod("mm2ReducedLattice<-","ms2Lib",function(m2l,value){
 	m2l
 })
 
-###Function to get a spectrum.
-
+isLoss <- function(m2l){
+	m2l@loss
+}
 
 ###A list of the recognised format
 recognisedFormat <- function(){
@@ -243,7 +244,9 @@ setMethod("show","ms2Lib",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
 	cat("It has",nrow(mm2EdgesLabels(object)),"edges labels.\n")
 	cat("The available supplementary informations are:",colnames(mm2SpectraInfos(m2l)),"\n")
-	cat("It contains: ",length(mm2Patterns(object)),"patterns")
+	cat("It contains: ",length(mm2Patterns(object)),"patterns\n")
+	if(length(mm2ReducedPatterns(m2l))!=0) cat("It has been reduced to ",
+											   length(mm2ReducedPatterns(m2l)),"patterns")
 })
 
 #' @export
@@ -260,8 +263,9 @@ setMethod("length","ms2Lib",function(x){
 #' Mine all the complete recurring subgraphs.
 #'
 #' @param m2l An m2Lib object to be processed.
-#' @param num The number of spectra in which the spectrum need to be sampled.
+#' @param count The number of spectra in which the spectrum need to be sampled.
 #' @param sizeMin The minimum size of the mined patterns.
+#' @param kTree The maximum depth of the path tree.
 #' @param precursor Should only the occurences coming form the root be conserved.
 #'
 #' @return The filled ms2Lib object.
@@ -269,10 +273,10 @@ setMethod("length","ms2Lib",function(x){
 #'
 #' @examples
 #' print("examples to be put here")
-setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, precursor = FALSE){
-	if(num<2){
-		warning("num parameters set to ",num," it is therefore set to 2.")
-		num <- 2
+setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2,kTree = NULL, precursor = FALSE){
+	if(count<2){
+		warning("'count' parameters set to ",count," it is therefore set to 2.")
+		count <- 2
 	}
 
 
@@ -284,11 +288,13 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, pre
 	if(nrow(mm2EdgesLabels(m2l))==0){
 		stop("No labels constructed, use the DiscretizeMallLosses function first.")
 	}
-	kTree <- 2
+
+	if(is.null(kTree)){
 	if(nrow(mm2EdgesLabels(m2l))<600){
 		kTree <- 3
 	}else{
 		kTree <- 2
+	}
 	}
 
 
@@ -303,7 +309,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, num = 2, sizeMin = 2, pre
 	df_vertices <-sapply(mm2Dags(m2l),fromIgraphToDf_vertices,simplify = FALSE)
 
 	###Mining the patterns.
-	resRcpp <- mineClosedDags(df_vertices,df_edges,processing,num,kTree,sizeMin,precursor)
+	resRcpp <- mineClosedDags(df_vertices,df_edges,processing,count,kTree,sizeMin,precursor)
 
 	mm2LatticeIdxItems(m2l) <- resRcpp$items
 
@@ -408,9 +414,10 @@ setMethod("plot", "ms2Lib",
 		  	if(rid[[1]]=="patterns"){
 				plot(x[y],title = y,edgeLabels=(mm2EdgesLabels(x)),...)
 		  	}else if(rid[[1]]=="spectra"){
-		  		plot(x[y],full=TRUE,...)
+		  		plot_Spectrum2(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){
-		  		stop("DAGS plotting not implemented at the moment.")
+		  		plot_dag(x[y],idx=y,edgeLabels=(mm2EdgesLabels(x)),...)
+		  		# stop("DAGS plotting not implemented at the moment.")
 		  	}else if(rid[[1]]=="losses"){
 		  		stop("Impossible to plot a loss")
 		  	}else if(rid[[1]]=="fragments"){
@@ -506,28 +513,33 @@ getInfo <- function(m2l,ids){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
 	authorizedValue <- c("losses","spectra")
 
-	pids <- sapply(ids,parseId,m2l=m2l,simplify=FALSE)
-
-	type <- sapply(pids,'[[',i=1)
-
-	if(all(type %in% authorizedValue)){
-		num <- sapply(pids,'[[',i=2)
-		res <- sapply(pids,function(x){
-			if(x[[1]] == "losses"){
-				return(getInfo.L(x[[2]]))
-			}
-			if(x[[1]] == "spectra"){
-				return(getInfo.S(x[[2]]))
-			}
-		},simplify=FALSE)
-		if(length(unique(type))==1){
-			return(do.call("rbind",res))
-		}else{
-			return(res)
-		}
+	if((length(ids)==1) & (nchar(ids)==1)){
+		ids <- match("S","L","P")
 
 	}else{
-		stop("Invalid type for getInfo: ",unique(type[!(type %in% authorizedValue)]))
+		pids <- sapply(ids,parseId,m2l=m2l,simplify=FALSE)
+
+		type <- sapply(pids,'[[',i=1)
+
+		if(all(type %in% authorizedValue)){
+			num <- sapply(pids,'[[',i=2)
+			res <- sapply(pids,function(x){
+				if(x[[1]] == "losses"){
+					return(getInfo.L(x[[2]]))
+				}
+				if(x[[1]] == "spectra"){
+					return(getInfo.S(x[[2]]))
+				}
+			},simplify=FALSE)
+			if(length(unique(type))==1){
+				return(do.call("rbind",res))
+			}else{
+				return(res)
+			}
+
+		}else{
+			stop("Invalid type for getInfo: ",unique(type[!(type %in% authorizedValue)]))
+		}
 	}
 }
 

@@ -85,15 +85,14 @@ VisitMap mass_graph::buildVisitMap()
     for(boost::tie(bv,ev)=boost::vertices(g); bv!=ev; bv++)
     {
         //We push the values
-        std::vector<std::pair<Vertex,bool> > AdjacentNodes;
+        std::vector<std::pair<Vertex,short> > AdjacentNodes;
         boost::graph_traits<graph>::adjacency_iterator ai,ai_end;
         for (boost::tie(ai, ai_end) = adjacent_vertices(*bv, g);
                 ai != ai_end; ++ai)
         {
-            std::pair<Vertex,bool> temp_pair(*ai,false);
+            std::pair<Vertex,short> temp_pair(*ai,0);
             AdjacentNodes.push_back(temp_pair);
         }
-        //At this step the map can be pushed in the value.
         vmap[*bv]=AdjacentNodes;
     }
     return vmap;
