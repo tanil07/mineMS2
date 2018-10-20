@@ -26,7 +26,7 @@ class subgraph_container
         //Inserting a pattern in the data structure.
         void insert_pattern(frag_pattern& pat,std::ostream& of);
 
-        void insert_closed_pattern(frag_pattern& fp, bool& inserted, std::ostream& of);
+        void insert_closed_pattern(frag_pattern& fp, bool& inserted, std::ostream& of, int& num_error);
 
         //Finding the idx of subgraph of a graph
         std::vector<patternIdx> findSubgraph(frag_pattern& pat);

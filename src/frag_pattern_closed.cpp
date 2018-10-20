@@ -5,6 +5,8 @@
 #include "frag_pattern.h"
 #include "common.h"
 
+#include "Rcpp.h"
+
 //TODO eventually replace it by an iterator.
 //Enumerate the possible subpattern of a pattern.
 std::vector<Edgep> frag_pattern::enumerate_possible_subpattern(){
@@ -58,6 +60,52 @@ std::vector<short> frag_pattern::get_out_edge_labs(Edgep e){
     return labs;
 }
 
+//Map a pattern to a mass graph
+std::map<Vertex,Vertexp> mapPattern(graph &g,Vertex orvertex,graphp &p,Vertexp rootp){
+
+    //First finding the mappin
+    //Intermdiate map used to build the mapping
+    std::map<short,Vertex> mg;
+    graphTraits::out_edge_iterator bo,eo;
+    //IndexMap imap = boost::get(boost::vertex_index,g);
+    graphTraits::vertex_iterator bv,ev;
+
+    boost::tie(bo,eo)=boost::out_edges(orvertex,g);
+    std::transform(bo,eo,std::inserter(mg,mg.begin()),
+                   [&g](graphTraits::edge_descriptor u)->std::pair<short,Vertex>{
+        return std::make_pair(g[u].lab,boost::target(u,g));
+    });
+
+    //Finding the vertex corresponding otthe origin in grpah d
+    //TODO stores it eventually
+    std::map<Vertex,Vertexp> mapping;
+    mapping.insert(std::make_pair(orvertex,rootp));
+    graphTraitsp::out_edge_iterator bpo,epo;
+    boost::tie(bpo,epo)=boost::out_edges(rootp,p);
+//
+    //Rcpp::Rcerr << "InMap :"<<std::endl;
+    for(;bpo!=epo;bpo++){
+        auto pos = mg.find(p[*bpo].lab);
+        if(pos!=mg.end()){
+            bool ins1;
+            Edge e1;
+            //Edgep e2;
+            boost::tie(e1,ins1)=boost::edge(orvertex,(*pos).second,g);
+            //boost::tie(e2,ins1)=boost::edge(rootp,(*pos).second,g);
+            //Rcpp::Rcerr << g[e1].lab <<"_" << p[*bpo].lab<<std::endl;
+            mapping.insert(std::make_pair((*pos).second,boost::target(*bpo,p)));
+        }
+    }
+
+
+//    std::transform(bpo,epo,std::inserter(mapping,mapping.begin()),
+//                   [&mg,&p](graphTraitsp::edge_descriptor u)->std::pair<Vertex,Vertexp>{
+//        return std::make_pair((*(mg.find(p[u].lab))).second,boost::target(u,p));
+//    });
+    return mapping;
+}
+
+
 
 //utility function called by the ismorphism.
 std::vector<short> get_labs(frag_pattern& fp,Vertexp v,bool sorted){
@@ -85,6 +133,7 @@ Vertexp find_subgraph(frag_pattern & a,frag_pattern & b){
     }
     return false;
 }
+
 
 //Return true if the graph a is isomorphic to b, 0 otherwise.
 bool is_isomorphic(frag_pattern & a,frag_pattern & b){

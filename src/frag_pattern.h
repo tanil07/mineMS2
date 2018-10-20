@@ -53,8 +53,8 @@ class frag_pattern
         std::pair<std::vector<Extension>::iterator,
                     std::vector<Extension>::iterator> get_it_exts();
 
-        void constructFullGraph(triangles_list& tl);
-        void constructFullGraph(triangles_list& tl,Vertexp v);
+//        void constructFullGraph(triangles_list& tl);
+//        void constructFullGraph(triangles_list& tl,Vertexp v);
 
         //Function to debug only
         bool isCoherent();
@@ -83,6 +83,11 @@ class frag_pattern
         Rcpp::List as_igraph_data_frame();
 
 
+        //V2 functions
+        bool isCompleteD(std::vector<mass_graph>& D);
+        void reconstructGraphD(std::vector<mass_graph>& D);
+
+
     protected:
         //extensions is in left-mostg depth-first.
         std::vector<Extension> extensions;
@@ -105,11 +110,11 @@ class frag_pattern
         //A pointer to the root for commodity purpose
         Vertexp root;
 
-        bool validExtension(Extension& ext,triangles_list& l);
+//        bool validExtension(Extension& ext,triangles_list& l);
         void fill_graph_info();
         //Remove the forbidden extensions.
-        void filterExtensions(triangles_list&);
-        std::vector<Extension>::iterator update_dist_prec(std::vector<Extension>&,Extension,triangles_list&);
+        void filterExtensions(k_path_tree&);
+//        std::vector<Extension>::iterator update_dist_prec(std::vector<Extension>&,Extension,k_path_tree&);
 
 };
 
@@ -122,4 +127,5 @@ bool is_subgraph(frag_pattern & a, frag_pattern & b, Vertexp v);
 bool is_subgraph(frag_pattern & a, frag_pattern & b);
 bool is_subgraph(frag_pattern & a, frag_pattern & b,std::ofstream& of);
 bool is_subgraph_edge_set(std::set<short> elabs,frag_pattern & p);
+std::map<Vertex,Vertexp> mapPattern(graph &g,Vertex origin,graphp &p,Vertexp rootp);
 #endif // FRAG_PATTERN_H

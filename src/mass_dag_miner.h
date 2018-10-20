@@ -3,7 +3,7 @@
 
 #include <stack>          // std::stack
 
-
+#include "Rcpp.h"
 #include "k_path_tree.h"
 #include "subgraph_container.h"
 #include "triangles_list.h"
@@ -18,15 +18,16 @@ class mass_dag_miner
         virtual ~mass_dag_miner();
         void mineFrequentDag(int freq,std::ostream& os);
         void mineFrequentCompleteDag(int freq,std::ostream& of);
-        void mineFrequentCompleteDag(int freq,std::set<short> vals,std::ostream& of);
+//        void mineFrequentCompleteDag(int freq,std::set<short> vals,std::ostream& of);
         subgraph_container& get_container();
         void setSizeMin(int smin);
         int getSizeMin();
 
     protected:
     private:
-        subgraph_container container;
+        std::vector<mass_graph> mgs;
         k_path_tree kt;
+        subgraph_container container;
         triangles_list tl;
         int num_graph;
         std::stack<lattice_node> lattice_stack;

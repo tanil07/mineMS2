@@ -167,7 +167,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	mm2EdgesLabels(m2l) <- res_list$elem
 	mm2Dags(m2l) <- res_list$dags
 
-	message("Losses discretization finished.")
+	message("Losses discretization finished ",nrow(res_list$elem)," common losses found.")
 	m2l
 })
 
@@ -237,7 +237,7 @@ discretizeMassesDifferences <- function(list_spec,
 	merged_masses <- gaussianMerging(masses,sds^2,alpha=max_overlap,fac_sig = fac_sig)
 	high_mz_idx <- which(merged_masses$mu>limFormula[2])
 	###Now we check the values which may originates from a formula.
-
+	# browser()
 
 	###Generation of all the neutral formula
 	message("Formula generation")
@@ -332,7 +332,6 @@ discretizeMassesDifferences <- function(list_spec,
 			ncol = length(list_masses[[i]])
 		)
 		colnames(toReturn[[i]]) <- sprintf(paste('%0.',mzdigits,'f',sep=""),list_masses[[i]])
-
 		###We first need to reorder the mass diff
 		om_diff <- order(list_matrix[[i]]$mz,decreasing = FALSE)
 		list_matrix[[i]]$mz <- list_matrix[[i]]$mz[om_diff]
@@ -399,6 +398,7 @@ discretizeMassesDifferences <- function(list_spec,
 			if(ecount(dag)>0){
 				tlab <- table(edge_attr(dag,"lab"))
 				ntlab <- as.numeric(names(tlab))
+				if(length(recap_tab$count[ntlab])!=length(as.numeric(tlab))) browser()
 				recap_tab$count[ntlab] <- recap_tab$count[ntlab]+as.numeric(tlab)
 			}
 		}
@@ -593,7 +593,7 @@ getExtendedSpec <- function(spec,ppm=5,dmz=0.02,removeSup=TRUE,addPrecursor=TRUE
 		onames <- colnames(df_spec)
 		onames <- c(onames,"rel_int")
 		rel_int <- (as.numeric(df_spec$int)/sum(as.numeric(df_spec$int)))*100
-		if(any(is.na(rel_int))) browser()
+		# if(any(is.na(rel_int))) browser()
 		df_spec$rel_int <- rel_int
 	}
 	df_spec <- df_spec[order(df_spec$mz,decreasing=TRUE),]
@@ -723,12 +723,9 @@ discretizeSequenceByClasses <- function(ppm,
 	listgroup <- listgroup[1:num_group,]
 	idxgroup <- idxgroup[1:num_group]
 	###Reordering by iuncreasing masses.
-	cat("a1")
 	og <- order(listgroup[,1],decreasing=FALSE)
-	cat("a2")
 	listgroup <- listgroup[og,]
 	idxgroup <- idxgroup[og]
-	cat("ok")
 	return(list(discrete_elem = listgroup, idx = idxgroup))
 }
 

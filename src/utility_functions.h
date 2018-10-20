@@ -2,9 +2,10 @@
 #define UTILITY_FUNCTIONS_H_INCLUDED
 
 #include "common.h"
+#include "Rcpp.h"
 
-Vertex nextNode(VisitMap&,Vertex);
-void printVmap(VisitMap&,graph&);
+Vertex nextNode(VisitMap&,graph&,Vertex);
+//void printVmap(VisitMap&,graph&);
 void addOccs(MapOccurrences& ,Vertext,occ);
 
 #endif // UTILITY_FUNCTIONS_H_INCLUDED

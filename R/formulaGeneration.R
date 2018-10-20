@@ -163,8 +163,9 @@ formulaToString <- function(vformula,vnames = NULL){
 	paste(paste(vnames,vnums,sep=""),collapse="")
 }
 
-stringToFormula <- function (fstring, vnames = character(0))
+stringToFormula <- function (fstring, vnames = character(0),rm_white=TRUE)
 {
+	fstring <- trimws(fstring)
 	res <- formulaFromString(as.character(fstring),as.character(vnames))
 	vres <- res[[2]]
 	names(vres) <- res[[1]]

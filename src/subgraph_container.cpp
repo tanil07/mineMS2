@@ -116,12 +116,11 @@ void subgraph_container::insert_pattern(frag_pattern& pat,std::ostream& of){
 }
 
 //
-void subgraph_container::insert_closed_pattern(frag_pattern& fp, bool& inserted, std::ostream& of){
+void subgraph_container::insert_closed_pattern(frag_pattern& fp, bool& inserted, std::ostream& of, int& num_error){
     //We check the supergraph.
     //of << " Possible_Insert..";
     std::vector<patternIdx> sup_idx = findSupergraph(fp,of);
     //of<<"num_sump_"<<sup_idx.size();
-
     std::vector<std::string> supergraphs;
     //Number of occurences is compared for closeness
     short current_score = fp.numOccs();
@@ -143,6 +142,7 @@ void subgraph_container::insert_closed_pattern(frag_pattern& fp, bool& inserted,
     //pattern is not inserted
     std::string & norm = fp.get_norm();
     if(idxmap.find(norm)!=idxmap.end()){
+        num_error++;
         inserted = false;
         return;
     }
@@ -179,11 +179,11 @@ void subgraph_container::insert_closed_pattern(frag_pattern& fp, bool& inserted,
 //    if(sub_idx.size()>0){
 //    //std::cout << "sup: "<<supergraphs.size() <<"sub: "<< subgraphs.size() <<" to_rm: "<<to_rm_norm.size() <<std::endl;
 //    }
-    removePattern_latt(to_rm_norm);
+    //removePattern_latt(to_rm_norm);
     //std::cout << "Removal done";
 
 
-    removeIdx(to_rm);
+    //removeIdx(to_rm);
     inserted = true;
     //std::cout << "OUT FUN";
 }
@@ -316,19 +316,7 @@ std::vector<patternIdx> subgraph_container::findSupergraph(frag_pattern& pat,std
         }
         //of <<" ";
     }
-    //std::cout <<"DONE!!";
     return to_return;
-
-//    for(auto it = pmap.begin();it != pmap.end();it++){
-//
-//    for(auto it = pmap.begin();it != pmap.end();it++){
-//        std::vector<frag_pattern>& cvec = it->second;
-//        for(int itt=0;itt<cvec.size();itt++){
-//            if(is_subgraph(pat,cvec[itt])){
-//                to_return.push_back(std::make_pair(it->first,itt));
-//            }
-//        }
-//    }
 }
 
 

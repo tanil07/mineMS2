@@ -24,6 +24,8 @@ class mass_graph
         graph& get_g();
         Vertex& get_precursor();
 
+        Vertexp get_vertex_from_gid(short gid);
+
         //Used to build the path tree.
         VisitMap buildVisitMap();
         std::vector<Vertex> roots();

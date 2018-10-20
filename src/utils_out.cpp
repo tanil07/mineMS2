@@ -181,12 +181,11 @@ NumericVector disjointBins(NumericVector points, NumericVector lower_lim, Numeri
 	int num_match = 0;
 	int in_inter = 0;
 	while((pi < lower_lim.size())&(pp<N)){
-		//Rprintf("pi %d pp %d \n",pi,pp);
+		//Rprintf("pi %d-%0.4f pp %d-%0.4f \n",pi,mean_bin[pi],pp,points[pp]);
 		if((points[pp]>=lower_lim[pi])&(points[pp]<upper_lim[pi])){
 			//We check if the value is already in a bin or not.
 			in_inter = 1;
 			num_match++;
-			//Rprintf("in inter\n");
 			if(bins[pp]!=0){
 				if(abs(mean_bin[bins[pp]-1]-points[pp])>=abs(mean_bin[pi]-points[pp])){
 					bins[pp]=pi+1;
@@ -208,6 +207,10 @@ NumericVector disjointBins(NumericVector points, NumericVector lower_lim, Numeri
 			}else if(points[pp]>=upper_lim[pi])
 				pi++;
 		}
+	}
+	//Case where the last element have been binned
+	if(bins[pp]!=0){
+		pp++;
 	}
 	for(int p=pp;p<N;p++){
 		bins[p]=NA_REAL;

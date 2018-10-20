@@ -28,15 +28,17 @@ class k_path_tree
         int get_k();
 
         ktree& get_t();
+        short get_dist_vertex(Vertext c);
         MapOccurrences& get_occs();
         Vertext get_root();
-        triangles_list& get_tl();
+//        triangles_list& get_tl();
         adjacencyGraph& get_adj();
 
         //Removing nodes which are non frequent
         void filter_frequent_nodes(int noccs);
 
         //Creating 1-edge.
+        void to_string(std::ostream& of);
         //std::vector<frag_pattern> constructOneEdgeGraphs();
         std::vector<Extension> getExtensions(Vertexp v,Vertext vt);
 
@@ -48,16 +50,14 @@ class k_path_tree
 
         //Create the values
 
-
-        //pure utility function.
-        //void to_string(std::ostream& of);
+        //Getting the nodes of a kpath tree
+        short getLab(Vertext v) const;
+        std::vector<short> getLabSuccs(Vertext v) const;
     protected:
-        //TO DO code the update pos
-        //Find the position of a path.
 
         //Here the number of value to store.
         void update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<int>& plabs,
-                                 int lpath, IndexMap& idx_vertex,VisitMap& vm, int gid, mass_graph& G);
+                                 int lpath, IndexMap& idx_vertex,VisitMap& vm, int gid, graph& G);
 
         //Here the number of value to roll_back
         void update_pos_back();
@@ -65,6 +65,8 @@ class k_path_tree
 
         //Given a list of labels return the correct nodes.
         Vertext find_pos(std::vector<short>);
+
+
 
 
     private:
@@ -81,7 +83,7 @@ class k_path_tree
         MapOccurrences moccs;
 
         //List of traingles dependent of the graph too
-        triangles_list tl;
+        //triangles_list tl;
 
         //A list giving the adjacency property of the graph
         adjacencyGraph adj;

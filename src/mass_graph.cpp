@@ -80,24 +80,32 @@ VisitMap mass_graph::buildVisitMap()
     VisitMap vmap;
 
     boost::graph_traits<graph>::vertex_iterator bv,ev;
+    boost::graph_traits<graph>::edge_iterator be,ee;
     //We iterate on all the vertices.
 
-    for(boost::tie(bv,ev)=boost::vertices(g); bv!=ev; bv++)
-    {
-        //We push the values
-        std::vector<std::pair<Vertex,short> > AdjacentNodes;
-        boost::graph_traits<graph>::adjacency_iterator ai,ai_end;
-        for (boost::tie(ai, ai_end) = adjacent_vertices(*bv, g);
-                ai != ai_end; ++ai)
-        {
-            std::pair<Vertex,short> temp_pair(*ai,0);
-            AdjacentNodes.push_back(temp_pair);
-        }
-        vmap[*bv]=AdjacentNodes;
+
+    for(boost::tie(be,ee)=edges(g);be!=ee;be++){
+        vmap[*be] = 0;
     }
+
     return vmap;
 }
 
+//    for(boost::tie(bv,ev)=boost::vertices(g); bv!=ev; bv++)
+//    {
+        //We push the values
+//        std::vector<std::pair<Vertex,short> > AdjacentNodes;
+//        boost::graph_traits<graph>::adjacency_iterator ai,ai_end;
+//        for (boost::tie(ai, ai_end) = adjacent_vertices(*bv, g);
+//                ai != ai_end; ++ai)
+//        {
+//            std::pair<Vertex,short> temp_pair(*ai,0);
+//            AdjacentNodes.push_back(temp_pair);
+//        }
+
+//        vmap[*bv]=AdjacentNodes;
+//    }
+//    return vmap;
 
 
 
@@ -115,6 +123,16 @@ VisitMap mass_graph::buildVisitMap()
 //    graph g;
 //
 //}
+
+Vertexp mass_graph::get_vertex_from_gid(short gid){
+    IndexMap imap = boost::get(boost::vertex_index,g);
+    graphTraits::vertex_iterator bv,ev;
+    for(boost::tie(bv,ev)=boost::vertices(g);bv!=ev;bv++){
+        if(gid==imap[*bv])     return *bv;
+    }
+    return graphTraits::null_vertex();
+
+}
 
 
 //We define the getter and setter function
