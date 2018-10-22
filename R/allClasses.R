@@ -7,6 +7,7 @@
 #' @slot spectraInfo A data.frame including the spectra information at minima the "mz.precursor" field
 #' and informations added by the user eventually.
 #' @slot spectra A list of spectra sotred under the form of Spectrum2 object.
+#' @slot ids A chracter vector containing the ids of spectra.
 #' @slot dags A list storing the set of graphs object corresponding to the MS-MS spectra.
 #' @slot edgesLabels The discretized edges labels.
 #' @slot nodesLabels The discretized nodes labels.
@@ -23,6 +24,7 @@ setClass(
 	slot = list(
 		spectraInfo = "data.frame",
 		spectra = "list",
+		ids = "character",
 		dags = "list",
 		losses = "data.frame",
 		fragments = "data.frame",
@@ -37,6 +39,7 @@ setClass(
 	prototype = list(
 		spectraInfo = data.frame(),
 		spectra = list(),
+		ids = character(),
 		dags = list(),
 		losses = data.frame(),
 		fragments = data.frame(),

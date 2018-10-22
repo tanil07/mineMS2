@@ -16,6 +16,11 @@ setMethod("mm2Dags","ms2Lib",function(m2l){
 	return(m2l@dags)
 })
 
+setMethod("mm2Ids","ms2Lib",function(m2l){
+	return(m2l@ids)
+})
+
+
 
 setMethod("mm2EdgesLabels","ms2Lib",function(m2l){
 	return(m2l@losses)
@@ -54,6 +59,21 @@ setMethod("mm2Spectra<-","ms2Lib",function(m2l,value){
 
 setMethod("mm2SpectraInfos<-","ms2Lib",function(m2l,value){
 	m2l@spectraInfo <- value
+	m2l
+})
+
+setMethod("mm2Ids<-","ms2Lib",function(m2l,value,check=TRUE){
+	if(check & any(startsWith(value,names(CORR_TABLE)))){
+		stop("Forbidden prefixes for ids: ",paste(names(CORR_TABLE),collapse = ", "),
+			 " found in ",value[startsWith(value,names(CORR_TABLE))])
+	}
+
+	if(length(value) != length(mm2Spectra(m2l))){
+		stop("Number of furnished ids (",paste(length(value)),
+			 ") should equal to spectra number (",paste(length(mm2Spectra(m2l))),")")
+	}
+	m2l@ids <- value
+	###Check of the correctness of the IDs.
 	m2l
 })
 
@@ -157,9 +177,13 @@ make_initial_title <- function(spec_infos){
 #' @param suppInfos Supplementary information to be associated to the spectra.
 #' It should be of the same size as the number of spectra. If there is a "file" column, this
 #' column is used to match the file.
+#' @param ids A supplementary vector giving a set of ids to design the spectra. It may be any character vector which
+#' does not start with \textbf{P,L,S} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
+#' and it contains an id fields, it will be used. If not ids is furnished and id will be generated for each spectra as S1,S2,...,SN
+#' where N is the number of furnished spectra.
 #' @examples
 #' print("examples to be put here")
-ms2Lib <- function(x, suppInfos = NULL){
+ms2Lib <- function(x, suppInfos = NULL,ids = NULL){
 
 	m2l <- new("ms2Lib")
 
@@ -199,6 +223,7 @@ ms2Lib <- function(x, suppInfos = NULL){
 
 	mm2Spectra(m2l) <- do.call("c",mm2Spectra(m2l))
 
+
 	###data.frame is initialized. With the mass of the precusors
 	temp_df <- data.frame("mz.precursor" = sapply(mm2Spectra(m2l),function(x){
 												  precursorMz(x)}))
@@ -217,7 +242,7 @@ ms2Lib <- function(x, suppInfos = NULL){
 
 	temp_df$title <- make_initial_title(temp_df)
 
-	##Adding the supplementary information if necessary.
+	##Adding the supplementary information if necessary while check for an id fileds.
 	if(!is.null(suppInfos)){
 		if(nrow(suppInfos)!= length(m2l@spectra)){
 			stop("The number of suppInfos rows (",nrow(suppInfos),
@@ -232,12 +257,26 @@ ms2Lib <- function(x, suppInfos = NULL){
 			}else{
 				temp_df <- cbind(temp_df,suppInfos)
 			}
+
+
+			if(("id" %in% colnames(suppInfos)) &
+			   (is.null(ids))){
+				mm2Ids(m2l) <- suppInfos[,"id"]
+			}
 		}
 
+	}else{
+		if(!is.null(ids)){
+			mm2Ids(m2l) <- ids
+		}else{
+			mm2Ids(m2l,check=FALSE) <- paste("S",1:length(mm2Spectra(m2l)),sep="")
+		}
 	}
+
 	mm2SpectraInfos(m2l) <- temp_df
 	m2l
 }
+
 
 #' @export
 setMethod("show","ms2Lib",function(object){
@@ -331,19 +370,27 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2,kT
 })
 
 
-###Parse an id.
+###Parse an id
 parseId <- function(m2l,idx){
+
 	prefix <- substring(idx,1,1)
 	number <- as.integer(substring(idx,2))
-	# browser()
-	if(!(prefix %in% names(CORR_TABLE))) stop("Invalid prefix ",prefix," authorized prefix are ",
-											  paste(names(CORR_TABLE),collapse=", "))
+	if(!(prefix %in% names(CORR_TABLE))){
+		###Checking if it's in the ids fields.
+		resm <- match(idx,mm2Ids(m2l))
+		if(is.na(resm)){
+			stop("Invalid prefix ",prefix," authorized prefix are ",
+			 	paste(names(CORR_TABLE),collapse=", "))
+		}else{
+			return(list(type=CORR_TABLE[["S"]],num=resm))
+		}
+	}
+
 	###The case of the L prfix is handled directly.
 	if(prefix=="L"){
 		if(nrow(mm2EdgesLabels(m2l))<number) stop("Invalid id for mass_losses: ",number,".")
 		return(list(type=CORR_TABLE[[prefix]],num=number))
 	}
-
 	if( (number<=length(slot(m2l,CORR_TABLE[[prefix]])))&
 		(number>=1)){
 		return(list(type=CORR_TABLE[[prefix]],num=number))

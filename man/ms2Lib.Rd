@@ -4,7 +4,7 @@
 \alias{ms2Lib}
 \title{ms2Lib constructor}
 \usage{
-ms2Lib(x, suppInfos = NULL)
+ms2Lib(x, suppInfos = NULL, ids = NULL)
 }
 \arguments{
 \item{x}{May be one of the following
@@ -17,6 +17,11 @@ ms2Lib(x, suppInfos = NULL)
 \item{suppInfos}{Supplementary information to be associated to the spectra.
 It should be of the same size as the number of spectra. If there is a "file" column, this
 column is used to match the file.}
+
+\item{ids}{A supplementary vector giving a set of ids to design the spectra. It may be any character vector which
+does not start with \textbf{P,L,S} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
+and it contains an id fields, it will be used. If not ids is furnished and id will be generated for each spectra as S1,S2,...,SN
+where N is the number of furnished spectra.}
 }
 \description{
 Create a ms2Lib object from files in suppoerted input formats.

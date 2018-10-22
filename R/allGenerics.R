@@ -4,6 +4,8 @@ setGeneric("mm2Spectra", function(m2l) standardGeneric("mm2Spectra"))
 
 setGeneric("mm2Dags", function(m2l) standardGeneric("mm2Dags"))
 
+setGeneric("mm2Ids", function(m2l) standardGeneric("mm2Ids"))
+
 setGeneric("mm2SpectraInfos", function(m2l) standardGeneric("mm2SpectraInfos"))
 
 setGeneric("mm2EdgesLabels", function(m2l) standardGeneric("mm2EdgesLabels"))
@@ -25,6 +27,8 @@ setGeneric("mm2ReducedLattice", function(m2l) standardGeneric("mm2ReducedLattice
 setGeneric("mm2Spectra<-", function(m2l,value) standardGeneric("mm2Spectra<-"))
 
 setGeneric("mm2Dags<-", function(m2l,value) standardGeneric("mm2Dags<-"))
+
+setGeneric("mm2Ids<-", function(m2l,value,...) standardGeneric("mm2Ids<-"))
 
 setGeneric("mm2SpectraInfos<-", function(m2l,value) standardGeneric("mm2SpectraInfos<-"))
 

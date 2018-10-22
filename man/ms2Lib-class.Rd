@@ -18,6 +18,8 @@ and informations added by the user eventually.}
 
 \item{\code{spectra}}{A list of spectra sotred under the form of Spectrum2 object.}
 
+\item{\code{ids}}{A chracter vector containing the ids of spectra.}
+
 \item{\code{dags}}{A list storing the set of graphs object corresponding to the MS-MS spectra.}
 
 \item{\code{edgesLabels}}{The discretized edges labels.}
