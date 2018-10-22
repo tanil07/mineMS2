@@ -1,0 +1,37 @@
+---
+title: 'MineMS2: Coupling with GNPS'
+author: "Alexis Delabriere"
+date: "22 octobre 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Introduction
+
+This vignette highlights the use of the _MineMS2_ software coupled to the GNPS MS-MS networking methodology. The GNPS network may be generated directly from the *ex_mgf.mgf* file present in the *dataset* subdirectory of your _MineMS2_ installation. In this example the GNPS network has been precomputed on the GNPS website and extracted, the *.graphML* file  *ex_gnps_network.graphml* is present inside the *dataset* subdirectory.
+
+
+```{r path_gnps}
+path_demo <- system.file("dataset",package="mineMS2")
+ex_network <- file.path(path_demo,"ex_gnps_network.graphml")
+```
+
+
+#Generating mineMS2 patterns.
+
+The patterns are generated using the full datasets, and are therefore not necessarely.
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

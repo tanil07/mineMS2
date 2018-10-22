@@ -122,6 +122,7 @@ isLoss <- function(m2l){
 }
 
 ###A list of the recognised format
+#' @export
 recognisedFormat <- function(){
 	return(c("mgf"))
 }
@@ -368,6 +369,8 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2,kT
 	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
 	m2l
 })
+
+
 
 
 ###Parse an id

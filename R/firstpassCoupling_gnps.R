@@ -20,9 +20,7 @@ findAllCliques <- function(net,minSize = 3,singleClique=0.9,vname="cluster index
 	}
 
 	return(list_cliques[1:max(pos_list-1,1)])
-
 }
-
 
 
 findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
@@ -63,7 +61,7 @@ findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
 #'
 #' @examples
 #' print("Examples to be put here")
-findAllComponents <- function(net,minSize = 3,singleClique=0.9,vname="cluster index"){
+findGNPSComponents <- function(net,minSize = 3,singleClique=0.9,vname="cluster index"){
 
 	###Finding all cliques.
 	cliques <- findAllCliques(net,minSize = minSize,singleClique= singleClique,vname = vname)
@@ -114,24 +112,6 @@ findAllComponents <- function(net,minSize = 3,singleClique=0.9,vname="cluster in
 }
 
 
-
-
-
-#' Map an MS-MS network to an ms2Lib object.
-#'
-#' Map a network object, an igraph object from a GNPS object to the dataset
-#'
-#'
-#' @param net An igraph object as read by a GNPS netwrk
-#' @param m2l An ms2Lib object
-#' @param vname THe name of the vertex attributes used to perform the mapping. It should corrspond to the order of the file in the
-#' "spectraInfo" field of the ms2Lib object, and should be in the same order than the ms2lib library order.
-#'
-#' @return return a numeric index giving for each spectra in the ms2Lib object the vertex index
-#' @export
-#'
-#' @examples
-#' print("Examples to be put here")
 mapNetworkMS2lib <- function(net,m2l,vname="cluster index"){
 
 	vidx <- V(net_gnps)
@@ -279,41 +259,33 @@ annotateNetworkWithComponents <- function(net,comps,vname="cluster index",score=
 #' @param type The matching algorithm to be used to determine the best pattern
 #' @param m2l An ms2Lib object
 #' @param vnames The column used to determine the id.
-#' @param ... Supplementaryh parameters to be passed to findAllComponents.
+#' @param ... Supplementary parameters to be passed to findGNPSComponents.
 #'
 #' @return
 #' @export
 #'
 #' @examples
-ExplainComponents<-function(net,m2l,type=c("f1","recall","accuracy"),vname="cluster index",...){
+#' print("Example to be put here")
+ExplainGNPSComponents<-function(net,m2l,metric=c("f1","recall","accuracy"),vname="cluster index",threshold=NA_real_){
 
 	type <- match.arg(type)
 
 	message("Extracting network components.")
 
 	##Each compoent is retruned as a list of vname attributes value.
-	rcomp <- findAllComponents(net,...)
-
-	###We find the index
-	# indexes <- mapNetworkMS2lib(net,m2l,vname=vname)
-
-	###We convert the extracted compoents to patterns ids
-	rpattern <- sapply(rcomp,function(x){
-		as.numeric(x)
-	})
+	rcomp <- findGNPSComponents(net,...)
 
 	###For each components find the best matching pattern.
 	message("Calculating best matching patterns.")
 
-	bpat <- sapply(rpattern,function(x,m2l,crit){
-		mineMS2:::find.patterns.class(m2l,x,criterion = crit,full = FALSE)
-	},m2l=m2l,crit=type,simplify = FALSE)
+
+	bpat <- findPatternsFromComponents(m2l,rcomp,metric=metric,threshold=threshold)
 
 	vscore <-  sapply(bpat,function(x){
-		unique(x[,"f1"])
+		unique(x[,metric])
 	})
 
-	###We extract the pattern IDs
+	###We extract the pattern IDs if there is multiple ids.
 	idpats <- sapply(bpat,function(x){
 		paste(x[,"id"],sep="|",collapse = "|")
 	})

@@ -18,18 +18,19 @@ knitr::opts_chunk$set(fig.width=6, fig.height=6, fig.path='figures/')
 
 # Context
 
-Mining interest blablablabla
-	* Grpha natural representation. 
-	* Efficient algorithm
-	* Blablabla
 	
-# Input
-
-The package takes as input a value to 
-```{r loading, echo=TRUE, warning=FALSE, message=FALSE}
-# loading the package
+# Initialization
+We first load the MineMS2 package
+```{r mineMS2_loading}
 library(mineMS2)
 ```
+
+##Dataset
+A dataset of demonstration is available in this package, it contains 
+
+# Input
+The _mineMS2_ package take as input any of the following format `r recognisedFormat()` and mays also take as input a list _Spectrum2_ object from the _MSnbase_ package. The initial spectra reading is done using the *ms2Lib* constructor.
+function.
 ```{r paths}
 # Finding the data
 path_demo <- system.file("dataset",package="mineMS2")

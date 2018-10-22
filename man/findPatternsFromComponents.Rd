@@ -15,10 +15,21 @@ findPatternsFromComponents(m2l, components, metric = c("f1"),
 \item{metric}{The metric used to match a component and the pattern occurence.}
 
 \item{threshold}{The threshold used to discriminate the dataset}
-
-\item{simplify}{}
+}
+\value{
+A list containing one data.frame by component including the following informations:
+#' \description{
+\item[id] The id of the matched patterns.
+\item[f1] The F1-score between the pattern and the component.
+\item[accuracy] The accuracy between the pattern and the component.
+\item[recall] The recall between the pattern and the component.
+\item[miss] The miss rate between the pattern and the component.
+}
 }
 \description{
 Find pattern maximizing the socre givne in metrics with each components. Threshold may be used to indicate that not match
 has been found. The majority
+}
+\examples{
+print("Examples to be put here")
 }

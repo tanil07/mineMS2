@@ -54,6 +54,9 @@ setClass(
 	)
 )
 
+setClass("splitMs2Lib",
+
+		 contains="ms2Lib")
 
 
 setClass(

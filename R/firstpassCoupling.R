@@ -35,7 +35,7 @@ convertComponent <- function(comp,ids){
 #'
 #' @examples
 #' print("Examples to be put here")
-findPatternsFromComponents <- function(m2l,components,metric=c("f1"),threshold=NA_real_,simplify=TRUE){
+findPatternsFromComponents <- function(m2l,components,metric=c("f1"),threshold=NA_real_){
 
 
 	###We first convert the ids of the compoentns to creect format.
