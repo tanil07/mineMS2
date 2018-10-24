@@ -13,18 +13,61 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Introduction
 
-This vignette highlights the use of the _MineMS2_ software coupled to the GNPS MS-MS networking methodology. The GNPS network may be generated directly from the *ex_mgf.mgf* file present in the *dataset* subdirectory of your _MineMS2_ installation. In this example the GNPS network has been precomputed on the GNPS website and extracted, the *.graphML* file  *ex_gnps_network.graphml* is present inside the *dataset* subdirectory.
+This vignette highlights the use of the _MineMS2_ software coupled to the GNPS MS-MS networking methodology. The GNPS network may be generated directly from the *ex_mgf.mgf* file present in the *dataset* subdirectory of your _MineMS2_ installation. In this example the GNPS network has been precomputed on the GNPS website and extracted, the *.graphML* file  *ex_gnps_network.graphml* is present inside the *dataset* subdirectory. I strongly recommend to compute the patterns and the GNPS network on the same .mgf file to avoir matching issues.
 
 
+# Preprocessing
+
+##Initialisation
+The initialization loads the required pakages and extract the data paths.
 ```{r path_gnps}
+library(mineMS2)
 path_demo <- system.file("dataset",package="mineMS2")
-ex_network <- file.path(path_demo,"ex_gnps_network.graphml")
+path_network <- file.path(path_demo,"ex_gnps_network.graphml")
+```
+
+##Reading the GNPS network
+The GNPS network may be read using the *igraph* package :
+```{r gnps_network_reading}
+library(igraph)
+
+net_gnps <- read_graph(path_network, "graphml")
+```
+
+However to avoid the inclusion of meaningless components, we start by removing the self-edges which are added by GNPS :
+
+```{r simplify_network}
+	net_gnps <- simplify(net_gnps,remove.multiple = FALSE,edge.attr.comb = "ignore")
+```
+
+Then the connected components and the cliques may be extracted using the *findGNPSComponents* function. The important parameters of this function are the _minSize_ parameter which idicate the minimum size of the detected cliques and the _pairThreshold_ threshold which indicate a similarity threshold for which a pair is generated.
+```{r parisThreshold}
+
+```
+
+findGNPSComponents(net,minSize = 3,s=0.9,vname="cluster index")
+
+
+
+##Ids assignment
+TO DO
+
+#Processing
+
+## Extracting components from an MS-MS network.
+A function have been implemented in the mineMS2 software to automatically extract connected and the cliques from an MS-MS network. 
+```{r gnps_comp_extraction}
+components <- 
 ```
 
 
-#Generating mineMS2 patterns.
 
-The patterns are generated using the full datasets, and are therefore not necessarely.
+
+
+
+
+# Coupling outside the GNPS software.
+
 
 ## Including Plots
 

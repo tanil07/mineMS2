@@ -48,6 +48,7 @@ findPatternsFromComponents <- function(m2l,components,metric=c("f1"),threshold=N
 	},m2l=m2l,crit=metric,simplify = FALSE)
 
 	###Postprocessing
+
 	return(bpat)
 }
 

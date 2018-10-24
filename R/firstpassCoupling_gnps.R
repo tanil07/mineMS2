@@ -1,5 +1,5 @@
 ####Eventually first removing isolated points.
-findAllCliques <- function(net,minSize = 3,singleClique=0.9,vname="cluster index"){
+findAllCliques <- function(net,minSize = 3,vname="cluster index"){
 	g <- induced_subgraph(net_gnps,V(net_gnps))
 
 	big_clique <- largest.cliques(g)[[1]]
@@ -54,17 +54,17 @@ findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
 #'
 #' @param net A gnps network
 #' @param minSize The minimum size of the detected clique.
-#' @param singleClique Not used at the moment
+#' @param pariThreshold For all the similarities, for each dataset,
 #'
 #' @return A list of the componets to be checked.
 #' @export
 #'
 #' @examples
 #' print("Examples to be put here")
-findGNPSComponents <- function(net,minSize = 3,singleClique=0.9,vname="cluster index"){
+findGNPSComponents <- function(net,minSize = 3,pairThreshold=0.9,vname="cluster index",eattr = "cosine_score"){
 
 	###Finding all cliques.
-	cliques <- findAllCliques(net,minSize = minSize,singleClique= singleClique,vname = vname)
+	cliques <- findAllCliques(net,minSize = minSize,vname = vname)
 
 	###Finding all connected components.
 	connected_components <- findConnectedComponents(net,vname=vname,minSize=2)
@@ -106,9 +106,32 @@ findGNPSComponents <- function(net,minSize = 3,singleClique=0.9,vname="cluster i
 	if(length(pComp)!=0) connected_components <- connected_components[pComp]
 
 
+	####Similarities passing the pairThreshold threshold are extracted.
 
-	###Returnt he components.
-	return(c(cliques,connected_components))
+	###Remvoing all the vertex from cliques.
+	Vlist <- V(net)
+	Vattr <- vertex_attr(net,vname)
+
+	pcliques <- unique(do.call("c",cliques))
+
+	in_cliques <- match(Vattr,pcliques)
+	out_cliques <- which(is.na(in_cliques))
+
+
+	vector(mode="list",sep="")
+	###All the edges are considered
+	E_edges <-  E(net)[.inc= Vlist[out_cliques] ]
+	E_edges <- E_edges[which(
+		as.numeric(edge_attr(net,eattr,E_edges))>pairThreshold)]
+
+
+	###Creatin the component from the edges.
+	highsim <- sapply(E_edges,function(x,net){
+		c(head_of(x,net),tail_of(x,net))
+	},net=net,simplify=FALSE)
+
+	###Return he components.
+	return(c(cliques,connected_components,highsim))
 }
 
 
