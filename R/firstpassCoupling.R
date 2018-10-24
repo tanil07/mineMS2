@@ -35,20 +35,20 @@ convertComponent <- function(comp,ids){
 #'
 #' @examples
 #' print("Examples to be put here")
-findPatternsFromComponents <- function(m2l,components,metric=c("f1"),threshold=NA_real_){
+findPatternsExplainingComponents <- function(m2l,components,metric=c("f1"),threshold=NA_real_){
 
 
 	###We first convert the ids of the compoentns to creect format.
-	components <- sapply(components,convertComponent,ids=mm2Ids(m2l),simplify = FALSE)
+	# components <- sapply(components,convertComponent,ids=mm2Ids(m2l),simplify = FALSE)
 
 	###We determine the best format for each found pattern.
 
-	bpat <- sapply(component,function(x,m2l,crit){
+	bpat <- sapply(components,function(x,m2l,crit){
+		print(x)
 		find.patterns.class(m2l,x,criterion = crit,full = FALSE)
 	},m2l=m2l,crit=metric,simplify = FALSE)
 
 	###Postprocessing
-
 	return(bpat)
 }
 

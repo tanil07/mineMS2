@@ -4,15 +4,15 @@
 \alias{findGNPSComponents}
 \title{Find the annotable component of a GNPS network.}
 \usage{
-findGNPSComponents(net, minSize = 3, singleClique = 0.9,
-  vname = "cluster index")
+findGNPSComponents(net, minSize = 3, pairThreshold = 0.9,
+  vname = "cluster index", eattr = "cosine_score")
 }
 \arguments{
 \item{net}{A gnps network}
 
 \item{minSize}{The minimum size of the detected clique.}
 
-\item{singleClique}{Not used at the moment}
+\item{pariThreshold}{For all the similarities, for each dataset,}
 }
 \value{
 A list of the componets to be checked.

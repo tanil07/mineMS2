@@ -184,7 +184,7 @@ make_initial_title <- function(spec_infos){
 #' where N is the number of furnished spectra.
 #' @examples
 #' print("examples to be put here")
-ms2Lib <- function(x, suppInfos = NULL,ids = NULL){
+ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL){
 
 	m2l <- new("ms2Lib")
 

@@ -108,29 +108,32 @@ findGNPSComponents <- function(net,minSize = 3,pairThreshold=0.9,vname="cluster 
 
 	####Similarities passing the pairThreshold threshold are extracted.
 
-	###Remvoing all the vertex from cliques.
+	###Remvoing all the vertex from cliques and 2 paris connected components
 	Vlist <- V(net)
 	Vattr <- vertex_attr(net,vname)
 
-	pcliques <- unique(do.call("c",cliques))
+	pairs <- connected_components[sapply(connected_components,length)==2]
+
+	pcliques <- unique(do.call("c",c(cliques,pairs)))
 
 	in_cliques <- match(Vattr,pcliques)
 	out_cliques <- which(is.na(in_cliques))
 
-
-	vector(mode="list",sep="")
 	###All the edges are considered
-	E_edges <-  E(net)[.inc= Vlist[out_cliques] ]
+	E_edges <-  E(net)[ Vlist %--% Vlist[out_cliques] ]
 	E_edges <- E_edges[which(
 		as.numeric(edge_attr(net,eattr,E_edges))>pairThreshold)]
 
-
-	###Creatin the component from the edges.
+	###Creating the components from the edges.
 	highsim <- sapply(E_edges,function(x,net){
-		c(head_of(x,net),tail_of(x,net))
+		c(head_of(net,x),tail_of(net,x))
 	},net=net,simplify=FALSE)
 
-	###Return he components.
+	highsim <- sapply(highsim,function(x,net,vname){
+		vertex_attr(net,vname,index=x)
+	},net=net,vname=vname,simplify=FALSE)
+
+	###Return the components.
 	return(c(cliques,connected_components,highsim))
 }
 
@@ -147,7 +150,6 @@ mapNetworkMS2lib <- function(net,m2l,vname="cluster index"){
 	list(m2l_to_net=vidx[match(seq_along(m2l@spectra),vdescriptor)],net_to_m2l=match(vdescriptor,seq_along(m2l@spectra)))
 }
 
-library(stringr)
 
 componentsToDf <- function(comp,pID=NULL,maxVal = NULL,score = NULL){
 	if(is.null(maxVal)){

@@ -24,6 +24,7 @@ The initialization loads the required pakages and extract the data paths.
 library(mineMS2)
 path_demo <- system.file("dataset",package="mineMS2")
 path_network <- file.path(path_demo,"ex_gnps_network.graphml")
+path_mgf <- file.path(path_demo,"ex_mgf.mgf")
 ```
 
 ##Reading the GNPS network
@@ -37,25 +38,37 @@ net_gnps <- read_graph(path_network, "graphml")
 However to avoid the inclusion of meaningless components, we start by removing the self-edges which are added by GNPS :
 
 ```{r simplify_network}
-	net_gnps <- simplify(net_gnps,remove.multiple = FALSE,edge.attr.comb = "ignore")
+net_gnps <- simplify(net_gnps,remove.multiple = FALSE,edge.attr.comb = "ignore")
 ```
 
-Then the connected components and the cliques may be extracted using the *findGNPSComponents* function. The important parameters of this function are the _minSize_ parameter which idicate the minimum size of the detected cliques and the _pairThreshold_ threshold which indicate a similarity threshold for which a pair is generated.
-```{r parisThreshold}
+## Extracting components from an MS-MS network.
 
+Then the connected components and the cliques may be extracted using the *findGNPSComponents* function. The important parameters of this function are the _minSize_ parameter which idicate the minimum size of the detected cliques and the _pairThreshold_ threshold which indicate a similarity threshold for which an exaplantion of a single edge is generated.
+```{r gnps_components}
+components <- findGNPSComponents(net_gnps,minSize=3,pairThreshold = 0.9)
+```
+The results of this function is a list of graph components which could potentially be explained by a pattern.
+
+## Computing patterns.
+Here we compute the patterns for the same set of MS-MS spectra than the MS2 software. The ocmputing is described in more detail in the mineMS2 vignette.
+```{r pattern_computing}
+m2l <- ms2Lib(path_mgf)
+m2l <- discretizeMassLosses(m2l,dmz = 0.008,ppm=8,heteroAtoms=FALSE,maxFrags=15)
+m2l <- mineClosedSubgraphs(m2l,sizeMin=1,count=2)
+```
+## Finding matching patterns
+
+MineMS2 implement an matching between components and subgraphs occurences using the [F1-score](https://en.wikipedia.org/wiki/F1_score). For each component the pattern maximizing the F1-score mays be extracted using the _findPatternsExplainingComponents_ function. We consider that a good match is found if there is an F-score superior to 0.8 between the two components.
+```{r patterns_explaining_components}
+patterns <- findPatternsExplainingComponents(m2l,components,metric=c("f1"),threshold=0.8)
 ```
 
-findGNPSComponents(net,minSize = 3,s=0.9,vname="cluster index")
 
-
-
-##Ids assignment
-TO DO
 
 #Processing
 
-## Extracting components from an MS-MS network.
-A function have been implemented in the mineMS2 software to automatically extract connected and the cliques from an MS-MS network. 
+
+A function have been implemented in the mineMS2 software to automatically extract connected and the cliques from an MS-MS network.
 ```{r gnps_comp_extraction}
 components <- 
 ```
