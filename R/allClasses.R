@@ -54,8 +54,9 @@ setClass(
 	)
 )
 
-setClass("splitMs2Lib",
-
+setClass("ms2LibSplit",
+		 representation = representation(components = "list",
+		 								idxpcomponents = "numeric"),
 		 contains="ms2Lib")
 
 

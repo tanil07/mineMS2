@@ -74,4 +74,12 @@ fragPattern <- function(rlist){
 
 
 
+relabelOccurrences <- function(pat,newlabs){
+	tempOccs <- mm2Occurences(pat)
+	tempOccs[,1] <- newlabs[tempOccs[,1]]
+	mm2Occurences(pat) <- tempOccs
+	pat
+}
+
+
 

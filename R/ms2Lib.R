@@ -372,6 +372,64 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2,kT
 
 
 
+setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, precursor = FALSE){
+	if(count<2){
+		warning("'count' parameters set to ",count," it is therefore set to 2.")
+		count <- 2
+	}
+
+
+	###Get the data.frame correspoding to the sizes.
+	processing <- sapply(mm2Dags(m2l),function(x){
+		ecount(x)>1
+	})
+
+	if(nrow(mm2EdgesLabels(m2l))==0){
+		stop("No labels constructed, use the DiscretizeMallLosses function first.")
+	}
+
+
+	kTree <- NULL
+	if(nrow(mm2EdgesLabels(m2l))<600){
+		kTree <- 2
+	}else{
+		kTree <- 1
+	}
+
+
+
+	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
+		###Wide variety of mass losses.
+		warning("sizeMin parameters set to ",sizeMin," risk of computational overhead.")
+	}
+
+	###Converting the dags into data.frame.
+	df_edges <- sapply(mm2Dags(m2l),fromIgraphToDf_edges,simplify = FALSE)
+	df_vertices <-sapply(mm2Dags(m2l),fromIgraphToDf_vertices,simplify = FALSE)
+
+	###Mining the patterns.
+	resRcpp <- mineClosedDags(df_vertices,df_edges,processing,count,kTree,sizeMin,precursor)
+
+	mm2LatticeIdxItems(m2l) <- resRcpp$items
+
+	###Construction via fragPatternc constructor.
+	mm2Patterns(m2l) <- sapply(resRcpp$patterns,fragPattern,USE.NAMES = FALSE)
+
+	###Initializing the names of the patterns.
+	for(i in 1:length(m2l@patterns)) mm2Name(m2l@patterns[[i]]) <- paste("P",i,sep="")
+
+
+	###Buillding of the lattice
+	mm2Lattice(m2l) <- graph_from_data_frame(resRcpp$edges,directed=TRUE,resRcpp$nodes)
+
+	###We add a label filed which give all the values of this.
+
+
+	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
+	m2l
+})
+
+
 
 ###Parse an id
 parseId <- function(m2l,idx){

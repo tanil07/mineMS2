@@ -8,7 +8,7 @@
 #' @importFrom graphics plot layout text lines
 #' @importFrom MSnbase readMgfData precursorMz mz intensity
 #' @importMethodsFrom MSnbase plot
-#' @importFrom stringr str_detect str_split fixed
+#' @importFrom stringr str_detect str_split str_sub fixed
 #' @importFrom Matrix Matrix
 #' @importFrom igraph make_empty_graph graph.empty set_vertex_attr add_edges adjacent_vertices V E get.edge.ids edge_attr
 #' edge_attr<- ecount as_data_frame graph_from_data_frame vcount plot.igraph tkplot layout_with_sugiyama vertex_attr

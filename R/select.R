@@ -252,7 +252,7 @@ find.patterns.class <- function(m2l,ids,criterion=c("f1","accuracy","recall","mi
 	idsp <- vrange(m2l,"P",reduced=reduced)
 
 	###The P is removed if needed.
-	if(is.character(ids)&&(startsWith(ids[1],"P"))) ids <- str_sub(ids,2)
+	if(is.character(ids)&&(startsWith(ids[1],"S"))) ids <- str_sub(ids,2)
 
 	ids <- as.numeric(ids)
 

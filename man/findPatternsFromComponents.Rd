@@ -5,7 +5,7 @@
 \title{Find pattern explainig components}
 \usage{
 findPatternsFromComponents(m2l, components, metric = c("f1"),
-  threshold = NA_real_, simplify = TRUE)
+  threshold = NA_real_)
 }
 \arguments{
 \item{m2l}{An ms2Lib object}

@@ -6,7 +6,7 @@
 \title{Mine recurrent subgraph from a set of graphs.}
 \usage{
 \S4method{mineClosedSubgraphs}{ms2Lib}(m2l, count = 2, sizeMin = 2,
-  kTree = NULL, precursor = FALSE)
+  precursor = FALSE)
 }
 \arguments{
 \item{m2l}{An m2Lib object to be processed.}
@@ -15,9 +15,9 @@
 
 \item{sizeMin}{The minimum size of the mined patterns.}
 
-\item{kTree}{The maximum depth of the path tree.}
-
 \item{precursor}{Should only the occurences coming form the root be conserved.}
+
+\item{kTree}{The maximum depth of the path tree.}
 }
 \value{
 The filled ms2Lib object.

@@ -67,12 +67,14 @@ setGeneric("mm2Root<-", function(pat,value) standardGeneric("mm2Root<-"))
 setGeneric("mm2Name<-", function(pat,value) standardGeneric("mm2Name<-"))
 
 
-###ms2Lib specific generic.
+###ms2Lib specific generics.
 setGeneric("discretizeMassLosses", function(m2l,...) standardGeneric("discretizeMassLosses"))
 
 setGeneric("discretizeMassFragments", function(m2l,...) standardGeneric("discretizeMassFragments"))
 
 setGeneric("mineClosedSubgraphs",function(m2l,...) standardGeneric("mineClosedSubgraphs"))
+
+setGeneric("mineClosedSubgraphsByComponent",function(m2l,...) standardGeneric("mineClosedSubgraphsByComponent"))
 
 setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurences"))
 
@@ -84,8 +86,10 @@ setGeneric("scoreLosses",function(m2l,...) standardGeneric("scoreLosses"))
 
 setGeneric("scorePatterns",function(m2l,...) standardGeneric("scorePatterns"))
 
-###ms2Lib research function.
+###ms2Lib research generics.
 setGeneric("vrange",function(m2l,type,...) standardGeneric("vrange"))
 
+###ms2LibSplit generics.
+setGeneric("setComponents",function(m2l,components,...) standardGeneric("setComponents"))
 
 
