@@ -229,6 +229,15 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL){
 	temp_df <- data.frame("mz.precursor" = sapply(mm2Spectra(m2l),function(x){
 												  precursorMz(x)}))
 
+
+	if(!is.null(intThreshold)){
+		message("Removing peaks with an intensity lower than ",intThreshold)
+		for(is in seq_along(mm2Spectra(m2l))){
+			m2l@spectra[[is]] <- removePeaks(m2l@spectra[[is]],t = intThreshold)
+			m2l@spectra[[is]] <- clean(m2l@spectra[[is]],all=TRUE)
+		}
+	}
+
 	if(origin=="file"){
 		if(is.null(lfiles)){
 			if(length(x)!=nrow(temp_df)){

@@ -211,7 +211,7 @@ select.spectra.losses <- function(m2l,id){
 
 
 
-###Return f1-score,accuracy,recall
+###Return f1-score,precision,recall
 f1.score <- function(id,idsref,full=FALSE){
 
 	###Calculating the intersection
@@ -221,11 +221,25 @@ f1.score <- function(id,idsref,full=FALSE){
 	union <- union(id,idsref)
 
 	recall <- (length(inter)/length(idsref))
-	accuracy <- (length(inter)/length(union))
-	miss_rate <- (length(unique(idsref))-length(inter))/length(idsref)
+	precision <- (length(inter)/length(id))
+	miss_rate <- (length(idsref)-length(inter))/length(idsref)
 
-	return(c(2*recall*accuracy/(recall+accuracy),accuracy,recall,miss_rate))
+	return(c(2*recall*precision/(recall+precision),precision,recall,miss_rate))
 }
+
+
+
+
+checkFTerms <- function(seq_terms){
+	REF_TERMS <- c("f1","accuracy","recall","miss","size")
+	if(all(seq_terms %in% REF_TERMS)){
+		return(seq_terms)
+	}else{
+		stop("Unknown term(s): ",paste(seq_terms[!(seq_terms %in% REF_TERMS)],sep=", "), "authorized terms are: ",paste(REF_TERMS,sep=", "))
+	}
+}
+
+
 
 
 #' Find biggest F1 score
@@ -245,9 +259,10 @@ f1.score <- function(id,idsref,full=FALSE){
 #'
 #' @examples
 #' print("Examples to be put here")
-find.patterns.class <- function(m2l,ids,criterion=c("f1","accuracy","recall","miss"),
+find.patterns.class <- function(m2l,ids,type=c("f1","accuracy","size"),
 								returnall=FALSE,full=TRUE,reduced=FALSE){
-	criterion <- match.arg(criterion)
+
+	criterion <- checkFTerms(type)
 
 	idsp <- vrange(m2l,"P",reduced=reduced)
 
@@ -258,11 +273,10 @@ find.patterns.class <- function(m2l,ids,criterion=c("f1","accuracy","recall","mi
 
 	###We find the best matching ones
 	vf1 <- sapply(idsp,function(x,idr,m2l,fullv){
-		f1.score(idr,m2l[x]@occurences[,1],full=fullv)
+		c(f1.score(unique(m2l[x]@occurences[,1]),idr,full=fullv),vcount(m2l[x]@graph))
 	},idr=ids,m2l=m2l,fullv=full)
 
-	###3 row, length(disp) columns.
-	rownames(vf1) <- c("f1","accuracy","recall","miss")
+	rownames(vf1) <- c("f1","accuracy","recall","miss","size")
 
 
 	###Two cases, single maximum return or the full list of ranked values returneed.
@@ -272,18 +286,20 @@ find.patterns.class <- function(m2l,ids,criterion=c("f1","accuracy","recall","mi
 	pf1 <- which(!is.na(vf1["f1",]))
 
 	if(length(pf1)==0) return(data.frame(id=character(0),f1=numeric(0),accuracy=numeric(0),
-										 recall=numeric(0),miss=numeric(0)))
+										 recall=numeric(0),miss=numeric(0),size=numeric(0)))
 	to_return <- data.frame(id=idsp[pf1],f1=vf1["f1",pf1],
 							accuracy=vf1["accuracy",pf1],recall=vf1["recall",pf1],
-							miss=vf1["miss",pf1],stringsAsFactors = FALSE)
-	if(returnall){
+							miss=vf1["miss",pf1],size=vf1["size",pf1],stringsAsFactors = FALSE)
 
-		###Reordering based on the F1-score.
-		to_return <- to_return[order(to_return[,criterion],decreasing = TRUE),]
-	}else{
-
-		maxval <- max(to_return[,criterion])
-		to_return <- to_return[which(to_return[,criterion]==maxval),]
+	to_return <- to_return[do.call(order, c(decreasing = TRUE, data.frame(to_return[,criterion]))),]
+	if(!returnall){
+		maxval <- to_return[1,criterion]
+		posret <- 1
+		while((posret < nrow(to_return)) && (!is.na(to_return[posret+1,1]))&&
+			  all(to_return[posret+1,criterion] == maxval)){
+			posret <- posret+1
+		}
+		to_return <- to_return[1:posret,]
 	}
 	return(to_return)
 }

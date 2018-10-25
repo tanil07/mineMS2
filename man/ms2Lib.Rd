@@ -4,7 +4,7 @@
 \alias{ms2Lib}
 \title{ms2Lib constructor}
 \usage{
-ms2Lib(x, suppInfos = NULL, ids = NULL)
+ms2Lib(x, suppInfos = NULL, ids = NULL, intThreshold = NULL)
 }
 \arguments{
 \item{x}{May be one of the following

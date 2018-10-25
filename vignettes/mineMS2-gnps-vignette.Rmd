@@ -52,7 +52,7 @@ The results of this function is a list of graph components which could potential
 ## Computing patterns.
 Here we compute the patterns for the same set of MS-MS spectra than the MS2 software. The ocmputing is described in more detail in the mineMS2 vignette.
 ```{r pattern_computing}
-m2l <- ms2Lib(path_mgf)
+m2l <- ms2Lib(path_mgf,intThreshold = 4000)
 m2l <- discretizeMassLosses(m2l,dmz = 0.008,ppm=8,heteroAtoms=FALSE,maxFrags=15)
 m2l <- mineClosedSubgraphs(m2l,sizeMin=1,count=2)
 ```
@@ -60,7 +60,7 @@ m2l <- mineClosedSubgraphs(m2l,sizeMin=1,count=2)
 
 MineMS2 implement an matching between components and subgraphs occurences using the [F1-score](https://en.wikipedia.org/wiki/F1_score). For each component the pattern maximizing the F1-score mays be extracted using the _findPatternsExplainingComponents_ function. We consider that a good match is found if there is an F-score superior to 0.8 between the two components.
 ```{r patterns_explaining_components}
-patterns <- findPatternsExplainingComponents(m2l,components,metric=c("f1"),threshold=0.8)
+patterns <- findPatternsExplainingComponents(m2l,components,metric=c("recall"),threshold=0.8)
 ```
 
 
