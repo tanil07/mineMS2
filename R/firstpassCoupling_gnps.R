@@ -220,6 +220,137 @@ componentsToDf <- function(comp,pID=NULL,maxVal = NULL,score = NULL){
 
 
 
+##Given a list of components, return for each vertices the index of the ocmpoents to which the vertex belong.
+
+
+makeIdxTable <- function(components,maxVertices=70){
+
+	res <- vector(mode="list",length=maxVertices)
+	for(ir in seq_along(res)){
+		res[[ir]] <- numeric(4)
+	}
+	seqidx <- rep(0,maxVertices)
+
+	for(icomp in seq_along(components)){
+		for(ic in components[[icomp]]){
+			if((seqidx[ic]+1)>length(res[[ic]])){
+				res[[ic]] <- c(res[[ic]],rep(NA_real_,length(res[[ic]])))
+			}
+			seqidx[ic] <- seqidx[ic]+1
+			res[[ic]][seqidx[ic]] <- icomp
+
+		}
+	}
+
+	for(ir in seq_along(res)){
+		if(seqidx[ir]>=1){
+		res[[ir]] <- res[[ir]][1:seqidx[ir]]
+		}else{
+			res[[ir]] <- numeric()
+		}
+	}
+	return(res)
+}
+
+
+#' Title
+#'
+#' @param components jkkj
+#' @param net kjkj
+#' @param patterns jkkj
+#' @param copy kjkj
+#' @keepattr kjdffkdj
+#' @param sep_infos kjkj
+#'
+#' @returnjkjk
+#' @export
+#'
+#' @examples
+#' print("Examples to be put here")
+annotateNetwork <- function(components,net,patterns,copy=TRUE,
+							keepattr = c("Compound_Name","SpectrumID","DefaultGroups",
+										 "cluster index","precursor mass"),sep_infos=","){
+
+	if(!is.null(keepattr)){
+		if(copy) net <- induced_subgraph(net, V(net))
+		attrnames <- vertex_attr_names(net)
+		to_rm <- attrnames[is.na(match(attrnames,keepattr))]
+
+		for(trm in to_rm){
+		 net <- delete_vertex_attr(net, trm)
+		}
+	}
+
+	DEFAULT <- "white"
+	COLS_SEQ <- c("blue","green","green","orange","red","yellow","purple","cyan")
+
+	fullseq <- rep(COLS_SEQ,ceiling(length(components)/length(COLS_SEQ)))
+
+
+	resComp <- makeIdxTable(components,vcount(net))
+	###Generating the col str.
+	colstr <- sapply(resComp,function(x,colseq,defcol){
+		if(length(x)>0){
+		return(paste(colseq[x],collapse = ","))
+		}else{
+			return(defcol)
+		}
+	},defcol=DEFAULT,colseq=COLS_SEQ)
+
+	legstr <- paste('stripechart: colorlist="',colstr,'"',sep="")
+	ids <- sapply(patterns,function(x,sep){
+		paste(x[,"id"],collapse=sep)
+	},sep=sep_infos)
+
+
+	rlist <- list()
+	for(ne in colnames(patterns[[1]])){
+		rlist[[ne]] <- sapply(patterns,function(x,sep,cname){
+			paste(x[,cname],collapse=sep)
+		},sep=sep_infos,cname= ne)
+	}
+
+	###We extract the maximum F1-score from this dataset.
+	maxF1 <- sapply(patterns,function(x,sep){
+		max(x[,"f1"],collapse=sep)
+	},sep=sep_infos)
+
+	str_components <- sapply(components,function(x,sep){
+		paste(x,collapse = sep)
+	},sep=sep_infos)
+
+	temp_leg <- sapply(resComp,function(x,attstr,sep){
+		if(length(x)==0) return("")
+		return(paste(attstr[x],collapse = sep))
+	},attstr=str_components,sep=sep_infos)
+	net <- set_vertex_attr(graph = net,name = "components",value = temp_leg)
+
+	###The consensus F1 score.
+	temp_leg <- sapply(resComp,function(x,attstr,sep){
+		if(length(x)==0) return("")
+		return(paste(attstr[x],collapse = sep))
+	},attstr=legstr,sep=sep_infos)
+	net <- set_vertex_attr(graph = net,name = "colorComponents",value = temp_leg)
+
+	###We now add the supplementary informations
+
+	for(ne in names(rlist)){
+		temp_leg <- sapply(resComp,function(x,attstr,sep){
+			if(length(x)==0) return("")
+			return(paste(attstr[x],collapse = sep))
+		},attstr=rlist[[ne]],sep=sep_infos)
+		net <- set_vertex_attr(graph = net,name = ne,value = temp_leg)
+	}
+
+	###The consensus F1 score.
+	temp_leg <- sapply(resComp,function(x,attstr,sep){
+		if(length(x)==0) return("")
+		return(paste(attstr[x],collapse = sep))
+	},attstr=maxF1,sep=sep_infos)
+	net <- set_vertex_attr(graph = net,name = "maxF1",value = temp_leg)
+	return(net)
+}
+
 
 
 ###score is a vector of the score of the same size than component.
@@ -233,7 +364,6 @@ annotateNetworkWithComponents <- function(net,comps,vname="cluster index",score=
 	}else{
 		rdf <- componentsToDf(comps,maxVal = vmax,score=score)
 	}
-
 
 	###We get the correct order
 	om <- match(seqIdx,rdf[,1])
@@ -260,8 +390,6 @@ annotateNetworkWithComponents <- function(net,comps,vname="cluster index",score=
 	}
 
 
-
-
 	for(i in colsComp){
 		net <- set_vertex_attr(graph = net,name = cnames[i],value = as.integer(rdf[om,i]))
 	}
@@ -274,6 +402,10 @@ annotateNetworkWithComponents <- function(net,comps,vname="cluster index",score=
 	if(!is.null(score)) 	net <- set_vertex_attr(graph = net,name = "F1",value = as.numeric(rdf[om,"score"]))
 	net
 }
+
+
+
+
 
 
 #' Find a pattern for each MS-MS network components.

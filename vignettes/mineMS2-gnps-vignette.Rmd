@@ -38,7 +38,7 @@ The patterns computations step is described in more detail in the [MineMS2 main 
 supp_infos <- read.table(path_supp_info,header=TRUE,sep=";")
 
 ###Sepctra are read and thresholded.
-m2l <- ms2Lib(ex_file,suppInfos = supp_infos, intThreshold = 3000)
+m2l <- ms2Lib(path_mgf,suppInfos = supp_infos, intThreshold = 3000)
 
 ###An ID is added to each spectra.
 infos <- getInfo(m2l,"S")
@@ -71,8 +71,16 @@ However to avoid the inclusion of meaningless components, we start by removing t
 net_gnps <- simplify(net_gnps,remove.multiple = FALSE,edge.attr.comb = "ignore")
 ```
 
-After this step the GNPS network may be annotated using the patterns extracted by mineMS2.
 
+An overview of the GNPS network after this processing is shown here, generated using the cytoscape software (@Shannon2003) :
+
+
+```{r, out.width = "500px",fig.align = 'center',echo=FALSE}
+knitr::include_graphics("figures/rawGNPS_example_mz.png")
+```
+
+
+After this step the GNPS network may be annotated using the patterns extracted by mineMS2.
 
 ## Extracting components from an MS-MS network.
 
@@ -86,7 +94,7 @@ The results of this function is a list of graph components which could potential
 
 MineMS2 implement a matching between components and subgraphs occurences using metrics related to binary classification, notably the _recall_, the _precision_ and the _F1-score_ [(more information)](https://en.wikipedia.org/wiki/F1_score). The pattern maximizing the given metric are returned, in case of tie a second metrics may be used. In the case of GNPS matching a we set the metric argument to `c("recall","accuracy","size")` to indicate that a pattern maximizing recall is extracted for each components, accuracy and size and then used to split tie. This will reduce the number of explaining pattern to 1 by component in general.
 ```{r patterns_explaining_components}
-patterns <- findPatternsExplainingComponents(m2l,components,metric=c("recall","accuracy","size"))
+patterns <- findPatternsExplainingComponents(m2l,components,metric=c("recall","precision","size"))
 ```
 
 The returned quantity is a list which include all the metrics for the given patterns, aswell as the id of the found explaining patterns.
@@ -101,4 +109,9 @@ These patterns can then be observed using the _plot_ and _plotOccurences_ functi
 ###Here a single id is selected for lisibility purpose.
 plotPatterns(m2l,ids[3],components = components[3])
 ```
-The found patterns may be exported directly by testifying
+The network may then be directly annotated using the _annotateNetwork_ function. Useful arguments.
+
+```{r annotate_network}
+annotated_net <- annotateNetwork(components,net_gnps,patterns)
+```
+

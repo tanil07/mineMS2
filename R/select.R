@@ -276,7 +276,7 @@ find.patterns.class <- function(m2l,ids,type=c("f1","accuracy","size"),
 		c(f1.score(unique(m2l[x]@occurences[,1]),idr,full=fullv),vcount(m2l[x]@graph))
 	},idr=ids,m2l=m2l,fullv=full)
 
-	rownames(vf1) <- c("f1","accuracy","recall","miss","size")
+	rownames(vf1) <- c("f1","precision","recall","miss","size")
 
 
 	###Two cases, single maximum return or the full list of ranked values returneed.
@@ -285,10 +285,10 @@ find.patterns.class <- function(m2l,ids,type=c("f1","accuracy","size"),
 	###In the two cases only the non-na are considered
 	pf1 <- which(!is.na(vf1["f1",]))
 
-	if(length(pf1)==0) return(data.frame(id=character(0),f1=numeric(0),accuracy=numeric(0),
+	if(length(pf1)==0) return(data.frame(id=character(0),f1=numeric(0),precision=numeric(0),
 										 recall=numeric(0),miss=numeric(0),size=numeric(0)))
 	to_return <- data.frame(id=idsp[pf1],f1=vf1["f1",pf1],
-							accuracy=vf1["accuracy",pf1],recall=vf1["recall",pf1],
+							accuracy=vf1["precision",pf1],recall=vf1["recall",pf1],
 							miss=vf1["miss",pf1],size=vf1["size",pf1],stringsAsFactors = FALSE)
 
 	to_return <- to_return[do.call(order, c(decreasing = TRUE, data.frame(to_return[,criterion]))),]
