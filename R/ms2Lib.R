@@ -77,6 +77,14 @@ setMethod("mm2Ids<-","ms2Lib",function(m2l,value,check=TRUE){
 	m2l
 })
 
+#' @export
+setMethod("setIds","ms2Lib",function(m2l,ids){
+	mm2Ids(m2l) <- ids
+	m2l
+})
+
+
+
 setMethod("mm2Dags<-","ms2Lib",function(m2l,value){
 	m2l@dags <- value
 	m2l
@@ -594,7 +602,7 @@ findMz <- function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
 }
 
 
-getInfo.L <- function(num){
+getInfo.L <- function(num,m2l){
 	titles <- colnames(mm2EdgesLabels(m2l))
 	titles <- titles[!(titles %in% 	c("sig", "fused",
 									  "adv_loss", "pen_loss", "carb_only", "nitrogen_only", "ch_only",
@@ -608,7 +616,7 @@ getInfo.L <- function(num){
 
 }
 
-getInfo.S <- function(num){
+getInfo.S <- function(num,m2l){
 	titles <- colnames(mm2SpectraInfos(m2l))
 	titles <- titles[!(titles %in% 	c("title"))]
 	return(mm2SpectraInfos(m2l)[
@@ -618,7 +626,7 @@ getInfo.S <- function(num){
 #' Return the available informationon a lost of a spectra.
 #'
 #' @param m2l An ms2Lib object
-#' @param ids A vector of IDs
+#' @param ids A vector of IDs should be a spectrum or a losses.
 #' @param ... Supplementary information ot be passed to the getInfo function.
 #'
 #' @return A data.frame giving informations about the queried elements.
@@ -630,33 +638,38 @@ getInfo <- function(m2l,ids){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
 	authorizedValue <- c("losses","spectra")
 
-	if((length(ids)==1) & (nchar(ids)==1)){
-		ids <- match("S","L","P")
+	if((length(ids)==1) && (nchar(ids)==1)){
+		if(ids=="S"){
+			ids <- vrange(m2l,"S")
+		}else if(ids=="L"){
+			ids <- vrange(m2l,"L")
+		}else{
+			stop("Single letters are only allowed for S and L.")
+		}
+	}
+
+	pids <- sapply(ids,parseId,m2l=m2l,simplify=FALSE)
+
+	type <- sapply(pids,'[[',i="type")
+
+	if(all(type %in% authorizedValue)){
+		num <- sapply(pids,'[[',i=2)
+		res <- sapply(pids,function(x,m2l){
+			if(x[[1]] == "losses"){
+				return(getInfo.L(x[[2]],m2l))
+			}
+			if(x[[1]] == "spectra"){
+				return(getInfo.S(x[[2]],m2l))
+			}
+		},simplify=FALSE,m2l=m2l)
+		if(length(unique(type))==1){
+			return(do.call("rbind",res))
+		}else{
+			return(res)
+		}
 
 	}else{
-		pids <- sapply(ids,parseId,m2l=m2l,simplify=FALSE)
-
-		type <- sapply(pids,'[[',i=1)
-
-		if(all(type %in% authorizedValue)){
-			num <- sapply(pids,'[[',i=2)
-			res <- sapply(pids,function(x){
-				if(x[[1]] == "losses"){
-					return(getInfo.L(x[[2]]))
-				}
-				if(x[[1]] == "spectra"){
-					return(getInfo.S(x[[2]]))
-				}
-			},simplify=FALSE)
-			if(length(unique(type))==1){
-				return(do.call("rbind",res))
-			}else{
-				return(res)
-			}
-
-		}else{
-			stop("Invalid type for getInfo: ",unique(type[!(type %in% authorizedValue)]))
-		}
+		stop("Invalid type for getInfo: ",unique(type[!(type %in% authorizedValue)]))
 	}
 }
 

@@ -45,10 +45,10 @@ plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FAL
 		id <- ids[pid]
 		if(!is.null(titles)){
 			if(!is.null(components)){
-				layout(matrix(c(1,2,2,2,2),byrow=TRUE,ncol=5))
+				layout(matrix(c(1,2,2,2),byrow=TRUE,ncol=4))
 				plot(0,xaxt="n",yaxt="n",xlab="",ylab="",ylim=c(0,1),xlim=c(0,1),type="n",bty="n")
 				text(x = rep(0,length(components[[pid]])),y=seq(0.1,0.9,length=length(components[[pid]])),
-					 labels = mm2Ids(m2l)[components[[pid]]],cex = 1.2)
+					 labels = mm2Ids(m2l)[components[[pid]]],cex = 1.0,pos=4)
 				plot(m2l,id,title=titles[pid])
 				layout(1)
 			}else{
@@ -56,12 +56,15 @@ plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FAL
 			}
 		}else{
 			if(!is.null(components)){
-				layout(matrix(c(1,2,2,2,2),byrow=TRUE,ncol=5))
+				layout(matrix(c(1,2,2,2),byrow=TRUE,ncol=4))
+				opar <- par("mar")
+				par(mar=c(0.1,0.1,2.1,0.1))
 				plot(0,xaxt="n",yaxt="n",xlab="",ylab="",ylim=c(0,1),xlim=c(0,1),type="n",bty="n")
 				text(x = rep(0,length(components[[pid]])),y=seq(0.1,0.9,length=length(components[[pid]])),
-					 labels = mm2Ids(m2l)[components[[pid]]],cex = 1.2)
+					 labels = mm2Ids(m2l)[components[[pid]]],cex = 1.0,pos=4)
 				plot(m2l,id)
 				layout(1)
+				par(mar=opar)
 			}else{
 				plot(m2l,id)
 			}

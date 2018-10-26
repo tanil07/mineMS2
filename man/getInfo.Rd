@@ -9,7 +9,7 @@ getInfo(m2l, ids)
 \arguments{
 \item{m2l}{An ms2Lib object}
 
-\item{ids}{A vector of IDs}
+\item{ids}{A vector of IDs should be a spectrum or a losses.}
 
 \item{...}{Supplementary information ot be passed to the getInfo function.}
 }

@@ -3,6 +3,7 @@ title: 'MineMS2: Coupling with GNPS'
 author: "Alexis Delabriere"
 date: "22 octobre 2018"
 output: html_document
+bibliography: "mineMS2-vignette.bib"
 ---
 
 ```{r setup, include=FALSE}
@@ -17,10 +18,8 @@ This vignette highlights the use of the _MineMS2_ software coupled to the GNPS M
 
 # Pre-requisites
 
-## Pattern computation.
-The patterns computations step is described in more detail in the [MineMS2 main vignette] (mineMS2-vignette.html). We juste do a quick computation on this dataset.
-
-
+##Dataset
+The considered dataset is a dataset of Penicillium verrucosum and is a subset of the 98 metabolites extracted from the study described in @Hautbergue2017 . All the spectra for which an MS signal wasdetected by the MzMine software [@Pluskal2010] in positive mode and for which an MS-MS spectra at HCD20 were extracted, resulting in 45 MS-MS spectra.
 
 
 ##Initialisation
@@ -30,10 +29,33 @@ library(mineMS2)
 path_demo <- system.file("dataset",package="mineMS2")
 path_network <- file.path(path_demo,"ex_gnps_network.graphml")
 path_mgf <- file.path(path_demo,"ex_mgf.mgf")
+path_supp_info <- file.path(path_demo,"ex_supp_infos.csv")
 ```
 
-##Dataset
-The considered dataset is a dataset pf E.coli used in the secondary experiments.
+## Patterns computation.
+The patterns computations step is described in more detail in the [MineMS2 main vignette] (mineMS2-vignette.html), therefore it not discussed in detail there.
+```{r pattern_computing,message=FALSE}
+supp_infos <- read.table(path_supp_info,header=TRUE,sep=";")
+
+###Sepctra are read and thresholded.
+m2l <- ms2Lib(ex_file,suppInfos = supp_infos, intThreshold = 3000)
+
+###An ID is added to each spectra.
+infos <- getInfo(m2l,"S")
+ids <- paste(paste("MZ",infos[,"mz"],sep=""),paste("RT",infos[,"rt"],sep=""),sep="_")
+m2l <- setIds(m2l,ids)
+
+
+###Dags are created.
+m2l <- discretizeMassLosses(m2l,dmz = 0.008,ppm=8,heteroAtoms=FALSE,maxFrags=15)
+
+###Patterns are detected.
+m2l <- mineClosedSubgraphs(m2l,sizeMin=1,count=2)
+```
+The resulting includes `r length(m2l)` subgraphs. In the rest of this vignette we will highlights how the funished methodology may be used to extract patterns explaining GNPS components.
+
+
+#Coupling MineMS2 with GNPS
 
 ##Reading the GNPS network
 The GNPS network may be read using the *igraph* package :
@@ -43,11 +65,14 @@ library(igraph)
 net_gnps <- read_graph(path_network, "graphml")
 ```
 
-However to avoid the inclusion of meaningless components, we start by removing the self-edges which are added by GNPS :
+However to avoid the inclusion of meaningless components, we start by removing the self-edges which are added by GNPS, this can be done using the _simplify_ function form the igraph package.
 
 ```{r simplify_network}
 net_gnps <- simplify(net_gnps,remove.multiple = FALSE,edge.attr.comb = "ignore")
 ```
+
+After this step the GNPS network may be annotated using the patterns extracted by mineMS2.
+
 
 ## Extracting components from an MS-MS network.
 
@@ -57,16 +82,9 @@ components <- findGNPSComponents(net_gnps,minSize=3,pairThreshold = 0.9)
 ```
 The results of this function is a list of graph components which could potentially be explained by a pattern.
 
-## Computing patterns.
-Here we compute the patterns for the same set of MS-MS spectra than the MS2 software. The ocmputing is described in more detail in the mineMS2 vignette.
-```{r pattern_computing,message=FALSE}
-m2l <- ms2Lib(path_mgf,intThreshold = 3000)
-m2l <- discretizeMassLosses(m2l,dmz = 0.008,ppm=8,heteroAtoms=FALSE,maxFrags=15)
-m2l <- mineClosedSubgraphs(m2l,sizeMin=1,count=2)
-```
 ## Finding patterns explaining components.
 
-MineMS2 implement a matching between components and subgraphs occurences using metrics related to binary classification, notably the _recall_, the _precision_ and the _F1-score_ [(more information)](https://en.wikipedia.org/wiki/F1_score). The pattern maximizing the given metric are returned, in case of tie a second metrics may be used. In the case of GNPS matching a we set the metric argument to `c("recall","f1","size")` to indicate that a pattern maximizing recall is extracted for each components, we then use accuracy and size to obtain a specific pattern as possible. This will reduce the number of explaining pattern to 1 by components.
+MineMS2 implement a matching between components and subgraphs occurences using metrics related to binary classification, notably the _recall_, the _precision_ and the _F1-score_ [(more information)](https://en.wikipedia.org/wiki/F1_score). The pattern maximizing the given metric are returned, in case of tie a second metrics may be used. In the case of GNPS matching a we set the metric argument to `c("recall","accuracy","size")` to indicate that a pattern maximizing recall is extracted for each components, accuracy and size and then used to split tie. This will reduce the number of explaining pattern to 1 by component in general.
 ```{r patterns_explaining_components}
 patterns <- findPatternsExplainingComponents(m2l,components,metric=c("recall","accuracy","size"))
 ```
@@ -75,7 +93,7 @@ The returned quantity is a list which include all the metrics for the given patt
 ```{r pattern_showing}
 patterns[[1]]
 ```
-It if useful to extract the pattern ids `r ids <- sapply(patterns,'[',i=1,j="id")`.
+The found ids can then be extracted using th id method. `r ids <- sapply(patterns,'[',i=1,j="id")`.
 
 
 These patterns can then be observed using the _plot_ and _plotOccurences_ functions, which are wrapped inside the _plotPatterns_ function for commodity purpose. This function may be easely coupled to a pdf output.
@@ -83,4 +101,4 @@ These patterns can then be observed using the _plot_ and _plotOccurences_ functi
 ###Here a single id is selected for lisibility purpose.
 plotPatterns(m2l,ids[3],components = components[3])
 ```
- FInally the exported compoent can be used to directly annotate the network.
+The found patterns may be exported directly by testifying

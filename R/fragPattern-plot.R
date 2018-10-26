@@ -230,8 +230,13 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 		}
 	}
 
-	if (is.null(titles))
-		titles <- mm2SpectraInfos(m2l)$title
+	if (is.null(titles)){
+		if(all(startsWith(mm2Ids(m2l),"S"))){
+			titles <- mm2SpectraInfos(m2l)$title
+		}else{
+			titles <- paste(mm2Ids(m2l)," (S",1:length(mm2Spectra(m2l)),")",sep="")
+		}
+	}
 
 	###Extracting the occurences,dags and the graph.
 	occs <- mm2Occurences(fp)

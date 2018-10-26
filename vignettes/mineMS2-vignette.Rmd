@@ -60,6 +60,15 @@ m2l <- ms2Lib(ex_file,suppInfos = supp_infos)
 m2l
 ```
 
+These supplementary information may also be used to generate an ID for each spectra, which can be used in the functions of the MineMS2 software, and which is reused into the visualisation. Here fore examples we design an ID composed of the mass and the retention time for the precursor for each spectrum. Initially this ID is set to S1,S2,...,SN where N is the number of file by the mineMS2 software.
+```{r spectrum_id}
+infos <- getInfo(m2l,"S")
+ids <- paste(paste("MZ",infos[,"mz"],sep=""),paste("RT",infos[,"rt"],sep=""),sep="_")
+m2l <- setIds(m2l,ids)
+```
+This ID is notably used in the visualisation offered by the *mineMS2* package.
+
+
 The extracted spectrum may be plot using the *plot* function of the *msnBase* package :
 ```{r plotSpec}
 plot(m2l["S10"],full=TRUE)
