@@ -109,9 +109,15 @@ These patterns can then be observed using the _plot_ and _plotOccurences_ functi
 ###Here a single id is selected for lisibility purpose.
 plotPatterns(m2l,ids[3],components = components[3])
 ```
-The network may then be directly annotated using the _annotateNetwork_ function. Useful arguments.
+The network may then be directly annotated using the _annotateNetwork_ function.
 
 ```{r annotate_network}
 annotated_net <- annotateNetwork(components,net_gnps,patterns)
 ```
+
+The graph can then be exported using the _write\_graph_ function from the igraph package.
+```{r export_graph}
+write_graph(graph = annotated_net,format = "graphml",file = file.path("ex_annotated_gnps_network.graphml"))
+```
+
 

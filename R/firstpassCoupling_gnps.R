@@ -297,7 +297,7 @@ annotateNetwork <- function(components,net,patterns,copy=TRUE,
 		}
 	},defcol=DEFAULT,colseq=COLS_SEQ)
 
-	legstr <- paste('stripechart: colorlist="',colstr,'"',sep="")
+	legstr <- paste(paste('stripechart: colorlist="',colstr,sep=""),'"',sep="")
 	ids <- sapply(patterns,function(x,sep){
 		paste(x[,"id"],collapse=sep)
 	},sep=sep_infos)
@@ -306,6 +306,8 @@ annotateNetwork <- function(components,net,patterns,copy=TRUE,
 	rlist <- list()
 	for(ne in colnames(patterns[[1]])){
 		rlist[[ne]] <- sapply(patterns,function(x,sep,cname){
+			tempt <- x[,cname]
+			if(is.numeric(tempt)) tempt <- sprintf("%0.2f",tempt)
 			paste(x[,cname],collapse=sep)
 		},sep=sep_infos,cname= ne)
 	}
@@ -325,12 +327,7 @@ annotateNetwork <- function(components,net,patterns,copy=TRUE,
 	},attstr=str_components,sep=sep_infos)
 	net <- set_vertex_attr(graph = net,name = "components",value = temp_leg)
 
-	###The consensus F1 score.
-	temp_leg <- sapply(resComp,function(x,attstr,sep){
-		if(length(x)==0) return("")
-		return(paste(attstr[x],collapse = sep))
-	},attstr=legstr,sep=sep_infos)
-	net <- set_vertex_attr(graph = net,name = "colorComponents",value = temp_leg)
+	net <- set_vertex_attr(graph = net,name = "colorComponents",value = legstr)
 
 	###We now add the supplementary informations
 
