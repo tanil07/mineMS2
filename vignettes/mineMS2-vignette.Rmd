@@ -68,7 +68,7 @@ Here the "S10" index correspond to the first spectra. These indexes will be disc
 
 
 #Losses dicretization
-The graphs are built by discretizing the mass losses. This algorithm use a density with a varying bandwidth to take into account the fact that the mass accuraccy of mass spectrometers are in ppm. This step is very important, as it determine the initial set of graphs. The most important parameters and their meaning are listed here :
+The graphs are built by discretizing the mass losses. This algorithm uses a density with a varying bandwidth to take into account the fact that the mass accuraccy of mass spectrometers are in ppm. This step is very important, as it determine the initial set of graphs. The most important parameters and their meaning are listed here :
 
 * _ppm_: The accuracy of the mass spectrometer in ppm used to determine the bandwidth of the density.
 
@@ -143,23 +143,6 @@ plot(m2l,"P80")
 ```
 ```{r patterns_plot_occs_example}
 plotOccurences(m2l,"P10",byPage=9)
-```
-#Scoring the patterns
-The scores of each pattern is determined by the scores of the losses included in the pattern. This score include mutliple components :
-
-* A penalization term form common losses, (_H2O_, _NH3_)
-* A penalization term for loss formula including only one type of atoms (_C2_).
-* A weigth term determining the degree of penalization of frequent losses in the dataset.  
-```{r scoring_edge}
-m2l <- score(m2l)
-
-```
-
-#Lattice reduction
-The lattice information may be summarized using the *kLatticeReduction* function, which select the _k_ reprsentative patterns :
-```{r k_latt_red}
-m2l <- kLatticeReduction(m2l,40)
-
 ```
 
 

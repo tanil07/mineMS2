@@ -10,13 +10,18 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-
 # Introduction
 
 This vignette highlights the use of the _MineMS2_ software coupled to the GNPS MS-MS networking methodology. The GNPS network may be generated directly from the *ex_mgf.mgf* file present in the *dataset* subdirectory of your _MineMS2_ installation. In this example the GNPS network has been precomputed on the GNPS website and extracted, the *.graphML* file  *ex_gnps_network.graphml* is present inside the *dataset* subdirectory. I strongly recommend to compute the patterns and the GNPS network on the same .mgf file to avoir matching issues.
 
 
-# Preprocessing
+# Pre-requisites
+
+## Pattern computation.
+The patterns computations step is described in more detail in the [MineMS2 main vignette] (mineMS2-vignette.html). We juste do a quick computation on this dataset.
+
+
+
 
 ##Initialisation
 The initialization loads the required pakages and extract the data paths.
@@ -26,6 +31,9 @@ path_demo <- system.file("dataset",package="mineMS2")
 path_network <- file.path(path_demo,"ex_gnps_network.graphml")
 path_mgf <- file.path(path_demo,"ex_mgf.mgf")
 ```
+
+##Dataset
+The considered dataset is a dataset pf E.coli used in the secondary experiments.
 
 ##Reading the GNPS network
 The GNPS network may be read using the *igraph* package :
@@ -51,43 +59,28 @@ The results of this function is a list of graph components which could potential
 
 ## Computing patterns.
 Here we compute the patterns for the same set of MS-MS spectra than the MS2 software. The ocmputing is described in more detail in the mineMS2 vignette.
-```{r pattern_computing}
-m2l <- ms2Lib(path_mgf,intThreshold = 4000)
+```{r pattern_computing,message=FALSE}
+m2l <- ms2Lib(path_mgf,intThreshold = 3000)
 m2l <- discretizeMassLosses(m2l,dmz = 0.008,ppm=8,heteroAtoms=FALSE,maxFrags=15)
 m2l <- mineClosedSubgraphs(m2l,sizeMin=1,count=2)
 ```
-## Finding matching patterns
+## Finding patterns explaining components.
 
-MineMS2 implement an matching between components and subgraphs occurences using the [F1-score](https://en.wikipedia.org/wiki/F1_score). For each component the pattern maximizing the F1-score mays be extracted using the _findPatternsExplainingComponents_ function. We consider that a good match is found if there is an F-score superior to 0.8 between the two components.
+MineMS2 implement a matching between components and subgraphs occurences using metrics related to binary classification, notably the _recall_, the _precision_ and the _F1-score_ [(more information)](https://en.wikipedia.org/wiki/F1_score). The pattern maximizing the given metric are returned, in case of tie a second metrics may be used. In the case of GNPS matching a we set the metric argument to `c("recall","f1","size")` to indicate that a pattern maximizing recall is extracted for each components, we then use accuracy and size to obtain a specific pattern as possible. This will reduce the number of explaining pattern to 1 by components.
 ```{r patterns_explaining_components}
-patterns <- findPatternsExplainingComponents(m2l,components,metric=c("recall"),threshold=0.8)
+patterns <- findPatternsExplainingComponents(m2l,components,metric=c("recall","accuracy","size"))
 ```
 
-
-
-#Processing
-
-
-A function have been implemented in the mineMS2 software to automatically extract connected and the cliques from an MS-MS network.
-```{r gnps_comp_extraction}
-components <- 
+The returned quantity is a list which include all the metrics for the given patterns, aswell as the id of the found explaining patterns.
+```{r pattern_showing}
+patterns[[1]]
 ```
+It if useful to extract the pattern ids `r ids <- sapply(patterns,'[',i=1,j="id")`.
 
 
-
-
-
-
-
-# Coupling outside the GNPS software.
-
-
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+These patterns can then be observed using the _plot_ and _plotOccurences_ functions, which are wrapped inside the _plotPatterns_ function for commodity purpose. This function may be easely coupled to a pdf output.
+```{r pattern_plotting}
+###Here a single id is selected for lisibility purpose.
+plotPatterns(m2l,ids[3],components = components[3])
 ```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+ FInally the exported compoent can be used to directly annotate the network.

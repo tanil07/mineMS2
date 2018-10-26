@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-plotPatterns <- function(m2l,ids=NULL,occurences=TRUE,full=FALSE,byPage=9,...){
+plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FALSE,byPage=9,titles=NULL,...){
 
 
 	if(is.null(ids)){
@@ -26,18 +26,50 @@ plotPatterns <- function(m2l,ids=NULL,occurences=TRUE,full=FALSE,byPage=9,...){
 			ids <- vrange(m2l,"P",reduced=TRUE)
 		}
 	}else{
-		tempids <- parseId(ids)
-		seq_type <- sapply(tempids,"[[",i=1)
-		if(any(seq_type != "P")){
+		tempids <- sapply(ids,parseId,m2l=m2l,simplify = FALSE)
+		seq_type <- sapply(tempids,"[[",i="type")
+		if(any(seq_type != "patterns")){
 			stop("Invalid ids furnished ",ids[which(seq_type!="P")]," only patterns ids may be furnished")
 		}
 	}
 
-	for(id in ids){
-		plot(m2l,id)
+	if(!is.null(titles) & (length(titles)!= length(ids))){
+		stop("titles argument should be a chracter of the same size than ids.")
+	}
+
+	if(!is.null(components) & (length(components)!= length(ids))){
+		stop("components argument should be a list of the same size than ids.")
+	}
+
+	for(pid in seq_along(ids)){
+		id <- ids[pid]
+		if(!is.null(titles)){
+			if(!is.null(components)){
+				layout(matrix(c(1,2,2,2,2),byrow=TRUE,ncol=5))
+				plot(0,xaxt="n",yaxt="n",xlab="",ylab="",ylim=c(0,1),xlim=c(0,1),type="n",bty="n")
+				text(x = rep(0,length(components[[pid]])),y=seq(0.1,0.9,length=length(components[[pid]])),
+					 labels = mm2Ids(m2l)[components[[pid]]],cex = 1.2)
+				plot(m2l,id,title=titles[pid])
+				layout(1)
+			}else{
+				plot(m2l,id,title=titles[pid])
+			}
+		}else{
+			if(!is.null(components)){
+				layout(matrix(c(1,2,2,2,2),byrow=TRUE,ncol=5))
+				plot(0,xaxt="n",yaxt="n",xlab="",ylab="",ylim=c(0,1),xlim=c(0,1),type="n",bty="n")
+				text(x = rep(0,length(components[[pid]])),y=seq(0.1,0.9,length=length(components[[pid]])),
+					 labels = mm2Ids(m2l)[components[[pid]]],cex = 1.2)
+				plot(m2l,id)
+				layout(1)
+			}else{
+				plot(m2l,id)
+			}
+		}
 		plotOccurences(m2l,id)
 	}
 }
+
 
 #' Plot the lattice of an ms2Lib object
 #'

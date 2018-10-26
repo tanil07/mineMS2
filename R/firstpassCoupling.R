@@ -44,14 +44,9 @@ findPatternsExplainingComponents <- function(m2l,components,metric=c("f1"),thres
 	###We determine the best format for each found pattern.
 
 	bpat <- sapply(components,function(x,m2l,type){
-		print(x)
 		find.patterns.class(m2l,x,type = type,full = FALSE)
 	},m2l=m2l,type=metric,simplify = FALSE)
 
 	###Postprocessing
 	return(bpat)
 }
-
-
-
-
