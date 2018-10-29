@@ -75,8 +75,8 @@ net_gnps <- simplify(net_gnps,remove.multiple = FALSE,edge.attr.comb = "ignore")
 An overview of the GNPS network after this processing is shown here, generated using the cytoscape software (@Shannon2003) :
 
 
-```{r, out.width = "500px",fig.align = 'center',echo=FALSE}
-knitr::include_graphics("figures/rawGNPS_example_mz.png")
+```{r net_raw, out.width = "500px",fig.align = 'center',echo=FALSE}
+knitr::include_graphics("figures/rawGNPS.png")
 ```
 
 
@@ -105,10 +105,11 @@ The found ids can then be extracted using th id method. `r ids <- sapply(pattern
 
 
 These patterns can then be observed using the _plot_ and _plotOccurences_ functions, which are wrapped inside the _plotPatterns_ function for commodity purpose. This function may be easely coupled to a pdf output.
-```{r pattern_plotting}
+```{r pattern_plotting, fig.align='center'}
 ###Here a single id is selected for lisibility purpose.
-plotPatterns(m2l,ids[3],components = components[3])
+plotPatterns(m2l,patterns[[4]][,"id"],components = components[4])
 ```
+
 The network may then be directly annotated using the _annotateNetwork_ function.
 
 ```{r annotate_network}
@@ -116,8 +117,45 @@ annotated_net <- annotateNetwork(components,net_gnps,patterns)
 ```
 
 The graph can then be exported using the _write\_graph_ function from the igraph package.
-```{r export_graph}
-write_graph(graph = annotated_net,format = "graphml",file = file.path("ex_annotated_gnps_network.graphml"))
+```{r export_graph,eval=FALSE}
+write_graph(graph = annotated_net,format = "graphml",file = "ex_annotated_gnps_network.graphml")
+```
+This network can be visualized in cytoscape :
+```{r net_annotated, out.width = "500px",fig.align = 'center',echo=FALSE}
+knitr::include_graphics("figures/annotatedGNPS.png")
+```
+The _colorComponents_ attribute is designed to be used in the enhancedGraphics GNPS package to visualize the explained components. Each components correspond ot a color, and multiply colored nodes indicates vertices present in multiples components.
+
+##Going further than GNPS
+While the use of GNPS allows a quick first pass processing of many interesting nodes, the use of *mineMS2* in a more exploratory way allow the discovery of supplementary information. The pattern found explaining the biggest components composed of isomeric compounds with m/z _513.21_   is `r patterns[[1]][,"id"]` as it visible in the network. We can plot this pattern using the *plotPatterns*
+```{r P5,fig.align = "center"}
+id_pat <- patterns[[1]][,"id"]
+plotPatterns(m2l,id_pat)
 ```
 
+We first an explanation of this fragmentation pattern, the 6 molecules all loses an $NH_3$. This single $NH_3$ loss is also observed in many different spectra, and is representative of an amine loss. One may also be interested into very specific fragmentation similarity, for exampled by looking at the similrity between vertices with mz $404.09$ and $370.13$, this high similarity is explained by components $4$
 
+```{r Pochratoxins,fig.align = "center"}
+id_pat <- patterns[[4]][,"id"]
+plot(m2l,id_pat)
+```
+
+In this pattern, we notably spot a loss with a mass differences of $147.068$, the information on this neutral loss, may notbaly be found using *findMz* and *getInfo* functions.
+```{r loss_phenylalanine}
+L147 <- findMz(m2l,147.068,ppm=8,dmz=0.005,type="L")
+getInfo(m2l,L147)
+
+```
+One possible formula for the loss is $C_9H_9NO$, which corresponds to a phenyalanine loss. It is possible to look for this loss in other patterns using the *select* functions :
+```{r other_phenyalanine}
+ids_phenylalanine <- select(m2l,L147,"P")
+ids_phenylalanine
+```
+By plotting patterns `r ids_phenylalanine[[1]][10]` using the plotPatterns function :
+```{r phenyalanine, fig.align="center"}
+plotPatterns(m2l,ids_phenylalanine[[1]][10])
+```
+
+One find a similarity of decomposition notably inclusing an $H_2O$,$CH3NO$ and $147.068$ which indicate a a common amino acid structure aswell as a phenyalanine loss. This similariy is totally ignored by GNPS, but may be found using the mineMS2 software.
+
+#Bibliography

@@ -4,7 +4,7 @@
 \alias{find.patterns.class}
 \title{Find biggest F1 score}
 \usage{
-find.patterns.class(m2l, ids, type = c("f1", "accuracy", "size"),
+find.patterns.class(m2l, ids, type = c("f1", "precision", "size"),
   returnall = FALSE, full = TRUE, reduced = FALSE)
 }
 \arguments{

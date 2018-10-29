@@ -49,15 +49,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">43</data>
       <data key="v_precursor mass">513.21</data>
-      <data key="v_components"></data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
-      <data key="v_id"></data>
-      <data key="v_f1"></data>
-      <data key="v_accuracy"></data>
-      <data key="v_recall"></data>
-      <data key="v_miss"></data>
-      <data key="v_size"></data>
-      <data key="v_maxF1"></data>
+      <data key="v_components">43,44,42,40,39|43,44,42,40,41,39</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
+      <data key="v_id">P5,P5</data>
+      <data key="v_f1">0.434782608695652,0.5</data>
+      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
+      <data key="v_recall">1,1</data>
+      <data key="v_miss">0,0</data>
+      <data key="v_size">2,2</data>
+      <data key="v_maxF1">0.4347826,0.5</data>
     </node>
     <node id="n2">
       <data key="v_Compound_Name"></data>
@@ -177,15 +177,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">23</data>
       <data key="v_precursor mass">299.09</data>
-      <data key="v_components"></data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
-      <data key="v_id"></data>
-      <data key="v_f1"></data>
-      <data key="v_accuracy"></data>
-      <data key="v_recall"></data>
-      <data key="v_miss"></data>
-      <data key="v_size"></data>
-      <data key="v_maxF1"></data>
+      <data key="v_components">23,12,15</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;green&quot;</data>
+      <data key="v_id">P127</data>
+      <data key="v_f1">0.461538461538462</data>
+      <data key="v_accuracy">0.3</data>
+      <data key="v_recall">1</data>
+      <data key="v_miss">0</data>
+      <data key="v_size">3</data>
+      <data key="v_maxF1">0.4615385</data>
     </node>
     <node id="n10">
       <data key="v_Compound_Name"></data>
@@ -193,15 +193,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">44</data>
       <data key="v_precursor mass">513.21</data>
-      <data key="v_components"></data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
-      <data key="v_id"></data>
-      <data key="v_f1"></data>
-      <data key="v_accuracy"></data>
-      <data key="v_recall"></data>
-      <data key="v_miss"></data>
-      <data key="v_size"></data>
-      <data key="v_maxF1"></data>
+      <data key="v_components">43,44,42,40,39|43,44,42,40,41,39</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
+      <data key="v_id">P5,P5</data>
+      <data key="v_f1">0.434782608695652,0.5</data>
+      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
+      <data key="v_recall">1,1</data>
+      <data key="v_miss">0,0</data>
+      <data key="v_size">2,2</data>
+      <data key="v_maxF1">0.4347826,0.5</data>
     </node>
     <node id="n11">
       <data key="v_Compound_Name"></data>
@@ -209,22 +209,6 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">45</data>
       <data key="v_precursor mass">623.32</data>
-      <data key="v_components">23,12,15,15,12</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;green,purple&quot;</data>
-      <data key="v_id">P127,P1</data>
-      <data key="v_f1">0.461538461538462,1</data>
-      <data key="v_accuracy">0.3,1</data>
-      <data key="v_recall">1,1</data>
-      <data key="v_miss">0,0</data>
-      <data key="v_size">3,6</data>
-      <data key="v_maxF1">0.4615385,1</data>
-    </node>
-    <node id="n12">
-      <data key="v_Compound_Name"></data>
-      <data key="v_SpectrumID"></data>
-      <data key="v_DefaultGroups">G1</data>
-      <data key="v_cluster index">42</data>
-      <data key="v_precursor mass">513.21</data>
       <data key="v_components"></data>
       <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
       <data key="v_id"></data>
@@ -234,6 +218,22 @@
       <data key="v_miss"></data>
       <data key="v_size"></data>
       <data key="v_maxF1"></data>
+    </node>
+    <node id="n12">
+      <data key="v_Compound_Name"></data>
+      <data key="v_SpectrumID"></data>
+      <data key="v_DefaultGroups">G1</data>
+      <data key="v_cluster index">42</data>
+      <data key="v_precursor mass">513.21</data>
+      <data key="v_components">43,44,42,40,39|43,44,42,40,41,39</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
+      <data key="v_id">P5,P5</data>
+      <data key="v_f1">0.434782608695652,0.5</data>
+      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
+      <data key="v_recall">1,1</data>
+      <data key="v_miss">0,0</data>
+      <data key="v_size">2,2</data>
+      <data key="v_maxF1">0.4347826,0.5</data>
     </node>
     <node id="n13">
       <data key="v_Compound_Name"></data>
@@ -257,15 +257,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">40</data>
       <data key="v_precursor mass">513.21</data>
-      <data key="v_components">23,12,15,15,12</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;green,purple&quot;</data>
-      <data key="v_id">P127,P1</data>
-      <data key="v_f1">0.461538461538462,1</data>
-      <data key="v_accuracy">0.3,1</data>
+      <data key="v_components">43,44,42,40,39|43,44,42,40,41,39</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
+      <data key="v_id">P5,P5</data>
+      <data key="v_f1">0.434782608695652,0.5</data>
+      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
       <data key="v_recall">1,1</data>
       <data key="v_miss">0,0</data>
-      <data key="v_size">3,6</data>
-      <data key="v_maxF1">0.4615385,1</data>
+      <data key="v_size">2,2</data>
+      <data key="v_maxF1">0.4347826,0.5</data>
     </node>
     <node id="n15">
       <data key="v_Compound_Name"></data>
@@ -273,15 +273,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">41</data>
       <data key="v_precursor mass">513.21</data>
-      <data key="v_components"></data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
-      <data key="v_id"></data>
-      <data key="v_f1"></data>
-      <data key="v_accuracy"></data>
-      <data key="v_recall"></data>
-      <data key="v_miss"></data>
-      <data key="v_size"></data>
-      <data key="v_maxF1"></data>
+      <data key="v_components">43,44,42,40,41,39</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;green&quot;</data>
+      <data key="v_id">P5</data>
+      <data key="v_f1">0.5</data>
+      <data key="v_accuracy">0.333333333333333</data>
+      <data key="v_recall">1</data>
+      <data key="v_miss">0</data>
+      <data key="v_size">2</data>
+      <data key="v_maxF1">0.5</data>
     </node>
     <node id="n16">
       <data key="v_Compound_Name"></data>
@@ -305,15 +305,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">3</data>
       <data key="v_precursor mass">251.09</data>
-      <data key="v_components">18,34</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;red&quot;</data>
-      <data key="v_id">P72</data>
-      <data key="v_f1">1</data>
-      <data key="v_accuracy">1</data>
-      <data key="v_recall">1</data>
-      <data key="v_miss">0</data>
-      <data key="v_size">3</data>
-      <data key="v_maxF1">1</data>
+      <data key="v_components"></data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
+      <data key="v_id"></data>
+      <data key="v_f1"></data>
+      <data key="v_accuracy"></data>
+      <data key="v_recall"></data>
+      <data key="v_miss"></data>
+      <data key="v_size"></data>
+      <data key="v_maxF1"></data>
     </node>
     <node id="n18">
       <data key="v_Compound_Name"></data>
@@ -385,15 +385,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">6</data>
       <data key="v_precursor mass">335.22</data>
-      <data key="v_components">23,12,15</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;green&quot;</data>
-      <data key="v_id">P127</data>
-      <data key="v_f1">0.461538461538462</data>
-      <data key="v_accuracy">0.3</data>
-      <data key="v_recall">1</data>
-      <data key="v_miss">0</data>
-      <data key="v_size">3</data>
-      <data key="v_maxF1">0.4615385</data>
+      <data key="v_components"></data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
+      <data key="v_id"></data>
+      <data key="v_f1"></data>
+      <data key="v_accuracy"></data>
+      <data key="v_recall"></data>
+      <data key="v_miss"></data>
+      <data key="v_size"></data>
+      <data key="v_maxF1"></data>
     </node>
     <node id="n23">
       <data key="v_Compound_Name"></data>
@@ -433,15 +433,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">39</data>
       <data key="v_precursor mass">513.21</data>
-      <data key="v_components"></data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
-      <data key="v_id"></data>
-      <data key="v_f1"></data>
-      <data key="v_accuracy"></data>
-      <data key="v_recall"></data>
-      <data key="v_miss"></data>
-      <data key="v_size"></data>
-      <data key="v_maxF1"></data>
+      <data key="v_components">43,44,42,40,39|43,44,42,40,41,39</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
+      <data key="v_id">P5,P5</data>
+      <data key="v_f1">0.434782608695652,0.5</data>
+      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
+      <data key="v_recall">1,1</data>
+      <data key="v_miss">0,0</data>
+      <data key="v_size">2,2</data>
+      <data key="v_maxF1">0.4347826,0.5</data>
     </node>
     <node id="n26">
       <data key="v_Compound_Name"></data>
@@ -449,15 +449,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">12</data>
       <data key="v_precursor mass">370.13</data>
-      <data key="v_components"></data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
-      <data key="v_id"></data>
-      <data key="v_f1"></data>
-      <data key="v_accuracy"></data>
-      <data key="v_recall"></data>
-      <data key="v_miss"></data>
-      <data key="v_size"></data>
-      <data key="v_maxF1"></data>
+      <data key="v_components">23,12,15|15,12</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;green,purple&quot;</data>
+      <data key="v_id">P127,P1</data>
+      <data key="v_f1">0.461538461538462,1</data>
+      <data key="v_accuracy">0.3,1</data>
+      <data key="v_recall">1,1</data>
+      <data key="v_miss">0,0</data>
+      <data key="v_size">3,6</data>
+      <data key="v_maxF1">0.4615385,1</data>
     </node>
     <node id="n27">
       <data key="v_Compound_Name"></data>
@@ -513,15 +513,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">38</data>
       <data key="v_precursor mass">511.29</data>
-      <data key="v_components"></data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
-      <data key="v_id"></data>
-      <data key="v_f1"></data>
-      <data key="v_accuracy"></data>
-      <data key="v_recall"></data>
-      <data key="v_miss"></data>
-      <data key="v_size"></data>
-      <data key="v_maxF1"></data>
+      <data key="v_components">38,37</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;orange&quot;</data>
+      <data key="v_id">P129</data>
+      <data key="v_f1">1</data>
+      <data key="v_accuracy">1</data>
+      <data key="v_recall">1</data>
+      <data key="v_miss">0</data>
+      <data key="v_size">8</data>
+      <data key="v_maxF1">1</data>
     </node>
     <node id="n31">
       <data key="v_Compound_Name"></data>
@@ -529,15 +529,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">15</data>
       <data key="v_precursor mass">404.09</data>
-      <data key="v_components"></data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
-      <data key="v_id"></data>
-      <data key="v_f1"></data>
-      <data key="v_accuracy"></data>
-      <data key="v_recall"></data>
-      <data key="v_miss"></data>
-      <data key="v_size"></data>
-      <data key="v_maxF1"></data>
+      <data key="v_components">23,12,15|15,12</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;green,purple&quot;</data>
+      <data key="v_id">P127,P1</data>
+      <data key="v_f1">0.461538461538462,1</data>
+      <data key="v_accuracy">0.3,1</data>
+      <data key="v_recall">1,1</data>
+      <data key="v_miss">0,0</data>
+      <data key="v_size">3,6</data>
+      <data key="v_maxF1">0.4615385,1</data>
     </node>
     <node id="n32">
       <data key="v_Compound_Name"></data>
@@ -561,6 +561,54 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">17</data>
       <data key="v_precursor mass">129.05</data>
+      <data key="v_components"></data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
+      <data key="v_id"></data>
+      <data key="v_f1"></data>
+      <data key="v_accuracy"></data>
+      <data key="v_recall"></data>
+      <data key="v_miss"></data>
+      <data key="v_size"></data>
+      <data key="v_maxF1"></data>
+    </node>
+    <node id="n34">
+      <data key="v_Compound_Name"></data>
+      <data key="v_SpectrumID"></data>
+      <data key="v_DefaultGroups">G1</data>
+      <data key="v_cluster index">16</data>
+      <data key="v_precursor mass">406.18</data>
+      <data key="v_components"></data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
+      <data key="v_id"></data>
+      <data key="v_f1"></data>
+      <data key="v_accuracy"></data>
+      <data key="v_recall"></data>
+      <data key="v_miss"></data>
+      <data key="v_size"></data>
+      <data key="v_maxF1"></data>
+    </node>
+    <node id="n35">
+      <data key="v_Compound_Name"></data>
+      <data key="v_SpectrumID"></data>
+      <data key="v_DefaultGroups">G1</data>
+      <data key="v_cluster index">19</data>
+      <data key="v_precursor mass">231.12</data>
+      <data key="v_components"></data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
+      <data key="v_id"></data>
+      <data key="v_f1"></data>
+      <data key="v_accuracy"></data>
+      <data key="v_recall"></data>
+      <data key="v_miss"></data>
+      <data key="v_size"></data>
+      <data key="v_maxF1"></data>
+    </node>
+    <node id="n36">
+      <data key="v_Compound_Name"></data>
+      <data key="v_SpectrumID"></data>
+      <data key="v_DefaultGroups">G1</data>
+      <data key="v_cluster index">18</data>
+      <data key="v_precursor mass">147.06</data>
       <data key="v_components">18,34</data>
       <data key="v_colorComponents">stripechart: colorlist=&quot;red&quot;</data>
       <data key="v_id">P72</data>
@@ -571,69 +619,21 @@
       <data key="v_size">3</data>
       <data key="v_maxF1">1</data>
     </node>
-    <node id="n34">
-      <data key="v_Compound_Name"></data>
-      <data key="v_SpectrumID"></data>
-      <data key="v_DefaultGroups">G1</data>
-      <data key="v_cluster index">16</data>
-      <data key="v_precursor mass">406.18</data>
-      <data key="v_components">36,35</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;yellow&quot;</data>
-      <data key="v_id">P26</data>
-      <data key="v_f1">1</data>
-      <data key="v_accuracy">1</data>
-      <data key="v_recall">1</data>
-      <data key="v_miss">0</data>
-      <data key="v_size">5</data>
-      <data key="v_maxF1">1</data>
-    </node>
-    <node id="n35">
-      <data key="v_Compound_Name"></data>
-      <data key="v_SpectrumID"></data>
-      <data key="v_DefaultGroups">G1</data>
-      <data key="v_cluster index">19</data>
-      <data key="v_precursor mass">231.12</data>
-      <data key="v_components">36,35</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;yellow&quot;</data>
-      <data key="v_id">P26</data>
-      <data key="v_f1">1</data>
-      <data key="v_accuracy">1</data>
-      <data key="v_recall">1</data>
-      <data key="v_miss">0</data>
-      <data key="v_size">5</data>
-      <data key="v_maxF1">1</data>
-    </node>
-    <node id="n36">
-      <data key="v_Compound_Name"></data>
-      <data key="v_SpectrumID"></data>
-      <data key="v_DefaultGroups">G1</data>
-      <data key="v_cluster index">18</data>
-      <data key="v_precursor mass">147.06</data>
-      <data key="v_components">38,37</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;orange&quot;</data>
-      <data key="v_id">P129</data>
-      <data key="v_f1">1</data>
-      <data key="v_accuracy">1</data>
-      <data key="v_recall">1</data>
-      <data key="v_miss">0</data>
-      <data key="v_size">8</data>
-      <data key="v_maxF1">1</data>
-    </node>
     <node id="n37">
       <data key="v_Compound_Name"></data>
       <data key="v_SpectrumID"></data>
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">31</data>
       <data key="v_precursor mass">391.14</data>
-      <data key="v_components">38,37</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;orange&quot;</data>
-      <data key="v_id">P129</data>
-      <data key="v_f1">1</data>
-      <data key="v_accuracy">1</data>
-      <data key="v_recall">1</data>
-      <data key="v_miss">0</data>
-      <data key="v_size">8</data>
-      <data key="v_maxF1">1</data>
+      <data key="v_components"></data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
+      <data key="v_id"></data>
+      <data key="v_f1"></data>
+      <data key="v_accuracy"></data>
+      <data key="v_recall"></data>
+      <data key="v_miss"></data>
+      <data key="v_size"></data>
+      <data key="v_maxF1"></data>
     </node>
     <node id="n38">
       <data key="v_Compound_Name"></data>
@@ -641,15 +641,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">30</data>
       <data key="v_precursor mass">391.14</data>
-      <data key="v_components">43,44,42,40,39,43,44,42,40,41,39</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
-      <data key="v_id">P5,P5</data>
-      <data key="v_f1">0.434782608695652,0.5</data>
-      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
-      <data key="v_recall">1,1</data>
-      <data key="v_miss">0,0</data>
-      <data key="v_size">2,2</data>
-      <data key="v_maxF1">0.4347826,0.5</data>
+      <data key="v_components"></data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
+      <data key="v_id"></data>
+      <data key="v_f1"></data>
+      <data key="v_accuracy"></data>
+      <data key="v_recall"></data>
+      <data key="v_miss"></data>
+      <data key="v_size"></data>
+      <data key="v_maxF1"></data>
     </node>
     <node id="n39">
       <data key="v_Compound_Name"></data>
@@ -657,15 +657,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">37</data>
       <data key="v_precursor mass">511.29</data>
-      <data key="v_components">43,44,42,40,39,43,44,42,40,41,39</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
-      <data key="v_id">P5,P5</data>
-      <data key="v_f1">0.434782608695652,0.5</data>
-      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
-      <data key="v_recall">1,1</data>
-      <data key="v_miss">0,0</data>
-      <data key="v_size">2,2</data>
-      <data key="v_maxF1">0.4347826,0.5</data>
+      <data key="v_components">38,37</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;orange&quot;</data>
+      <data key="v_id">P129</data>
+      <data key="v_f1">1</data>
+      <data key="v_accuracy">1</data>
+      <data key="v_recall">1</data>
+      <data key="v_miss">0</data>
+      <data key="v_size">8</data>
+      <data key="v_maxF1">1</data>
     </node>
     <node id="n40">
       <data key="v_Compound_Name"></data>
@@ -673,15 +673,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">36</data>
       <data key="v_precursor mass">509.29</data>
-      <data key="v_components">43,44,42,40,41,39</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;green&quot;</data>
-      <data key="v_id">P5</data>
-      <data key="v_f1">0.5</data>
-      <data key="v_accuracy">0.333333333333333</data>
+      <data key="v_components">36,35</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;yellow&quot;</data>
+      <data key="v_id">P26</data>
+      <data key="v_f1">1</data>
+      <data key="v_accuracy">1</data>
       <data key="v_recall">1</data>
       <data key="v_miss">0</data>
-      <data key="v_size">2</data>
-      <data key="v_maxF1">0.5</data>
+      <data key="v_size">5</data>
+      <data key="v_maxF1">1</data>
     </node>
     <node id="n41">
       <data key="v_Compound_Name"></data>
@@ -689,15 +689,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">35</data>
       <data key="v_precursor mass">509.29</data>
-      <data key="v_components">43,44,42,40,39,43,44,42,40,41,39</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
-      <data key="v_id">P5,P5</data>
-      <data key="v_f1">0.434782608695652,0.5</data>
-      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
-      <data key="v_recall">1,1</data>
-      <data key="v_miss">0,0</data>
-      <data key="v_size">2,2</data>
-      <data key="v_maxF1">0.4347826,0.5</data>
+      <data key="v_components">36,35</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;yellow&quot;</data>
+      <data key="v_id">P26</data>
+      <data key="v_f1">1</data>
+      <data key="v_accuracy">1</data>
+      <data key="v_recall">1</data>
+      <data key="v_miss">0</data>
+      <data key="v_size">5</data>
+      <data key="v_maxF1">1</data>
     </node>
     <node id="n42">
       <data key="v_Compound_Name"></data>
@@ -705,15 +705,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">34</data>
       <data key="v_precursor mass">312.29</data>
-      <data key="v_components">43,44,42,40,39,43,44,42,40,41,39</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
-      <data key="v_id">P5,P5</data>
-      <data key="v_f1">0.434782608695652,0.5</data>
-      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
-      <data key="v_recall">1,1</data>
-      <data key="v_miss">0,0</data>
-      <data key="v_size">2,2</data>
-      <data key="v_maxF1">0.4347826,0.5</data>
+      <data key="v_components">18,34</data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;red&quot;</data>
+      <data key="v_id">P72</data>
+      <data key="v_f1">1</data>
+      <data key="v_accuracy">1</data>
+      <data key="v_recall">1</data>
+      <data key="v_miss">0</data>
+      <data key="v_size">3</data>
+      <data key="v_maxF1">1</data>
     </node>
     <node id="n43">
       <data key="v_Compound_Name"></data>
@@ -721,15 +721,15 @@
       <data key="v_DefaultGroups">G1</data>
       <data key="v_cluster index">33</data>
       <data key="v_precursor mass">416.17</data>
-      <data key="v_components">43,44,42,40,39,43,44,42,40,41,39</data>
-      <data key="v_colorComponents">stripechart: colorlist=&quot;blue,green&quot;</data>
-      <data key="v_id">P5,P5</data>
-      <data key="v_f1">0.434782608695652,0.5</data>
-      <data key="v_accuracy">0.277777777777778,0.333333333333333</data>
-      <data key="v_recall">1,1</data>
-      <data key="v_miss">0,0</data>
-      <data key="v_size">2,2</data>
-      <data key="v_maxF1">0.4347826,0.5</data>
+      <data key="v_components"></data>
+      <data key="v_colorComponents">stripechart: colorlist=&quot;white&quot;</data>
+      <data key="v_id"></data>
+      <data key="v_f1"></data>
+      <data key="v_accuracy"></data>
+      <data key="v_recall"></data>
+      <data key="v_miss"></data>
+      <data key="v_size"></data>
+      <data key="v_maxF1"></data>
     </node>
     <node id="n44">
       <data key="v_Compound_Name"></data>

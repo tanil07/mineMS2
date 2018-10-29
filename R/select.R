@@ -231,7 +231,7 @@ f1.score <- function(id,idsref,full=FALSE){
 
 
 checkFTerms <- function(seq_terms){
-	REF_TERMS <- c("f1","accuracy","recall","miss","size")
+	REF_TERMS <- c("f1","precision","recall","miss","size")
 	if(all(seq_terms %in% REF_TERMS)){
 		return(seq_terms)
 	}else{
@@ -259,7 +259,7 @@ checkFTerms <- function(seq_terms){
 #'
 #' @examples
 #' print("Examples to be put here")
-find.patterns.class <- function(m2l,ids,type=c("f1","accuracy","size"),
+find.patterns.class <- function(m2l,ids,type=c("f1","precision","size"),
 								returnall=FALSE,full=TRUE,reduced=FALSE){
 
 	criterion <- checkFTerms(type)
@@ -288,7 +288,7 @@ find.patterns.class <- function(m2l,ids,type=c("f1","accuracy","size"),
 	if(length(pf1)==0) return(data.frame(id=character(0),f1=numeric(0),precision=numeric(0),
 										 recall=numeric(0),miss=numeric(0),size=numeric(0)))
 	to_return <- data.frame(id=idsp[pf1],f1=vf1["f1",pf1],
-							accuracy=vf1["precision",pf1],recall=vf1["recall",pf1],
+							precision=vf1["precision",pf1],recall=vf1["recall",pf1],
 							miss=vf1["miss",pf1],size=vf1["size",pf1],stringsAsFactors = FALSE)
 
 	to_return <- to_return[do.call(order, c(decreasing = TRUE, data.frame(to_return[,criterion]))),]
