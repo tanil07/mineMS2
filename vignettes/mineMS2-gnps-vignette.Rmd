@@ -153,9 +153,9 @@ ids_phenylalanine
 ```
 By plotting patterns `r ids_phenylalanine[[1]][10]` using the plotPatterns function :
 ```{r phenyalanine, fig.align="center"}
-plotPatterns(m2l,ids_phenylalanine[[1]][10])
+plotPatterns(m2l,ids_phenylalanine[[1]][4])
 ```
 
-One find a similarity of decomposition notably inclusing an $H_2O$,$CH3NO$ and $147.068$ which indicate a a common amino acid structure aswell as a phenyalanine loss. This similariy is totally ignored by GNPS, but may be found using the mineMS2 software.
+One find a similarity of decomposition notably inclusing an $H_2O$,$CH3NO$ and $147.068$ which indicate a a common amino acid structure aswell as a phenyalanine loss. This similariy is totally ignored by GNPS, but may be found using the mineMS2 software. 
 
 #Bibliography
