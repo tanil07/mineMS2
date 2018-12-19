@@ -144,7 +144,10 @@ parse_mgf_spectrum2 <- function(filename){
 
 		lspec[[i]] <- msnexp[[paste("X",i,sep="")]]
 	}
-	return(lspec)
+	metadata <- fData(msnexp)
+	rlist <- list(spec=lspec,supp=metadata)
+
+	return(rlist)
 }
 
 ###Check the format fo a list of files.
@@ -190,15 +193,17 @@ make_initial_title <- function(spec_infos){
 #' does not start with \textbf{P,L,S} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
 #' and it contains an id fields, it will be used. If not ids is furnished and id will be generated for each spectra as S1,S2,...,SN
 #' where N is the number of furnished spectra.
+#' @param infosFromFiles Shall the other informations present in the files be added to the supplementary infos.
 #' @examples
 #' print("examples to be put here")
-ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL){
+ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFromFiles = FALSE){
 
 	m2l <- new("ms2Lib")
 
 	origin <- "R"
 	lfiles <- NULL
 
+	suppMetadata <- NULL
 	###The kind of the acquisition is assessed there.
 	if(class(x)=="list"){
 		if(all(sapply(x,class) == "Spectrum2")){
@@ -215,12 +220,18 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL){
 				lfiles <- list.files(x,full.names = TRUE)
 				exts <- checkFormat(lfiles)
 				message("Reading ",length(exts)," files with format(s): ",unique(exts))
-				mm2Spectra(m2l) <- apply(matrix(c(lfiles,exts),ncol=2,byrow = FALSE),1,parseMS2file_line)
-
+				
+				tres <- apply(matrix(c(lfiles,exts),ncol=2,byrow = FALSE),1,parseMS2file_line)
+				mm2Spectra(m2l) <- sapply(tres,"[",i="spec")
+				suppMetadata <- sapply(tres,"[",i="supp")
+				
 			}else{ ###Case of a single spectra.
 				exts <- checkFormat(x)
 				message("Reading ",length(exts)," files with format(s): ",unique(exts))
-				mm2Spectra(m2l) <- parseMS2file_line(c(x,exts))
+				tres <- parseMS2file_line(c(x,exts))
+				mm2Spectra(m2l) <- tres$spec
+				suppMetadata <- tres$supp
+				
 			}
 		}else{
 			###Case of multiples singles spectra
@@ -276,7 +287,6 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL){
 				temp_df <- cbind(temp_df,suppInfos)
 			}
 
-
 			if(("id" %in% colnames(suppInfos)) &
 			   (is.null(ids))){
 				mm2Ids(m2l) <- suppInfos[,"id"]
@@ -290,6 +300,11 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL){
 			mm2Ids(m2l,check=FALSE) <- paste("S",1:length(mm2Spectra(m2l)),sep="")
 		}
 	}
+	
+	if(infosFromFiles&!is.null(suppMetadata)){
+	  temp_df <- cbind(temp_df,suppMetadata)
+	}
+	
 
 	mm2SpectraInfos(m2l) <- temp_df
 	m2l

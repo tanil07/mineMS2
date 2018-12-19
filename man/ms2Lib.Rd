@@ -4,7 +4,8 @@
 \alias{ms2Lib}
 \title{ms2Lib constructor}
 \usage{
-ms2Lib(x, suppInfos = NULL, ids = NULL, intThreshold = NULL)
+ms2Lib(x, suppInfos = NULL, ids = NULL, intThreshold = NULL,
+  infosFromFiles = FALSE)
 }
 \arguments{
 \item{x}{May be one of the following
@@ -22,6 +23,8 @@ column is used to match the file.}
 does not start with \textbf{P,L,S} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
 and it contains an id fields, it will be used. If not ids is furnished and id will be generated for each spectra as S1,S2,...,SN
 where N is the number of furnished spectra.}
+
+\item{infosFromFiles}{Shall the other informations present in the files be added to the supplementary infos.}
 }
 \description{
 Create a ms2Lib object from files in suppoerted input formats.

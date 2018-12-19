@@ -5,11 +5,11 @@
 \alias{discretizeMassFragments,ms2Lib-method}
 \title{Discretize the fragments of mass spectrometers.}
 \usage{
-\S4method{discretizeMassFragments}{ms2Lib}(m2l, adducts = NULL, ppm = 7,
-  dmz = 0.002, mode = c("POS", "NEG"), count = 2, limMzFormula = c(50,
-  250), maxFrags = 15, maxOverlap = 0.05, strictMatching = TRUE,
-  precPpm = 20, precDmz = 0.02, atoms = NULL, heteroAtoms = TRUE,
-  mzDigits = 4, ...)
+\S4method{discretizeMassFragments}{ms2Lib}(m2l, adducts = NULL,
+  ppm = 7, dmz = 0.002, mode = c("POS", "NEG"), count = 2,
+  limMzFormula = c(50, 250), maxFrags = 15, maxOverlap = 0.05,
+  strictMatching = TRUE, precPpm = 20, precDmz = 0.02,
+  atoms = NULL, heteroAtoms = TRUE, mzDigits = 4, ...)
 }
 \arguments{
 \item{m2l}{The ms2 lib object to be discretized.}

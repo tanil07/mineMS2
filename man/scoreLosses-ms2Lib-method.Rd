@@ -5,8 +5,8 @@
 \alias{scoreLosses,ms2Lib-method}
 \title{Determine edges scores}
 \usage{
-\S4method{scoreLosses}{ms2Lib}(m2l, knownLoss = 0.2, selectedLosses = 3,
-  monoAtom = -1, weigth = 3.5)
+\S4method{scoreLosses}{ms2Lib}(m2l, knownLoss = 0.2,
+  selectedLosses = 3, monoAtom = -1, weigth = 3.5)
 }
 \arguments{
 \item{m2l}{An ms2Lib object}

@@ -7,7 +7,7 @@
 #' @docType package
 #' @importFrom graphics plot layout text lines
 #' @importFrom MSnbase readMgfData precursorMz mz intensity removePeaks
-#' @importMethodsFrom MSnbase plot clean
+#' @importMethodsFrom MSnbase plot clean fData
 #' @importFrom stringr str_detect str_split str_sub fixed
 #' @importFrom Matrix Matrix
 #' @importFrom igraph make_empty_graph graph.empty set_vertex_attr add_edges adjacent_vertices V E get.edge.ids edge_attr
