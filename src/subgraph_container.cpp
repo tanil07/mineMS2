@@ -471,7 +471,6 @@ void subgraph_container::removePattern_latt(std::string& key){
     //The position of the pattern is found.
     auto it = idxmap.find(key);
     Vertexl pos = (*it).second;
-    //std::cout <<"Removing_"<<key<<"_"<<pos<<"  ";
     boost::clear_vertex(pos,lat);
     boost::remove_vertex(pos,lat);
 
@@ -501,7 +500,6 @@ void subgraph_container::addPattern_latt(std::string& key,std::vector<std::strin
 
     //It is added to the vertex map
     idxmap.emplace(key,node);
-    //if(key=="11.95") std::cout << "k:"<<key<<"n:"<<node;
 
     //We add the parents
     for(auto it = supergraphs.begin();it!=supergraphs.end();it++){
@@ -541,7 +539,6 @@ void subgraph_container::resetIdxMap(){
     graphTraitl::vertex_iterator bv,ev;
     boost::tie(bv,ev) = boost::vertices(lat);
     for(;bv!=ev;bv++){
-        //if(lat[*bv].key=="11.95") std::cout<< "fffound: "<<*bv;
         idxmap[lat[*bv].key] = (*bv);
     }
 }
@@ -549,7 +546,6 @@ void subgraph_container::resetIdxMap(){
 std::map< Vertexl, patternIdx> subgraph_container::getMapping(){
 
     std::map< Vertexl, patternIdx> res;
-    //of <<"map: "<<std::endl;
     //Associate a value to a node at each step.
     for(auto it=pmap.begin();it != pmap.end(); it++){
                 //Associate a value to a node at each step.
@@ -558,12 +554,8 @@ std::map< Vertexl, patternIdx> subgraph_container::getMapping(){
 
             //We get the label of the current node
             std::string cnorm = it->second[i].get_norm();
-            //if(cnorm=="2.180.238")
-            //    std::cout << ""<<cnorm<<"_"<<idxmap[cnorm]<<"_"<<lat[idxmap[cnorm]].key<<"_"<<cpair.first<<"_"<<cpair.second <<std::endl;
             res.insert( std::make_pair(idxmap[cnorm],cpair));
-//            if(lat[idxmap[cnorm]].key =="11.95"){
-//                std::cout <<"norm: "<<cnorm<<"2ndnorm: "<<lat[idxmap[cnorm]].key <<" cpair: "<<cpair.first << "_"<<cpair.second<<std::endl;
-//            }
+
         }
     }
 

@@ -103,23 +103,17 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
         if(pres){
             elab = G[e].lab;
         }else{//TODO check if it is possible to return directly.
-            //cignore=true;
             continue;
         }
 
-        //if(pos[pi-1].size()==0)
         if(pos[pi-1].size()==0)
         {
-            ///if(pos[pi-2].size()!=0){
             if(pos[pi-2].size()!=0)
             {
                 Vertext vn = this->get_node(pos[pi-2].back(),plabs[lpath-1],elab);
                 pos[pi-1].push_back(vn);
                 occ oc = {short(gid),short(idx_vertex[pfr[lpath-pi]])};
                 addOccs(moccs,vn,oc);
-//                    if(pi==3){
-//                    //std::cout <<"pi: "<<pi<<"size3f_"<<plabs[lpath-1]<<"lpfr: "<<pfr.size()<<"_"<<t[pos[pi-2].back()].lab<<"_"<<t[vn].lab<<std::endl;
-//                    }
             }
             continue;
         }
@@ -129,6 +123,7 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
         {
             Vertext old_vertice = pos[pi-2].back();
             //String obtained by adding the value.
+            
             Vertext vn = this->get_node(old_vertice,plabs[lpath-1],elab);
             pos[pi-1].push_back(vn);
 
@@ -137,7 +132,6 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
             addOccs(moccs,vn,oc);
         }
     }
-    //Rcpp::Rcout <<"sa";
         occ oc = {short(gid),short(idx_vertex[pfr[lpath-1]])};
     Vertext vn = this->get_node(root,plabs[lpath-1],plabs[lpath-1]);
     pos[0].push_back(vn);

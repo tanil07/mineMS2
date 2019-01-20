@@ -1,5 +1,6 @@
 ###CORRESPONDANCE TABLE
 CORR_TABLE <- list("D"="dags","S"="spectra","P"="patterns","L"="losses")#"F"="fragments"
+COVERAGE_NAME <- "coverage"
 
 
 
@@ -138,7 +139,7 @@ recognisedFormat <- function(){
 
 ###Parse an mgf and return a list of the Spectrum2 object
 parse_mgf_spectrum2 <- function(filename){
-	msnexp <- MSnbase::readMgfData(filename)
+	msnexp <- MSnbase::readMgfData(filename,verbose = TRUE)
 	lspec <- vector(mode="list",length=length(msnexp))
 	for(i in 1:length(msnexp)){
 
@@ -242,6 +243,10 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	}
 
 	mm2Spectra(m2l) <- do.call("c",mm2Spectra(m2l))
+	
+	if(length(mm2Spectra(m2l))>1000){
+	  stop("At the moment it is impossible ot process more than 1000 spectra at the same time.")
+	}
 
 
 	###data.frame is initialized. With the mass of the precusors
@@ -700,17 +705,20 @@ getInfo <- function(m2l,ids){
 #'
 #' @examples
 #' print("Examples to be put here")
-setMethod("vrange","ms2Lib",function(m2l,type=c("S","L","P","F"), reduced=TRUE){
+setMethod("vrange","ms2Lib",function(m2l,type=c("S","L","P","F"), reduced=TRUE, as.number=FALSE){
 	type <- match.arg(type)
 	if(type=="S"){
 		if(length(m2l)==0) return(character(0))
+	  if(as.number) return(1:length(m2l))
 		return(paste("S",1:length(m2l),sep=""))
 	}
 	if(type=="P"){
 		if(length(mm2Patterns(m2l))==0) return(character(0))
 		if(reduced){
+		  if(as.number) return(mm2ReducedPatterns(m2l))
 			return(paste("P",mm2ReducedPatterns(m2l),sep=""))
 		}else{
+		  if(as.number) return(1:length(mm2Patterns(m2l)))
 			return(paste("P",1:length(mm2Patterns(m2l)),sep=""))
 		}
 	}
@@ -720,6 +728,61 @@ setMethod("vrange","ms2Lib",function(m2l,type=c("S","L","P","F"), reduced=TRUE){
 	}
 	if(type=="F"){
 		if(nrow(mm2NodesLabels(m2l))==0) return(character(0))
+	  if(as.number) return(1:nrow(mm2NodesLabels(m2l)))
 		return(paste("L",1:nrow(mm2NodesLabels(m2l)),sep=""))
 	}
 })
+
+
+hasPatterns <- function(m2l){
+  return(length(m2l@patterns)!=0)
+}
+
+hasCoverage <- function(m2l){
+  if(hasPatterns(m2l)){
+    return(COVERAGE_NAME %in% colnames(m2l@patterns[[1]]@occurences))
+  }else{
+    stop(paste("Patterns need to be computed before obtaining coverage.",sep=""))
+  }
+  return(FALSE)
+}
+
+
+#' Calculate the coverage of all the patterns in the dataset.
+#'
+#' @param m2l The ms2Lib to bo computed.
+#'
+#' @return The m2l object with all the coverage calculated.
+#' @export
+#'
+#' @examples
+#' print("Examples to be put here")
+calculateCoverage <- function(m2l){
+  loss_mz <- mm2EdgesLabels(m2l)$mz
+  mgs <- mm2Dags(m2l)
+  txtProgressBar(min = 0, max = length(mm2Patterns(m2l)), initial = 0, char = "=",
+                 width = NA, "Covergae calculation", "cov_calc", style = 1, file = "")
+  for(i in seq_along(mm2Patterns(m2l))){
+    occs <- m2l@patterns[[i]]@occurences
+    coverages <- rep(NA_real_,nrow(occs))
+    for(j in 1:nrow(occs)){
+      gid <- occs[j,"gid"]
+      cg <-mgs[[gid]]
+      mapv <- get_mapping(cg ,m2l@patterns[[i]]@graph, loss_mz,root=occs[j,"idx"])
+      
+      ###Plotting of the spectra
+      intv <- vertex_attr(cg, "rel_int")
+      mzs <- vertex_attr(cg, "mz")
+      ids <- V(cg)
+      
+      ###Peaks are split between matched and non matched.
+      matched_peaks_idx <- match(mapv[2,], ids)
+      coverages[j] <- sum(intv[matched_peaks_idx])/sum(intv)
+    }
+    onames <- colnames(occs)
+    occs <- cbind(occs,coverages)
+    colnames(occs) <- c(onames,COVERAGE_NAME)
+    m2l@patterns[[i]]@occurences <- occs
+  }
+  return(m2l)
+}

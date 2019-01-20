@@ -116,7 +116,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 		warning("count set to a 2.")
 		count <- 2
 	}
-	freq <- count/length(m2l)
+	freq <- count/length(m2l@spectra)
 	if((freq<0) | (freq>1)){
 		stop("Wrong count value ",count)
 	}

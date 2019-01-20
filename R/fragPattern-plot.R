@@ -62,7 +62,7 @@ matchMzs <- function(mz1,mz2,ppm=15,dmz=0.03){
 
 
 ###Mapp the peaks of a pattern on another values.
-get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.005,ppm=10){
+get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 
 	###Extracting the correct root idx
 	rootidx <- V(mg)[root+1]
@@ -83,7 +83,7 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.005,ppm=10){
 	p0_mz <- loss_mass[p0_labs]
 
 	###Now we just have to match the value
-	res_match <- matchMzs(m0_mz,p0_mz,50,0.1)
+	res_match <- matchMzs(m0_mz,p0_mz,ppm,tol)
 
 	###Normally there is a match for every value.
 	###However if there is a mistake we remove it.

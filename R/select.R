@@ -1,4 +1,4 @@
-####Implementation of the selecte functions.
+####Implementation of the selection functions.
 
 
 checkSize <- function(vec,pos){

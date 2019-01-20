@@ -6,7 +6,7 @@
 \title{Return the range of iteration on an ms2Lib object.}
 \usage{
 \S4method{vrange}{ms2Lib}(m2l, type = c("S", "L", "P", "F"),
-  reduced = TRUE)
+  reduced = TRUE, as.number = FALSE)
 }
 \arguments{
 \item{m2l}{AN ms2Lib object}
