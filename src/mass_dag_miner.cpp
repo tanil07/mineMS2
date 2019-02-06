@@ -61,6 +61,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
     Rcpp::Rcerr << "Mined patterns: "<<std::endl;
     int insert_error=0;
     int counter = 0;
+    int current_1000 = 0;
     for(auto it=initialPatterns.begin();it!=initialPatterns.end();it++){
 
         //We empty the current stack
@@ -76,7 +77,6 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
         max_child_occs.push(0);
 
         int LIM_ITER = 1000000;
-        int current_1000 = 0;
         lattice_node next_node;
         int indicator = -1;
         while(counter<LIM_ITER){
@@ -87,8 +87,8 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
             bool is_root = current_node.is_root();
 
             //We print the label of the current node
-            if(((counv%1000)==0)&(((counv/1000)!=indicator))){
-                indicator = counv/1000;
+            if(((counv%10000)==0)&(((counv/10000)!=indicator))){
+                indicator = counv/10000;
                 of <<"Patterns explored: "<< counv <<" closed motifs found: "<<container.numSubgraphs()<<std::endl;
             }
 
@@ -122,9 +122,9 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
                             boost::tie(ba,ea)=boost::adjacent_vertices(current_node.get_root(),gg);
                             boost::tie(bo,eo)=boost::out_edges(current_node.get_root(),gg);
                             counter++;
-                            if(counter/1000!=current_1000){
-                                current_1000 = counter/1000;
-                                Rcpp::Rcerr << current_1000*1000 <<" ";
+                            if(counter/10000!=current_1000){
+                                current_1000 = counter/10000;
+                                Rcpp::Rcerr << current_1000*10000 <<" ";
                             }
 //                            Rcpp::Rcerr << " out " << std::endl;
                             container.insert_closed_pattern(current_node,inserted,of,insert_error);

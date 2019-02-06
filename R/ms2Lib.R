@@ -145,7 +145,8 @@ parse_mgf_spectrum2 <- function(filename){
 
 		lspec[[i]] <- msnexp[[paste("X",i,sep="")]]
 	}
-	metadata <- fData(msnexp)
+	
+	metadata <- fData(msnexp)[paste("X",1:length(msnexp),sep=""),]
 	rlist <- list(spec=lspec,supp=metadata)
 
 	return(rlist)

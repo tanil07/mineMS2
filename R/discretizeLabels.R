@@ -152,7 +152,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	###Simplifying the DAG if necessary.
 	change <- TRUE
 	niter <- 1
-	while(change){
+	while(change&niter<4){
 		res_list <- fuseElem(elems =res_list$elems ,dags = res_list$dags,thresh=count,atoms = names(atoms))
 		change <- res_list$change
 		niter <- niter+1
@@ -398,7 +398,6 @@ discretizeMassesDifferences <- function(list_spec,
 			if(ecount(dag)>0){
 				tlab <- table(edge_attr(dag,"lab"))
 				ntlab <- as.numeric(names(tlab))
-				if(length(recap_tab$count[ntlab])!=length(as.numeric(tlab))) browser()
 				recap_tab$count[ntlab] <- recap_tab$count[ntlab]+as.numeric(tlab)
 			}
 		}
@@ -900,16 +899,6 @@ discretizeFragments <- function(list_specs,list_graphs,adducts,
 		if(is.na(x[xp1])) return(NA_character_)
 		apply(allFormula$formula[x[xp1]:x[xp2],,drop=FALSE],1,formulaToString,vnames=atm_names)
 	})
-	# ###Finding penalized and advantaged formula.
-	# freq_f <- sapply(str_formula,function(x){
-	# 	if(is.na(x[1])) return(FALSE)
-	# 	any(x %in% floss)
-	# })
-	#
-	# non_freq_f <- sapply(str_formula,function(x){
-	# 	if(is.na(x[1])) return(FALSE)
-	# 	any(x %in% nfloss)
-	# })
 
 
 	###Final strings
@@ -1019,7 +1008,7 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 								}
 								###The position is added ot the dataset.
 								stormat[ma,mb] <- nval
-								storval[[nval]] <- c(la,lb,lc)
+								storval[[nval]] <- c(ma,mb,lc)
 								nval <- nval+1
 							}else{
 								if(!lc %in% storval[[is_in]] ){
@@ -1055,7 +1044,8 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 		a <- sv[1]
 		b <- sv[2]
 		cs <- sv[3:length(storval[[i]])]
-		telems <- elems[cs,,drop=FALSE]
+		rcs <- range(cs)
+		telems <- elems[rcs[1]:rcs[2],,drop=FALSE]
 
 		##The dataset are fused.
 		mzmin <- min(telems$mzmin)
@@ -1102,7 +1092,7 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 			}
 		}
 		formula <- paste(formula,sep="|")
-		to_rm <- c(to_rm,cs[2:length(cs)])
+		to_rm <- c(to_rm,rcs[2:length(cs)])
 		merged_val <- c(merged_val,cs[1])
 		elems$mzmin[cs[1]] <- mzmin
 		elems$mzmax[cs[1]] <- mzmax
@@ -1110,8 +1100,9 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 		elems$fused[cs[1]] <- TRUE
 		elems$count[cs[1]] <- count
 		elems$formula[cs[1]] <- formula
-		nlab[cs] <- cs[1]
+		nlab[rcs] <- cs[1]
 	}
+	
 
 	###Now all the labels need to be redone
 	ulabs <- unique(nlab)
@@ -1127,6 +1118,7 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 		}
 		eg_lab <- edge_attr(g,"lab")
 		edge_attr(g,"lab") <- new_labs[eg_lab]
+		if(any(sapply(new_labs[eg_lab],is.na))) browser()
 		if(ecount(g)>0){
 			tlab <- table(edge_attr(g,"lab"))
 			ntlab <- as.numeric(names(tlab))
@@ -1134,17 +1126,55 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 		}
 		dags[[igl]] <- g
 	}
+	
+	p_rm <- countv<thresh
+	p_keep <- countv>thresh
 
-	# ###Updating the lement table.
-	# to_rm <- to_rm[!(to_rm %in% merged_val)]
-	#
-	#
-	# if(length(to_rm)>=1){
-	# 	elems <- elems[-to_rm,]
-	# }
-	# browser()
 	elems$count <- countv
-	elems <- elems[countv>=thresh,]
-	elems$lab <- 1:nrow(elems)
-	return(list(elems=elems,dags=dags,change=anyChange))
+	# elems <- elems[countv>=thresh,]
+	# elems$lab <- 1:nrow(elems)
+	
+	tempr <- cleanupElems(elems,dags,thresh)
+	
+	return(list(elems=tempr$elems,dags=tempr$dags,change=anyChange))
+}
+
+cleanupElems <- function(elems,dags,thresh){
+  countv <- rep(0,nrow(elems))
+  
+  for(igl in 1:length(dags)){
+    g <- dags[[igl]]
+    if(is.null(g)||is.na(g)){
+      next
+    }
+    eg_lab <- edge_attr(g,"lab")
+    if(ecount(g)>0){
+      tlab <- table(eg_lab)
+      ntlab <- as.numeric(names(tlab))
+      countv[ntlab] <- countv[ntlab]+as.numeric(tlab)
+    }
+  }
+  
+  p_rm <- elems$lab[countv<thresh]
+  p_keep <- elems$lab[countv>=thresh]
+  
+  nlab <- elems$lab
+  nlab[p_keep] <- 1:length(p_keep)
+  
+  ###Now removing the not frequent edge unused edge.
+  for(igl in 1:length(dags)){
+    g <- dags[[igl]]
+    if(is.null(g)||is.na(g)){
+      next
+    }
+    eg_lab <- edge_attr(g,"lab")
+    v_rm <- eg_lab %in% p_rm
+    g <- delete_edges(g,E(g)[v_rm])
+    eg_lab <- edge_attr(g,"lab")
+    edge_attr(g,"lab") <- nlab[eg_lab]
+    dags[[igl]] <- g
+  }
+  
+  elems <- elems[p_keep,]
+  return(list(elems=elems,dags=dags))
 }
