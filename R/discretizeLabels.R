@@ -1043,7 +1043,7 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 
 		a <- sv[1]
 		b <- sv[2]
-		cs <- sv[3:length(storval[[i]])]
+		cs <- sort(sv[3:length(storval[[i]])])
 		rcs <- range(cs)
 		telems <- elems[rcs[1]:rcs[2],,drop=FALSE]
 
@@ -1065,10 +1065,13 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 		}else{
 			###We calculate the new formula.
 			aformula <- ifelse(is.null(allformula[[a]]),NA,allformula[[a]])
+			bformula <- ifelse(is.null(allformula[[b]]),NA,allformula[[b]])
+			
+			####
+			
 			if(typeof(aformula)=="list"){
 				aformula <- aformula[[1]]
 			}
-			bformula <- ifelse(is.null(allformula[[b]]),NA,allformula[[b]])
 			if(typeof(bformula)=="list"){
 				bformula <- bformula[[1]]
 			}

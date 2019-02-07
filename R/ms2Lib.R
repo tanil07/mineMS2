@@ -550,7 +550,7 @@ setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 #' @examples
 setMethod("plot", "ms2Lib",
 		  function(x,
-		  		 y,
+		  		 y,title=NULL,
 		  		 ...) {
 		  	if(length(y)>1){
 		  		warning("A single if may be plotted on each call, plotting the first element only")
@@ -558,6 +558,7 @@ setMethod("plot", "ms2Lib",
 		  	}
 		  	rid <- parseId(x,y)
 		  	if(rid[[1]]=="patterns"){
+		  	  
 				plot(x[y],title = y,edgeLabels=(mm2EdgesLabels(x)),...)
 		  	}else if(rid[[1]]=="spectra"){
 		  		plot_Spectrum2(x[y],full=TRUE,...)

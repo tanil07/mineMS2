@@ -5,7 +5,7 @@
 \alias{plot,ms2Lib,ANY-method}
 \title{Plot an element given an idx}
 \usage{
-\S4method{plot}{ms2Lib,ANY}(x, y, ...)
+\S4method{plot}{ms2Lib,ANY}(x, y, title = NULL, ...)
 }
 \arguments{
 \item{x}{An ms2Lib oject.}

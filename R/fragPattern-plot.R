@@ -120,7 +120,7 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 setMethod("plot", "fragPattern",
 		  function(x,
 		  		 y = NULL,
-		  		 title="Frag pattern",
+		  		 title=NULL,
 		  		 edgeLabels = NULL,
 		  		 nodeLab = c("default", "label"),
 		  		 edgeLab = c("formula","none"),
@@ -167,7 +167,9 @@ setMethod("plot", "fragPattern",
 		  	}
 
 		  	###Title
-		  	title <- paste("Pattern: ", mm2Name(x))
+		  	if(is.null(title)){
+		  	  title <- paste("Pattern: ", mm2Name(x))
+		  	}
 
 		  	if (tkplot) {
 		  		tkplot(
@@ -264,10 +266,12 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 
 	layout(layoutMatrix(min(byPage, length(occs_gid))))
 
+	res_plot <- vector(mode="list",length=nrow(occs))
 	for (i in 1:length(occs_gid)) {
 		gid <- occs_gid[i]
 		pos <- occs_pos[i]
 		map <- get_mapping(mgs[[gid]], g, loss_mz, root = pos)
+
 
 		###Plotting of the spectra
 		intv <- vertex_attr(mgs[[gid]], "rel_int")
@@ -277,11 +281,17 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 		###Peaks are split between matched and non matched.
 		matched_peaks_idx <- match(map[2,], ids)
 		non_matched_peaks_idx <- seq(1, length(mzs))[-matched_peaks_idx]
+		
+		col_seq <- rep("#000000FF",length(mzs))
+		col_seq[matched_peaks_idx] <- col_vec[subOccs[i]]
+		
+		res_plot[[i]] <- data.frame(int=intv,mz=mzs,col=col_seq)
+		
 		plot(
 			mzs[non_matched_peaks_idx],
 			intv[non_matched_peaks_idx],
 			type = "h",
-			col = "black",
+			col = "#000000FF",
 			lwd = 3,
 			xlim = c(0, max(mzs) * 1.05),
 			ylim = c(0, max(intv * 1.05)),
@@ -298,6 +308,8 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 			   lwd = 3)
 	}
 	layout(1)
+	
+	return(invisible(res_plot))
 })
 # setMethod("plot","fragPattern",function(x,y=NULL,mode=c("fixed","interactive"),
 # 										 labsNodes=c(),
