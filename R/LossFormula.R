@@ -5,11 +5,28 @@
 REF_MINEMS2_ATOMS_NAMES <- tabAtoms()$name
 REF_MINEMS2_HALOGENS <- tabAtoms()$name[tabAtoms()$halogen]
 
-LossFormula <- function(formula=NULL,ref=NULL,sep=NULL){
+
+getAtomsMass <- function(atoms){
+  temp <- tabAtoms()
+  temp$mass[temp$name %in% atoms]
+}
+
+calc_mass_raw <- function(row,atoms_m){
+  sum(row*atoms_m)
+}
+
+
+LossFormulaFromSingleString <- function(formula,ref,sep="|"){
+  allf <- str_split(formula,fixed(sep),simplify=TRUE)[1,]
+  LossFormula(allf,ref=ref)
+}
+
+
+LossFormula <- function(formula=NULL,ref=NULL){
   ####We check the class of the arguments
   lf <- new("LossFormula")
   
-  if(is.null(formula)|is.na(formula)){
+  if(is.null(formula)|((length(formula)==1) & (is.na(formula)))){
     if(is.null(ref)){
       lf@formula <- matrix(NA_integer_,nrow=0,ncol=0)
     }else{
@@ -116,9 +133,6 @@ orderByRDBE <- function(lf){
   lf
 }
 
-createLabel <- function(lf){
-  
-}
 
 setMethod("%in%",signature=list(x="character",table="LossFormula"),function(x,table){
   vf <- stringToFormula(x,vnames=colnames(table@formula))
@@ -126,37 +140,64 @@ setMethod("%in%",signature=list(x="character",table="LossFormula"),function(x,ta
 })
 
 
-setMethod("addFormula",signature = list(object = "LossFormula",x = "ANY"),function(object,x){
+setMethod("addFormula",signature = list(x = "LossFormula",lf = "ANY"),function(x,lf){
+  l_atoms <- colnames(x@formula)
+  
+  if(typeof(lf)=="character"){
+    lf <- stringToFormula(lf,vnames=l_atoms)
+  }else if(typeof(lf)=="numeric"){
+    lf <- convertFormula(lf,x@formula)
+  }else if(typeof(lf)=="integer"){
+    lf <- convertFormula(lf,x@formula)
+  }
+  x@formula <- cbind(x@formula,lf)
+  x
+})
+
+is_sub_raw <- function(rf1,rf2){
+  all(rf1<=rf2)
+}
+
+
+###Vectorized implementation.
+setMethod("isSubformula",signature = list(x="LossFormula",lf = "character"),function(x,lf){
+  l_atoms <- colnames(x@formula)
+  lf <- stringToFormula(lf,vnames=l_atoms)
+  vr <-apply(x@formula,1,is_sub_raw,rf2=lf)
+  vr
+})
+
+
+setMethod("isSubformula",signature = list(x="LossFormula",lf="LossFormula"),function(x,lf){
+  
   l_atoms <- colnames(object@formula)
   
-  if(typeof(x)=="character"){
-    x <- stringToFormula(x,vnames=l_atoms)
-  }else if(typeof(x)=="numeric"){
-    x <- convertFormula(x,object@formula)
-  }else if(typeof(x)=="integer"){
-    x <- convertFormula(x,object@formula)
-  }
-  object@formula <- cbind(object@formula,x)
-  object
+  tm <- t(apply(x@formula,1,function(x,y,agg){
+    res <- apply(y,1,function(w,z){
+      is_sub_raw(w,z)
+    },z=x)
+    
+    any(res)
+  },y=lf@formula))
+  
+  any(tm)
 })
 
 
 
-setMethod("addFormula",signature = list(object = "LossFormula",x = "LossFormula"),function(object,x){
-  if(any(colnames(object@formula)!=colnames(x@formula))) stop("Incompatible atoms in formula.")
-  l_atoms <- colnames(object@formula)
+setMethod("addFormula",signature = list(x = "LossFormula",lf = "LossFormula"),function(x,lf){
+  if(any(colnames(lf@formula)!=colnames(x@formula))) stop("Incompatible atoms in formula.")
+  l_atoms <- colnames(lf@formula)
   
-  idobj <- as.character(object)
+  idobj <- as.character(lf)
   idx <- as.character(x)
   
   pok <- !(idx %in% idobj)
   
   if(sum(pok)!=0){
-    object@formula <- rbind(object@formula,x@formula[pok,,drop=FALSE])
+    lf@formula <- rbind(lf@formula,x@formula[pok,,drop=FALSE])
   }
-  
-  ####We check the value
-  object
+  lf
 })
 
 

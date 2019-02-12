@@ -17,7 +17,8 @@ ms2Lib(x, suppInfos = NULL, ids = NULL, intThreshold = NULL,
 
 \item{suppInfos}{Supplementary information to be associated to the spectra.
 It should be of the same size as the number of spectra. If there is a "file" column, this
-column is used to match the file.}
+column is used to match the filenames. A "composition" or "formula" fields may also be present, and is then used to set the
+formula of the molecules.}
 
 \item{ids}{A supplementary vector giving a set of ids to design the spectra. It may be any character vector which
 does not start with \textbf{P,L,S} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
@@ -27,7 +28,8 @@ where N is the number of furnished spectra.}
 \item{infosFromFiles}{Shall the other informations present in the files be added to the supplementary infos.}
 }
 \description{
-Create a ms2Lib object from files in suppoerted input formats.
+Create a ms2Lib object from file sin the correct format. Eventually add some supplementary informations given in a file. These supplementary informations
+may notably include the composition or the ofrmula of the molecules, which will then be used to plot the created graphs..
 }
 \examples{
 print("examples to be put here")

@@ -1,6 +1,7 @@
 ###CORRESPONDANCE TABLE
 CORR_TABLE <- list("D"="dags","S"="spectra","P"="patterns","L"="losses")#"F"="fragments"
 COVERAGE_NAME <- "coverage"
+UNKNOWN_FORMULA <- NA_character_
 
 
 
@@ -176,10 +177,18 @@ make_initial_title <- function(spec_infos){
 }
 
 
+convert_formula <- function(form_vec){
+  pnf <- which(is.na(form_vec)|(nchar(form_vec)==0))
+  form_vec[pnf] <- UNKNOWN_FORMULA
+  form_vec
+}
+
+
 
 #' ms2Lib constructor
 #'
-#' Create a ms2Lib object from files in suppoerted input formats.
+#' Create a ms2Lib object from file sin the correct format. Eventually add some supplementary informations given in a file. These supplementary informations
+#' may notably include the composition or the ofrmula of the molecules, which will then be used to plot the created graphs..
 #'
 #' @export
 #' @param x May be one of the following
@@ -190,7 +199,8 @@ make_initial_title <- function(spec_infos){
 #' }
 #' @param suppInfos Supplementary information to be associated to the spectra.
 #' It should be of the same size as the number of spectra. If there is a "file" column, this
-#' column is used to match the file.
+#' column is used to match the filenames. A "composition" or "formula" fields may also be present, and is then used to set the
+#' formula of the molecules.
 #' @param ids A supplementary vector giving a set of ids to design the spectra. It may be any character vector which
 #' does not start with \textbf{P,L,S} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
 #' and it contains an id fields, it will be used. If not ids is furnished and id will be generated for each spectra as S1,S2,...,SN
@@ -311,6 +321,17 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	  temp_df <- cbind(temp_df,suppMetadata)
 	}
 	
+	
+	####Adding the molecular formula.
+	cnames <- tolower(colnames(temp_df))
+	
+	pf <- which(cnames %in% c("formula"))
+	if(length(pf)==0){
+	  message("No 'formula' column found. All formula are considered as unknown.")
+	  temp_df$formula <- rep(UNKNOWN_FORMULA,nrow(temp_df))
+	}else{
+	  temp_df[,pf] <- convert_formula(as.character(temp_df[,pf]))
+	}
 
 	mm2SpectraInfos(m2l) <- temp_df
 	m2l
@@ -332,7 +353,9 @@ setMethod("length","ms2Lib",function(x){
 	return(length(mm2Spectra(x)))
 })
 
-
+getFormula <- function(m2l){
+  return(as.character(m2l@spectraInfo[,"formula"]))
+}
 
 
 

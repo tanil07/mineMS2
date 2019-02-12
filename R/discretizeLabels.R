@@ -176,7 +176,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	    
 	    genf <- combineLossFormula(allF[[pf1[j]]],allF[[pf2[j]]])
 	    
-	    allF[[i]] <- addFormula(allF[[i]],genf)
+	    allF[[i]] <- addFormula(genf,allF[[i]])
 	    
 	  }
 	  allF[[i]] <- orderByRDBE(allF[[i]])

@@ -37,6 +37,7 @@ Collate:
     'fragPattern.R'
     'gaussianMixtureProcessing.R'
     'graphConversion.R'
+    'labels.R'
     'mineMS2-package.R'
     'ms2Lib.R'
     'ms2LibSplit.R'

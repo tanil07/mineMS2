@@ -88,9 +88,11 @@ setGeneric("scorePatterns",function(m2l,...) standardGeneric("scorePatterns"))
 
 setGeneric("setIds",function(m2l,...) standardGeneric("setIds"))
 
-setGeneric("addFormula",function(object,x,...) standardGeneric("addFormula"))
+setGeneric("addFormula",function(x,lf,...) standardGeneric("addFormula"))
 
+setGeneric("isSubformula",function(x,lf,...) standardGeneric("isSubformula"))
 
+setGeneric("isSubformulaIdx",function(x,lf,...) standardGeneric("isSubformulaIdx"))
 
 
 ###ms2Lib research generics.
