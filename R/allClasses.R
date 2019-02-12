@@ -28,6 +28,7 @@ setClass(
 		dags = "list",
 		losses = "data.frame",
 		fragments = "data.frame",
+		atoms = "list",
 		patterns = "list",
 		loss = "logical",
 		lattice = "ANY",
@@ -43,6 +44,7 @@ setClass(
 		dags = list(),
 		losses = data.frame(),
 		fragments = data.frame(),
+		atoms = list(),
 		patterns = list(),
 		loss = TRUE,
 		lattice = make_empty_graph(),
@@ -74,4 +76,14 @@ setClass(
 		root = as.integer(1),
 		name = character()
 	)
+)
+
+# Formula is a named numeric.
+setClass("LossFormula",
+         slot = list(
+           formula = "matrix"
+         ),
+         prototype = list(
+           formula = matrix(NA_integer_,nrow=0,ncol=0)
+         )
 )

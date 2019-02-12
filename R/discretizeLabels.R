@@ -1,4 +1,4 @@
-
+#' @include LossFormula.R
 
 ###Function used to construct the edges labels dataset.
 make_label_loss <- function(lab_edges){
@@ -49,7 +49,7 @@ make_label_frag <- function(lab_frags){
 
 #' Discretize the mass differences.
 #'
-#' Build graph using discrtized mass differences as edges.
+#' Build graph using discretized mass differences as edges.
 #'
 #' @param m2l The ms2 lib object to be discretized.
 #' @param ppm the maximum authorized deviation in ppm (parts per million).
@@ -128,6 +128,8 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 			atoms <- list("C"= max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6)
 		}
 	}
+	
+	m2l@atoms <- atoms
 
 
 	if(is.null(penalizedLosses)){
@@ -145,7 +147,48 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 								max_overlap = maxOverlap, strictMatching = strictMatching,
 								prec.ppm = precPpm,prec.dmz = precDmz, atoms = atoms,
 								floss = penalizedLosses, nfloss = majoredLosses, ...)
-
+	
+	
+	###At this step we add the formula if necessary.
+	
+	###We find the postion of the last elementsapply()
+	plast <- which(res_list$elems$mz<limMzFormula[2])
+	plast <- plast[length(plast)]
+	ref <- names(atoms)
+	
+	to_correct <- find_combinations_ranges(res_list$elems[1:(plast+1),"mzmin"],res_list$elems[1:(plast+1),"mzmax"],limMzFormula[2])
+	
+	###We merge the formula when necessary.
+	
+	allF <- sapply(res_list$elems$formula[1:plast],function(x){
+	  orderByRDBE(LossFormula(str_split(x,fixed("|"),simplify=TRUE)[1,],ref=c("C","H","O","N")))
+	})
+	to_correct <- find_combinations_ranges(m2l@losses[1:(plast+1),"mzmin"],m2l@losses[1:(plast+1),"mzmax"],200,0)
+	sapply(to_correct,function(x) length(x$f1))
+	
+	
+	for(i in seq_along(allF)){
+	  ####
+	  pf1 <- to_correct[[i]]$f1+1
+	  pf2 <- to_correct[[i]]$f2+1
+	  
+	  for(j in seq_along(pf1)){
+	    
+	    genf <- combineLossFormula(allF[[pf1[j]]],allF[[pf2[j]]])
+	    
+	    allF[[i]] <- addFormula(allF[[i]],genf)
+	    
+	  }
+	  allF[[i]] <- orderByRDBE(allF[[i]])
+	}
+	
+	####Now we rebuild the edge labels.
+	res_list$elems[1:plast] <- sapply(allF,function(x){
+	  paste(as.character(x),collapse = "|")
+	})
+	sapply(allF)
+	
+	
 	###Add the fusing part of the edge labels.
 	message("Fusing the edges labels.")
 

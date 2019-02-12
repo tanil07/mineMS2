@@ -47,7 +47,7 @@ If it is NULL, the default list is C:limMzFormula[2]%/%12, H:50, N:6 ,O:6.}
 An ms2Lib object with filled fileds and constructed dags.
 }
 \description{
-Build graph using discrtized mass differences as edges.
+Build graph using discretized mass differences as edges.
 }
 \examples{
 print("Examples ot be put here !")

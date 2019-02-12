@@ -11,7 +11,8 @@ tabAtoms <- function(){
 				 34.0968853, 78.918336, 126.904477, 27.976928, 31.972071,
 				 30.973763, 73.922477)
 	val_atoms <- c(1, 4, 2, 3, 1, 1, 1, 1, 4, 2, 3, 6)
-	return(data.frame(name = n_atoms, mass = m_atoms, valence = val_atoms,
+	halogens <- c(FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE)
+	return(data.frame(name = n_atoms, mass = m_atoms, valence = val_atoms, halogen = halogens,
 					  stringsAsFactors = FALSE))
 }
 

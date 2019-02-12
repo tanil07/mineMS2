@@ -88,6 +88,10 @@ setGeneric("scorePatterns",function(m2l,...) standardGeneric("scorePatterns"))
 
 setGeneric("setIds",function(m2l,...) standardGeneric("setIds"))
 
+setGeneric("addFormula",function(object,x,...) standardGeneric("addFormula"))
+
+
+
 
 ###ms2Lib research generics.
 setGeneric("vrange",function(m2l,type,...) standardGeneric("vrange"))

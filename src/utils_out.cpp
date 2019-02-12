@@ -336,6 +336,113 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 
 
 
+//Correct formula mistake.
+bool intersect(double b1min,double b1max,double b2min,double b2max){
+  double mmin = std::max(b1min,b2min);
+  double mmax = std::min(b1max,b2max);
+  if(mmax>mmin){
+    return(true);
+  }
+  return(false);
+}
+
+IntegerVector extend_match(double valmin, double valmax, int pos, NumericVector bmin, NumericVector bmax){
+  int pleft = pos;
+  int pright = pos;
+  while(intersect(valmin,valmax,bmin[pleft],bmax[pleft]) & (pleft>=0)){
+    pleft--; 
+  }
+  
+  while(intersect(valmin,valmax,bmin[pright],bmax[pright]) & (pright<bmin.size())){
+    pright++; 
+  }
+  IntegerVector res;
+  res.push_back(pleft);
+  res.push_back(pright);
+  
+  return res;
+}
+
+//finding the limiting range of the value.
+IntegerVector bisect_search_borns(double valmin, double valmax, NumericVector bmin, NumericVector bmax){
+  int bleft = 0;
+  int bright = bmin.size()-1;
+  int csize = bright - bleft;
+  int mid = std::floor((bleft+bright)/2);
+  
+  //We try to find the first intersecting value.
+  while( !intersect(valmin,valmax,bmin[mid],bmax[mid]) & (csize > 1)){
+    if(bmax[mid]<valmin){
+      bleft = mid;
+      csize = bright - bleft;
+      mid = std::floor((bleft+bright)/2);
+    }else if(bmin[mid]>valmax){
+      bright = mid;
+      csize = bright - bleft;
+      mid = std::floor((bleft+bright)/2);
+    }
+  }
+  if(csize<=1){
+    IntegerVector res;
+    res.push_back(mid);
+    res.push_back(mid);
+    return(res);
+  }
+  
+  return extend_match(valmin,valmax,mid,bmin,bmax);
+}
+
+// [[Rcpp::export]]
+List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
+                              NumericVector cmzmax){
+  
+  int N = bmin.size();
+  
+  int i = 0;
+  int j = 0;
+  
+  List to_return(bmin.size());
+  for(int i=0;i<to_return.size();i++){
+    IntegerVector v1(0);
+    IntegerVector v2(0);
+    List temp =List::create(Rcpp::Named("f1") = v1,Rcpp::Named("f2") = v2);
+    to_return[i]=temp;
+  }
+  
+  double mzmax = cmzmax[0];
+  double hmax,hmin;
+  IntegerVector res;
+  while( (bmax[i] < mzmax) & (i < bmin.size())){
+    j = i;
+    while(((hmin=(bmin[j]+bmin[i])) < mzmax) & (j<bmin.size())){
+      
+      //We calculate the borns
+      double hmax = bmax[j]+bmax[i];
+      
+      //We find the interval limit
+      res = bisect_search_borns(hmin,hmax,bmin,bmax);
+      
+      if(res[0]!=res[1]){
+        for(int ii = res[0]+1; ii < res[1]; ii++){
+          List temp = to_return[ii];
+          IntegerVector f1 = temp["f1"];
+          IntegerVector f2 = temp["f2"];
+          f1.push_back(i);
+          f2.push_back(j);
+          temp["f1"] = f1;
+          temp["f2"] = f2;
+          to_return[ii] = temp;
+        }
+      }
+      j++;
+    }
+    i++;
+  }
+  
+  return to_return;
+}
+
+
 
 
 

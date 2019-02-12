@@ -65,3 +65,7 @@ checkInter <- function(a_min, a_max, b_min, b_max) {
     .Call('_mineMS2_checkInter', PACKAGE = 'mineMS2', a_min, a_max, b_min, b_max)
 }
 
+find_combinations_ranges <- function(bmin, bmax, cmzmax) {
+    .Call('_mineMS2_find_combinations_ranges', PACKAGE = 'mineMS2', bmin, bmax, cmzmax)
+}
+

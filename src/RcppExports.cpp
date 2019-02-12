@@ -222,6 +222,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// find_combinations_ranges
+List find_combinations_ranges(NumericVector bmin, NumericVector bmax, NumericVector cmzmax);
+RcppExport SEXP _mineMS2_find_combinations_ranges(SEXP bminSEXP, SEXP bmaxSEXP, SEXP cmzmaxSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type bmin(bminSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type bmax(bmaxSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type cmzmax(cmzmaxSEXP);
+    rcpp_result_gen = Rcpp::wrap(find_combinations_ranges(bmin, bmax, cmzmax));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mineMS2_closeMatch", (DL_FUNC) &_mineMS2_closeMatch, 6},
@@ -240,6 +253,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mineMS2_formulaFromString", (DL_FUNC) &_mineMS2_formulaFromString, 2},
     {"_mineMS2_disjointBins", (DL_FUNC) &_mineMS2_disjointBins, 4},
     {"_mineMS2_checkInter", (DL_FUNC) &_mineMS2_checkInter, 4},
+    {"_mineMS2_find_combinations_ranges", (DL_FUNC) &_mineMS2_find_combinations_ranges, 3},
     {NULL, NULL, 0}
 };
 
