@@ -202,5 +202,10 @@ setMethod("addFormula",signature = list(x = "LossFormula",lf = "LossFormula"),fu
 
 
 setMethod("show","LossFormula",function(object){
-  cat("A LossFormulz object containing",nrow(object@formula),"formula with atoms",paste(colnames(object@formula),collapse = ","))
+  cat("A LossFormula object containing",nrow(object@formula),"formula with atoms",paste(colnames(object@formula),collapse = ","))
+})
+
+
+setMethod(length,"LossFormula",function(x){
+  nrow(x@formula)
 })

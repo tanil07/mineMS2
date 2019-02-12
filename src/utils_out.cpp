@@ -368,28 +368,24 @@ IntegerVector bisect_search_borns(double valmin, double valmax, NumericVector bm
   int bleft = 0;
   int bright = bmin.size()-1;
   int csize = bright - bleft;
-  int mid = std::floor((bleft+bright)/2);
+  int mid = (bleft+bright)/2;
+  
+  IntegerVector resn;
+  resn.push_back(mid);
+  resn.push_back(mid);
   
   //We try to find the first intersecting value.
-  while( !intersect(valmin,valmax,bmin[mid],bmax[mid]) & (csize > 1)){
+  while(bleft!=bright){
     if(bmax[mid]<valmin){
-      bleft = mid;
-      csize = bright - bleft;
-      mid = std::floor((bleft+bright)/2);
+      bleft = mid+1;
+    }else if(intersect(valmin,valmax,bmin[mid],bmax[mid])){
+      return extend_match(valmin,valmax,mid,bmin,bmax);
     }else if(bmin[mid]>valmax){
-      bright = mid;
-      csize = bright - bleft;
-      mid = std::floor((bleft+bright)/2);
+      bright = mid-1;
     }
+    mid = (bleft+bright)/2;
   }
-  if(csize<=1){
-    IntegerVector res;
-    res.push_back(mid);
-    res.push_back(mid);
-    return(res);
-  }
-  
-  return extend_match(valmin,valmax,mid,bmin,bmax);
+  return resn;
 }
 
 // [[Rcpp::export]]
@@ -403,6 +399,7 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
   
   List to_return(bmin.size());
   for(int i=0;i<to_return.size();i++){
+    
     IntegerVector v1(0);
     IntegerVector v2(0);
     List temp =List::create(Rcpp::Named("f1") = v1,Rcpp::Named("f2") = v2);
@@ -412,9 +409,11 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
   double mzmax = cmzmax[0];
   double hmax,hmin;
   IntegerVector res;
-  while( (bmax[i] < mzmax) & (i < bmin.size())){
+  while( (bmax[i] < mzmax) & (i< 10)){ //bmin.size())){
     j = i;
-    while(((hmin=(bmin[j]+bmin[i])) < mzmax) & (j<bmin.size())){
+    
+    Rcout << i <<" ";
+    while(((hmin=(bmin[j]+bmin[i])) < mzmax) & (j< 10)){ //bmin.size())){
       
       //We calculate the borns
       double hmax = bmax[j]+bmax[i];

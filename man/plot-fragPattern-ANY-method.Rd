@@ -7,8 +7,9 @@
 \usage{
 \S4method{plot}{fragPattern,ANY}(x, y = NULL, title = NULL,
   edgeLabels = NULL, nodeLab = c("default", "label"),
-  edgeLab = c("formula", "none"), mzdigits = 3, vertex_size = 55,
-  subNodes = NULL, tkplot = FALSE, ...)
+  edgeLab = c("adapted", "formula", "none"), atoms = c("C", "H", "O",
+  "N", "S", "P"), formula = NA_character_, mzdigits = 3,
+  vertex_size = 55, subNodes = NULL, tkplot = FALSE, ...)
 }
 \arguments{
 \item{y}{= NULL,}

@@ -17,28 +17,37 @@
 #Return the formula witht he most labels..
 get_best_label <- function(lf,oformula,mzv,atoms){
   
-  ###Majority vote.
-  vm <- sapply(oformula,isSubformula,x=lf,simplify=TRUE)
-  bf <- apply(vm,1,sum)
-  bloss <- which(bf==max(bf))
+
+  
+  bloss <- NULL
+  bsolo <- 0
+  if(is.na(oformula)){
+    bloss <- 1:length(lf)
+  }else{
+    ###Majority vote.
+    vm <- sapply(oformula,isSubformula,x=lf,simplify=TRUE)
+    bf <- apply(vm,1,sum)
+    bloss <- which(bf==max(bf))
+  }
   
   ###We keep the one the closest to the furnished mass.
   if(length(bloss)>1){
     m_atoms <- getAtomsMass(atoms)
     vmz <- lf@formula[bloss] %*% m_atoms
     bloss <- bloss[which.min(abs(vmz-mzv))]
+    bsolo <- as.numeric(as.numeric(bf[bloss])==nrow(lf@formula))
   }
   
   ###We return the subformula with the maximum size
-  c(bloss,as.numeric(bf[bloss])==nrow(lf@formula))
+  c(bloss,bsolo)
   
 }
 
 
-make_labels_raw <- function(g,elabs,atoms,attr_name="lab",formula=character(0)){
+make_labels_raw <- function(g,elabs,atoms,attr_name="lab",formula=character(0),unknow_label = NA_character_){
   
   ####We first extract all the edges labels of the gapths
-  re <- vertex_attr(g,attr_name)
+  re <- edge_attr(g,attr_name)
   ure <- unique(re)
   
   ###We extract all the formula.
@@ -46,20 +55,24 @@ make_labels_raw <- function(g,elabs,atoms,attr_name="lab",formula=character(0)){
   to_choose <- which(!is.na(tev$formula))
 
   
-  labs <- rep(NA_character_,length(ure))
+  labs <- rep(unknow_label,length(ure))
+  all_partial <- rep(NA,length(ure))
+  all_solo <- rep(NA,length(ure))
   
+  if(length(to_choose) != 0){
   ###For all the formula labels we find the best subformula;
   mlabs <- sapply(to_choose,function(x,elabs,oformula,atoms){
     lf <- LossFormulaFromSingleString(elabs$formula[x],ref=atoms,sep="|")
     bpos <- get_best_label(lf,oformula=oformula,mzv=elabs$mz[x],atoms=atoms)
     ####We generate the formula string.
-    c(formulaToString(lf@formula[bpos[1],],vnames=colnames(lf@formula)),ifelse(bpos[2],TRUE,FALSE))
+    c(formulaToString(lf@formula[bpos[1],],vnames=colnames(lf@formula)),ifelse(bpos[2],"TRUE","FALSE"),
+      as.character(nrow(lf@formula)))
     },oformula=formula,atoms=atoms,elabs=tev)
   
   labs[to_choose] <- mlabs[1,]
-  
-  ####Now we complete the vector
-  all_lab <- labs[match(re,ure)]
-  return(list(lab=all_lab,partial = mlabs[,2]))
+  all_partial[to_choose] <- as.logical(mlabs[2,])
+  all_solo[to_choose] <- as.logical(mlabs[3,])
+  }
+  return(list(id=ure,lab=labs,partial = all_partial,solo=all_solo))
 }
 

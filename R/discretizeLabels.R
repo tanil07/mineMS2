@@ -150,24 +150,32 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	
 	
 	###At this step we add the formula if necessary.
+
 	
 	###We find the postion of the last elementsapply()
 	plast <- which(res_list$elems$mz<limMzFormula[2])
 	plast <- plast[length(plast)]
 	ref <- names(atoms)
 	
+	message("Formula extensions : ")
+	browser()
 	to_correct <- find_combinations_ranges(res_list$elems[1:(plast+1),"mzmin"],res_list$elems[1:(plast+1),"mzmax"],limMzFormula[2])
 	
 	###We merge the formula when necessary.
+	o10 <- 0
 	
 	allF <- sapply(res_list$elems$formula[1:plast],function(x){
 	  orderByRDBE(LossFormula(str_split(x,fixed("|"),simplify=TRUE)[1,],ref=c("C","H","O","N")))
 	})
-	to_correct <- find_combinations_ranges(m2l@losses[1:(plast+1),"mzmin"],m2l@losses[1:(plast+1),"mzmax"],200,0)
 	sapply(to_correct,function(x) length(x$f1))
 	
-	
+
 	for(i in seq_along(allF)){
+	  
+	  if(((i*10)/length(allF))!=o10){
+	    o10 <- ((i*10)/length(allF))
+	    message(paste(o10*10),appendLF = FALSE)
+	  }
 	  ####
 	  pf1 <- to_correct[[i]]$f1+1
 	  pf2 <- to_correct[[i]]$f2+1

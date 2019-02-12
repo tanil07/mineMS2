@@ -123,7 +123,9 @@ setMethod("plot", "fragPattern",
 		  		 title=NULL,
 		  		 edgeLabels = NULL,
 		  		 nodeLab = c("default", "label"),
-		  		 edgeLab = c("formula","none"),
+		  		 edgeLab = c("adapted","formula","none"),
+		  		 atoms=c("C","H","O","N","S","P"),
+		  		 formula=NA_character_,
 		  		 mzdigits = 3,
 		  		 vertex_size = 55,
 		  		 subNodes = NULL,
@@ -134,11 +136,23 @@ setMethod("plot", "fragPattern",
 
 		  	g <- mm2Graph(x)
 		  	###We determine the edge label
+		  	
+		  	
+		  	
 		  	elabs <- edge_attr(g, "lab")
 		  	txtlabs <- rep("", length(elabs))
-		  	if (edgeLab == "formula")
+		  	u_label <- NULL
+		  	if(edgeLab == "adapted"){
+		  	  u_label <- make_labels_raw(g,edgeLabels,atoms,attr_name="lab",formula=formula)
+		  	  vm <- match(elabs,u_label$id)
+		  	  txtlabs <- u_label$lab[vm]
+		  	  pnf <- which(is.na(txtlabs))
+		  	  if(length(pnf)>0){
+		  	    txtlabs[pnf] <- sprintf(paste("%0.",mzdigits,"f",sep=""),edgeLabels$mz[vm[pnf]])
+		  	  }
+		  	}else if (edgeLab == "formula"){
 		  		txtlabs <- edgeLabels[elabs, "labs"]
-
+		  	}
 
 		  	###Node labels, nodes are always in the right order
 		  	nodes0 <- g[[1,]][[1]]
@@ -149,7 +163,16 @@ setMethod("plot", "fragPattern",
 		  	if (nodeLab == "label") {
 		  		nlabs[pnon0] <- paste(nlabs[pnon0], labs0)
 		  	} else if (nodeLab == "default") {
-		  		nlabs[pnon0] <- paste(nlabs[pnon0],edgeLabels[labs0,"full_labels"])
+		  	  u_label$lab[match(labs0,u_label$id)]
+		  	  vm <- match(labs0,u_label$id)
+		  	  vtxtlabs <- u_label$lab[vm]
+		  	  pnf <- which(is.na(vtxtlabs))
+		  	  if(length(pnf)>0){
+		  	    vtxtlabs[pnf] <- HIGH_MASS
+		  	  } 
+		  	  
+		  		nlabs[pnon0] <- paste(nlabs[pnon0]," - ",sprintf(paste("%.",mzdigits,"f",sep=""),edgeLabels$mz[labs0]),"\n",
+		  		                      vtxtlabs)
 		  	}
 
 		  	if(!is.null(subNodes)){
@@ -161,9 +184,9 @@ setMethod("plot", "fragPattern",
 		  		te <- tail_of(g,E(g))
 		  		w_edges <- which((!(se %in% subNodes))&
 		  								(!(te %in% subNodes)))
-				if(length(w_edges)>0){
-		  			txtlabs[w_edge] <- ""
-				}
+  				if(length(w_edges)>0){
+  		  			txtlabs[w_edge] <- ""
+  				}
 		  	}
 
 		  	###Title
