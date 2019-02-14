@@ -340,7 +340,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 bool intersect(double b1min,double b1max,double b2min,double b2max){
   double mmin = std::max(b1min,b2min);
   double mmax = std::min(b1max,b2max);
-  if(mmax>mmin){
+  if(mmax>=mmin){
     return(true);
   }
   return(false);
@@ -365,6 +365,7 @@ IntegerVector extend_match(double valmin, double valmax, int pos, NumericVector 
 
 //finding the limiting range of the value.
 IntegerVector bisect_search_borns(double valmin, double valmax, NumericVector bmin, NumericVector bmax){
+  //Rcout <<"in" << std::endl;
   int bleft = 0;
   int bright = bmin.size()-1;
   int csize = bright - bleft;
@@ -375,16 +376,19 @@ IntegerVector bisect_search_borns(double valmin, double valmax, NumericVector bm
   resn.push_back(mid);
   
   //We try to find the first intersecting value.
-  while(bleft!=bright){
+  while(bleft<bright){
+    //Rcout << bleft <<"_" << mid<<"_" << bright << std::endl;
     if(bmax[mid]<valmin){
       bleft = mid+1;
     }else if(intersect(valmin,valmax,bmin[mid],bmax[mid])){
+      //Rcout <<"outv";
       return extend_match(valmin,valmax,mid,bmin,bmax);
     }else if(bmin[mid]>valmax){
       bright = mid-1;
     }
     mid = (bleft+bright)/2;
   }
+  //Rcout <<"outf";
   return resn;
 }
 
@@ -409,11 +413,11 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
   double mzmax = cmzmax[0];
   double hmax,hmin;
   IntegerVector res;
-  while( (bmax[i] < mzmax) & (i< 10)){ //bmin.size())){
+  while( (bmax[i] < mzmax) & (i< bmin.size())){
     j = i;
+    // Rcout << i <<" ";
     
-    Rcout << i <<" ";
-    while(((hmin=(bmin[j]+bmin[i])) < mzmax) & (j< 10)){ //bmin.size())){
+    while(((hmin=(bmin[j]+bmin[i])) < mzmax)& (j <bmin.size())){
       
       //We calculate the borns
       double hmax = bmax[j]+bmax[i];
@@ -421,7 +425,7 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
       //We find the interval limit
       res = bisect_search_borns(hmin,hmax,bmin,bmax);
       
-      if(res[0]!=res[1]){
+      if(res[0]<res[1]){
         for(int ii = res[0]+1; ii < res[1]; ii++){
           List temp = to_return[ii];
           IntegerVector f1 = temp["f1"];

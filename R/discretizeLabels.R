@@ -158,24 +158,24 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	ref <- names(atoms)
 	
 	message("Formula extensions : ")
-	browser()
+	
 	to_correct <- find_combinations_ranges(res_list$elems[1:(plast+1),"mzmin"],res_list$elems[1:(plast+1),"mzmax"],limMzFormula[2])
 	
 	###We merge the formula when necessary.
 	o10 <- 0
 	
-	allF <- sapply(res_list$elems$formula[1:plast],function(x){
-	  orderByRDBE(LossFormula(str_split(x,fixed("|"),simplify=TRUE)[1,],ref=c("C","H","O","N")))
-	})
+	allF <- sapply(res_list$elems$formula[1:plast],function(x,atoms){
+	  orderByRDBE(LossFormula(str_split(x,fixed("|"),simplify=TRUE)[1,],ref=atoms))
+	},atoms=names(m2l@atoms))
 	sapply(to_correct,function(x) length(x$f1))
 	
 
 	for(i in seq_along(allF)){
 	  
-	  if(((i*10)/length(allF))!=o10){
-	    o10 <- ((i*10)/length(allF))
-	    message(paste(o10*10),appendLF = FALSE)
-	  }
+	  # if(((i*10)/length(allF))!=o10){
+	  #   o10 <- ((i*10)/length(allF))
+	  #   message(paste(o10*10),appendLF = FALSE)
+	  # }
 	  ####
 	  pf1 <- to_correct[[i]]$f1+1
 	  pf2 <- to_correct[[i]]$f2+1
@@ -191,10 +191,9 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	}
 	
 	####Now we rebuild the edge labels.
-	res_list$elems[1:plast] <- sapply(allF,function(x){
+	res_list$elems$formula[1:plast] <- sapply(allF,function(x){
 	  paste(as.character(x),collapse = "|")
 	})
-	sapply(allF)
 	
 	
 	###Add the fusing part of the edge labels.

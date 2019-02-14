@@ -341,7 +341,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 #' @export
 setMethod("show","ms2Lib",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
-	cat("It has",nrow(mm2EdgesLabels(object)),"edges labels built with atoms",paste(names(m2l@atoms),collapase=","),".\n")
+	cat("It has",nrow(mm2EdgesLabels(object)),"edges labels built with atoms",paste(names(m2l@atoms),collapse=","),".\n")
 	cat("The available supplementary informations are:",colnames(mm2SpectraInfos(m2l)),"\n")
 	cat("It contains: ",length(mm2Patterns(object)),"patterns\n")
 	if(length(mm2ReducedPatterns(m2l))!=0) cat("It has been reduced to ",
