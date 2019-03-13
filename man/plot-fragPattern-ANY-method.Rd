@@ -6,7 +6,7 @@
 \title{plotting a fargPattern object.}
 \usage{
 \S4method{plot}{fragPattern,ANY}(x, y = NULL, title = NULL,
-  edgeLabels = NULL, nodeLab = c("default", "label"),
+  edgeLabels = NULL, dags = NULL, nodeLab = c("default", "label"),
   edgeLab = c("adapted", "formula", "none"), atoms = c("C", "H", "O",
   "N", "S", "P"), formula = NA_character_, mzdigits = 3,
   vertex_size = 55, subNodes = NULL, tkplot = FALSE, ...)

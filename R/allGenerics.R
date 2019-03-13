@@ -22,6 +22,8 @@ setGeneric("mm2ReducedPatterns", function(m2l) standardGeneric("mm2ReducedPatter
 
 setGeneric("mm2ReducedLattice", function(m2l) standardGeneric("mm2ReducedLattice"))
 
+setGeneric("mm2Atoms", function(m2l) standardGeneric("mm2Atoms"))
+
 
 ###ms2Lib object setter
 setGeneric("mm2Spectra<-", function(m2l,value) standardGeneric("mm2Spectra<-"))
@@ -45,6 +47,8 @@ setGeneric("mm2LatticeIdxItems<-", function(m2l,value) standardGeneric("mm2Latti
 setGeneric("mm2ReducedPatterns<-", function(m2l,value) standardGeneric("mm2ReducedPatterns<-"))
 
 setGeneric("mm2ReducedLattice<-", function(m2l,value) standardGeneric("mm2ReducedLattice<-"))
+
+setGeneric("mm2Atoms<-", function(m2l,value) standardGeneric("mm2Atoms<-"))
 
 
 ###fragPattern object getter
@@ -101,4 +105,5 @@ setGeneric("vrange",function(m2l,type,...) standardGeneric("vrange"))
 ###ms2LibSplit generics.
 setGeneric("setComponents",function(m2l,components,...) standardGeneric("setComponents"))
 
-
+###LossFormula generic
+setGeneric("idxFormula",function(x,lf,...) standardGeneric("idxFormula"))

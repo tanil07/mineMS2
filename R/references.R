@@ -1,4 +1,13 @@
 
+###MACRO REFERENCES
+
+HIGH_MASS_SYMBOL <- NA_character_
+HIGH_MASS_INDICATOR <- NA_character_
+HIGH_MASS_LEGEND <- "high m/z"
+UNKNOWN_FORMULA_INDICATOR <- NA_real_
+UNKNOWN_FORMULA_LEGEND <- "unknown formula"
+
+
 #################
 #ATOMS REFERENCE#
 #################

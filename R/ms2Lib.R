@@ -1,3 +1,6 @@
+#' @include LossFormula.R
+
+
 ###CORRESPONDANCE TABLE
 CORR_TABLE <- list("D"="dags","S"="spectra","P"="patterns","L"="losses")#"F"="fragments"
 COVERAGE_NAME <- "coverage"
@@ -22,7 +25,9 @@ setMethod("mm2Ids","ms2Lib",function(m2l){
 	return(m2l@ids)
 })
 
-
+setMethod("mm2Atoms","ms2Lib",function(m2l){
+  return(m2l@atoms)
+})
 
 setMethod("mm2EdgesLabels","ms2Lib",function(m2l){
 	return(m2l@losses)
@@ -126,6 +131,12 @@ setMethod("mm2ReducedLattice<-","ms2Lib",function(m2l,value){
 	m2l@reducedLattice<- value
 	m2l
 })
+
+setMethod("mm2Atoms<-","ms2Lib",function(m2l,value){
+  m2l@atoms<- value
+  m2l
+})
+
 
 isLoss <- function(m2l){
 	m2l@loss
@@ -338,6 +349,11 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 }
 
 
+get_formula <- function(m2l){
+  vf <- match("formula",tolower(colnames(m2l@spectraInfo)))
+  return(m2l@spectraInfo[,vf])
+}
+
 #' @export
 setMethod("show","ms2Lib",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
@@ -354,7 +370,8 @@ setMethod("length","ms2Lib",function(x){
 })
 
 getFormula <- function(m2l){
-  return(as.character(m2l@spectraInfo[,"formula"]))
+  vnames <- tolower(colnames(m2l@spectraInfo))
+  return(as.character(m2l@spectraInfo[,match("formula",vnames)]))
 }
 
 
@@ -581,8 +598,8 @@ setMethod("plot", "ms2Lib",
 		  	}
 		  	rid <- parseId(x,y)
 		  	if(rid[[1]]=="patterns"){
-		  	  
-				plot(x[y],title = y,edgeLabels=(mm2EdgesLabels(x)),...)
+		  	  toccs <- x[y]@occurences[,1]
+				plot(x[y],title = y,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),formula=get_formula(x)[toccs],...)
 		  	}else if(rid[[1]]=="spectra"){
 		  		plot_Spectrum2(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){

@@ -1,55 +1,123 @@
+#' @include references.R
+#' @include labels.R
+#' @include LossFormula.R
+
 ###Motif plotting function uniquely.
 
-
-###CONSTANTS
-HIGH_MASS <- "high m/z"
-MULTIPLE_FORMULA <- "2+ formula"
-
-
-layoutMatrix <- function(n)
+GCD <- function (a, b, extended = FALSE) 
 {
+  stopifnot(is.numeric(a), is.numeric(b))
+  if (length(a) == 1) {
+    a <- rep(a, times = length(b))
+  }
+  else if (length(b) == 1) {
+    b <- rep(b, times = length(a))
+  }
+  n <- length(a)
+  e <- d <- g <- numeric(n)
+  for (k in 1:n) {
+    u <- c(1, 0, abs(a[k]))
+    v <- c(0, 1, abs(b[k]))
+    while (v[3] != 0) {
+      q <- floor(u[3]/v[3])
+      t <- u - v * q
+      u <- v
+      v <- t
+    }
+    e[k] <- u[1] * sign(a[k])
+    d[k] <- u[2] * sign(a[k])
+    g[k] <- u[3]
+  }
+  if (extended) {
+    return(list(g = g, c = e, d = d))
+  }
+  else {
+    return(g)
+  }
+}
+
+LCM <- function (a, b) 
+{
+  stopifnot(is.numeric(a), is.numeric(b))
+  if (length(a) == 1) {
+    a <- rep(a, times = length(b))
+  }
+  else if (length(b) == 1) {
+    b <- rep(b, times = length(a))
+  }
+  g <- GCD(a, b, extended = FALSE)
+  return(a/g * b)
+}
+
+
+expandMatrixMult <- function(mat,mult_row=1,mult_col=1){
+  te <- apply(mat,2,rep,each=mult_row,simplify=FALSE)
+  t(apply(te,1,rep,each=mult_col))
+}
+
+layoutMatrix <- function(n,margin=NA)
+{
+  tm <- NULL
+  
 	if (n == 1) {
-		return(matrix(c(1)))
+		tm <- (matrix(c(1)))
 	}
 	if (n == 2) {
-		return(matrix(c(1, 2), nrow = (2)))
+		tm <- (matrix(c(1, 2), nrow = (2)))
 	}
 	if (n == 3) {
-		return(matrix(c(1, 2, 3), nrow = (3)))
+		tm <- (matrix(c(1, 2, 3), nrow = (3)))
 	}
 	if (n == 4) {
-		return(matrix(c(1, 2, 3, 4), nrow = (2), byrow = TRUE))
+		tm <- (matrix(c(1, 2, 3, 4), nrow = (2), byrow = TRUE))
 	}
 	if (n == 5) {
-		return(matrix(c(1, 2, 3, 4, 5, 6), nrow = (2), byrow = TRUE))
+		tm <- (matrix(c(1, 2, 3, 4, 5, 6), nrow = (2), byrow = TRUE))
 	}
 	if (n == 6) {
-		return(matrix(c(1, 2, 3, 4, 5, 6), nrow = (2), byrow = TRUE))
+		tm <- (matrix(c(1, 2, 3, 4, 5, 6), nrow = (2), byrow = TRUE))
 	}
 	if (n == 7) {
-		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow = (3),
+		tm <- (matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow = (3),
 					  byrow = TRUE))
 	}
 	if (n == 8) {
-		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8), nrow = (2),
+		tm <- (matrix(c(1, 2, 3, 4, 5, 6, 7, 8), nrow = (2),
 					  byrow = TRUE))
 	}
 	if (n == 9) {
-		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow = (3),
+		tm <- (matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9), nrow = (3),
 					  byrow = TRUE))
 	}
 	if (n == 10) {
-		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+		tm <- (matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
 					  nrow = (4), byrow = TRUE))
 	}
 	if (n == 11) {
-		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+		tm <- (matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
 					  nrow = (4), byrow = TRUE))
 	}
 	if (n == 12) {
-		return(matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+		tm <- (matrix(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
 					  nrow = (4), byrow = TRUE))
 	}
+
+  if(!is.na(margin)){
+    ntot <- floor(1/margin)
+    xtot <- LCM(ntot,ncol(tm))
+    xmarg <- xtot%/%ntot
+    xvmul <- xtot/ncol(tm)
+    ytot <- LCM(ntot,nrow(tm))
+    ymarg <- ytot%/%ntot
+    yvmul <- ytot/nrow(tm)  
+    tm <- expandMatrixMult(tm,yvmul,xvmul)  
+    # browser()
+    tmx <- matrix(1,nrow=nrow(tm),ncol=xmarg)
+    tm <- cbind(tmx,tm+2)
+    tmy <- matrix(2,nrow=ymarg,ncol=ncol(tm))
+    tm <- rbind(tm,tmy)
+  }
+  return(tm)
 }
 
 
@@ -97,6 +165,10 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 
 
 
+
+
+
+
 #' plotting a fargPattern object.
 #'
 #' plot a fragPattern associated fragmentation
@@ -122,6 +194,7 @@ setMethod("plot", "fragPattern",
 		  		 y = NULL,
 		  		 title=NULL,
 		  		 edgeLabels = NULL,
+		  		 dags = NULL,
 		  		 nodeLab = c("default", "label"),
 		  		 edgeLab = c("adapted","formula","none"),
 		  		 atoms=c("C","H","O","N","S","P"),
@@ -131,63 +204,15 @@ setMethod("plot", "fragPattern",
 		  		 subNodes = NULL,
 		  		 tkplot = FALSE,
 		  		 ...) {
+		    
+		    
 		  	nodeLab <- match.arg(nodeLab)
 		  	edgeLab <- match.arg(edgeLab)
 
 		  	g <- mm2Graph(x)
 		  	###We determine the edge label
-		  	
-		  	
-		  	
-		  	elabs <- edge_attr(g, "lab")
-		  	txtlabs <- rep("", length(elabs))
-		  	u_label <- NULL
-		  	if(edgeLab == "adapted"){
-		  	  u_label <- make_labels_raw(g,edgeLabels,atoms,attr_name="lab",formula=formula)
-		  	  vm <- match(elabs,u_label$id)
-		  	  txtlabs <- u_label$lab[vm]
-		  	  pnf <- which(is.na(txtlabs))
-		  	  if(length(pnf)>0){
-		  	    txtlabs[pnf] <- sprintf(paste("%0.",mzdigits,"f",sep=""),edgeLabels$mz[vm[pnf]])
-		  	  }
-		  	}else if (edgeLab == "formula"){
-		  		txtlabs <- edgeLabels[elabs, "labs"]
-		  	}
-
-		  	###Node labels, nodes are always in the right order
-		  	nodes0 <- g[[1,]][[1]]
-		  	labs0 <- edge_attr(g, "lab", g[[1, , edges = TRUE]][[1]])
-		  	p0 <- 1
-		  	pnon0 <- as.numeric(nodes0)
-		  	nlabs <- rep("M", length(nodes0) + 1)
-		  	if (nodeLab == "label") {
-		  		nlabs[pnon0] <- paste(nlabs[pnon0], labs0)
-		  	} else if (nodeLab == "default") {
-		  	  u_label$lab[match(labs0,u_label$id)]
-		  	  vm <- match(labs0,u_label$id)
-		  	  vtxtlabs <- u_label$lab[vm]
-		  	  pnf <- which(is.na(vtxtlabs))
-		  	  if(length(pnf)>0){
-		  	    vtxtlabs[pnf] <- HIGH_MASS
-		  	  } 
-		  	  
-		  		nlabs[pnon0] <- paste(nlabs[pnon0]," - ",sprintf(paste("%.",mzdigits,"f",sep=""),edgeLabels$mz[labs0]),"\n",
-		  		                      vtxtlabs)
-		  	}
-
-		  	if(!is.null(subNodes)){
-		  		compN <- 1:length(nlabs)
-		  		compN <- compN[-subNodes]
-		  		nlabs[compN] <- ""
-
-		  		se <- head_of(g,E(g))
-		  		te <- tail_of(g,E(g))
-		  		w_edges <- which((!(se %in% subNodes))&
-		  								(!(te %in% subNodes)))
-  				if(length(w_edges)>0){
-  		  			txtlabs[w_edge] <- ""
-  				}
-		  	}
+		  	oformula <- sapply(get_formula(m2l)[mm2Occurences(x)[,"gid"]],LossFormula,ref=atoms)
+		  	labels <- makeLabelPattern(x,atoms,dags,edgeLabels,oformula=oformula)
 
 		  	###Title
 		  	if(is.null(title)){
@@ -200,9 +225,9 @@ setMethod("plot", "fragPattern",
 		  			layout = (layout_with_sugiyama(g)$layout),
 		  			canvas.width = 600,
 		  			canvas.height = 600,
-		  			vertex.label = nlabs,
+		  			vertex.label = labels$vertices,
 		  			vertex.size = vertex_size,
-		  			edge.label = txtlabs,
+		  			edge.label = labels$edges,
 		  			vertex.color = "orange",
 		  			main="title",
 		  			...
@@ -212,9 +237,9 @@ setMethod("plot", "fragPattern",
 		  		plot.igraph(
 		  			g,
 		  			layout = (layout_with_sugiyama(g)$layout),
-		  			vertex.label = nlabs,
+		  			vertex.label = labels$vertices,
 		  			vertex.size = vertex_size,
-		  			edge.label = txtlabs,
+		  			edge.label = labels$edges,
 		  			vertex.color = "orange",
 		  			main=title,
 		  			...
@@ -243,6 +268,7 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 											   subOccs=NULL,
 											   ...) {
 	###Verifying that a correct id have been queried.
+  omar <- par("mar")
 	fp <- NULL
 	if (class(pidx) == "fragPattern") {
 		fp <- pidx
@@ -286,9 +312,14 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	###THE IDX IS HANDLED BY C++ AND SHOULD BE CORRECT.
 	occs_gid <- occs[, 1]
 	occs_pos <- occs[, 2]
-
-	layout(layoutMatrix(min(byPage, length(occs_gid))))
-
+	layout(layoutMatrix(min(byPage, length(occs_gid)),margin = 0.1))
+	par(mar=c(0.1,0.1,0.1,0.1))
+	
+	###
+	plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+	plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+	
+	par(mar=c(2.5,2,2,0.5))
 	res_plot <- vector(mode="list",length=nrow(occs))
 	for (i in 1:length(occs_gid)) {
 		gid <- occs_gid[i]
@@ -319,8 +350,8 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 			xlim = c(0, max(mzs) * 1.05),
 			ylim = c(0, max(intv * 1.05)),
 			main = titles[gid],
-			xlab = "m/z",
-			ylab = "intensity",...
+			xlab = "",
+			ylab = "",...
 		)
 
 		###We add the matched peaks.
@@ -331,7 +362,9 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 			   lwd = 3)
 	}
 	layout(1)
-	
+	mtext(expression(bold("m/z")),side=1,padj=2)
+	mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+	par(mar=omar)
 	return(invisible(res_plot))
 })
 # setMethod("plot","fragPattern",function(x,y=NULL,mode=c("fixed","interactive"),

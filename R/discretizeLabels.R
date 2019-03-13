@@ -1,3 +1,4 @@
+#' @include references.R
 #' @include LossFormula.R
 
 ###Function used to construct the edges labels dataset.
@@ -46,6 +47,12 @@ make_label_frag <- function(lab_frags){
 }
 
 
+
+reorderAtom <- function(atoms){
+  
+  lf<- LossFormula(ref=names(atoms))
+  return(atoms[match(colnames(lf@formula),names(atoms))])
+}
 
 #' Discretize the mass differences.
 #'
@@ -129,7 +136,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 		}
 	}
 	
-	m2l@atoms <- atoms
+	m2l@atoms <- reorderAtom(atoms)
 
 
 	if(is.null(penalizedLosses)){
@@ -145,7 +152,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 								freq = freq, mzdigits = mzDigits,
 								limFormula = limMzFormula, maxFrag = maxFrags,
 								max_overlap = maxOverlap, strictMatching = strictMatching,
-								prec.ppm = precPpm,prec.dmz = precDmz, atoms = atoms,
+								prec.ppm = precPpm,prec.dmz = precDmz, atoms = m2l@atoms,
 								floss = penalizedLosses, nfloss = majoredLosses, ...)
 	
 	
@@ -157,26 +164,19 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	plast <- plast[length(plast)]
 	ref <- names(atoms)
 	
-	message("Formula extensions : ")
+	message("Formula extensions")
 	
 	to_correct <- find_combinations_ranges(res_list$elems[1:(plast+1),"mzmin"],res_list$elems[1:(plast+1),"mzmax"],limMzFormula[2])
 	
 	###We merge the formula when necessary.
-	o10 <- 0
-	
 	allF <- sapply(res_list$elems$formula[1:plast],function(x,atoms){
 	  orderByRDBE(LossFormula(str_split(x,fixed("|"),simplify=TRUE)[1,],ref=atoms))
 	},atoms=names(m2l@atoms))
-	sapply(to_correct,function(x) length(x$f1))
+	# sapply(to_correct,function(x) length(x$f1))
 	
 
 	for(i in seq_along(allF)){
 	  
-	  # if(((i*10)/length(allF))!=o10){
-	  #   o10 <- ((i*10)/length(allF))
-	  #   message(paste(o10*10),appendLF = FALSE)
-	  # }
-	  ####
 	  pf1 <- to_correct[[i]]$f1+1
 	  pf2 <- to_correct[[i]]$f2+1
 	  
@@ -209,18 +209,30 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	}
 
 	###Constructing the edges labels
-	templabs <- make_label_loss(res_list$elem)
+	templabs <- make_label_loss(res_list$elems)
 	# print(head(templabs))
 	res_list$elem$full_labels <- templabs$full_labs
 	res_list$elem$labs <- templabs$labs
 
-	mm2EdgesLabels(m2l) <- res_list$elem
+	mm2EdgesLabels(m2l) <- res_list$elems
 	mm2Dags(m2l) <- res_list$dags
 
 	message("Losses discretization finished ",nrow(res_list$elem)," common losses found.")
 	m2l
 })
 
+
+removeBinsOverlap <- function(mzmin,mzmax,margin=0.00001){
+  tmzmin <- mzmin
+  tmzmax <- mzmax
+  poverlap <- which(mzmax[1:(length(mzmax)-1)]>mzmin[2:(length(mzmax))])
+  if(length(poverlap)>0){
+    dev <- (tmzmin[poverlap]+tmzmax[poverlap])/2
+    tmzmin[poverlap+1] <- dev-margin
+    tmzmax[poverlap] <- dev+margin
+  }
+  return(list(min=tmzmin,max=tmzmax))
+}
 
 discretizeMassesDifferences <- function(list_spec,
 										ppm = 7, dmz = 0.002,
@@ -307,8 +319,12 @@ discretizeMassesDifferences <- function(list_spec,
 
 	merginf <- merged_masses$mu-fac_sig*sqrt(merged_masses$sig)
 	mergmax <- merged_masses$mu+fac_sig*sqrt(merged_masses$sig)
-	# browser()
-
+	
+	###We remove the remaining overlaps.
+	tempmz <- removeBinsOverlap(merginf,mergmax,margin=0)
+	merginf <- tempmz$min
+	mergmax <- tempmz$max
+	
 	###Now we need to check the overlap between the interval.
 	##Function to parse the Cpp function.
 	matched_inter <- checkInter(minm,maxm,merginf,mergmax)
@@ -740,30 +756,6 @@ discretizeSequenceByClasses <- function(ppm,
 			idxgroup[[num_group]] <- porder[selectedPGroup]
 			previousMz <- c(previousMz, mean(vmz[porder[selectedPGroup]]))
 		}
-
-		# mzr <- c(105.5920 , 105.5927)
-		# if(all(bmin1<mzr)&all(bmax1>mzr)){
-		# 	###We plot the result
-		#
-		# 	maxval <- max(den$y)
-		#
-		# 	plot(den$x,den$y,type="l",lwd=2,xlab="m/z",ylab="Estimated density",ylim=c(0,maxval*1.05),xlim=c(mzr[1]-0.01,mzr[2]+0.01))
-		#
-		# 	####Adding the points
-		# 	points(vmz,rep(maxval/2,length(vmz)),col="red",pch=4,lwd=2)
-		#
-		# 	ppos <- num_group
-		# 	while(listgroup[ppos,1]>bmin1) ppos <- (ppos-1)
-		# 	nfound <- num_group-ppos
-		#
-		# 	colv <- rainbow(nfound)
-		# 	colv <- rep(colv,times=2)
-		#
-		# 	print(as.numeric(listgroup[ppos:num_group, 2:3]))
-		# 	print(colv)
-		#
-		# 	abline(v=as.numeric(listgroup[ppos:num_group, 2:3]),lty=2,lwd=2,col=colv)
-		# }
 	}
 
 	if (num_group < 1) {
@@ -1012,15 +1004,9 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 	anyChange <- FALSE
 
 	###We first store a list of all the formula when they exist
-	allformula <- str_split(elems$formula,fixed("|"))
-	allformula <- sapply(allformula,function(x,vi){
-		if(is.na(x[1])|x[1]=="NA") return(NULL)
-		sapply(x,function(y,vn){
-			stringToFormula(y,vnames = vn)
-		},vn=vi,simplify=FALSE)
-	},vi=atoms,simplify=FALSE)
-
-
+	allformula <- sapply(elems$formula,LossFormulaFromSingleString,ref=atoms,sep="|")
+  # omzmin <- elems$mzmin
+  # omzmax <- elems$mzmax
 	###Data structure for triple value, a sparse matrix.
 	stormat <- Matrix(0,nrow=nrow(elems),ncol=nrow(elems),sparse = TRUE)
 	storval <- vector(mode="list",length=1000)
@@ -1071,8 +1057,11 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 			}
 		}
 	}
-	storval <- storval[1:(nval-1)]
-
+	if(nval>1){
+	  storval <- storval[1:(nval-1)]
+	}else{
+	  storval <- list()
+	}
 	####Now we have a data structure with all the value, we check which set needs to be fused.
 	vmul <- sapply(storval,function(x){length(unique(x))>3})
 	pmistake <- which(vmul)
@@ -1084,9 +1073,13 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 	}
 
 	###We we fuse the dataset if necessary
-	to_rm <- numeric(0)
-	nlab <- elems$lab
-	merged_val <- numeric(0)
+	to_rm <- numeric(100)
+	idrm <- 1
+	
+	nlab <- 1:nrow(elems)
+	
+	merged_val <- numeric(100)
+	idm <- 1
 
 	for(i in pmistake){
 		sv <- storval[[i]]
@@ -1095,7 +1088,16 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 		b <- sv[2]
 		cs <- sort(sv[3:length(storval[[i]])])
 		rcs <- range(cs)
-		telems <- elems[rcs[1]:rcs[2],,drop=FALSE]
+		
+		####We extend the cd label if a value has been jump.
+		cs <- rcs[1]:rcs[2]
+		
+		###If any of the value is in the merged vals or in the removed vals we skip this step.
+		if(any(cs %in% to_rm[1:(idrm-1)])||any(cs %in% merged_val[1:(idm-1)])){
+		  next
+		}
+		
+		telems <- elems[cs,,drop=FALSE]
 
 		##The dataset are fused.
 		mzmin <- min(telems$mzmin)
@@ -1107,94 +1109,86 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 		###We determine correct formula.
 		tform <- allformula[cs]
 
+		
+		
+		####This formula check is not necessary anymore.
 		formula <- NULL
-
-		non_null <- which(!sapply(tform,is.null))
-		if(length(non_null)==0){
-			formula <- "NA"
+		with_form <- which(sapply(tform,length)!=0)
+		if(length(with_form)==0){
+			formula <- HIGH_MASS_SYMBOL
 		}else{
 			###We calculate the new formula.
-			aformula <- ifelse(is.null(allformula[[a]]),NA,allformula[[a]])
-			bformula <- ifelse(is.null(allformula[[b]]),NA,allformula[[b]])
-			
-			####
-			
-			if(typeof(aformula)=="list"){
-				aformula <- aformula[[1]]
-			}
-			if(typeof(bformula)=="list"){
-				bformula <- bformula[[1]]
-			}
-			cformula <- sumFormula(aformula,bformula,all_lab = atoms)
-
-			if(!is.na(cformula)){
-				resf <- formulaToString(cformula)
-
-				cform <- unlist(tform,recursive = FALSE,use.names = TRUE)
-
-				ncform <- unique(names(cform))
-				pfor <- match(resf,ncform)
-
-				if(is.na(pfor)){
-					formula <- c(resf,ncform)
-				}else{
-					formula <- c(resf,ncform[-pfor])
-				}
-			}else{
-				formula <- "NA"
-			}
+			tempf <- Reduce(f = addFormula,tform)
+			formula <- paste(as.character(tempf),collapse = "|")
 		}
-		formula <- paste(formula,sep="|")
-		to_rm <- c(to_rm,rcs[2:length(cs)])
-		merged_val <- c(merged_val,cs[1])
+		
+		###
+		n_add <- length(cs)-1
+		if((idrm+n_add-1)>length(to_rm)){
+		  to_rm <- c(to_rm,numeric(length(to_rm)))
+		}
+		to_rm[idrm:(idrm+n_add-1)] <- cs[2:length(cs)]
+		idrm <- idrm + n_add
+		
+		if((idm)>length(merged_val)){
+		  merged_val <- c(merged_val,numeric(length(merged_val)))
+		}
+		merged_val[idm] <- cs[1]
+		
+		idm <- idm+1
 		elems$mzmin[cs[1]] <- mzmin
 		elems$mzmax[cs[1]] <- mzmax
 		elems$mz[cs[1]] <- mz
 		elems$fused[cs[1]] <- TRUE
 		elems$count[cs[1]] <- count
 		elems$formula[cs[1]] <- formula
-		nlab[rcs] <- cs[1]
+		nlab[cs] <- cs[1]
 	}
+
+	###The conserved labels
+	ulabs <- sort(unique(nlab))
 	
-
-	###Now all the labels need to be redone
-	ulabs <- unique(nlab)
+	###The new labels.
 	new_labs <- match(nlab,ulabs)
-
+	
 	###Relabeling of the graph
-	countv <- rep(0,nrow(elems))
-
 	for(igl in 1:length(dags)){
 		g <- dags[[igl]]
 		if(is.null(g)||is.na(g)){
 			next
 		}
-		eg_lab <- edge_attr(g,"lab")
-		edge_attr(g,"lab") <- new_labs[eg_lab]
-		if(any(sapply(new_labs[eg_lab],is.na))) browser()
 		if(ecount(g)>0){
-			tlab <- table(edge_attr(g,"lab"))
-			ntlab <- as.numeric(names(tlab))
-			countv[ntlab] <- countv[ntlab]+as.numeric(tlab)
+		  eg_lab <- edge_attr(g,"lab")
+		  g <- set_edge_attr(g,name = "lab",value = new_labs[nlab[eg_lab]])
 		}
 		dags[[igl]] <- g
 	}
+	# checkCorrectness(omzmin,omzmax,elems$mzmin,elems$mzmax,nlab,margin=0.0001)
 	
-	p_rm <- countv<thresh
-	p_keep <- countv>thresh
-
-	elems$count <- countv
-	# elems <- elems[countv>=thresh,]
-	# elems$lab <- 1:nrow(elems)
+	elems <- elems[ulabs, ]
+	elems$lab <- 1:length(ulabs)
 	
 	tempr <- cleanupElems(elems,dags,thresh)
 	
 	return(list(elems=tempr$elems,dags=tempr$dags,change=anyChange))
 }
 
+
+####There is an issue if a new_lab does not contain all the old labs.
+
+# checkCorrectness <- function(omzmin,omzmax,mzmin,mzmax,newlab,margin=0.0001){
+#   for(i in seq_along(omzmin)){
+#     npos <- newlab[i]
+#     if((mzmin[npos]>omzmin[i])|(mzmax[npos]<omzmax[i])){
+#       message(paste("mistake on",i))
+#       browser()
+#     }
+#   }
+# }
+
+
 cleanupElems <- function(elems,dags,thresh){
   countv <- rep(0,nrow(elems))
-  
   for(igl in 1:length(dags)){
     g <- dags[[igl]]
     if(is.null(g)||is.na(g)){
@@ -1214,7 +1208,7 @@ cleanupElems <- function(elems,dags,thresh){
   nlab <- elems$lab
   nlab[p_keep] <- 1:length(p_keep)
   
-  ###Now removing the not frequent edge unused edge.
+  ###Now removing the non frequent edges.
   for(igl in 1:length(dags)){
     g <- dags[[igl]]
     if(is.null(g)||is.na(g)){
@@ -1222,12 +1216,15 @@ cleanupElems <- function(elems,dags,thresh){
     }
     eg_lab <- edge_attr(g,"lab")
     v_rm <- eg_lab %in% p_rm
-    g <- delete_edges(g,E(g)[v_rm])
+    if(sum(v_rm)>0){
+      g <- delete_edges(g,E(g)[v_rm])
+    }
     eg_lab <- edge_attr(g,"lab")
     edge_attr(g,"lab") <- nlab[eg_lab]
     dags[[igl]] <- g
   }
-  
+  elems$count <- countv
   elems <- elems[p_keep,]
   return(list(elems=elems,dags=dags))
 }
+

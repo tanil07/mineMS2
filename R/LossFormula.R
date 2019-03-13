@@ -15,6 +15,12 @@ calc_mass_raw <- function(row,atoms_m){
   sum(row*atoms_m)
 }
 
+calcMass<- function(lf,atoms_mass=NULL){
+  if(is.null(atoms_mass)){
+    atoms_mass <-getAtomMass(colnames(lf@formula))
+  }
+  apply(lf@formula,1,calc_mass_raw,atoms_m=atoms_mass)
+}
 
 LossFormulaFromSingleString <- function(formula,ref,sep="|"){
   allf <- str_split(formula,fixed(sep),simplify=TRUE)[1,]
@@ -26,7 +32,7 @@ LossFormula <- function(formula=NULL,ref=NULL){
   ####We check the class of the arguments
   lf <- new("LossFormula")
   
-  if(is.null(formula)|((length(formula)==1) & (is.na(formula)))){
+  if(is.null(formula)||((length(formula)==1) & (is.na(formula)))||(nchar(formula)==0)){
     if(is.null(ref)){
       lf@formula <- matrix(NA_integer_,nrow=0,ncol=0)
     }else{
@@ -62,6 +68,9 @@ LossFormula <- function(formula=NULL,ref=NULL){
   return(lf)
 }
 
+isKnown <- function(lf){
+  nrow(lf@formula)==1
+}
 
 setMethod("as.character","LossFormula",function(x){
   return(apply(x@formula,1,formulaToString))
@@ -87,31 +96,30 @@ combineLossFormula <- function(f1,f2,maxf=3){
 }
 
 
+vecRDBE <- function(lfm){
+  vmult <- rep(0,ncol(lfm))
+  pC <- which(colnames(lfm)=="C")
+  if(length(pC)!=0){
+    vmult[pC] <- 1.0
+  }
+  pH <-  which(colnames(lfm)=="H")
+  if(length(pH)!=0){
+    vmult[pH] <- -0.5
+  }
+  pN <-  which(colnames(lfm)=="N")
+  if(length(pN)!=0){
+    vmult[pN] <- -0.5
+  }
+  PHalo <- which(colnames(lfm) %in% REF_MINEMS2_HALOGENS)
+  if(length(PHalo)!=0){
+    vmult[PHalo] <- -0.5
+  }
 
+  return(vmult)
+}
 calcRDBE <- function(lf,vmult=NULL){
   ###We match the input into each cathegory
-  vrdbe <- rep(1,nrow(lf@formula))
-  
-  if(is.null(vmult)){
-    vmult <- rep(0,ncol(lf@formula))
-    
-    pC <- which(colnames(lf@formula)=="C")
-    if(length(pC)!=0){
-      vmult[pC] <- 1.0
-    }
-    pH <-  which(colnames(lf@formula)=="H")
-    if(length(pH)!=0){
-      vmult[pH] <- -0.5
-    }
-    pN <-  which(colnames(lf@formula)=="N")
-    if(length(pN)!=0){
-      vmult[pN] <- -0.5
-    }
-    PHalo <- which(colnames(lf@formula) %in% REF_MINEMS2_HALOGENS)
-    if(length(PHalo)!=0){
-      vmult[PHalo] <- -0.5
-    }
-  }
+  vmult <- vecRDBE(lf@formula)
   calcRDBE_raw(lf@formula,vmult)
 }
 
@@ -139,7 +147,15 @@ setMethod("%in%",signature=list(x="character",table="LossFormula"),function(x,ta
   any(apply(table@formula, 1, function(x, want) isTRUE(all.equal(x, want)), vf))
 })
 
+setMethod("%in%",signature=list(x="integer",table="LossFormula"),function(x,table){
+  names(x) <- colnames(table@formula)
+  any(apply(table@formula, 1, function(x, want) isTRUE(all.equal(x, want)), vf))
+})
 
+
+
+
+####Methods to add a formula to LossFormula.
 setMethod("addFormula",signature = list(x = "LossFormula",lf = "ANY"),function(x,lf){
   l_atoms <- colnames(x@formula)
   
@@ -153,36 +169,6 @@ setMethod("addFormula",signature = list(x = "LossFormula",lf = "ANY"),function(x
   x@formula <- cbind(x@formula,lf)
   x
 })
-
-is_sub_raw <- function(rf1,rf2){
-  all(rf1<=rf2)
-}
-
-
-###Vectorized implementation.
-setMethod("isSubformula",signature = list(x="LossFormula",lf = "character"),function(x,lf){
-  l_atoms <- colnames(x@formula)
-  lf <- stringToFormula(lf,vnames=l_atoms)
-  vr <-apply(x@formula,1,is_sub_raw,rf2=lf)
-  vr
-})
-
-
-setMethod("isSubformula",signature = list(x="LossFormula",lf="LossFormula"),function(x,lf){
-  
-  l_atoms <- colnames(object@formula)
-  
-  tm <- t(apply(x@formula,1,function(x,y,agg){
-    res <- apply(y,1,function(w,z){
-      is_sub_raw(w,z)
-    },z=x)
-    
-    any(res)
-  },y=lf@formula))
-  
-  any(tm)
-})
-
 
 
 setMethod("addFormula",signature = list(x = "LossFormula",lf = "LossFormula"),function(x,lf){
@@ -201,6 +187,69 @@ setMethod("addFormula",signature = list(x = "LossFormula",lf = "LossFormula"),fu
 })
 
 
+
+###Method to check that a formula is a subformula.
+
+is_sub_raw <- function(rf1,rf2){
+  all(rf1<=rf2)
+}
+
+
+###Vectorized implementation.
+setMethod("isSubformula",signature = list(x="LossFormula",lf = "character"),function(x,lf){
+  l_atoms <- colnames(x@formula)
+  lf <- stringToFormula(lf,vnames=l_atoms)
+  vr <-apply(x@formula,1,is_sub_raw,rf2=lf)
+  vr
+})
+
+###We suppose that he columns are ordered correctly.
+setMethod("isSubformula",signature = list(x="integer",lf = "LossFormula"),function(x,lf){
+  # l_atoms <- colnames(x@formula)
+  # lf <- stringToFormula(lf,vnames=l_atoms)
+  vr <-apply(lf@formula,1,is_sub_raw,rf1=x)
+  vr
+})
+
+
+setMethod("isSubformula",signature = list(x="LossFormula",lf="LossFormula"),function(x,lf,type=c("any","none")){
+  type <- match.arg(type)
+  l_atoms <- colnames(x@formula)
+  agg <- function(x){x}
+  if(type=="any"){
+    agg <- any
+  }
+  
+  tm <- t(apply(x@formula,1,function(x,y,agg){
+    res <- apply(y,1,function(w,z){
+      is_sub_raw(z,w)
+    },z=x)
+    
+    agg(res)
+  },y=lf@formula,agg=agg))
+  
+  agg(tm)
+})
+
+
+
+
+setMethod("idxFormula",signature=list(x="character",lf="LossFormula"),function(x,lf){
+  vf <- stringToFormula(x,vnames=colnames(lf@formula))
+  which(apply(lf@formula, 1, function(x, want) isTRUE(all.equal(x, want)), x))
+})
+
+setMethod("idxFormula",signature=list(x="integer",lf="LossFormula"),function(x,lf){
+  names(x) <- colnames(lf@formula)
+  which(apply(lf@formula, 1, function(x, want) isTRUE(all.equal(x, want)), want=x))
+})
+
+setMethod("idxFormula",signature=list(x="LossFormula",lf="LossFormula"),function(x,lf){
+  which(apply(lf@formula, 1, function(x, want) isTRUE(all.equal(x, want)), x@formula))
+})
+
+
+
 setMethod("show","LossFormula",function(object){
   cat("A LossFormula object containing",nrow(object@formula),"formula with atoms",paste(colnames(object@formula),collapse = ","))
 })
@@ -208,4 +257,9 @@ setMethod("show","LossFormula",function(object){
 
 setMethod(length,"LossFormula",function(x){
   nrow(x@formula)
+})
+
+setMethod('[',"LossFormula",function(x,i,j=NULL,...,drop=TRUE){
+  x@formula <- x@formula[i,,drop=FALSE]
+  return(x)
 })
