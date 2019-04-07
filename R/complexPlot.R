@@ -20,7 +20,6 @@ plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FAL
 				ids <- vrange(m2l,"P",reduced=FALSE)
 			}else{
 				stop("No reduced pattern, to plot the full patterns set the 'full' parameter to TRUE")
-
 			}
 		}else{
 			ids <- vrange(m2l,"P",reduced=TRUE)
@@ -69,6 +68,7 @@ plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FAL
 				plot(m2l,id)
 			}
 		}
+
 		plotOccurences(m2l,id)
 	}
 }

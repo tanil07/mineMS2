@@ -1,4 +1,4 @@
-
+#' @include references.R
 
 setMethod("mm2Graph", "fragPattern",function(pat){
 	return(pat@graph)
@@ -72,6 +72,38 @@ fragPattern <- function(rlist){
 	fp
 }
 
+
+setMethod("calculateCoverage","fragPattern",function(x,mzloss,mgs){
+  occs <- x@occurences
+  coverages <- rep(NA_real_,nrow(occs))
+  for(j in 1:nrow(occs)){
+    gid <- occs[j,"gid"]
+    cg <-mgs[[gid]]
+    mapv <- get_mapping(cg ,x@graph, mzloss,root=occs[j,"idx"])
+    
+    ###Plotting of the spectra
+    intv <- vertex_attr(cg, "rel_int")
+    mzs <- vertex_attr(cg, "mz")
+    ids <- V(cg)
+    
+    ###Peaks are split between matched and non matched.
+    matched_peaks_idx <- match(mapv[2,], ids)
+    coverages[j] <- sum(intv[matched_peaks_idx])/sum(intv)
+  }
+  onames <- colnames(occs)
+  if(!COVERAGE_NAME %in% colnames(occs)){
+    occs <- cbind(occs,coverages)
+    colnames(occs) <- c(onames,COVERAGE_NAME)
+  }else{
+    occs[,COVERAGE_NAME] <- coverages
+  }
+  x@occurences <- occs
+  x
+})
+
+setMethod("hasCoverage","fragPattern",function(x){
+  COVERAGE_NAME %in% colnames(x@occurences)
+})
 
 
 relabelOccurrences <- function(pat,newlabs){

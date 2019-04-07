@@ -195,8 +195,8 @@ setMethod("plot", "fragPattern",
 		  		 title=NULL,
 		  		 edgeLabels = NULL,
 		  		 dags = NULL,
-		  		 nodeLab = c("default", "label"),
-		  		 edgeLab = c("adapted","formula","none"),
+		  		 nodeLabel = c("default", "label"),
+		  		 edgeLabel = c("formula","mass","none"),
 		  		 atoms=c("C","H","O","N","S","P"),
 		  		 formula=NA_character_,
 		  		 mzdigits = 3,
@@ -206,13 +206,29 @@ setMethod("plot", "fragPattern",
 		  		 ...) {
 		    
 		    
-		  	nodeLab <- match.arg(nodeLab)
-		  	edgeLab <- match.arg(edgeLab)
+		  	nodeLabel <- match.arg(nodeLabel)
+		  	edgeLabel <- match.arg(edgeLabel)
 
 		  	g <- mm2Graph(x)
 		  	###We determine the edge label
 		  	oformula <- sapply(get_formula(m2l)[mm2Occurences(x)[,"gid"]],LossFormula,ref=atoms)
+		  	filled_formula <- which(sapply(oformula,function(x){length(x)>0}))
+		  	if(length(filled_formula)==0){
+		  	  oformula <- list()
+		  	}else{
+		  	  oformula <- oformula[filled_formula]
+		  	}
+		  	
 		  	labels <- makeLabelPattern(x,atoms,dags,edgeLabels,oformula=oformula)
+		  	
+		  	ledges <- NULL
+		  	if(edgeLabel=="formula"){
+		  	  ledges <- labels$edges
+		  	}else if(edgeLabel=="none"){
+		  	  ledges <- rep("",length(labels$edges))
+		  	}else if(edgeLabel=="mass"){
+		  	  ledges <- sprintf("%0.3f",edgeLabels$mz[edge_attr(g,"lab")])
+		  	}
 
 		  	###Title
 		  	if(is.null(title)){
@@ -227,7 +243,7 @@ setMethod("plot", "fragPattern",
 		  			canvas.height = 600,
 		  			vertex.label = labels$vertices,
 		  			vertex.size = vertex_size,
-		  			edge.label = labels$edges,
+		  			edge.label = ledges,
 		  			vertex.color = "orange",
 		  			main="title",
 		  			...
@@ -239,7 +255,7 @@ setMethod("plot", "fragPattern",
 		  			layout = (layout_with_sugiyama(g)$layout),
 		  			vertex.label = labels$vertices,
 		  			vertex.size = vertex_size,
-		  			edge.label = labels$edges,
+		  			edge.label = ledges,
 		  			vertex.color = "orange",
 		  			main=title,
 		  			...
@@ -312,16 +328,25 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	###THE IDX IS HANDLED BY C++ AND SHOULD BE CORRECT.
 	occs_gid <- occs[, 1]
 	occs_pos <- occs[, 2]
-	layout(layoutMatrix(min(byPage, length(occs_gid)),margin = 0.1))
-	par(mar=c(0.1,0.1,0.1,0.1))
+	lmat <- layoutMatrix(min(byPage, length(occs_gid)),margin = 0.07)
+	maxv <- max(lmat)-2
+	layout(lmat)
+
 	
-	###
-	plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
-	plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
-	
-	par(mar=c(2.5,2,2,0.5))
 	res_plot <- vector(mode="list",length=nrow(occs))
 	for (i in 1:length(occs_gid)) {
+	  if((i %% 6) == 1){
+	    if(i != 1){
+	      layout(1)
+	      mtext(expression(bold("m/z")),side=1,padj=2)
+	      mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+	      layout(lmat)
+	    }
+	    par(mar=c(0.1,0.1,0.1,0.1))
+	    plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+	    plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+	    par(mar=c(2.5,2,2,0.5))
+	  }
 		gid <- occs_gid[i]
 		pos <- occs_pos[i]
 		map <- get_mapping(mgs[[gid]], g, loss_mz, root = pos)
@@ -361,9 +386,11 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 			   col =col_vec[subOccs[i]],
 			   lwd = 3)
 	}
-	layout(1)
-	mtext(expression(bold("m/z")),side=1,padj=2)
-	mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+	if((i%%6) != 1){
+	  layout(1)
+	  mtext(expression(bold("m/z")),side=1,padj=2)
+	  mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+	}
 	par(mar=omar)
 	return(invisible(res_plot))
 })

@@ -197,7 +197,7 @@ chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = N
   bloss <- NULL
   bpartial <- 0
   bsolo <- 0
-  if((length(oformula)==1) && is.na(oformula)){
+  if((length(oformula)==0)|((length(oformula)==1)&&is.na(oformula))){
     bloss <- 1:length(lf)
   }else{
     pok <- 1:length(lf)
@@ -214,9 +214,10 @@ chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = N
       }
     }
     
-    if(length(lf)>1){
+    if((length(lf)>1)&(length(oformula)>0)){
       ###Majority vote.
       vm <- sapply(oformula,isSubformula,x=lf,type="none",simplify=TRUE)
+      if(is.null(dim(vm))) browser()
       bf <- apply(vm,1,sum)
       bloss <- which(bf==max(bf))
     }else{
@@ -255,8 +256,8 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
     massdiff <- apply(massdiff,2,mean)
   }
 
+
   subformula <- getSubformulaLossVertices_afg(g,occs,dags,elabs,atoms,c(0,vlab))
-  
   
   if(is.null(allf)){
     allf <- sapply(elabs$formula[vlab],function(x,atoms){
@@ -294,7 +295,6 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
 makeEdgeLabelWithoutVertices <- function(lf,mzv,oformula,atoms,vrdbe){
   
   ###Solo
-  
   if(length(lf)==1){
     vm <- sapply(oformula,isSubformula,x=lf,simplify=TRUE)
     return(c(1,1,as.numeric(all(vm))))
@@ -306,11 +306,14 @@ makeEdgeLabelWithoutVertices <- function(lf,mzv,oformula,atoms,vrdbe){
   bloss <- NULL
   bpartial <- 0
   bsolo <- 0
-  if((length(oformula)==1) && is.na(oformula)){
+  bf <- numeric(0)
+  if((length(oformula)==0)|((length(oformula)==1)&&is.na(oformula))){
     bloss <- 1:length(lf)
   }else{
     ###Majority vote.
     vm <- sapply(oformula,isSubformula,x=lf,type="none",simplify=TRUE)
+    # if(is.null(dim(vm))) browser()
+    
     bf <- apply(vm,1,sum)
     bloss <- which(bf==max(bf))
   }
@@ -320,18 +323,23 @@ makeEdgeLabelWithoutVertices <- function(lf,mzv,oformula,atoms,vrdbe){
     m_atoms <- getAtomsMass(atoms)
     vmz <- lf@formula[bloss,] %*% m_atoms
     rdbe <- calcRDBE_raw(lf@formula[bloss,],vrdbe)
-    
-    ####Now we split the value of t
-    
-    bloss <- bloss[which.min(abs(vmz-mzv)*10^6/mzv+abs(rdbe))]
-    bpartial <- as.numeric(as.numeric(bf[bloss])==nrow(lf@formula))
+    ###mono atom.
+    penalisation <- apply(lf@formula[bloss,],1,function(x){
+      vs <- sort(x[c("C","H","N","O")],decreasing = TRUE)
+      (vs[1]-vs[2])/vs[1]
+    })
+    scorev <- abs(vmz-mzv)*10^6/mzv+abs(rdbe)/10+penalisation
+    bloss <- bloss[which.min(scorev)]
+    if(length(bf)==0){
+      bpartial <- TRUE
+    }else{
+      bpartial <- as.numeric(as.numeric(bf[bloss])==nrow(lf@formula))
+    }
   }else{
     bsolo <- 1
   }
-  
   ###We return the subformula with the maximum size
   c(bloss,bsolo,bpartial)
-  
 }
 
 
@@ -354,6 +362,7 @@ makeEdgeLabel <-
     mat_dist <-
       matrix(c(tail_of(g, e), head_of(g, e)), byrow = FALSE, ncol = 2)
     coevec <- rep(TRUE,length=ecount(g))
+    multipleannot <- rep(FALSE,length=ecount(g))
     
     ###Formula annotation of the edges.
     lf <- vector(mode="list",length=ecount(g))
@@ -430,7 +439,7 @@ makeEdgeLabel <-
           FUN = makeEdgeLabelWithoutVertices,
           MoreArgs = list(
             'vrdbe' = vrdbe,
-            'atoms' = atoms,
+            'atoms' = names(atoms),
             'oformula' =
               oformula
           )
@@ -441,6 +450,7 @@ makeEdgeLabel <-
         vannot[p_non_root[non_coherent_edge[pnna]]] <- tempe[1,pnna]
         coevec[p_non_root[non_coherent_edge]] <- FALSE
         coevec[p_non_root[high_mz]] <- TRUE
+        multipleannot[p_non_root[non_coherent_edge[!as.logical(tempe[2,])]]] <- TRUE
         for(cp in which(pnna)){
           lf[[p_non_root[non_coherent_edge[cp]]]] <- allf[[p_non_root[non_coherent_edge[cp]]]][tempe[1,cp],drop=FALSE]
         }
@@ -448,13 +458,11 @@ makeEdgeLabel <-
           for(cp in which(pna)){
             lf[[p_non_root[non_coherent_edge[cp]]]] <- LossFormula(ref=atoms)
           }
-      }
+       }
     }
-    return(list(formula=lf,annot=as.integer(vannot),root=ifelse(mat_dist[,1]==1,TRUE,FALSE),coherent = coevec))
+    return(list(formula=lf,annot=as.integer(vannot),root=ifelse(mat_dist[,1]==1,TRUE,FALSE),
+                coherent = coevec, multiple = multipleannot))
   }
-
-
-
 
 
 annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
@@ -474,14 +482,11 @@ annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
   ###LABL ORIGIN IS IN THE SAME ORDER THAN V, DO NOT MOVE.
   label_origin <- edge_attr(g,name=edge_label,index = e_origin)[pmm]
   
-
-  
   ###Building all the formula.
   all_edges_lab <- edge_attr(g,name = "lab")
   allf <- sapply(elabs$formula[all_edges_lab],function(x,atoms){
     LossFormulaFromSingleString(x,ref = atoms,sep = "|")
   },atoms=atoms,simplify=FALSE)
-  
   
   
   massdiff <- getMzDiff(g,mm2Occurences(fp),dags,elabs$mz)
@@ -537,11 +542,7 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
   
   ####If the formula is not solo or partial we add parenthesis
   vpv <- apply(!vert$info[,1,drop=FALSE],1,any)
-  # 
-  # if(replaceByMz){
-  #   pmz <-  labvert==HIGH_MASS_LEGEND
-  #   labvert[pmz] <- sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$v[pmz])
-  # }
+
   
   labvert_formula[vpv] <- paste("(",labvert_formula[vpv],")",sep="")
   
@@ -558,9 +559,12 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
   },def=HIGH_MASS_LEGEND)
   
   vp <- ((!edg$coherent)&(labedge!=HIGH_MASS_LEGEND))
+  
   vp[1:(vcount(g)-1)] <- vpv
   pmz <-  labedge==HIGH_MASS_LEGEND
   labedge[pmz] <- sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[pmz])
+  
+  vp <- vp|((edg$multiple)&(!pmz))
   
   labedge[vp] <- paste("(",labedge[vp],")",sep="")
   

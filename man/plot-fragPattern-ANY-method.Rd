@@ -6,8 +6,8 @@
 \title{plotting a fargPattern object.}
 \usage{
 \S4method{plot}{fragPattern,ANY}(x, y = NULL, title = NULL,
-  edgeLabels = NULL, dags = NULL, nodeLab = c("default", "label"),
-  edgeLab = c("adapted", "formula", "none"), atoms = c("C", "H", "O",
+  edgeLabels = NULL, dags = NULL, nodeLabel = c("default", "label"),
+  edgeLabel = c("formula", "mass", "none"), atoms = c("C", "H", "O",
   "N", "S", "P"), formula = NA_character_, mzdigits = 3,
   vertex_size = 55, subNodes = NULL, tkplot = FALSE, ...)
 }
@@ -16,10 +16,6 @@
 
 \item{edgeLabels}{= NULL,}
 
-\item{nodeLab}{= c("default", "label"),}
-
-\item{edgeLab}{= c("formula","none"),}
-
 \item{mzdigits}{= 3,}
 
 \item{vertex_size}{= 30,}
@@ -27,6 +23,10 @@
 \item{tkplot}{= FALSE,}
 
 \item{...}{}
+
+\item{nodeLab}{= c("default", "label"),}
+
+\item{edgeLab}{= c("formula","none"),}
 }
 \value{
 nothing

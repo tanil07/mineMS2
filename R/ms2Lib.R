@@ -3,7 +3,6 @@
 
 ###CORRESPONDANCE TABLE
 CORR_TABLE <- list("D"="dags","S"="spectra","P"="patterns","L"="losses")#"F"="fragments"
-COVERAGE_NAME <- "coverage"
 UNKNOWN_FORMULA <- NA_character_
 
 
@@ -189,8 +188,13 @@ make_initial_title <- function(spec_infos){
 
 
 convert_formula <- function(form_vec){
+  ###We remoe the whitespaces and the special character
+  form_vec <- trimws(str_replace(form_vec,"\\?|\\-|\\+|\\-",""))
+  
   pnf <- which(is.na(form_vec)|(nchar(form_vec)==0))
   form_vec[pnf] <- UNKNOWN_FORMULA
+  
+  
   form_vec
 }
 
@@ -336,7 +340,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	####Adding the molecular formula.
 	cnames <- tolower(colnames(temp_df))
 	
-	pf <- which(cnames %in% c("formula"))
+	pf <- which(cnames %in% c("formula","composition"))
 	if(length(pf)==0){
 	  message("No 'formula' column found. All formula are considered as unknown.")
 	  temp_df$formula <- rep(UNKNOWN_FORMULA,nrow(temp_df))
@@ -357,11 +361,13 @@ get_formula <- function(m2l){
 #' @export
 setMethod("show","ms2Lib",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
-	cat("It has",nrow(mm2EdgesLabels(object)),"edges labels built with atoms",paste(names(m2l@atoms),collapse=","),".\n")
-	cat("The available supplementary informations are:",colnames(mm2SpectraInfos(m2l)),"\n")
+  if(length(mm2Atoms(object))!=0){
+	  cat("It has",nrow(mm2EdgesLabels(object)),"edges labels built with atoms",paste(mm2Atoms(object),collapse=","),".\n")
+  }
+  cat("The available supplementary informations are:",colnames(mm2SpectraInfos(object)),"\n")
 	cat("It contains: ",length(mm2Patterns(object)),"patterns\n")
-	if(length(mm2ReducedPatterns(m2l))!=0) cat("It has been reduced to ",
-											   length(mm2ReducedPatterns(m2l)),"patterns")
+	if(length(mm2ReducedPatterns(object))!=0) cat("It has been reduced to ",
+											   length(mm2ReducedPatterns(object)),"patterns")
 })
 
 #' @export
@@ -599,11 +605,13 @@ setMethod("plot", "ms2Lib",
 		  	rid <- parseId(x,y)
 		  	if(rid[[1]]=="patterns"){
 		  	  toccs <- x[y]@occurences[,1]
-				plot(x[y],title = y,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),formula=get_formula(x)[toccs],...)
+				plot(x[y],title = y,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
+				     atoms=x@atoms,formula=get_formula(x)[toccs],...)
 		  	}else if(rid[[1]]=="spectra"){
 		  		plot_Spectrum2(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){
-		  		plot_dag(x[y],idx=y,edgeLabels=(mm2EdgesLabels(x)),...)
+		  	  if(is.null(title)) title="Fragmentation Graph"
+		  		plot_dag(x[y],idx=y,edgeLabels=(mm2EdgesLabels(x)),atoms=x@atoms,title=title,...)
 		  		# stop("DAGS plotting not implemented at the moment.")
 		  	}else if(rid[[1]]=="losses"){
 		  		stop("Impossible to plot a loss")
@@ -780,14 +788,14 @@ hasPatterns <- function(m2l){
   return(length(m2l@patterns)!=0)
 }
 
-hasCoverage <- function(m2l){
-  if(hasPatterns(m2l)){
-    return(COVERAGE_NAME %in% colnames(m2l@patterns[[1]]@occurences))
+setMethod("hasCoverage","ms2Lib",function(x){
+  if(hasPatterns(x)){
+    return(COVERAGE_NAME %in% colnames(x@patterns[[1]]@occurences))
   }else{
     stop(paste("Patterns need to be computed before obtaining coverage.",sep=""))
   }
   return(FALSE)
-}
+})
 
 
 #' Calculate the coverage of all the patterns in the dataset.
@@ -799,32 +807,14 @@ hasCoverage <- function(m2l){
 #'
 #' @examples
 #' print("Examples to be put here")
-calculateCoverage <- function(m2l){
-  loss_mz <- mm2EdgesLabels(m2l)$mz
-  mgs <- mm2Dags(m2l)
-  txtProgressBar(min = 0, max = length(mm2Patterns(m2l)), initial = 0, char = "=",
-                 width = NA, "Covergae calculation", "cov_calc", style = 1, file = "")
-  for(i in seq_along(mm2Patterns(m2l))){
-    occs <- m2l@patterns[[i]]@occurences
-    coverages <- rep(NA_real_,nrow(occs))
-    for(j in 1:nrow(occs)){
-      gid <- occs[j,"gid"]
-      cg <-mgs[[gid]]
-      mapv <- get_mapping(cg ,m2l@patterns[[i]]@graph, loss_mz,root=occs[j,"idx"])
-      
-      ###Plotting of the spectra
-      intv <- vertex_attr(cg, "rel_int")
-      mzs <- vertex_attr(cg, "mz")
-      ids <- V(cg)
-      
-      ###Peaks are split between matched and non matched.
-      matched_peaks_idx <- match(mapv[2,], ids)
-      coverages[j] <- sum(intv[matched_peaks_idx])/sum(intv)
-    }
-    onames <- colnames(occs)
-    occs <- cbind(occs,coverages)
-    colnames(occs) <- c(onames,COVERAGE_NAME)
-    m2l@patterns[[i]]@occurences <- occs
+setMethod("calculateCoverage","ms2Lib",function(x){
+  loss_mz <- mm2EdgesLabels(x)$mz
+  mgs <- mm2Dags(x)
+  pb <- txtProgressBar(min = 0, max = length(mm2Patterns(x)), initial = 0, char = "=",
+                 width = NA, "Covergae calculation", "cov_calc", style = 3, file = "")
+  for(i in seq_along(mm2Patterns(x))){
+    setTxtProgressBar(pb, i)
+    x@patterns[[i]] <- calculateCoverage(x@patterns[[i]],loss_mz,mgs)
   }
-  return(m2l)
-}
+  return(x)
+})

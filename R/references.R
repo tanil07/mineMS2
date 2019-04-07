@@ -6,6 +6,8 @@ HIGH_MASS_INDICATOR <- NA_character_
 HIGH_MASS_LEGEND <- "high m/z"
 UNKNOWN_FORMULA_INDICATOR <- NA_real_
 UNKNOWN_FORMULA_LEGEND <- "unknown formula"
+MULTIPLE_FORMULA_LEGEND <- ">1 formula"
+COVERAGE_NAME <- "coverage"
 
 
 #################
@@ -14,12 +16,12 @@ UNKNOWN_FORMULA_LEGEND <- "unknown formula"
 
 ###Reference for atoms
 tabAtoms <- function(){
-	n_atoms <- c("H", "C", "O", "N", "F", "Cl", "Br", "I", "Si",
+	n_atoms <- c( "C","H", "O", "N", "F", "Cl", "Br", "I", "Si",
 				 "S", "P", "Se")
-	m_atoms <- c(1.00783, 12, 15.994915, 14.003074, 18.998403,
+	m_atoms <- c( 12, 1.00783, 15.994915, 14.003074, 18.998403,
 				 34.0968853, 78.918336, 126.904477, 27.976928, 31.972071,
 				 30.973763, 73.922477)
-	val_atoms <- c(1, 4, 2, 3, 1, 1, 1, 1, 4, 2, 3, 6)
+	val_atoms <- c(4, 1, 2, 3, 1, 1, 1, 1, 4, 2, 3, 6)
 	halogens <- c(FALSE,FALSE,FALSE,FALSE,TRUE,TRUE,TRUE,TRUE,FALSE,FALSE,FALSE,FALSE)
 	return(data.frame(name = n_atoms, mass = m_atoms, valence = val_atoms, halogen = halogens,
 					  stringsAsFactors = FALSE))

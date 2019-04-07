@@ -27,10 +27,24 @@ LossFormulaFromSingleString <- function(formula,ref,sep="|"){
   LossFormula(allf,ref=ref)
 }
 
+getAtomsFromRef <- function(ref){
+  if(typeof(ref)=="list"){
+    return(names(ref))
+  }
+  if(typeof(ref) %in% c("numeric","integer")){
+    return(names(ref))
+  }
+  if(typeof(ref) == c("character")){
+    return(ref)
+  }
+}
+
 
 LossFormula <- function(formula=NULL,ref=NULL){
   ####We check the class of the arguments
   lf <- new("LossFormula")
+  
+  if(!is.null(ref)) ref<- getAtomsFromRef(ref)
   
   if(is.null(formula)||((length(formula)==1) & (is.na(formula)))||(nchar(formula)==0)){
     if(is.null(ref)){

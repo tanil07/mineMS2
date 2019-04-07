@@ -1,6 +1,9 @@
 #' @include references.R
 #' @include LossFormula.R
 
+MULTIPLE_FORMULA <- "Formula>2"
+HIGH_MASS <- "high mz"
+
 ###Function used to construct the edges labels dataset.
 make_label_loss <- function(lab_edges){
 

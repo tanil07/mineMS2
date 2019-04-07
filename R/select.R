@@ -2,10 +2,28 @@
 
 
 checkSize <- function(vec,pos){
-	if(length(vec)<pos){
-		vec <- c(vec,do.call(typeof(vec),args=list(length(vec))))
-	}
-	return(vec)
+  if(typeof(vec) %in% c("numeric","integer","character","logical")){
+  	if(length(vec)<pos){
+  		vec <- c(vec,do.call(typeof(vec),args=list(length(vec))))
+  	}
+  	return(vec)
+  }
+  
+  if(is.data.frame(vec)){
+    if(nrow(vec)<pos){
+      vec <- vec[rep(1:(nrow(vec)),times=2),]
+    }
+    return(vec)
+  }
+  
+  if(is.list(vec)){
+    if(length(vec)<pos){
+      vec <- c(vec,vector(mode="list",length=length(vec)))
+    }
+    return(vec)
+  }
+  
+  stop("Unrecognized data type :",typeof(vec))
 }
 
 #' Selection function
@@ -91,51 +109,67 @@ find <- function(m2l,ids,vals=c("P","S"),...){
 }
 
 
-find.patterns.spectra<- function(m2l,ids,reduced=FALSE,biggest=TRUE,partial = TRUE){
+find.patterns.spectra<- function(m2l,ids,reduced=FALSE,metric = c("coverage","size","none"),partial = TRUE){
+  
+  metric <- match.arg(metric)
+  
 	idsp <- vrange(m2l,"P",reduced)
+	
+	if((!hasCoverage(m2l@patterns[[1]])) & (metric=="coverage")) stop("use calculateCoverage function before searching with type to coverage") 
+	
+	info_patt_full <- data.frame(id=character(10),size=numeric(10),inter=numeric(10),stringsAsFactors = FALSE)
+	info_patt_partial <- data.frame(id=character(10),size=numeric(10),inter=numeric(10),stringsAsFactors = FALSE)
+	
+	if(hasCoverage(m2l@patterns[[1]])){
+	  info_patt_full$coverage <- numeric(10)
+	  info_patt_partial$coverage <- numeric(10)
+	}
 
-	resids <- character(10)
-	resids_partial <- character(10)
-	seqsize <- integer(10)
-	seqsize_partial <- integer(10)
 	nsol <- 0
 	nsol_partial <- 0
 	for(ip in seq_along(idsp)){
 		temp_pat <- m2l[idsp[ip]]
 		occs <- mm2Occurences(temp_pat)
+		vm <- (ids %in% occs[,"gid"])
 
-		if(all(ids %in% occs[,"gid"])){
+		if(all(vm)){
 			nsol <- nsol+1
-			resids <- checkSize(resids,nsol)
-			resids[nsol] <- idsp[ip]
-			seqsize <- checkSize(seqsize,nsol)
-			seqsize[nsol] <- vcount(temp_pat@graph)-1
-
-		}
-
-		if(any(ids %in% occs[,"gid"])){
-			nsol_partial <- nsol_partial+1
-			resids_partial <- checkSize(resids_partial,nsol_partial)
-			resids_partial[nsol_partial] <- idsp[ip]
-			seqsize_partial <- checkSize(seqsize_partial,nsol_partial)
-			seqsize_partial[nsol_partial] <- sum(ids %in% occs[,"gid"])+vcount(temp_pat@graph)-1
-		}
-	}
-
-	if(nsol!=0){
-		resids <- resids[1:nsol]
-		if(biggest){
-			resids <- resids[which.max(seqsize)]
-		}
-		return(resids)
-	}else{
-		if(partial){
-			if(length(resids_partial)>0){
-				resids_partial <- resids_partial[which.max(seqsize_partial)]
+			info_patt_full <- checkSize(info_patt_full,nsol)
+			info_patt_full$id[nsol] <- idsp[ip]
+			info_patt_full$size[nsol] <- vcount(temp_pat@graph)-1
+			info_patt_full$inter[nsol] <- sum(vm)
+			if(hasCoverage(m2l@patterns[[1]])){
+			  info_patt_full$coverage[nsol] <- median(occs[,"coverage"])
 			}
 		}
-		return(character(0))
+		if(any(vm)){
+		  nsol_partial <- nsol_partial+1
+		  info_patt_partial <- checkSize(info_patt_partial,nsol_partial)
+		  info_patt_partial$id[nsol_partial] <- idsp[ip]
+		  info_patt_partial$size[nsol_partial] <- vcount(temp_pat@graph)-1
+		  info_patt_partial$inter[nsol_partial] <- sum(vm)
+		  
+		  if(hasCoverage(m2l@patterns[[1]])){
+		    info_patt_partial$coverage[nsol_partial] <- median(occs[,"coverage"])
+		  }
+		}
 	}
+	resids <- NULL
+	if(nsol!=0){
+	  info_patt_full <- info_patt_full[1:nsol,]
+		if(metric != "none"){
+		  resids <- info_patt_full$id[which.max(info_patt_full[[metric]])]
+		}
+	  if(metric == "none") resids <- info_patt_full$id[info_patt_full$inter>=2]
+	}else{
+		if(partial){
+			if(nsol_partial != 0){
+				resids <- info_patt_partial$id[which.max(info_patt_full[[metric]])]
+			}
+		}
+	}
+	
+	return(resids)
 }
 
 

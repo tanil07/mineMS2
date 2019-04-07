@@ -98,6 +98,11 @@ setGeneric("isSubformula",function(x,lf,...) standardGeneric("isSubformula"))
 
 setGeneric("isSubformulaIdx",function(x,lf,...) standardGeneric("isSubformulaIdx"))
 
+setGeneric("calculateCoverage",function(x,...) standardGeneric("calculateCoverage"))
+
+setGeneric("hasCoverage",function(x,...) standardGeneric("hasCoverage"))
+
+
 
 ###ms2Lib research generics.
 setGeneric("vrange",function(m2l,type,...) standardGeneric("vrange"))
