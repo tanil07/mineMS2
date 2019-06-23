@@ -18,7 +18,7 @@ findPatternsExplainingComponents(m2l, components, metric = c("f1"),
 }
 \value{
 A list containing one data.frame by component including the following informations:
-#' \description{
+\describe{
 \item[id] The id of the matched patterns.
 \item[f1] The F1-score between the pattern and the component.
 \item[accuracy] The accuracy between the pattern and the component.

@@ -605,8 +605,8 @@ setMethod("plot", "ms2Lib",
 		  	rid <- parseId(x,y)
 		  	if(rid[[1]]=="patterns"){
 		  	  toccs <- x[y]@occurences[,1]
-				plot(x[y],title = y,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
-				     atoms=x@atoms,formula=get_formula(x)[toccs],...)
+				return(plot(x[y],title = y,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
+				     atoms=x@atoms,formula=get_formula(x)[toccs],...))
 		  	}else if(rid[[1]]=="spectra"){
 		  		plot_Spectrum2(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){

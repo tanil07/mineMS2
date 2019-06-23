@@ -265,7 +265,7 @@ setMethod("plot", "fragPattern",
 		  			...
 		  		)
 		  	}
-
+    return(invisible(list(g,labels$vertices,ledges)))
 		  })
 #' PLotting the occurences of a fragPattern object inside
 #' an ms2Lib object.
@@ -286,6 +286,8 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 											   titles = NULL,
 											   byPage = 6,
 											   subOccs=NULL,
+											   highlights=TRUE,
+											   commonAxis=FALSE,
 											   ...) {
 	###Verifying that a correct id have been queried.
   omar <- par("mar")
@@ -308,6 +310,15 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 			titles <- paste(mm2Ids(m2l)," (S",1:length(mm2Spectra(m2l)),")",sep="")
 		}
 	}
+	
+	###We reformat the title if necessary
+	if(length(titles)!=length(mm2Spectra(m2l))){
+	  ntitles <- rep("",length(mm2Spectra(m2l)))
+	  ntitles[fp@occurences[,1]] <- titles
+    titles <- ntitles
+	}
+	
+	
 
 	###Extracting the occurences,dags and the graph.
 	occs <- mm2Occurences(fp)
@@ -335,6 +346,12 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	lmat <- layoutMatrix(min(byPage, length(occs_gid)),margin = 0.07)
 	maxv <- max(lmat)-2
 	layout(lmat)
+	
+	xlims <- NULL
+	if(commonAxis){
+	  xlims <- c(0,max(sapply(mgs[occs_gid],function(x) max(vertex_attr(x,"mz"))))*1.05)
+	  
+	}
 
 	
 	res_plot <- vector(mode="list",length=nrow(occs))
@@ -370,13 +387,18 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 		
 		res_plot[[i]] <- data.frame(int=intv,mz=mzs,col=col_seq)
 		
+		if(!commonAxis){
+		  xlims <- c(0, max(mzs) * 1.05)
+		}
+		
+		
 		plot(
 			mzs[non_matched_peaks_idx],
 			intv[non_matched_peaks_idx],
 			type = "h",
 			col = "#000000FF",
 			lwd = 3,
-			xlim = c(0, max(mzs) * 1.05),
+			xlim = xlims,
 			ylim = c(0, max(intv * 1.05)),
 			main = titles[gid],
 			xlab = "",
@@ -384,10 +406,14 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 		)
 
 		###We add the matched peaks.
+		ccol <- "#000000FF"
+		if(highlights){
+		  ccol <- col_vec[subOccs[i]]
+		}
 		points(mzs[matched_peaks_idx],
 			   intv[matched_peaks_idx],
 			   type = "h",
-			   col =col_vec[subOccs[i]],
+			   col =ccol,
 			   lwd = 3)
 	}
 	if((i%%6) != 1){

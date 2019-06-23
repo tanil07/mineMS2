@@ -113,5 +113,5 @@ plot_dag <- function(g,idx=NULL,
 		  			...
 		  		)
 		  	}
-
+    return(invisible(list(g,nodeslabs,txtlabs)))
 		  }
