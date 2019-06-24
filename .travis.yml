@@ -1,0 +1,13 @@
+language: r
+cache:
+    packages: true
+
+r:
+    - oldrel
+    - release
+    - devel
+
+notifications:
+ email:
+  recipients:
+   - pk.roger@icloud.com
