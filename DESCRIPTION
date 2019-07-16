@@ -12,6 +12,7 @@ Depends:
 Suggests:
 	devtools,
 	testthat (>= 2.0.0),
+	tools
 Imports: Rcpp (>= 0.12.13),
     MSnbase,
 	igraph,

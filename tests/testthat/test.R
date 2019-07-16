@@ -50,7 +50,8 @@ test_basic_processing <- function() {
                         file = path_output_graph)
     
     # Compare outputs
-    # TODO
+    testthat::expect_equal(tools::md5sum(path_output_graph),
+                           tools::md5sum(path_expected_output_graph))
 }
 
 # Main {{{1
