@@ -71,6 +71,14 @@ fragPattern <- function(rlist){
 }
 
 
+###Make an ID fo the graph based on edges.
+makeId <- function(pat){
+  elabs <- edge_attr(pat@graph,'lab',incident_edges(pat@graph,1)[[1]])
+  elabs <- paste(sort(elabs),collapse="/")
+  elabs
+}
+
+
 setMethod("calculateCoverage","fragPattern",function(x,mzloss,mgs){
   occs <- x@occurences
   coverages <- rep(NA_real_,nrow(occs))
