@@ -1,6 +1,5 @@
 language: r
-cache:
-    packages: true
+cache: packages
 
 r:
     - oldrel
