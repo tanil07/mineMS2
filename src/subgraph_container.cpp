@@ -20,9 +20,6 @@ subgraph_container::~subgraph_container()
 
 //Method to get an element.
 frag_pattern& subgraph_container::get(patternIdx idx){
-   // std::cout << "Getting " << idx.first <<" "<<idx.second;
-   //if((pmap[idx.first])[idx.second].null)
-    //std::cout <<"pm"<<(pmap[idx.first])[idx.second].get_norm()<<"_"<<(pmap[idx.first])[idx.second].null;
     return (pmap[idx.first])[idx.second];
 }
 
@@ -118,15 +115,12 @@ void subgraph_container::insert_pattern(frag_pattern& pat,std::ostream& of){
 //
 void subgraph_container::insert_closed_pattern(frag_pattern& fp, bool& inserted, std::ostream& of, int& num_error){
     //We check the supergraph.
-    //of << " Possible_Insert..";
     std::vector<patternIdx> sup_idx = findSupergraph(fp,of);
-    //of<<"num_sump_"<<sup_idx.size();
     std::vector<std::string> supergraphs;
     //Number of occurences is compared for closeness
     short current_score = fp.numOccs();
-    for(auto it=sup_idx.begin();it<sup_idx.end();it++){
+    for(auto it=sup_idx.begin();it!=sup_idx.end();it++){
         if(this->get(*it).numOccs()==current_score){
-            //of <<" "<< this->get(*it).numOccs()<<"_vs_"<<current_score<<" ";
             inserted = false;
             return;
         }
@@ -147,8 +141,6 @@ void subgraph_container::insert_closed_pattern(frag_pattern& fp, bool& inserted,
         return;
     }
 
-
-    //of <<"patt:  "<<fp.get_norm()<<"inserted !! " << std::endl;//DEBUG
     std::vector<patternIdx> to_rm;
     std::vector<std::string> to_rm_norm;
     std::string current_key = fp.get_norm();
@@ -170,22 +162,10 @@ void subgraph_container::insert_closed_pattern(frag_pattern& fp, bool& inserted,
             subgraphs.push_back(this->get(*it).get_norm());
         }
     }
-//    of << " removed "<<nremoved; //DEBUG
     //We remove the selected patterns.
-
-
     insert_pattern(fp,of);
     addPattern_latt(current_key,subgraphs,supergraphs);
-//    if(sub_idx.size()>0){
-//    //std::cout << "sup: "<<supergraphs.size() <<"sub: "<< subgraphs.size() <<" to_rm: "<<to_rm_norm.size() <<std::endl;
-//    }
-    //removePattern_latt(to_rm_norm);
-    //std::cout << "Removal done";
-
-
-    //removeIdx(to_rm);
     inserted = true;
-    //std::cout << "OUT FUN";
 }
 
 
@@ -194,7 +174,6 @@ void subgraph_container::insert_closed_pattern(frag_pattern& fp, bool& inserted,
 std::vector<patternIdx> subgraph_container::findSubgraph(frag_pattern& pat){
     //We start by getting all possible subgraph from the pattern
     std::vector<Edgep> econt = pat.enumerate_possible_subpattern();
-    //if(econt.size()>0) std::cout <<"poney"<<std::endl;
     auto & g = pat.get_g();
 
     //Results
@@ -224,12 +203,9 @@ std::vector<patternIdx> subgraph_container::findSubgraph(frag_pattern& pat){
             int idx = 0;
             for(;bp!=ep;bp++){
                 if((*bp).null) continue;
-                //std::cout << "iso_test";
                 if(is_isomorphic(*bp,eset)){
-                    //std::cout << "!OK!";
                     res.push_back(std::make_pair(lab,idx));
                 }
-                //std::cout << std::endl;
                 idx++;
             }
         }
@@ -241,7 +217,6 @@ std::vector<patternIdx> subgraph_container::findSubgraph(frag_pattern& pat){
 std::vector<patternIdx> subgraph_container::getInitialIdxSupermotifs(frag_pattern& pat,std::ostream& of,int nrand){
     std::vector<patternIdx> res;
     graphp& g = pat.get_g();
-//    of<<"bsampling: "; //DEBUB
     int nedges = boost::num_edges(g);
     if(nedges<1){
         return res;
@@ -259,15 +234,9 @@ std::vector<patternIdx> subgraph_container::getInitialIdxSupermotifs(frag_patter
     while(num<nrand){
         //We get a random summit
         auto rit = std::next(be, std::rand()%(nedges));
-        //of << "cnode_samp: "<<g[(*rit)].lab<<"_"<<num<<"/"<<nrand;
-        //We pick an edge at random.
-        //graphTraitsp::out_edge_iterator bo,eo;
-        //boost::tie(bo,eo) = boost::out_edges(*rit,g);
-        //Now a random edges is taken
-        //if(bo!=eo){
             //We pick the first edge
             short elab = g[*rit].lab;
-            //of<< "rlab: "<< elab <<" size: "<< res.size()<< std::endl;
+
             //We get the current idx
             auto idx = lab_idx.find(elab);
 
