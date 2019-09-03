@@ -596,10 +596,7 @@ bool frag_pattern::isCompleteD(std::vector<mass_graph>& D){
     for(boost::tie(ba,ea)=boost::adjacent_vertices(root,g);ba!=ea;ba++){
         L0.insert(g[*ba].lab);
     }
-//    Rcpp::Rcerr << "L0: ";
-//    for(auto itt = L0.begin();itt!=L0.end();itt++){
-//        Rcpp::Rcerr << *itt <<"_";
-//    }
+
     bool init = true;
     for(auto it=occurences.begin();it!=occurences.end();it++){
         occ& o = (*it);

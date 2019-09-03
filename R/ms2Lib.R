@@ -389,7 +389,6 @@ getFormula <- function(m2l){
 #' @param m2l An m2Lib object to be processed.
 #' @param count The number of spectra in which the spectrum need to be sampled.
 #' @param sizeMin The minimum size of the mined patterns.
-#' @param kTree The maximum depth of the path tree.
 #' @param precursor Should only the occurences coming form the root be conserved.
 #'
 #' @return The filled ms2Lib object.
@@ -397,65 +396,6 @@ getFormula <- function(m2l){
 #'
 #' @examples
 #' print("examples to be put here")
-setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2,kTree = NULL, precursor = FALSE){
-	if(count<2){
-		warning("'count' parameters set to ",count," it is therefore set to 2.")
-		count <- 2
-	}
-
-
-	###Get the data.frame correspoding to the sizes.
-	processing <- sapply(mm2Dags(m2l),function(x){
-		ecount(x)>1
-	})
-
-	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("No labels constructed, use the DiscretizeMallLosses function first.")
-	}
-
-	if(is.null(kTree)){
-	if(nrow(mm2EdgesLabels(m2l))<600){
-		kTree <- 3
-	}else{
-		kTree <- 2
-	}
-	}
-
-
-
-	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
-		###Wide variety of mass losses.
-		warning("sizeMin parameters set to ",sizeMin," risk of computational overhead.")
-	}
-
-	###Converting the dags into data.frame.
-	df_edges <- sapply(mm2Dags(m2l),fromIgraphToDf_edges,simplify = FALSE)
-	df_vertices <-sapply(mm2Dags(m2l),fromIgraphToDf_vertices,simplify = FALSE)
-
-	###Mining the patterns.
-	resRcpp <- mineClosedDags(df_vertices,df_edges,processing,count,kTree,sizeMin,precursor)
-
-	mm2LatticeIdxItems(m2l) <- resRcpp$items
-
-	###Construction via fragPatternc constructor.
-	mm2Patterns(m2l) <- sapply(resRcpp$patterns,fragPattern,USE.NAMES = FALSE)
-
-	###Initializing the names of the patterns.
-	for(i in 1:length(m2l@patterns)) mm2Name(m2l@patterns[[i]]) <- paste("P",i,sep="")
-
-
-	###Buillding of the lattice
-	mm2Lattice(m2l) <- graph_from_data_frame(resRcpp$edges,directed=TRUE,resRcpp$nodes)
-
-	###We add a label filed which give all the values of this.
-
-
-	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
-	m2l
-})
-
-
-
 setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, precursor = FALSE){
 	if(count<2){
 		warning("'count' parameters set to ",count," it is therefore set to 2.")

@@ -96,6 +96,8 @@ class subgraph_container
         int num_items;
 
         //Other possible implmentation using vector.
+        
+        //Patterns are stored using the rest of this shit
         std::map<short,std::vector<patternIdx> > lab_idx;
 
 

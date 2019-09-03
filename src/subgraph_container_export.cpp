@@ -133,7 +133,6 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 		}
 
 		// //Currently the socre is initialized to 0:
-		// elat[pinf.first].score = 0;
 		//In this part we add the edges to the dataset.
 		graphTraitl::out_edge_iterator bo,eo;
 		boost::tie(bo,eo) = boost::out_edges(it->first,lat);
@@ -142,7 +141,6 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 			from[count_edge]=vmap[boost::source(*bo,lat)]+1;
 			to[count_edge]=vmap[boost::target(*bo,lat)]+1;
 			//The edge is added
-			//boost::add_edge(nsource,ntarget,elat);
 			count_edge++;
 		}
 

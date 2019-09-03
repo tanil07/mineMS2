@@ -31,10 +31,10 @@ setClass(
 		atoms = "list",
 		patterns = "list",
 		loss = "logical",
-		lattice = "ANY",
-		latticeIdxItems = "integer",
+		# lattice = "ANY",
+		# latticeIdxItems = "integer",
 		reducedPatterns = "integer",
-		reducedLattice = "ANY",
+		# reducedLattice = "ANY",
 		k = "integer"
 	),
 	prototype = list(
