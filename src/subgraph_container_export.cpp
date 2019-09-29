@@ -167,13 +167,130 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 		Rcpp::Named("to") = to
 	);
 
-	//The final resl list is created.
+	//The final results list is created.
 
 	Rcpp::List res_list = Rcpp::List::create(
 		Rcpp::Named("nodes")=nodes_infos,
-		Rcpp::Named("edges")=edges_infos,
 		Rcpp::Named("patterns")=list_patterns,
 		Rcpp::Named("items")=vec_items
 	);
 	return res_list;
 }
+
+
+//Second verison of the R export.
+Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
+
+  //We generate the ids, on for the datasets, one for the nodes.
+  int count_M = 0;
+  int count_I = 0;
+  int tot_count = 0;
+  
+  //We iterate on the full vector.
+  int num_patterns = numPatterns();
+  
+  //List storing the pattern as a data.frame
+  Rcpp::List list_patterns(num_patterns);
+  
+  //List sotring the id of the items.
+  Rcpp::IntegerVector vec_items(num_items);
+  
+  //Supplementary nodes infos which will be returned.
+  Rcpp::IntegerVector num_occs(num_patterns);
+  Rcpp::IntegerVector num_occs_unique(num_patterns);
+  Rcpp::IntegerVector num_losses(num_patterns);
+  Rcpp::LogicalVector is_item(num_patterns);
+  
+  //The id of the pattern or the position of the pattern.
+  Rcpp::IntegerVector sid(num_patterns);
+  Rcpp::IntegerVector gid(num_patterns);
+  
+  //Score can be directly initalised
+  // Rcpp::NumericVector score(num_patterns,0.0);
+  
+  //Vertrox used for the edge list.
+
+  for(auto it = vmap.begin();it != vmap.end();it++){
+    int pos = it-> second;
+    //The new value is generated
+    if(lat[it->first].item){
+      
+      //Putting it into the vectors.
+      num_occs[pos] = 1;
+      num_occs_unique[pos] = 1;
+      num_losses[pos] = 0;
+      is_item[pos] = true;
+      
+      //The motif ID
+      sid[pos] = count_I;
+      
+      //If it was extracted into the lattice.
+      
+      //We append the index of the item to the data.
+      vec_items[count_I] = pos+1;
+      count_I++;
+      
+    }else{
+      patternIdx& patId = map_l_pat[it->first];
+      
+      //Pattern is extracted.
+      frag_pattern& cp  = get(patId);
+      
+      //Putting it into the vectors.
+      num_occs[pos] = cp.numOccs();
+      num_occs_unique[pos] = cp.numUniqueOccs().size();
+      num_losses[pos] = cp.sizeGraph()-1;
+      is_item[pos] = false;
+      sid[pos] = count_M+1;
+      
+      //Pattern is transformed into a list and pushed ot the list of motifs.
+      list_patterns[count_M] = cp.as_igraph_data_frame();
+      count_M++;
+    }
+    
+    // //Currently the socre is initialized to 0:
+    //In this part we add the edges to the dataset.
+    graphTraitl::out_edge_iterator bo,eo;
+    boost::tie(bo,eo) = boost::out_edges(it->first,lat);
+    
+    for(;bo!=eo;bo++){
+      from[count_edge]=vmap[boost::source(*bo,lat)]+1;
+      to[count_edge]=vmap[boost::target(*bo,lat)]+1;
+      //The edge is added
+      count_edge++;
+    }
+    
+    gid[pos] = pos+1;
+    tot_count++;
+  }
+  
+  
+  //The node_infos data.frame of the lattice is created. is created
+  Rcpp::DataFrame nodes_infos = Rcpp::DataFrame::create(
+    Rcpp::Named("gid") = gid,
+    Rcpp::Named("sid") = sid,
+    Rcpp::Named("item") = is_item,
+    Rcpp::Named("num_occs") = num_occs,
+    Rcpp::Named("num_occs_unique") = num_occs_unique,
+    Rcpp::Named("num_losses") = num_losses,
+    Rcpp::Named("score") = score
+  );
+
+  
+  //Export of the lattice structre.
+  // Rcpp::DataFrame edges_infos = Rcpp::DataFrame::create(
+  //   Rcpp::Named("from") = from,
+  //   Rcpp::Named("to") = to
+  // );
+  
+  //The final resl list is created.
+  
+  Rcpp::List res_list = Rcpp::List::create(
+    Rcpp::Named("nodes")=nodes_infos,
+    Rcpp::Named("edges")=edges_infos,
+    Rcpp::Named("patterns")=list_patterns,
+    Rcpp::Named("items")=vec_items
+  );
+  return res_list;
+}
+

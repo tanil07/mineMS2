@@ -648,7 +648,7 @@ bool frag_pattern::isCompleteD(std::vector<mass_graph>& D){
             std::transform(bi,ei,std::inserter(o_in_labs,o_in_labs.begin()),
                            [&gd](Edge e)-> short{return gd[e].lab;});
 
-            //intersectin
+            //intersection the possible extensions
             std::set<short> in_intersect;
             std::set_intersection(in_labs.begin(),in_labs.end(),
                                     o_in_labs.begin(),o_in_labs.end(),

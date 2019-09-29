@@ -97,12 +97,12 @@ class subgraph_container
 
         //Other possible implmentation using vector.
         
-        //Patterns are stored using the rest of this shit
+        //Patterns are stored using the lanbels 
         std::map<short,std::vector<patternIdx> > lab_idx;
-
-
-        void insertPatternIndex(frag_pattern& pat,patternIdx& idx,std::ostream& of);
-        void removePatternIndex(frag_pattern& pat,patternIdx& idx);
+        std::set<std::string> norm_set;
+        
+        //void insertPatternIndex(frag_pattern& pat,patternIdx& idx,std::ostream& of);
+        //void removePatternIndex(frag_pattern& pat,patternIdx& idx);
         std::vector<patternIdx> getInitialIdxSupermotifs(frag_pattern& pat,std::ostream& of,int nrand=3);
 
 
@@ -111,12 +111,12 @@ class subgraph_container
 
         std::vector<Vertexl> getLeafs();
 
-        //LATTICE STRUCTURE.
-        latticesub lat;
+        //LATTICE STRUCTURE (REMOVED IN FINAL VERFSION)
+        // latticesub lat;
 
         //Map a lattice node to a dataset.
-        void resetIdxMap();
-        subgraph_idx idxmap;
+        // void resetIdxMap();
+        // subgraph_idx idxmap;
 
 };
 
