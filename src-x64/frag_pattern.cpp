@@ -596,10 +596,7 @@ bool frag_pattern::isCompleteD(std::vector<mass_graph>& D){
     for(boost::tie(ba,ea)=boost::adjacent_vertices(root,g);ba!=ea;ba++){
         L0.insert(g[*ba].lab);
     }
-//    Rcpp::Rcerr << "L0: ";
-//    for(auto itt = L0.begin();itt!=L0.end();itt++){
-//        Rcpp::Rcerr << *itt <<"_";
-//    }
+
     bool init = true;
     for(auto it=occurences.begin();it!=occurences.end();it++){
         occ& o = (*it);
@@ -651,7 +648,7 @@ bool frag_pattern::isCompleteD(std::vector<mass_graph>& D){
             std::transform(bi,ei,std::inserter(o_in_labs,o_in_labs.begin()),
                            [&gd](Edge e)-> short{return gd[e].lab;});
 
-            //intersectin
+            //intersection the possible extensions
             std::set<short> in_intersect;
             std::set_intersection(in_labs.begin(),in_labs.end(),
                                     o_in_labs.begin(),o_in_labs.end(),

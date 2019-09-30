@@ -31,8 +31,6 @@ setClass(
 		atoms = "list",
 		patterns = "list",
 		loss = "logical",
-		# lattice = "ANY",
-		# latticeIdxItems = "integer",
 		reducedPatterns = "integer",
 		# reducedLattice = "ANY",
 		k = "integer"
@@ -47,12 +45,8 @@ setClass(
 		atoms = list(),
 		patterns = list(),
 		loss = TRUE,
-		lattice = make_empty_graph(),
-		latticeIdxItems = integer(),
 		reducedPatterns = integer(),
-		reducedLattice = make_empty_graph(),
 		k = as.integer(1)
-
 	)
 )
 
@@ -68,13 +62,15 @@ setClass(
 		graph = "ANY",
 		occurences = "matrix",
 		root = "integer",
-		name = "character"
+		name = "character",
+		canonicalForm = "character"
 	),
 	prototype = list(
 		graph = make_empty_graph(),
 		occurences = matrix(0,nrow=0,ncol=2),
 		root = as.integer(1),
-		name = character()
+		name = character(),
+		canonicalForm = character()
 	)
 )
 

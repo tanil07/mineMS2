@@ -100,9 +100,11 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
             counter++;
             if(!frequent_children){
                 if(is_root){
-                	if(sizeMin<=1){
-                        counter++;
+                	if(sizeMin<=1){  //We only insert it if he is not presnet in any other pattern
+                	    if(current_node.isCompleteD(mgs)){
+                      counter++;
                     	container.insert_closed_pattern(current_node,inserted,of,insert_error);
+                	    }
                 	}
                     break;
                 }else{
@@ -154,7 +156,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
     Rcpp::Rcerr<<"Explored "<< counv<<" graphs. "<<container.numSubgraphs()<<" closed frequent subgraphs found."<<std::endl;
 
     //We add the information on the found patterns
-    container.postProcessing(num_graph,of);
+    //container.postProcessing(num_graph,of);
 }
 
 

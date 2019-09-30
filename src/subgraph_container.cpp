@@ -83,9 +83,9 @@ std::tuple< std::vector<frag_pattern>::iterator ,std::vector<frag_pattern>::iter
     }
 }
 
-latticesub& subgraph_container::get_lat(){
-    return lat;
-}
+// latticesub& subgraph_container::get_lat(){
+//     return lat;
+// }
 
 //Inserting a pattern in the data structure.
 void subgraph_container::insert_pattern(frag_pattern& pat,std::ostream& of){
@@ -108,7 +108,7 @@ void subgraph_container::insert_pattern(frag_pattern& pat,std::ostream& of){
     patternIdx pv = std::make_pair(key,(pmap[key]).size()-1);
 
     //In very case the pattern in inserted into the new map.
-    insertPatternIndex(pat,pv,of);
+    //insertPatternIndex(pat,pv,of);
 
 }
 
@@ -464,7 +464,7 @@ int subgraph_container::numPatterns(){
     for(auto it = pmap.begin(); it != pmap.end(); it++){
       num_patt += it->second.size();
     }
-    return(num_patt)
+    return(num_patt);
 }
 
 // void subgraph_container::addPattern_latt(std::string& key,std::vector<std::string>& subgraphs,std::vector<std::string>&supergraphs){

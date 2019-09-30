@@ -16,8 +16,6 @@
 \item{sizeMin}{The minimum size of the mined patterns.}
 
 \item{precursor}{Should only the occurences coming form the root be conserved.}
-
-\item{kTree}{The maximum depth of the path tree.}
 }
 \value{
 The filled ms2Lib object.

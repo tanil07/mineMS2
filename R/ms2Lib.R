@@ -40,20 +40,8 @@ setMethod("mm2Patterns","ms2Lib",function(m2l){
 	return(m2l@patterns)
 })
 
-setMethod("mm2Lattice","ms2Lib",function(m2l){
-	return(m2l@lattice)
-})
-
-setMethod("mm2LatticeIdxItems","ms2Lib",function(m2l){
-	return(m2l@latticeIdxItems)
-})
-
 setMethod("mm2ReducedPatterns","ms2Lib",function(m2l){
 	return(m2l@reducedPatterns)
-})
-
-setMethod("mm2ReducedLattice","ms2Lib",function(m2l){
-	return(m2l@reducedLattice)
 })
 
 
@@ -111,23 +99,8 @@ setMethod("mm2Patterns<-","ms2Lib",function(m2l,value){
 	m2l
 })
 
-setMethod("mm2Lattice<-","ms2Lib",function(m2l,value){
-	m2l@lattice<- value
-	m2l
-})
-
-setMethod("mm2LatticeIdxItems<-","ms2Lib",function(m2l,value){
-	m2l@latticeIdxItems<- value
-	m2l
-})
-
 setMethod("mm2ReducedPatterns<-","ms2Lib",function(m2l,value){
 	m2l@reducedPatterns<- value
-	m2l
-})
-
-setMethod("mm2ReducedLattice<-","ms2Lib",function(m2l,value){
-	m2l@reducedLattice<- value
 	m2l
 })
 
@@ -434,20 +407,11 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 	###Mining the patterns.
 	resRcpp <- mineClosedDags(df_vertices,df_edges,processing,count,kTree,sizeMin,precursor)
 
-	mm2LatticeIdxItems(m2l) <- resRcpp$items
-
 	###Construction via fragPatternc constructor.
-	mm2Patterns(m2l) <- sapply(resRcpp$patterns,fragPattern,USE.NAMES = FALSE)
+	mm2Patterns(m2l) <- sapply(resRcpp$patterns,function(x){canonicalForm(fragPattern(x))},USE.NAMES = FALSE)
 
 	###Initializing the names of the patterns.
 	for(i in 1:length(m2l@patterns)) mm2Name(m2l@patterns[[i]]) <- paste("P",i,sep="")
-
-
-	###Buillding of the lattice
-	mm2Lattice(m2l) <- graph_from_data_frame(resRcpp$edges,directed=TRUE,resRcpp$nodes)
-
-	###We add a label filed which give all the values of this.
-
 
 	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
 	m2l
