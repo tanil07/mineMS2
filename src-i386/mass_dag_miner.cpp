@@ -58,7 +58,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
     std::stack<short> max_child_occs;
 
     //Used for the closeness predicates.
-    Rcpp::Rcerr << "Mined patterns: "<<std::endl;
+    Rcpp::Rcerr << "Mining in process, currently mined: "<<std::endl;
     int insert_error=0;
     int counter = 0;
     int current_1000 = 0;
@@ -89,7 +89,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
             //We print the label of the current node
             if(((counv%10000)==0)&(((counv/10000)!=indicator))){
                 indicator = counv/10000;
-                of <<"Patterns explored: "<< counv <<" closed motifs found: "<<container.numSubgraphs()<<std::endl;
+                //of <<"Patterns explored: "<< counv <<" closed motifs found: "<<container.numSubgraphs()<<std::endl;
             }
 
             //We try to get the next node.

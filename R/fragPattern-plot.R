@@ -328,9 +328,6 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	###Mass loss are used for matching.
 	loss_mz <- mm2EdgesLabels(m2l)$mz
 
-
-	col_vec <- rainbow(nrow(occs))
-
 	if(is.null(subOccs)){
 		subOccs <- 1:nrow(occs)
 	}else{
@@ -339,21 +336,99 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 		}
 	}
 
-
 	###THE IDX IS HANDLED BY C++ AND SHOULD BE CORRECT.
 	occs_gid <- occs[, 1]
 	occs_pos <- occs[, 2]
+	
+	u_occs_gid <- tapply(occs[,2],INDEX = occs[,1],FUN = function(x){return(x)})
+	ru_occs_gid <- as.numeric(names(u_occs_gid))
+	##We build the colvec_idx
+	col_idx_val <- tapply(1:nrow(occs),INDEX = occs[,1],FUN = function(x){return(x)})
+	
+	col_vec <- rainbow(length(ru_occs_gid))
+	
+	###We aggregate the spectra
 	lmat <- layoutMatrix(min(byPage, length(occs_gid)),margin = 0.07)
 	maxv <- max(lmat)-2
 	layout(lmat)
-	
 	xlims <- NULL
 	if(commonAxis){
 	  xlims <- c(0,max(sapply(mgs[occs_gid],function(x) max(vertex_attr(x,"mz"))))*1.05)
 	  
 	}
-
 	
+	res_plot <- vector(mode="list",length=nrow(occs))
+	for (i in 1:length(u_occs_gid)) {
+	  if((i %% 6) == 1){
+	    if(i != 1){
+	      layout(1)
+	      mtext(expression(bold("m/z")),side=1,padj=2)
+	      mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+	      layout(lmat)
+	    }
+	    par(mar=c(0.1,0.1,0.1,0.1))
+	    plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+	    plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+	    par(mar=c(2.5,2,2,0.5))
+	  }
+	  gid <- ru_occs_gid[i]
+	  all_pos <- u_occs_gid[[i]]
+	  
+	  all_maps <- sapply(all_pos,function(x,mg,loss_mz,mgs,g){
+	    get_mapping(mg=mg, patg=g, loss_mass=loss_mz, root = x)
+	  },mg=mgs[[gid]],g=g,loss_mz=loss_mz,simplify=FALSE)
+	  
+	  ###Plotting of the spectra
+	  intv <- vertex_attr(mgs[[gid]], "rel_int")
+	  mzs <- vertex_attr(mgs[[gid]], "mz")
+	  ids <- V(mgs[[gid]])
+	  
+	  ###Peaks are split between matched and non matched.
+	  matched_peaks_idx <- match(unique(do.call(c,sapply(all_maps,function(x){x[,2]}))), ids)
+	  non_matched_peaks_idx <- seq(1, length(mzs))[-matched_peaks_idx]
+	  col_seq <- rep("#000000FF",length(mzs))
+	  col_seq[matched_peaks_idx] <- col_vec[ru_occs_gid[i]]
+	  res_plot[[i]] <- data.frame(int=intv,mz=mzs,col=col_seq)
+	  
+	  if(!commonAxis){
+	    xlims <- c(0, max(mzs) * 1.05)
+	  }
+	  
+	  plot(
+	    mzs[non_matched_peaks_idx],
+	    intv[non_matched_peaks_idx],
+	    type = "h",
+	    col = "#000000FF",
+	    lwd = 3,
+	    xlim = xlims,
+	    ylim = c(0, max(intv * 1.05)),
+	    main = titles[gid],
+	    xlab = "",
+	    ylab = "",...
+	  )
+	  
+	  ###We add the matched peaks.
+	  ccol <- "#000000FF"
+	  if(highlights){
+	    ccol <- col_vec[ru_occs_gid[i]]
+	  }
+	  points(mzs[matched_peaks_idx],
+	         intv[matched_peaks_idx],
+	         type = "h",
+	         col =ccol,
+	         lwd = 3)
+	}
+	if((i%%6) != 1){
+	  layout(1)
+	  mtext(expression(bold("m/z")),side=1,padj=2)
+	  mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+	}
+	par(mar=omar)
+	return(invisible(res_plot))
+	
+	
+	
+
 	res_plot <- vector(mode="list",length=nrow(occs))
 	for (i in 1:length(occs_gid)) {
 	  if((i %% 6) == 1){
