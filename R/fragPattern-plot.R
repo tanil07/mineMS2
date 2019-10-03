@@ -384,10 +384,11 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	  ids <- V(mgs[[gid]])
 	  
 	  ###Peaks are split between matched and non matched.
-	  matched_peaks_idx <- match(unique(do.call(c,sapply(all_maps,function(x){x[,2]}))), ids)
+	  matched_peaks_idx <- match(unique(unlist(sapply(all_maps,function(x){x[2,]},simplify=FALSE))), ids)
+	  # browser()
 	  non_matched_peaks_idx <- seq(1, length(mzs))[-matched_peaks_idx]
 	  col_seq <- rep("#000000FF",length(mzs))
-	  col_seq[matched_peaks_idx] <- col_vec[ru_occs_gid[i]]
+	  col_seq[matched_peaks_idx] <- col_vec[i]
 	  res_plot[[i]] <- data.frame(int=intv,mz=mzs,col=col_seq)
 	  
 	  if(!commonAxis){
@@ -410,7 +411,7 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	  ###We add the matched peaks.
 	  ccol <- "#000000FF"
 	  if(highlights){
-	    ccol <- col_vec[ru_occs_gid[i]]
+	    ccol <- col_vec[i]
 	  }
 	  points(mzs[matched_peaks_idx],
 	         intv[matched_peaks_idx],
@@ -425,9 +426,6 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	}
 	par(mar=omar)
 	return(invisible(res_plot))
-	
-	
-	
 
 	res_plot <- vector(mode="list",length=nrow(occs))
 	for (i in 1:length(occs_gid)) {
@@ -492,10 +490,10 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 			   lwd = 3)
 	}
 	if((i%%6) != 1){
-	  layout(1)
 	  mtext(expression(bold("m/z")),side=1,padj=2)
 	  mtext(expression(bold("intensity")),side=2,padj=-0.2)	
 	}
+	layout(1)
 	par(mar=omar)
 	return(invisible(res_plot))
 })
