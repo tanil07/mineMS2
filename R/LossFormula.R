@@ -210,7 +210,7 @@ is_sub_raw <- function(rf1,rf2){
 
 
 ###Vectorized implementation.
-setMethod("isSubformula",signature = list(x="LossFormula",lf = "character"),function(x,lf){
+setMethod("isSubformula",signature = list(x="LossFormula",lf = "character"),function(x,lf,type=NULL){
   l_atoms <- colnames(x@formula)
   lf <- stringToFormula(lf,vnames=l_atoms)
   vr <-apply(x@formula,1,is_sub_raw,rf2=lf)

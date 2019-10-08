@@ -214,7 +214,7 @@ setMethod("plot", "fragPattern",
 
 		  	g <- mm2Graph(x)
 		  	###We determine the edge label
-		  	oformula <- sapply(get_formula(m2l)[mm2Occurences(x)[,"gid"]],LossFormula,ref=atoms)
+		  	oformula <- formula[mm2Occurences(x)[,"gid"]]
 		  	filled_formula <- which(sapply(oformula,function(x){length(x)>0}))
 		  	if(length(filled_formula)==0){
 		  	  oformula <- list()

@@ -327,7 +327,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 
 
 get_formula <- function(m2l){
-  vf <- match("formula",tolower(colnames(m2l@spectraInfo)))
+  vf <- match("formula",tolower(trimws(colnames(m2l@spectraInfo))))
   return(m2l@spectraInfo[,vf])
 }
 
@@ -510,7 +510,7 @@ setMethod("plot", "ms2Lib",
 				return(plot(x[y],title = y,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
 				     atoms=names(x@atoms),formula=get_formula(x)[toccs],...))
 		  	}else if(rid[[1]]=="spectra"){
-		  		plot_Spectrum2(x[y],full=TRUE,...)
+		  		MSnbase:::plot_Spectrum2(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){
 		  	  if(is.null(title)) title="Fragmentation Graph"
 		  		plot_dag(x[y],idx=y,edgeLabels=(mm2EdgesLabels(x)),atoms=x@atoms,title=title,...)
