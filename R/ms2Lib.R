@@ -335,7 +335,7 @@ get_formula <- function(m2l){
 setMethod("show","ms2Lib",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
   if(length(mm2Atoms(object))!=0){
-	  cat("It has",nrow(mm2EdgesLabels(object)),"edges labels built with atoms",paste(mm2Atoms(object),collapse=","),".\n")
+	  cat("It has",nrow(mm2EdgesLabels(object)),"edges labels built with atoms",paste(names(mm2Atoms(object)),collapse=","),".\n")
   }
   cat("The available supplementary informations are:",colnames(mm2SpectraInfos(object)),"\n")
 	cat("It contains: ",length(mm2Patterns(object)),"patterns\n")
