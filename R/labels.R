@@ -130,7 +130,6 @@ chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = N
     if((length(lf) > 1) && (length(oformula) > 0)) {
       ###Majority vote.
       vm <- sapply(oformula,isSubformula,x=lf,type="none",simplify=TRUE)
-      if(is.null(dim(vm))) browser()
       bf <- apply(vm,1,sum)
       bloss <- which(bf == max(bf))
     } else {
@@ -398,7 +397,6 @@ annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
   allf <- sapply(elabs$formula[all_edges_lab],function(x,atoms){
     LossFormulaFromSingleString(x,ref = atoms,sep = "|")
   },atoms=atoms,simplify=FALSE)
-  
   
   massdiff <- getMzDiff(g,mm2Occurences(fp),dags,elabs$mz)
   massdiff <- apply(massdiff,2,mean)
