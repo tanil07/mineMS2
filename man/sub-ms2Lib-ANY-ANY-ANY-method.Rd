@@ -13,11 +13,18 @@
 \item{i}{The index, a string starting by S if it a spectrum, P if it's a pattern D if it's a dag, L if it's a loss
 F if it's a fragment.}
 
-\item{drop}{}
+\item{j}{unused.}
+
+\item{...}{unused.}
+
+\item{drop}{unused.}
 }
 \value{
 A list containg the object.
 }
 \description{
 Indexing function.
+}
+\examples{
+print("Example to be put here")
 }

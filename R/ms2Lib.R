@@ -114,8 +114,15 @@ isLoss <- function(m2l){
 	m2l@loss
 }
 
-###A list of the recognised format
+##List of the recognised format currently
+
+#' Get the supported input forma for mineMS2
+#'
+#' @return A character vector lsiting the supported format
 #' @export
+#'
+#' @examples
+#' recognisedFormat()
 recognisedFormat <- function(){
 	return(c("mgf"))
 }
@@ -140,13 +147,9 @@ parse_mgf_spectrum2 <- function(filename){
 checkFormat <- function(x){
 	rf <- recognisedFormat()
 	splitted <- strsplit(x,".",fixed=TRUE)
-
-	exts <- sapply(splitted,tail,1)
-
+	exts <- sapply(splitted,FUN = tail,1)
 	is_ok <- exts %in% rf
-
 	if(any(!(is_ok))) stop(paste("Unrecognized format:",exts[!is_ok],"in",x[!is_ok]))
-
 	return(exts)
 }
 
@@ -193,7 +196,9 @@ convert_formula <- function(form_vec){
 #' does not start with \code{'P', 'L', 'S'} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
 #' and it contains an id fields, it will be used. If no ids are furnished, an id will be generated for each spectra in the form \code{'S1', 'S2', ..., 'SN'}
 #' where N is the number of furnished spectra.
+#' @param intThreshold The intensity threshold used to filter out the peaks.
 #' @param infosFromFiles Shall the other informations present in the files be added to the supplementary infos.
+#' @aliases ms2Lib ms2Lib-constructor
 #' @examples
 #' print("examples to be put here")
 ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFromFiles = FALSE){
@@ -382,7 +387,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 	})
 
 	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("No labels constructed, use the DiscretizeMallLosses function first.")
+		stop("No labels constructed, use the DiscretizeMassLosses function first.")
 	}
 
 
@@ -462,12 +467,15 @@ mm2get <- function(m2l,arglist){
 #' @param x An ms2Lib oject.
 #' @param i The index, a string starting by S if it a spectrum, P if it's a pattern D if it's a dag, L if it's a loss
 #' F if it's a fragment.
-#' @param drop
+#' @param j unused.
+#' @param drop unused.
+#' @param ... unused.
 #'
 #' @return A list containg the object.
 #' @export
 #'
 #' @examples
+#' print("Example to be put here")
 setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 	if(length(i)==1){
 		 temp <- mm2get(x,parseId(x,i))
@@ -490,12 +498,14 @@ setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 #'
 #' @param x An ms2Lib oject.
 #' @param y The index, a string starting by S if it a spectrum, P if it's a pattern or D if it's a dag.
+#' @param title The title of the plot, only used for dag and spectrum.
 #' @param ... supplementary arguments to be passed by the method.
 #'
 #' @return a fragPattern object of an igraph graph object.
 #' @export
 #'
 #' @examples
+#' print("Examples to be put here")
 setMethod("plot", "ms2Lib",
 		  function(x,
 		  		 y,title=NULL,
@@ -649,10 +659,11 @@ getInfo <- function(m2l,ids){
 #' Return the range of iteration on an ms2Lib object.
 #'
 #' @param m2l AN ms2Lib object
-#' @param type "S","L","P" or "F"
-#' @param reduced Used only if "type" is set to "P".
+#' @param type "S","L" or "P"
+#' @param reduced Used only if "type" is set to "P", shall the filtered pattern set be returned.
+#' @param as.number If as number is selected integer are returned without the prefix.
 #'
-#' @return A character vector giving the existing ids.
+#' @return A character vector giving the existing ids in the ms2Lib object,
 #' @export
 #'
 #' @examples
@@ -701,8 +712,11 @@ setMethod("hasCoverage","ms2Lib",function(x){
 
 
 #' Calculate the coverage of all the patterns in the dataset.
+#' 
+#' Calculate the coverage, the total intensity covered by the patterns on the mass graphs.
+#'  This calculation can be qute long.
 #'
-#' @param m2l The ms2Lib to bo computed.
+#' @param x The ms2Lib to bo computed.
 #'
 #' @return The m2l object with all the coverage calculated.
 #' @export

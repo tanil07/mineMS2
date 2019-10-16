@@ -1,15 +1,15 @@
 ---
 title: "*mineMS2*: Mining of MS fragmentation spectra by frequent subgraph mining."
-author: "Alexis Delabriere and Eteinne Thevenot"
+author: "Alexis Delabriere and Etienne Thevenot"
 date: "`r Sys.Date()`"
 
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{mineMS2: Mining of MS fragmentation spectra by frequent subgraph mining}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: "mineMS2-vignette.bib"
 output: 
-  BiocStyle::html_document
+  BiocStyle::pdf_document
 ---
 
 ```{r global_options, include=FALSE}
@@ -76,7 +76,7 @@ plot(m2l,"S10")
 Here the "S10" index correspond to the 10th spectra. These indexes will be discussed later.
 
 
-#Losses dicretization
+#Losses discretization
 The graphs are built by discretizing the mass losses. This algorithm uses a density with a varying bandwidth to take into account the fact that the mass accuraccy of mass spectrometers are in ppm. This step is very important, as it determine the initial set of graphs. The most important parameters and their meaning are listed here :
 
 * _ppm_: The accuracy of the mass spectrometer in ppm used to determine the bandwidth of the density.
@@ -96,7 +96,7 @@ The graphs are built by discretizing the mass losses. This algorithm uses a dens
 
 The _precPpm_ and _precDmz_ arguments are used to find a peak corresponding to the precursor on the MS-MS spectra. If it is not present an artificial peak is added.
 
-```{r edge_discretization,message=FALSE}
+```{r edge_discretization, message=FALSE}
 m2l <- discretizeMassLosses(m2l,ppm=8,dmz=0.008,count=2,
 							precPpm=20,precDmz=0.03,maxFrags=15)
 ```
@@ -148,9 +148,9 @@ pids
 
 ##Patterns
 
-* Patterns IDs start by the *P* letter, they can be plotted using the *plot* and *plotOccurences* functions.
+Patterns IDs start by the *P* letter, they can be plotted using the *plot* and *plotOccurences* functions.
 ```{r patterns_plot_example}
-selected_pattern <- pids[["L96"]][3]
+selected_pattern <- pids[[lphenyl]][3]
 plot(m2l,selected_pattern)
 ```
 ```{r patterns_plot_occs_example}

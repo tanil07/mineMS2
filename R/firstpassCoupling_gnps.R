@@ -3,7 +3,7 @@ ID_COL_GNPS <- "cluster index"
 
 
 ####Eventually first removing isolated points.
-findAllCliques <- function(net,minSize = 3,vname="cluster index"){
+findAllCliques <- function(net_gnps,minSize = 3,vname="cluster index"){
 	g <- induced_subgraph(net_gnps,V(net_gnps))
 
 	big_clique <- largest.cliques(g)[[1]]
@@ -58,7 +58,9 @@ findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
 #'
 #' @param net A gnps network
 #' @param minSize The minimum size of the detected clique.
-#' @param pariThreshold For all the similarities, for each dataset,
+#' @param pairThreshold A threshold used to discard the edges to detect components.
+#' @param vname The name of the exported index of the component as verte attribute.
+#' @param eattr The name of the considered similarity measure on the network.
 #'
 #' @return A list of the componets to be checked.
 #' @export
@@ -175,16 +177,16 @@ makeIdxTable <- function(components,maxVertices=70){
 }
 
 
-#' Title
+#' Annotation of GNPS network
 #'
-#' @param components jkkj
-#' @param net kjkj
-#' @param patterns jkkj
-#' @param copy kjkj
-#' @keepattr kjdffkdj
-#' @param sep_infos kjkj
+#' @param components The components of the GNPS network as integer.
+#' @param net The GNPS network as an igraph object
+#' @param patterns The set of patterns extract from an ms2Lib object.
+#' @param copy Shall the igraph object be copied (recommended)
+#' @param keepattr Which attributes sahll be kept on the ntwork
+#' @param sep_infos The seprator used to separate the colors when multiple colors are associated ot a single node.
 #'
-#' @returnjkjk
+#' @return The annotated netowrk.
 #' @export
 #'
 #' @examples

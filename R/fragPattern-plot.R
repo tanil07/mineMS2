@@ -167,8 +167,8 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 #' plot a fragPattern associated fragmentation
 #' dag using igraph capabilities.
 #'
-#' @param x
-#' @param y = NULL,
+#' @param x The pattern to plot.
+#' @param y = NULL
 #' @param edgeLabels = NULL,
 #' @param nodeLab = c("default", "label"),
 #' @param edgeLab = c("formula","none"),
@@ -177,10 +177,9 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 #' @param vertex_label_cex = 0.7,
 #' @param subNodes = NULL,
 #' @param tkplot = FALSE,
-#' @param ...
+#' @param ... Supplmentary arguments passed to the igraph function
 #'
-#' @return nothing
-#' @export
+#' @return None
 #'
 #' @examples
 #' print("Exmaples ot be put here.")
@@ -269,12 +268,16 @@ setMethod("plot", "fragPattern",
 #' @param titles A vector of titles to be used. A default tile include id
 #' and precursor will bne used by default
 #' @param byPage The maximum number of spectra to be plotted by page.
+#' @param subOccs Shall some specific occurences be ocnsidered over all the occurences.
+#' @param highlights Shall the peaks covered by the pattern be highlighted.
+#' @param commonAxis Shall all the spectra be plotted with a common x-axis.
 #' @param ... supplementary function to be passed to theplot function.
 #'
-#' @return
+#' @return A list ocntainng the spectra and their coloring in RGB format
 #' @export
 #'
 #' @examples
+#' print("Examples to be put here")
 setMethod("plotOccurences", "ms2Lib", function(m2l,
 											   pidx,
 											   titles = NULL,

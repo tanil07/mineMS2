@@ -13,7 +13,9 @@
   tkplot = FALSE, ...)
 }
 \arguments{
-\item{y}{= NULL,}
+\item{x}{The pattern to plot.}
+
+\item{y}{= NULL}
 
 \item{edgeLabels}{= NULL,}
 
@@ -27,14 +29,14 @@
 
 \item{tkplot}{= FALSE,}
 
-\item{...}{}
+\item{...}{Supplmentary arguments passed to the igraph function}
 
 \item{nodeLab}{= c("default", "label"),}
 
 \item{edgeLab}{= c("formula","none"),}
 }
 \value{
-nothing
+None
 }
 \description{
 plot a fragPattern associated fragmentation

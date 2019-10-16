@@ -41,7 +41,7 @@ setMethod("mm2Name<-", "fragPattern",function(pat,value){
 	pat
 })
 
-setMethod("mm2CanonicalForm<-", "fragPattern",function(pat){
+setMethod("mm2CanonicalForm<-", "fragPattern",function(pat,value){
   pat@canonicalForm <- value
   pat
 })
@@ -67,6 +67,7 @@ setMethod("show","fragPattern",function(object){
 #' and the second giving the nodes.
 #'
 #' @return
+#' The constructed fragPattern object.
 #'
 #' @examples
 #' print("Exmaples to be put here")

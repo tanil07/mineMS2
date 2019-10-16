@@ -9,7 +9,7 @@
   count = 2, limMzFormula = c(14.5, 200), maxFrags = 15,
   maxOverlap = 0.05, strictMatching = TRUE, precPpm = 20,
   precDmz = 0.02, atoms = NULL, heteroAtoms = TRUE, mzDigits = 4,
-  penalizedLosses = NULL, majoredLosses = character(0), ...)
+  ...)
 }
 \arguments{
 \item{m2l}{The ms2 lib object to be discretized.}
@@ -34,11 +34,12 @@ higher term won't have formula check.}
 
 \item{precDmz}{The minimum tolerance used to match the precursor mz to the fragments.}
 
+\item{atoms}{A list of the maximum number of atoms authorized during the formula generation process.
+If it is NULL, the default list the maximum of \emph{limMzFormula}/12, H:50, N:6 ,O:6.}
+
 \item{heteroAtoms}{a boolean,  ignored if a custom atoms is furnished, add heteroatoms P, Cl, S as possible atoms.}
 
 \item{mzDigits}{The number of decimals to write as an information in the graphs.}
-
-\item{penalizedLosses}{A chracter vector, the losses which will be penalized. If NULL the table penalizedLossDefault() is used.}
 }
 \value{
 An ms2Lib object with filled fileds and constructed dags.

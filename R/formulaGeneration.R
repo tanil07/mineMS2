@@ -79,17 +79,19 @@ checkSevenGoldenRules <- function(tAtoms,solution,tol=c("low","high"),rules=rep(
 
 #' findFormula function
 #'
-#'Fast formula generator using the algoirthm descirbed by Bocker
+#'Fast formula generator using the algoirthm described by Bocker
 #'2010. 100 times faster than rcdk.
 #' @param mz The mass to b decomposed.
 #' @param tol The tolerance in ppm.
 #' @param atoms A of constraint on the number of atoms.
-#'
+#' @param rules Which of the seven golden rules should be respected
+#' @param mgraph Shall the molecular formula possible admit a molecular graph.
+#' @param scomp Shall only single component molecular grpah be generated (Not H4O2 for example)
 #' @return A list of the valid formula.
 #' @export
 #'
 #' @examples
-#' cat("examples ot be put there")
+#' findFormula(34,tol=0.1,scomp=FALSE)
 findFormula <-
 	function(mz,
 			 tol,
@@ -148,7 +150,7 @@ findFormula <-
 				nsol <- nsol + 1
 			}
 		}
-		return(resList[1:nsol])
+		return(resList[1:max(nsol-1,1)])
 	}
 
 

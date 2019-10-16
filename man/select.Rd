@@ -4,7 +4,7 @@
 \alias{select}
 \title{Selection function}
 \usage{
-select(m2l, ids, vals = c("P", "S", "L", "F"), ...)
+select(m2l, ids, vals = c("P", "S", "L", "F"))
 }
 \arguments{
 \item{m2l}{An ms2Lib object.}

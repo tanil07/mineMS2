@@ -12,6 +12,8 @@ find.patterns.class(m2l, ids, type = c("f1", "precision", "size"),
 
 \item{ids}{Valid IDs of objects, it mays be a chracter vector with the prefix "P" or an integer or numeric vector}
 
+\item{type}{Which criteria is used to determine the best match, F-score, precision or acccuracy}
+
 \item{returnall}{Shall all the patterns with a similar F1 score be returned.}
 
 \item{full}{Shall only full matches be returned.}

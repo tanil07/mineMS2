@@ -12,7 +12,11 @@ findGNPSComponents(net, minSize = 3, pairThreshold = 0.9,
 
 \item{minSize}{The minimum size of the detected clique.}
 
-\item{pariThreshold}{For all the similarities, for each dataset,}
+\item{pairThreshold}{A threshold used to discard the edges to detect components.}
+
+\item{vname}{The name of the exported index of the component as verte attribute.}
+
+\item{eattr}{The name of the considered similarity measure on the network.}
 }
 \value{
 A list of the componets to be checked.

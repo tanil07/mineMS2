@@ -9,15 +9,12 @@
 #' @slot spectra A list of spectra sotred under the form of Spectrum2 object.
 #' @slot ids A chracter vector containing the ids of spectra.
 #' @slot dags A list storing the set of graphs object corresponding to the MS-MS spectra.
-#' @slot edgesLabels The discretized edges labels.
-#' @slot nodesLabels The discretized nodes labels.
+#' @slot losses The discretized edges labels.
+#' @slot fragments The discretized nodes labels.
 #' @slot patterns A list storing the fragPattern objects.
-#' @slot lattice The graph reprsentation of the lattice of the patterns.
-#' @slot latticeIdxItems The ids of the nodes which are items in MS2process.
 #' @slot ReducedPatterns The ids of the reduced patterns.
-#' @slot ReducedLattice The graph of the reduced lattice.
 #' @slot k The count of reduced patterns.
-#' @aliases ms2Lib
+#' @aliases ms2Lib-class
 #' @exportClass ms2Lib
 setClass(
 	"ms2Lib",

@@ -186,9 +186,9 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
   vrdbe <- vecRDBE(allf[[1]]@formula)
   mzv <- massdiff[seq_along(vlab)]
   
-  if(is.null(oformula)){
-    oformula <- sapply(getFormula(m2l)[occs[,1]],LossFormulaFromSingleString,ref=atoms,sep="|")
-  }
+  # if(is.null(oformula)){
+  #   oformula <- sapply(getFormula(m2l)[occs[,1]],LossFormulaFromSingleString,ref=atoms,sep="|")
+  # }
   
   ####Each col correspond to a vertices.
   res <- sapply(seq_along(vlab),function(x,l_origin,voformula,vatoms,subf,vdags,lformula,vmz,vrdbe){
@@ -201,7 +201,7 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
     vrdbe <- vecRDBE(lf@formula)
     rtemp <- chooseVerticesLosses(lf,oformula=voformula,dags,vmz[x],vrdbe=vrdbe,atoms=vatoms,subformula = subf[x+1,])
     return(list(rtemp[2:3],lf[rtemp[1],,drop=FALSE]))
-  },vdags=vdags,voformula=oformula,l_origin=vlab,vatoms = atoms,subf = subformula,
+  },vdags=dags,voformula=oformula,l_origin=vlab,vatoms = atoms,subf = subformula,
   lformula=allf,vmz = mzv,vrdbe=vrdbe)
   return(res)
 }

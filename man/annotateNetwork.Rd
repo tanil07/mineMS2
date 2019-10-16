@@ -2,25 +2,30 @@
 % Please edit documentation in R/firstpassCoupling_gnps.R
 \name{annotateNetwork}
 \alias{annotateNetwork}
-\title{Title}
+\title{Annotation of GNPS network}
 \usage{
 annotateNetwork(components, net, patterns, copy = TRUE,
   keepattr = c("Compound_Name", "SpectrumID", "DefaultGroups",
   "cluster index", "precursor mass"), sep_infos = ",")
 }
 \arguments{
-\item{components}{jkkj}
+\item{components}{The components of the GNPS network as integer.}
 
-\item{net}{kjkj}
+\item{net}{The GNPS network as an igraph object}
 
-\item{patterns}{jkkj}
+\item{patterns}{The set of patterns extract from an ms2Lib object.}
 
-\item{copy}{kjkj}
+\item{copy}{Shall the igraph object be copied (recommended)}
 
-\item{sep_infos}{kjkj}
+\item{keepattr}{Which attributes sahll be kept on the ntwork}
+
+\item{sep_infos}{The seprator used to separate the colors when multiple colors are associated ot a single node.}
+}
+\value{
+The annotated netowrk.
 }
 \description{
-Title
+Annotation of GNPS network
 }
 \examples{
 print("Examples to be put here")

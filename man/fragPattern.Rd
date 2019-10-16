@@ -14,7 +14,7 @@ by the graph_from_data_frame function.
 and the second giving the nodes.}
 }
 \value{
-
+The constructed fragPattern object.
 }
 \description{
 This is an internal constructor which is used to pass form the rcpp

@@ -36,7 +36,7 @@ checkSize <- function(vec,pos){
 #'
 #' @examples
 #' print("Examples to be put here")
-select <- function(m2l,ids,vals=c("P","S","L","F"),...){
+select <- function(m2l,ids,vals=c("P","S","L","F")){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an ms2Lib object.")
 
 	vals <- match.arg(vals)
@@ -283,6 +283,7 @@ checkFTerms <- function(seq_terms){
 #'
 #' @param m2l An ms2Lib object.
 #' @param ids Valid IDs of objects, it mays be a chracter vector with the prefix "P" or an integer or numeric vector
+#' @param type Which criteria is used to determine the best match, F-score, precision or acccuracy
 #' @param returnall Shall all the patterns with a similar F1 score be returned.
 #' @param full Shall only full matches be returned.
 #' @param reduced Shall only the reduced set of patterns be considered.

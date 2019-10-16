@@ -11,12 +11,14 @@
 \arguments{
 \item{m2l}{AN ms2Lib object}
 
-\item{type}{"S","L","P" or "F"}
+\item{type}{"S","L" or "P"}
 
-\item{reduced}{Used only if "type" is set to "P".}
+\item{reduced}{Used only if "type" is set to "P", shall the filtered pattern set be returned.}
+
+\item{as.number}{If as number is selected integer are returned without the prefix.}
 }
 \value{
-A character vector giving the existing ids.
+A character vector giving the existing ids in the ms2Lib object,
 }
 \description{
 Return the range of iteration on an ms2Lib object.

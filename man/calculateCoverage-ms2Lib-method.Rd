@@ -8,13 +8,14 @@
 \S4method{calculateCoverage}{ms2Lib}(x)
 }
 \arguments{
-\item{m2l}{The ms2Lib to bo computed.}
+\item{x}{The ms2Lib to bo computed.}
 }
 \value{
 The m2l object with all the coverage calculated.
 }
 \description{
-Calculate the coverage of all the patterns in the dataset.
+Calculate the coverage, the total intensity covered by the patterns on the mass graphs.
+ This calculation can be qute long.
 }
 \examples{
 print("Examples to be put here")

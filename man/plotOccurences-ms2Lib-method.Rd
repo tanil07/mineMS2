@@ -19,9 +19,21 @@ and precursor will bne used by default}
 
 \item{byPage}{The maximum number of spectra to be plotted by page.}
 
+\item{subOccs}{Shall some specific occurences be ocnsidered over all the occurences.}
+
+\item{highlights}{Shall the peaks covered by the pattern be highlighted.}
+
+\item{commonAxis}{Shall all the spectra be plotted with a common x-axis.}
+
 \item{...}{supplementary function to be passed to theplot function.}
+}
+\value{
+A list ocntainng the spectra and their coloring in RGB format
 }
 \description{
 PLotting the occurences of a fragPattern object inside
 an ms2Lib object.
+}
+\examples{
+print("Examples to be put here")
 }

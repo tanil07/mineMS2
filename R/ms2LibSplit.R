@@ -48,7 +48,7 @@ setMethod("setComponents","ms2LibSplit",function(m2l,components){
 	components <- sapply(components,checkComponent)
 
 	valids <- sapply(components,function(x) x$valid)
-
+	
 	if(any(!valids)){
 		stop("Invalids ids in component(s): ",paste(components[which(!valids)],sep=", "))
 	}
@@ -139,8 +139,8 @@ setMethod("mineClosedSubgraphsByComponent","ms2LibSplit",function(m2l, count = 2
 setMethod("show","ms2LibSplit",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
 	cat("It has",nrow(mm2EdgesLabels(object)),"edges labels.\n")
-	cat("The available supplementary informations are:",colnames(mm2SpectraInfos(m2l)),"\n")
+	cat("The available supplementary informations are:",colnames(mm2SpectraInfos(object)),"\n")
 	cat("It contains: ",length(mm2Patterns(object)),"patterns\n")
-	if(length(mm2ReducedPatterns(m2l))!=0) cat("It has been reduced to ",
-											   length(mm2ReducedPatterns(m2l)),"patterns")
+	if(length(mm2ReducedPatterns(object))!=0) cat("It has been reduced to ",
+											   length(mm2ReducedPatterns(object)),"patterns")
 })
