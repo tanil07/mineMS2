@@ -71,9 +71,9 @@ This ID is notably used in the visualisation offered by the *mineMS2* package.
 
 The extracted spectrum may be plot using the *plot* function of the *msnBase* package :
 ```{r plotSpec}
-plot(m2l["S10"],full=TRUE)
+plot(m2l,"S10")
 ```
-Here the "S10" index correspond to the first spectra. These indexes will be discussed later.
+Here the "S10" index correspond to the 10th spectra. These indexes will be discussed later.
 
 
 #Losses dicretization
@@ -140,18 +140,21 @@ pids
 
 Losses IDs start by the *L* letter. The can be searched using the *findMz* function to. Some information may be extracted using the *getInfo* function. We don't demonstrate it as they are similar to those of spectra. They can be searched against patterns (*P*) or dags (*D*) using the *select* function :
 ```{r select_l_p}
-pids <- select(m2l,"L5","P")
+##Finding a loss corresponding ot phenyalanine
+lphenyl <- findMz(m2l,type = "L",147.05,dmz = 0.1)
+pids <- select(m2l,lphenyl,"P")
+pids
 ```
 
 ##Patterns
 
 * Patterns IDs start by the *P* letter, they can be plotted using the *plot* and *plotOccurences* functions.
 ```{r patterns_plot_example}
-plot(m2l,"P80")
-
+selected_pattern <- pids[["L96"]][3]
+plot(m2l,selected_pattern)
 ```
 ```{r patterns_plot_occs_example}
-plotOccurences(m2l,"P10",byPage=9)
+plotOccurences(m2l,selected_pattern,byPage=9)
 ```
 
 

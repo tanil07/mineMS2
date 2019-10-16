@@ -99,11 +99,12 @@ getSubformulaLossVertices_afg <- function(g,occs,dags,edge_labels,atoms,label_or
 }
 
 chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = NULL){
-  # function(lf,oformula,mzv,atoms,vrdbe,subformula = NULL){
   ###Solo
   if(length(lf) == 1){
+    if(length(oformula)==0){
+      return(c(1,1,0))
+    }
     vm <- sapply(oformula,isSubformula,x=lf,simplify=TRUE)
-    
     return(c(1,1,as.numeric(all(vm))))
   }
   

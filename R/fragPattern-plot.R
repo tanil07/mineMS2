@@ -111,7 +111,6 @@ layoutMatrix <- function(n,margin=NA)
     ymarg <- ytot%/%ntot
     yvmul <- ytot/nrow(tm)  
     tm <- expandMatrixMult(tm,yvmul,xvmul)  
-    # browser()
     tmx <- matrix(1,nrow=nrow(tm),ncol=xmarg)
     tm <- cbind(tmx,tm+2)
     tmy <- matrix(2,nrow=ymarg,ncol=ncol(tm))
@@ -163,12 +162,6 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 
 
 
-
-
-
-
-
-
 #' plotting a fargPattern object.
 #'
 #' plot a fragPattern associated fragmentation
@@ -215,7 +208,8 @@ setMethod("plot", "fragPattern",
 		  	g <- mm2Graph(x)
 		  	###We determine the edge label
 		  	oformula <- formula[mm2Occurences(x)[,"gid"]]
-		  	filled_formula <- which(sapply(oformula,function(x){length(x)>0}))
+		  	filled_formula <- which(sapply(oformula,function(x){(length(x)>0)})&
+		  	                          sapply(oformula,function(x){!is.na(x)}))
 		  	if(length(filled_formula)==0){
 		  	  oformula <- list()
 		  	}else{
