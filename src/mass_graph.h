@@ -14,18 +14,11 @@ class mass_graph
     public:
     //Constructor
     	mass_graph(Rcpp::DataFrame df_nodes,Rcpp::DataFrame df_edges);
-
-
-        //TODO constructor form a R object.
-
         virtual ~mass_graph();
-
         //Getter
         graph& get_g();
         Vertex& get_precursor();
-
         Vertexp get_vertex_from_gid(short gid);
-
         //Used to build the path tree.
         VisitMap buildVisitMap();
         std::vector<Vertex> roots();

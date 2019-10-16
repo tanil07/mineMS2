@@ -48,8 +48,6 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
 
     kt.filter_frequent_nodes(freq);
 
-    //Rcpp::Rcerr <<"Initial k-path tree with: "<<boost::num_vertices(t) <<" nodes down from "<< init_nodes<< std::endl;
-
     std::vector<lattice_node> initialPatterns = kt.constructOneEdgeGraphs(of);
     Rcpp::Rcerr <<"Mining initialized with: "<<initialPatterns.size() <<" patterns."<< std::endl;
     
@@ -128,7 +126,6 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
                                 current_1000 = counter/10000;
                                 Rcpp::Rcerr << current_1000*10000 <<" ";
                             }
-//                            Rcpp::Rcerr << " out " << std::endl;
                             container.insert_closed_pattern(current_node,inserted,of,insert_error);
                         }
                     }
@@ -154,9 +151,6 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
         }
     }
     Rcpp::Rcerr<<"Explored "<< counv<<" graphs. "<<container.numSubgraphs()<<" closed frequent subgraphs found."<<std::endl;
-
-    //We add the information on the found patterns
-    //container.postProcessing(num_graph,of);
 }
 
 

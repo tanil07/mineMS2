@@ -9,7 +9,6 @@
 
 #include "common.h"
 #include "k_path_tree.h"
-#include "triangles_list.h"
 #include "adjacencyGraph.h"
 
 class adjacencyGraph;
@@ -28,7 +27,6 @@ class frag_pattern
                       int fthreshold,bool& created,std::ostream& os);
 
         //To do implment this constructore.
-        //frag_pattern(k_path_tree& kt,Vertext v,triangles_list& tl, bool& created);
         virtual ~frag_pattern();
         graphp& get_g();
         patternKey get_key() const;
@@ -49,12 +47,8 @@ class frag_pattern
 
         //TO impement later
         void extendMotif();
-
         std::pair<std::vector<Extension>::iterator,
                     std::vector<Extension>::iterator> get_it_exts();
-
-//        void constructFullGraph(triangles_list& tl);
-//        void constructFullGraph(triangles_list& tl,Vertexp v);
 
         //Function to debug only
         bool isCoherent();
@@ -72,16 +66,12 @@ class frag_pattern
         void to_reduced_string(std::ostream& of);
         void to_reduced_string_ext(std::ostream& of);
         std::set<short> numUniqueOccs();
-
         void write_graphml(std::string path_graphml);
-
         void clearPatternFull();
-
         bool null=false;
 
         //Export function used by Rcpp
         Rcpp::List as_igraph_data_frame();
-
 
         //V2 functions
         bool isCompleteD(std::vector<mass_graph>& D);
@@ -101,7 +91,6 @@ class frag_pattern
         //This key is used for indexing by the data structure.
         patternKey key;
 
-        //
         std::string norm;
 
         //The attribute store the graph
@@ -110,11 +99,9 @@ class frag_pattern
         //A pointer to the root for commodity purpose
         Vertexp root;
 
-//        bool validExtension(Extension& ext,triangles_list& l);
         void fill_graph_info();
         //Remove the forbidden extensions.
         void filterExtensions(k_path_tree&);
-//        std::vector<Extension>::iterator update_dist_prec(std::vector<Extension>&,Extension,k_path_tree&);
 
 };
 

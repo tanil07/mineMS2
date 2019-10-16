@@ -18,7 +18,6 @@ class mass_dag_miner
         virtual ~mass_dag_miner();
         void mineFrequentDag(int freq,std::ostream& os);
         void mineFrequentCompleteDag(int freq,std::ostream& of);
-//        void mineFrequentCompleteDag(int freq,std::set<short> vals,std::ostream& of);
         subgraph_container& get_container();
         void setSizeMin(int smin);
         int getSizeMin();
