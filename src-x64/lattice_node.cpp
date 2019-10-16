@@ -35,9 +35,6 @@ lattice_node::lattice_node(lattice_node& fp,k_path_tree& kt,int iext,
 std::pair<bool,lattice_node> lattice_node::get_next(k_path_tree& kt,int fthreshold,std::ostream& os){
     bool created = false;
     //Now we split the value.
-    //std::cout<<"second_string"<<std::endl; //DEBUG
-    //this->to_string();
-    //std::cout << "CREATED" << (current_ext!=numExts())<<" "<<current_ext<<std::endl; //DEBUG
     while((current_ext<numExts()) & (!created)){
         lattice_node pchild(*this,kt,current_ext,fthreshold,created,os);
         current_ext++;

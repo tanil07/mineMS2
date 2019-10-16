@@ -4,7 +4,6 @@
 #include "frag_pattern.h"
 #include "k_path_tree.h"
 #include "common.h"
-#include "triangles_list.h"
 
 #include <boost/graph/copy.hpp>
 #include <boost/graph/graphml.hpp>

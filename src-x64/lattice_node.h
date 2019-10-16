@@ -21,7 +21,6 @@ class lattice_node : public frag_pattern{
         void reinitialize();
 
         //this function add a child to this pattern.
-        //void add_child(lattice_node& fp);
         //Utility function
         bool is_root(){return root;};
         virtual ~lattice_node();

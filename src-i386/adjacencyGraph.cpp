@@ -41,7 +41,6 @@ Vertexadj adjacencyGraph::getNode(short lab){
 void adjacencyGraph::add_adj(Vertex v,graph& mg){
     graphTraits::out_edge_iterator b1,e1,b2,e2;
     boost::tie(b1,e1) = boost::out_edges(v,mg);
-    //boost::tie(b2,e2) = boost::out_edges(v,mg);
     for(;b1!=e1;b1++){
         //We check if the node exists.
         short lab1 = mg[*b1].lab;
@@ -66,14 +65,12 @@ void adjacencyGraph::add_graph(graph& mg){
 void adjacencyGraph::addKTreeVertices(k_path_tree& kt){
     const Vertext rt = kt.get_root();
     const ktree& t = kt.get_t();
-    //std::cout << "addr1 t "<<&t<< std::endl;//DEBUG
     //For every successors node we add the correct vertex
     graphTraitst::adjacency_iterator bv,ev;
     for(boost::tie(bv,ev)=boost::adjacent_vertices(rt,t);bv!=ev;bv++){
         //We get the correspoding label
         short tlab = t[*bv].lab;
         g[lab_node[tlab]].v = (*bv);
-        //std::cout << "added " << tlab << " to " << g[lab_node[tlab]].lab << "updated " <<g[lab_node[tlab]].v<<"vs" <<*bv<<std::endl;//DEBUG
     }
 }
 

@@ -44,5 +44,4 @@ Collate:
     'mineMS2-package.R'
     'ms2Lib.R'
     'ms2LibSplit.R'
-    'scorePatterns.R'
     'select.R'

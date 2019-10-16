@@ -5,7 +5,6 @@
 #include "Rcpp.h"
 
 Vertex nextNode(VisitMap&,graph&,Vertex);
-//void printVmap(VisitMap&,graph&);
 void addOccs(MapOccurrences& ,Vertext,occ);
 
 #endif // UTILITY_FUNCTIONS_H_INCLUDED

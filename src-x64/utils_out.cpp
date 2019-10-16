@@ -181,7 +181,6 @@ NumericVector disjointBins(NumericVector points, NumericVector lower_lim, Numeri
 	int num_match = 0;
 	int in_inter = 0;
 	while((pi < lower_lim.size())&(pp<N)){
-		//Rprintf("pi %d-%0.4f pp %d-%0.4f \n",pi,mean_bin[pi],pp,points[pp]);
 		if((points[pp]>=lower_lim[pi])&(points[pp]<upper_lim[pi])){
 			//We check if the value is already in a bin or not.
 			in_inter = 1;
@@ -229,23 +228,19 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 	NumericVector hbin_min(Nb);
 	NumericVector hbin_max(Nb);
 	NumericVector mean_a(Na);
-	//NumericVector mean_b(Nb);
 	for(int j=0;j<Nb;j++){
 		bin_min[j]=NA_REAL;
 		bin_max[j]=NA_REAL;
 		hbin_min[j]=NA_REAL;
 		hbin_max[j]=NA_REAL;
-		//mean_b[j] = (b_min[j]+b_max[j])/2;
 	}
 	for(int j=0;j<Na;j++){
 		mean_a[j]= (a_min[j]+a_max[j])/2;
 	}
-	//Rprintf("Na %d Nd %d \n",Na,Nb);
 	int pa = 0;
 	int pb = 0;
 	int in_inter = 0;
 	while((pa < Na)&(pb<Nb)){
-		//Rprintf("\n pa %d pb %d in_int %d ",pa,pb,in_inter);
 		//AAA*****
 		//****BBB*
 		if(a_max[pa]<=b_min[pb]){
@@ -294,7 +289,6 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			}
 			pa++;
 		}
-		//Rprintf("\n End pa %d pb %d in_int %d a_min %0.4f a_max %0.4f b_min %0.4f b_max %0.4f",pa,pb,in_inter,a_min[pa],a_max[pa],b_min[pb],b_max[pb]);
 	}
 	if((pa==Na)&(in_inter==1)){
 		bin_max[pb]=pa-1;
@@ -306,9 +300,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 		}
 		int beginning = 0;
 		for(int i=bin_min[j];i<=bin_max[j];i++){
-			//Rprintf("i:inter %f - %f mean %f \n",bin_min[j],bin_max[j],mean_a[i]);
 			if((mean_a[i]<=b_max[j])&(mean_a[i]>=b_min[j])){
-				//Rprintf("i %d inter %f - %f mean %f \n",i,b_min[j],b_max[j],mean_a[i]);
 				if(beginning==0){
 					hbin_min[j]=i;
 					beginning=1;
@@ -377,18 +369,15 @@ IntegerVector bisect_search_borns(double valmin, double valmax, NumericVector bm
   
   //We try to find the first intersecting value.
   while(bleft<bright){
-    //Rcout << bleft <<"_" << mid<<"_" << bright << std::endl;
     if(bmax[mid]<valmin){
       bleft = mid+1;
     }else if(intersect(valmin,valmax,bmin[mid],bmax[mid])){
-      //Rcout <<"outv";
       return extend_match(valmin,valmax,mid,bmin,bmax);
     }else if(bmin[mid]>valmax){
       bright = mid-1;
     }
     mid = (bleft+bright)/2;
   }
-  //Rcout <<"outf";
   return resn;
 }
 
@@ -415,7 +404,6 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
   IntegerVector res;
   while( (bmax[i] < mzmax) & (i< bmin.size())){
     j = i;
-    // Rcout << i <<" ";
     
     while(((hmin=(bmin[j]+bmin[i])) < mzmax)& (j <bmin.size())){
       
@@ -445,23 +433,3 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
   return to_return;
 }
 
-
-
-
-
-/*** R
-###Test ifnd equalGreaterM
-FindEqualGreaterM(1:100,c(10.2,56.1,89))
-
-###Test findLimDensity.
-xsq <- seq(-10,10,by=0.01)
-ds <- dnorm(xsq,mean = 2,sd = 2)+dnorm(xsq,mean = -4,1)
-res <- findLimDensity(ds,400,2)
-print(res)
-res2 <- findLimDensity(ds,res[2],res[3])
-print(res2)
-
-plot(ds)
-abline(v=res,col="red")
-abline(v=res2,col="darkgreen")
-*/

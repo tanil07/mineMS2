@@ -118,7 +118,6 @@ std::vector<std::vector<int> > filteringCompositionsTol(std::vector<std::vector<
 		double vsum = 0;
 		for(size_t j = 0; j < components.size(); j ++)
 		{
-			//cout << solutions[i][j] << endl;
 			vsum += (solutions[i][j]*components[j]);
 		}
 		if(vsum <= ub && vsum >= lb)
@@ -294,17 +293,3 @@ List formulaExtension(NumericVector masses,NumericVector mzlim, IntegerMatrix fo
 	to_return["formula"] = new_formula(Range(0,crow-1),Range(0,nelems-1));
 	return(to_return);
 }
-
-
-
-
-
-
-// You can include R code blocks in C++ files processed with sourceCpp
-// (useful for testing and development). The R code will be automatically
-// run after the compilation.
-//
-
-/*** R
-wrapperDecomposeMass(251.451,0.02,100,c(10,7,3.01,5.06,1.72))
-*/

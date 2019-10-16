@@ -80,9 +80,6 @@ class subgraph_container
         Rcpp::List exportMinedPatternsRcpp();
 
         //Functions used only otuside of R.
-        // void exportResultingLattice(std::string path_lattice,std::string path_patterns,
-        //                                         std::ostream& of);
-        // std::map<Vertexl,Vertexel> createExportLattice(latticeexport& elat);
         std::map<Vertexl, int> latticeMapping();
 
     protected:
@@ -100,9 +97,6 @@ class subgraph_container
         //Patterns are stored using the lanbels 
         std::map<short,std::vector<patternIdx> > lab_idx;
         std::set<std::string> norm_set;
-        
-        //void insertPatternIndex(frag_pattern& pat,patternIdx& idx,std::ostream& of);
-        //void removePatternIndex(frag_pattern& pat,patternIdx& idx);
         std::vector<patternIdx> getInitialIdxSupermotifs(frag_pattern& pat,std::ostream& of,int nrand=3);
 
 
@@ -110,13 +104,6 @@ class subgraph_container
         std::map< Vertexl, patternIdx> getMapping();
 
         std::vector<Vertexl> getLeafs();
-
-        //LATTICE STRUCTURE (REMOVED IN FINAL VERFSION)
-        // latticesub lat;
-
-        //Map a lattice node to a dataset.
-        // void resetIdxMap();
-        // subgraph_idx idxmap;
 
 };
 

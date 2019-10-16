@@ -42,14 +42,8 @@ int k_path_tree::get_k()
 
 ktree& k_path_tree::get_t()
 {
-    //std::cout <<"addr const "<< &t << std::endl;
     return t;
 }
-
-//triangles_list& k_path_tree::get_tl()
-//{
-//    return tl;
-//}
 
 MapOccurrences& k_path_tree::get_occs()
 {
@@ -93,7 +87,6 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
     short elab;
 
     //We consider that pi is the size of the added path.
-    ///for(int pi=k; pi>1; pi--)
     for(int pi=k;pi>2;pi--)
     {
         if(pi>lpath) break;
@@ -172,7 +165,6 @@ short k_path_tree::get_dist_vertex(Vertext c){
 void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
 {
 
-    //Rcpp::Rcout << std::endl <<gid << std::endl;
     //We find all the possible root nodes.
     graph& g = G.get_g();
 
@@ -207,7 +199,6 @@ void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
 
     for(int i=0; i<int(roots.size()); i++)
     {
-        //Rcpp::Rcout <<"new root ";
         //Root initialization.
         Vertex root = roots[i];
         pathFromRoot[0] = root;
@@ -251,7 +242,6 @@ void k_path_tree::add_graph(mass_graph& G,int gid, bool prec_only)
 
                 edgesLabels[ppath-1] = g[boost::edge(pathFromRoot[ppath-1],cnode,g).first].lab;
                 backward = false;
-                //Rcpp::Rcout <<"s9 ";
                 if(!backward)
                 {
                     this->update_pos_adv(edgesLabels[ppath-1], pathFromRoot,
@@ -367,18 +357,14 @@ std::vector<Vertext> k_path_tree::find_predecessors(Vertext v)
     int num_it = 0;
     while(cnode!=dest)
     {
-        //std::cout << "cnode "<< t[cnode].lab << std::endl; //DEBUG
         if(num_it>=k)
         {
-            //std::cout << "issue"; //DEBUG
             std::vector<Vertext> tav;
             return tav;
         }
         graphTraitst::in_edge_iterator eb,ee;
         boost::tie(eb,ee)=boost::in_edges(cnode,t);
-        //std::cout << "iedge found : "<<(eb==ee)<<" "; //DEBUG
         cnode = boost::source(*eb,t);
-        //std::cout <<"pred: "<< cnode<<std::endl; //DEBUG
         pathRoot.insert(pathRoot.begin(),cnode);
         num_it++;
     }
@@ -444,8 +430,6 @@ std::vector<lattice_node> k_path_tree::constructOneEdgeGraphs(std::ostream& of,b
     boost::tie(vb,ve)=boost::adjacent_vertices(root,t);
     std::vector<lattice_node> single_e_patterns;
 
-    //const k_path_tree* addr = this;
-
     int num = 0; //DEBUG
     int percent10 = 0;
     for(; vb!=ve; vb++)
@@ -455,7 +439,6 @@ std::vector<lattice_node> k_path_tree::constructOneEdgeGraphs(std::ostream& of,b
         if(dec!=percent10)
         {
             percent10 = dec;
-            //of << percent10*10 << " ";
         }
         single_e_patterns.push_back(lattice_node((*vb), *this,of));
         num++;
