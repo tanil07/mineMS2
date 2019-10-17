@@ -15,25 +15,31 @@
 \arguments{
 \item{x}{The pattern to plot.}
 
-\item{y}{= NULL}
+\item{y}{Not used at the moment.}
 
-\item{edgeLabels}{= NULL,}
+\item{title}{The title used for th eplot}
 
-\item{mzdigits}{= 3,}
+\item{edgeLabels}{A vector usually passed automatically by the plot method of the ms2Lib object.}
 
-\item{vertex_size}{= 30,}
+\item{nodeLabel}{The type of vertex label to be plotted, default means that a will try to be 
+determined while label show the raw label as integer.}
 
-\item{vertex_label_cex}{= 0.7,}
+\item{edgeLabel}{The type of edges label to be plotted, default means that a will try to be 
+determined while label show the raw label as integer.}
 
-\item{subNodes}{= NULL,}
+\item{atoms}{The used in the formula in the right order.\.}
 
-\item{tkplot}{= FALSE,}
+\item{mzdigits}{The number of digits included in the plot of mass differences}
 
-\item{...}{Supplmentary arguments passed to the igraph function}
+\item{vertex_size}{The size of the vertices.}
 
-\item{nodeLab}{= c("default", "label"),}
+\item{vertex_label_cex}{The size of the vertices label compared to the rest of the data}
 
-\item{edgeLab}{= c("formula","none"),}
+\item{subNodes}{The subset of nodes ot be plotted if necessary}
+
+\item{tkplot}{Shall an interactiv eplot be shown using tkplot.}
+
+\item{...}{Supplmentary arguments passed to the igraph plot function}
 }
 \value{
 None
@@ -43,5 +49,5 @@ plot a fragPattern associated fragmentation
 dag using igraph capabilities.
 }
 \examples{
-print("Exmaples ot be put here.")
+print("Examples ot be put here.")
 }

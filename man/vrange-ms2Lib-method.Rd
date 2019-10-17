@@ -3,7 +3,7 @@
 \docType{methods}
 \name{vrange,ms2Lib-method}
 \alias{vrange,ms2Lib-method}
-\title{Return the range of iteration on an ms2Lib object.}
+\title{Return The Range Of Iteration Of MS2Lib Object}
 \usage{
 \S4method{vrange}{ms2Lib}(m2l, type = c("S", "L", "P", "F"),
   reduced = TRUE, as.number = FALSE)
@@ -21,7 +21,7 @@
 A character vector giving the existing ids in the ms2Lib object,
 }
 \description{
-Return the range of iteration on an ms2Lib object.
+Return the full range of iteration of different object for an MS2lib object.
 }
 \examples{
 print("Examples to be put here")

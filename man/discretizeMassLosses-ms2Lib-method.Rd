@@ -8,8 +8,7 @@
 \S4method{discretizeMassLosses}{ms2Lib}(m2l, ppm = 7, dmz = 0.002,
   count = 2, limMzFormula = c(14.5, 200), maxFrags = 15,
   maxOverlap = 0.05, strictMatching = TRUE, precPpm = 20,
-  precDmz = 0.02, atoms = NULL, heteroAtoms = TRUE, mzDigits = 4,
-  ...)
+  precDmz = 0.02, atoms = NULL, heteroAtoms = TRUE, mzDigits = 4)
 }
 \arguments{
 \item{m2l}{The ms2 lib object to be discretized.}

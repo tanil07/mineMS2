@@ -95,8 +95,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 													 precDmz = 0.02,
 													 atoms = NULL,
 													 heteroAtoms = TRUE,
-													 mzDigits = 4,
-													 ...) {
+													 mzDigits = 4) {
 
 	message("Discretization of the mass losses...")
 
@@ -142,7 +141,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 								freq = freq, mzdigits = mzDigits,
 								limFormula = limMzFormula, maxFrag = maxFrags,
 								max_overlap = maxOverlap, strictMatching = strictMatching,
-								prec.ppm = precPpm,prec.dmz = precDmz, atoms = m2l@atoms,, ...)
+								prec.ppm = precPpm,prec.dmz = precDmz, atoms = m2l@atoms)
 	
 	
 	###At this step we add the formula if necessary.

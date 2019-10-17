@@ -21,7 +21,7 @@
 The filled ms2Lib object.
 }
 \description{
-Mine all the complete recurring subgraphs.
+Mine all the complete clsoed recurring subgraphs from a set of preconstructed mass graphs objects.
 }
 \examples{
 print("examples to be put here")

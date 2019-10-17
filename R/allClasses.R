@@ -12,8 +12,10 @@
 #' @slot losses The discretized edges labels.
 #' @slot fragments The discretized nodes labels.
 #' @slot patterns A list storing the fragPattern objects.
-#' @slot ReducedPatterns The ids of the reduced patterns.
-#' @slot k The count of reduced patterns.
+#' @slot atoms A list of the atoms used to build the ofmrula aswell as their maximum number.
+#' @slot loss A boolena indicating if the object is built with loss or fragments.
+#' @slot reducedPatterns The ids of the reduced patterns.
+#' @slot k The maximum depth of the ocnstructed k path tree.
 #' @aliases ms2Lib-class
 #' @exportClass ms2Lib
 setClass(

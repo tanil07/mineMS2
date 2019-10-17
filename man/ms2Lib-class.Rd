@@ -27,8 +27,12 @@ and informations added by the user eventually.}
 
 \item{\code{patterns}}{A list storing the fragPattern objects.}
 
-\item{\code{ReducedPatterns}}{The ids of the reduced patterns.}
+\item{\code{atoms}}{A list of the atoms used to build the ofmrula aswell as their maximum number.}
 
-\item{\code{k}}{The count of reduced patterns.}
+\item{\code{loss}}{A boolena indicating if the object is built with loss or fragments.}
+
+\item{\code{reducedPatterns}}{The ids of the reduced patterns.}
+
+\item{\code{k}}{The maximum depth of the ocnstructed k path tree.}
 }}
 

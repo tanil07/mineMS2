@@ -30,13 +30,14 @@ checkSize <- function(vec,pos){
 #'
 #' @param m2l An ms2Lib object.
 #' @param ids Valid IDs of objects.
+#' @param vals the type of value to be returned. Only certain combinations are allowed.
 #'
 #' @return The objects of the correspodning type.
 #' @export
 #'
 #' @examples
 #' print("Examples to be put here")
-select <- function(m2l,ids,vals=c("P","S","L","F")){
+select <- function(m2l,ids,vals=c("P","S","L")){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an ms2Lib object.")
 
 	vals <- match.arg(vals)

@@ -3,8 +3,7 @@
 \docType{methods}
 \name{plotOccurences,ms2Lib-method}
 \alias{plotOccurences,ms2Lib-method}
-\title{PLotting the occurences of a fragPattern object inside
-an ms2Lib object.}
+\title{PLotting the occurences of a fragPattern object}
 \usage{
 \S4method{plotOccurences}{ms2Lib}(m2l, pidx, titles = NULL, byPage = 6,
   subOccs = NULL, highlights = TRUE, commonAxis = FALSE, ...)
@@ -31,8 +30,7 @@ and precursor will bne used by default}
 A list ocntainng the spectra and their coloring in RGB format
 }
 \description{
-PLotting the occurences of a fragPattern object inside
-an ms2Lib object.
+Plot the occurences, the spectra overlayed with the matched peaks of a fragmentation pattern.
 }
 \examples{
 print("Examples to be put here")

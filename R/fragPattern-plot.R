@@ -168,21 +168,25 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 #' dag using igraph capabilities.
 #'
 #' @param x The pattern to plot.
-#' @param y = NULL
-#' @param edgeLabels = NULL,
-#' @param nodeLab = c("default", "label"),
-#' @param edgeLab = c("formula","none"),
-#' @param mzdigits = 3,
-#' @param vertex_size = 30,
-#' @param vertex_label_cex = 0.7,
-#' @param subNodes = NULL,
-#' @param tkplot = FALSE,
-#' @param ... Supplmentary arguments passed to the igraph function
+#' @param y Not used at the moment.
+#' @param title The title used for th eplot
+#' @param edgeLabels A vector usually passed automatically by the plot method of the ms2Lib object.
+#' @param nodeLabel The type of vertex label to be plotted, default means that a will try to be 
+#' determined while label show the raw label as integer.
+#' @param edgeLabel The type of edges label to be plotted, default means that a will try to be 
+#' determined while label show the raw label as integer.
+#' @param atoms The used in the formula in the right order.\.
+#' @param mzdigits The number of digits included in the plot of mass differences
+#' @param vertex_size The size of the vertices.
+#' @param vertex_label_cex The size of the vertices label compared to the rest of the data
+#' @param subNodes The subset of nodes ot be plotted if necessary
+#' @param tkplot Shall an interactiv eplot be shown using tkplot.
+#' @param ... Supplmentary arguments passed to the igraph plot function
 #'
 #' @return None
 #'
 #' @examples
-#' print("Exmaples ot be put here.")
+#' print("Examples ot be put here.")
 setMethod("plot", "fragPattern",
 		  function(x,
 		  		 y = NULL,
@@ -199,11 +203,9 @@ setMethod("plot", "fragPattern",
 		  		 subNodes = NULL,
 		  		 tkplot = FALSE,
 		  		 ...) {
-		    
-		    
+		    if(is.null(edgeLabels)) stop("lease use the plot function through the ms2Lib object (ex :plot(m2l,'P15'))")
 		  	nodeLabel <- match.arg(nodeLabel)
 		  	edgeLabel <- match.arg(edgeLabel)
-
 		  	g <- mm2Graph(x)
 		  	###We determine the edge label
 		  	oformula <- formula[mm2Occurences(x)[,"gid"]]
@@ -260,8 +262,9 @@ setMethod("plot", "fragPattern",
 		  	}
     return(invisible(list(g,labels$vertices,ledges)))
 		  })
-#' PLotting the occurences of a fragPattern object inside
-#' an ms2Lib object.
+#' PLotting the occurences of a fragPattern object
+#' 
+#' Plot the occurences, the spectra overlayed with the matched peaks of a fragmentation pattern.
 #'
 #' @param m2l An ms2lib object.
 #' @param pidx A pattern id or a frag_pattern object.

@@ -362,7 +362,7 @@ getFormula <- function(m2l){
 
 #' Mine recurrent subgraph from a set of graphs.
 #'
-#' Mine all the complete recurring subgraphs.
+#' Mine all the complete clsoed recurring subgraphs from a set of preconstructed mass graphs objects.
 #'
 #' @param m2l An m2Lib object to be processed.
 #' @param count The number of spectra in which the spectrum need to be sampled.
@@ -656,7 +656,9 @@ getInfo <- function(m2l,ids){
 }
 
 
-#' Return the range of iteration on an ms2Lib object.
+#' Return The Range Of Iteration Of MS2Lib Object
+#' 
+#' Return the full range of iteration of different object for an MS2lib object.
 #'
 #' @param m2l AN ms2Lib object
 #' @param type "S","L" or "P"
