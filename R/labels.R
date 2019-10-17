@@ -140,7 +140,7 @@ chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = N
   
   # We keep the one the closest to the furnished mass.
   if(length(bloss) > 1) {
-    m_atoms <- getAtomsMass(atoms)
+    m_atoms <- getAtomMass(atoms)
     vmz <- lf@formula[bloss,] %*% m_atoms
     rdbe <- calcRDBE_raw(lf@formula[bloss,],vrdbe)
     
@@ -236,7 +236,7 @@ makeEdgeLabelWithoutVertices <- function(lf,mzv,oformula,atoms,vrdbe){
   
   ###We keep the one the closest to the furnished mass.
   if(length(bloss)>1){
-    m_atoms <- getAtomsMass(atoms)
+    m_atoms <- getAtomMass(atoms)
     vmz <- lf@formula[bloss,] %*% m_atoms
     rdbe <- calcRDBE_raw(lf@formula[bloss,],vrdbe)
     ###mono atom.
