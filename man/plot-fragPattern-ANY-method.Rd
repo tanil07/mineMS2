@@ -9,8 +9,8 @@
   edgeLabels = NULL, dags = NULL, nodeLabel = c("default", "label"),
   edgeLabel = c("formula", "mass", "none"), atoms = c("C", "H", "O",
   "N", "S", "P"), formula = NA_character_, mzdigits = 3,
-  vertex_size = 55, vertex_label_cex = 0.7, subNodes = NULL,
-  tkplot = FALSE, ...)
+  vertex_size = 55, vertex_label_cex = 0.7, edge_label_cex = 0.7,
+  subNodes = NULL, tkplot = FALSE, ...)
 }
 \arguments{
 \item{x}{The pattern to plot.}
@@ -33,7 +33,9 @@ determined while label show the raw label as integer.}
 
 \item{vertex_size}{The size of the vertices.}
 
-\item{vertex_label_cex}{The size of the vertices label compared to the rest of the data}
+\item{vertex_label_cex}{The size of the vertices label}
+
+\item{edge_label_cex}{The size of the edges label}
 
 \item{subNodes}{The subset of nodes ot be plotted if necessary}
 

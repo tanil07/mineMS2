@@ -5,7 +5,7 @@
 \title{Find pattern explainig components}
 \usage{
 findPatternsExplainingComponents(m2l, components, metric = c("f1"),
-  threshold = NA_real_)
+  ref_label = NULL, threshold = NA_real_, reduced = TRUE)
 }
 \arguments{
 \item{m2l}{An ms2Lib object}
@@ -13,6 +13,8 @@ findPatternsExplainingComponents(m2l, components, metric = c("f1"),
 \item{components}{A list containing the components to be explained.}
 
 \item{metric}{The metric used to match a component and the pattern occurence.}
+
+\item{ref_label}{A set of reference label to be used if the extracted component corresponds to an id over the position ofht e MS-MS spetra in the file}
 
 \item{threshold}{The threshold used to discriminate the dataset}
 }

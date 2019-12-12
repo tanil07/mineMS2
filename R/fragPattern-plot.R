@@ -178,7 +178,8 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 #' @param atoms The used in the formula in the right order.\.
 #' @param mzdigits The number of digits included in the plot of mass differences
 #' @param vertex_size The size of the vertices.
-#' @param vertex_label_cex The size of the vertices label compared to the rest of the data
+#' @param vertex_label_cex The size of the vertices label 
+#' @param edge_label_cex The size of the edges label 
 #' @param subNodes The subset of nodes ot be plotted if necessary
 #' @param tkplot Shall an interactiv eplot be shown using tkplot.
 #' @param ... Supplmentary arguments passed to the igraph plot function
@@ -200,6 +201,7 @@ setMethod("plot", "fragPattern",
 		  		 mzdigits = 3,
 		  		 vertex_size = 55,
 		  		 vertex_label_cex = 0.7,
+		  		 edge_label_cex=0.7,
 		  		 subNodes = NULL,
 		  		 tkplot = FALSE,
 		  		 ...) {
@@ -254,6 +256,7 @@ setMethod("plot", "fragPattern",
 		  			vertex.label = labels$vertices,
 		  			vertex.size = vertex_size,
 		  			vertex.label.cex=vertex_label_cex,
+		  			edge.label.cex=edge_label_cex,
 		  			edge.label = ledges,
 		  			vertex.color = "orange",
 		  			main=title,
@@ -348,7 +351,7 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	col_vec <- rainbow(length(ru_occs_gid))
 	
 	###We aggregate the spectra
-	lmat <- layoutMatrix(min(byPage, length(occs_gid)),margin = 0.07)
+	lmat <- layoutMatrix(min(byPage, length(u_occs_gid )),margin = 0.07)
 	maxv <- max(lmat)-2
 	layout(lmat)
 	xlims <- NULL
@@ -357,7 +360,7 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	  
 	}
 	
-	res_plot <- vector(mode="list",length=nrow(occs))
+	res_plot <- vector(mode="list",length=length(u_occs_gid))
 	for (i in 1:length(u_occs_gid)) {
 	  if((i %% 6) == 1){
 	    if(i != 1){

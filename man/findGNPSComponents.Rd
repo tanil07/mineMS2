@@ -5,7 +5,8 @@
 \title{Find the annotable component of a GNPS network.}
 \usage{
 findGNPSComponents(net, minSize = 3, pairThreshold = 0.9,
-  vname = "cluster index", eattr = "cosine_score")
+  vname = "cluster index", eattr = "cosine_score",
+  convert_component = TRUE)
 }
 \arguments{
 \item{net}{A gnps network}
