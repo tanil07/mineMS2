@@ -425,6 +425,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 
 	###Initializing the names of the patterns.
 	for(i in 1:length(m2l@patterns)) mm2Name(m2l@patterns[[i]]) <- paste("P",i,sep="")
+	m2l@reducedPatterns <- seq_along(m2l@patterns)
 
 	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
 	m2l

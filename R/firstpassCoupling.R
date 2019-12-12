@@ -42,12 +42,11 @@ findPatternsExplainingComponents <- function(m2l,components,metric=c("f1"),ref_l
 	# components <- sapply(components,convertComponent,ids=mm2Ids(m2l),simplify = FALSE)
   if(!is.null(ref_label)){
     components <- sapply(components,function(x,ref){
-      match(x,ref)
+      ref[x]
     },ref=ref_label,simplify = FALSE)
   }
 
 	###We determine the best format for each found pattern.
-
 	bpat <- sapply(components,function(x,m2l,type,reduced){
 		find.patterns.class(m2l,x,type = type,full = FALSE,reduced=reduced)
 	},m2l=m2l,type=metric,simplify = FALSE,reduced=reduced)
