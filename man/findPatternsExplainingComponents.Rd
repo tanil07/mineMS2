@@ -4,8 +4,14 @@
 \alias{findPatternsExplainingComponents}
 \title{Find pattern explainig components}
 \usage{
-findPatternsExplainingComponents(m2l, components, metric = c("f1"),
-  ref_label = NULL, threshold = NA_real_, reduced = TRUE)
+findPatternsExplainingComponents(
+  m2l,
+  components,
+  metric = c("f1"),
+  ref_label = NULL,
+  threshold = NA_real_,
+  reduced = TRUE
+)
 }
 \arguments{
 \item{m2l}{An ms2Lib object}

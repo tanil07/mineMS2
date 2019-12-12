@@ -5,8 +5,13 @@
 \alias{ms2Lib-constructor}
 \title{ms2Lib constructor}
 \usage{
-ms2Lib(x, suppInfos = NULL, ids = NULL, intThreshold = NULL,
-  infosFromFiles = FALSE)
+ms2Lib(
+  x,
+  suppInfos = NULL,
+  ids = NULL,
+  intThreshold = NULL,
+  infosFromFiles = FALSE
+)
 }
 \arguments{
 \item{x}{May be one of the following

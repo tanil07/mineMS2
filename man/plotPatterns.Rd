@@ -4,8 +4,15 @@
 \alias{plotPatterns}
 \title{Plot patterns and occurences of an ms2Lib object}
 \usage{
-plotPatterns(m2l, ids = NULL, components = NULL, occurences = TRUE,
-  full = FALSE, byPage = 9, titles = NULL)
+plotPatterns(
+  m2l,
+  ids = NULL,
+  components = NULL,
+  occurences = TRUE,
+  full = FALSE,
+  byPage = 9,
+  titles = NULL
+)
 }
 \arguments{
 \item{m2l}{An ms2Lib object}

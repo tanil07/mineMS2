@@ -4,8 +4,15 @@
 \alias{getExtendedSpec}
 \title{Return the spectrum considered while building the graph.}
 \usage{
-getExtendedSpec(spec, ppm = 5, dmz = 0.02, removeSup = TRUE,
-  addPrecursor = TRUE, maxNum = NULL, relInt = TRUE)
+getExtendedSpec(
+  spec,
+  ppm = 5,
+  dmz = 0.02,
+  removeSup = TRUE,
+  addPrecursor = TRUE,
+  maxNum = NULL,
+  relInt = TRUE
+)
 }
 \arguments{
 \item{spec}{A "Spectrum2" object as defined in msnBase}

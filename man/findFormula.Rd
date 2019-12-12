@@ -4,8 +4,14 @@
 \alias{findFormula}
 \title{findFormula function}
 \usage{
-findFormula(mz, tol, atoms = list(H = 50, C = 25, N = 10, O = 20),
-  rules = rep(TRUE, 7), mgraph = TRUE, scomp)
+findFormula(
+  mz,
+  tol,
+  atoms = list(H = 50, C = 25, N = 10, O = 20),
+  rules = rep(TRUE, 7),
+  mgraph = TRUE,
+  scomp
+)
 }
 \arguments{
 \item{mz}{The mass to b decomposed.}

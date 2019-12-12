@@ -225,7 +225,7 @@ all.patterns.losses <- function(m2l,reduced=TRUE){
 }
 
 select.patterns.spectra <- function(m2l,id){
-	temp <- select_patterns_from_spectra(mm2Patterns(m2l),as.integer(substring(id,2)))
+	temp <- select_patterns_from_spectra(mm2Patterns(m2l),as.integer(id))
 	if(length(temp)>0) return(paste("P",temp,sep=""))
 }
 

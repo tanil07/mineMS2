@@ -404,16 +404,24 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 		###Wide variety of mass losses.
 		warning("sizeMin parameters set to ",sizeMin," risk of computational overhead.")
 	}
+	
+	###WE select the non empty graph to mine the patterns.
+	sel_g <- which(sapply(mm2Dags(m2l),ecount)!=0)
+	if(length(sel_g)==0) stop("No non-empty dags found.")
 
 	###Converting the dags into data.frame.
-	df_edges <- sapply(mm2Dags(m2l),fromIgraphToDf_edges,simplify = FALSE)
-	df_vertices <-sapply(mm2Dags(m2l),fromIgraphToDf_vertices,simplify = FALSE)
-
+	df_edges <- sapply(mm2Dags(m2l),fromIgraphToDf_edges,simplify = FALSE)[sel_g]
+	df_vertices <-sapply(mm2Dags(m2l),fromIgraphToDf_vertices,simplify = FALSE)[sel_g]
+	
 	###Mining the patterns.
 	resRcpp <- mineClosedDags(df_vertices,df_edges,processing,count,kTree,sizeMin,precursor)
 
 	###Construction via fragPatternc constructor.
-	mm2Patterns(m2l) <- sapply(resRcpp$patterns,function(x){canonicalForm(fragPattern(x))},USE.NAMES = FALSE)
+	mm2Patterns(m2l) <- sapply(resRcpp$patterns,function(x,sel_idx){
+	  temp <- canonicalForm(fragPattern(x))
+	  temp@occurences[,1] <- sel_idx[temp@occurences[,1]]
+	  return(temp)
+	 },USE.NAMES = FALSE,sel_idx=sel_g)
 
 	###Initializing the names of the patterns.
 	for(i in 1:length(m2l@patterns)) mm2Name(m2l@patterns[[i]]) <- paste("P",i,sep="")
