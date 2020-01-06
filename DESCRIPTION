@@ -5,23 +5,24 @@ Version: 0.9.4
 Author: Alexis Delabriere
 Maintainer: Alexis Delabriere <alexis.delabriere@hotmail.fr>
 VignetteBuilder: knitr
-Description: Mine MS-MS spectra using a frequent usbgraph mining approach. 
+Description: Mine MS-MS spectra using a frequent usbgraph mining approach.
 Depends:
-    R (>= 3.3.0),
-	BH
+    R (>= 3.3.0)
 Suggests:
 	devtools,
+	knitr,
 	testthat (>= 2.0.0),
-	tools
+	tools,
+	rmarkdown
 Imports: Rcpp (>= 0.12.13),
 	igraph,
 	stringr,
 	Matrix
 LinkingTo: Rcpp,BH
-License: What license is it under?
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
 Collate: 
     'allClasses.R'
     'allGenerics.R'
@@ -44,5 +45,4 @@ Collate:
     'mineMS2-package.R'
     'ms2Lib.R'
     'ms2LibSplit.R'
-    'scorePatterns.R'
     'select.R'

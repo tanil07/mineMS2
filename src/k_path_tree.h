@@ -7,7 +7,6 @@
 
 #include "mass_graph.h"
 #include "common.h"
-#include "triangles_list.h"
 #include "adjacencyGraph.h"
 
 
@@ -23,7 +22,6 @@ class k_path_tree
         k_path_tree(int k);
         virtual ~k_path_tree();
         void add_graph(mass_graph& G, int gid, bool=false);
-        //void add_graph(mass_graph& G, int gid, bool prec_only);
         std::vector<Vertext> find_predecessors(Vertext c);
         int get_k();
 
@@ -31,7 +29,6 @@ class k_path_tree
         short get_dist_vertex(Vertext c);
         MapOccurrences& get_occs();
         Vertext get_root();
-//        triangles_list& get_tl();
         adjacencyGraph& get_adj();
 
         //Removing nodes which are non frequent
@@ -39,7 +36,6 @@ class k_path_tree
 
         //Creating 1-edge.
         void to_string(std::ostream& of);
-        //std::vector<frag_pattern> constructOneEdgeGraphs();
         std::vector<Extension> getExtensions(Vertexp v,Vertext vt);
 
         //All the actions which take place after reading the graph
@@ -83,7 +79,6 @@ class k_path_tree
         MapOccurrences moccs;
 
         //List of traingles dependent of the graph too
-        //triangles_list tl;
 
         //A list giving the adjacency property of the graph
         adjacencyGraph adj;

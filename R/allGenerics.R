@@ -24,7 +24,6 @@ setGeneric("mm2ReducedLattice", function(m2l) standardGeneric("mm2ReducedLattice
 
 setGeneric("mm2Atoms", function(m2l) standardGeneric("mm2Atoms"))
 
-
 ###ms2Lib object setter
 setGeneric("mm2Spectra<-", function(m2l,value) standardGeneric("mm2Spectra<-"))
 
@@ -60,6 +59,8 @@ setGeneric("mm2Root", function(pat) standardGeneric("mm2Root"))
 
 setGeneric("mm2Name", function(pat) standardGeneric("mm2Name"))
 
+setGeneric("mm2CanonicalForm", function(pat) standardGeneric("mm2CanonicalForm"))
+
 
 ###fragPattern object setter
 setGeneric("mm2Graph<-", function(pat,value) standardGeneric("mm2Graph<-"))
@@ -69,6 +70,8 @@ setGeneric("mm2Occurences<-", function(pat,value) standardGeneric("mm2Occurences
 setGeneric("mm2Root<-", function(pat,value) standardGeneric("mm2Root<-"))
 
 setGeneric("mm2Name<-", function(pat,value) standardGeneric("mm2Name<-"))
+
+setGeneric("mm2CanonicalForm<-", function(pat,value) standardGeneric("mm2CanonicalForm<-"))
 
 
 ###ms2Lib specific generics.

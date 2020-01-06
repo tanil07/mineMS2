@@ -4,8 +4,14 @@
 \alias{findFormula}
 \title{findFormula function}
 \usage{
-findFormula(mz, tol, atoms = list(H = 50, C = 25, N = 10, O = 20),
-  rules = rep(TRUE, 7), mgraph = TRUE, scomp)
+findFormula(
+  mz,
+  tol,
+  atoms = list(H = 50, C = 25, N = 10, O = 20),
+  rules = rep(TRUE, 7),
+  mgraph = TRUE,
+  scomp
+)
 }
 \arguments{
 \item{mz}{The mass to b decomposed.}
@@ -13,14 +19,20 @@ findFormula(mz, tol, atoms = list(H = 50, C = 25, N = 10, O = 20),
 \item{tol}{The tolerance in ppm.}
 
 \item{atoms}{A of constraint on the number of atoms.}
+
+\item{rules}{Which of the seven golden rules should be respected}
+
+\item{mgraph}{Shall the molecular formula possible admit a molecular graph.}
+
+\item{scomp}{Shall only single component molecular grpah be generated (Not H4O2 for example)}
 }
 \value{
 A list of the valid formula.
 }
 \description{
-Fast formula generator using the algoirthm descirbed by Bocker
+Fast formula generator using the algoirthm described by Bocker
 2010. 100 times faster than rcdk.
 }
 \examples{
-cat("examples ot be put there")
+findFormula(34,tol=0.1,scomp=FALSE)
 }

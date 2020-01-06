@@ -4,13 +4,21 @@
 \alias{find.patterns.class}
 \title{Find biggest F1 score}
 \usage{
-find.patterns.class(m2l, ids, type = c("f1", "precision", "size"),
-  returnall = FALSE, full = TRUE, reduced = FALSE)
+find.patterns.class(
+  m2l,
+  ids,
+  type = c("f1", "precision", "size"),
+  returnall = FALSE,
+  full = TRUE,
+  reduced = FALSE
+)
 }
 \arguments{
 \item{m2l}{An ms2Lib object.}
 
 \item{ids}{Valid IDs of objects, it mays be a chracter vector with the prefix "P" or an integer or numeric vector}
+
+\item{type}{Which criteria is used to determine the best match, F-score, precision or acccuracy}
 
 \item{returnall}{Shall all the patterns with a similar F1 score be returned.}
 

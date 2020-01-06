@@ -111,7 +111,6 @@ layoutMatrix <- function(n,margin=NA)
     ymarg <- ytot%/%ntot
     yvmul <- ytot/nrow(tm)  
     tm <- expandMatrixMult(tm,yvmul,xvmul)  
-    # browser()
     tmx <- matrix(1,nrow=nrow(tm),ncol=xmarg)
     tm <- cbind(tmx,tm+2)
     tmy <- matrix(2,nrow=ymarg,ncol=ncol(tm))
@@ -163,34 +162,32 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 
 
 
-
-
-
-
-
-
 #' plotting a fargPattern object.
 #'
 #' plot a fragPattern associated fragmentation
 #' dag using igraph capabilities.
 #'
-#' @param x
-#' @param y = NULL,
-#' @param edgeLabels = NULL,
-#' @param nodeLab = c("default", "label"),
-#' @param edgeLab = c("formula","none"),
-#' @param mzdigits = 3,
-#' @param vertex_size = 30,
-#' @param vertex_label_cex = 0.7,
-#' @param subNodes = NULL,
-#' @param tkplot = FALSE,
-#' @param ...
+#' @param x The pattern to plot.
+#' @param y Not used at the moment.
+#' @param title The title used for th eplot
+#' @param edgeLabels A vector usually passed automatically by the plot method of the ms2Lib object.
+#' @param nodeLabel The type of vertex label to be plotted, default means that a will try to be 
+#' determined while label show the raw label as integer.
+#' @param edgeLabel The type of edges label to be plotted, default means that a will try to be 
+#' determined while label show the raw label as integer.
+#' @param atoms The used in the formula in the right order.\.
+#' @param mzdigits The number of digits included in the plot of mass differences
+#' @param vertex_size The size of the vertices.
+#' @param vertex_label_cex The size of the vertices label 
+#' @param edge_label_cex The size of the edges label 
+#' @param subNodes The subset of nodes ot be plotted if necessary
+#' @param tkplot Shall an interactiv eplot be shown using tkplot.
+#' @param ... Supplmentary arguments passed to the igraph plot function
 #'
-#' @return nothing
-#' @export
+#' @return None
 #'
 #' @examples
-#' print("Exmaples ot be put here.")
+#' print("Examples ot be put here.")
 setMethod("plot", "fragPattern",
 		  function(x,
 		  		 y = NULL,
@@ -204,18 +201,18 @@ setMethod("plot", "fragPattern",
 		  		 mzdigits = 3,
 		  		 vertex_size = 55,
 		  		 vertex_label_cex = 0.7,
+		  		 edge_label_cex=0.7,
 		  		 subNodes = NULL,
 		  		 tkplot = FALSE,
 		  		 ...) {
-		    
-		    
+		    if(is.null(edgeLabels)) stop("lease use the plot function through the ms2Lib object (ex :plot(m2l,'P15'))")
 		  	nodeLabel <- match.arg(nodeLabel)
 		  	edgeLabel <- match.arg(edgeLabel)
-
 		  	g <- mm2Graph(x)
 		  	###We determine the edge label
-		  	oformula <- sapply(get_formula(m2l)[mm2Occurences(x)[,"gid"]],LossFormula,ref=atoms)
-		  	filled_formula <- which(sapply(oformula,function(x){length(x)>0}))
+		  	oformula <- formula[mm2Occurences(x)[,"gid"]]
+		  	filled_formula <- which(sapply(oformula,function(x){(length(x)>0)})&
+		  	                          sapply(oformula,function(x){!is.na(x)}))
 		  	if(length(filled_formula)==0){
 		  	  oformula <- list()
 		  	}else{
@@ -259,6 +256,7 @@ setMethod("plot", "fragPattern",
 		  			vertex.label = labels$vertices,
 		  			vertex.size = vertex_size,
 		  			vertex.label.cex=vertex_label_cex,
+		  			edge.label.cex=edge_label_cex,
 		  			edge.label = ledges,
 		  			vertex.color = "orange",
 		  			main=title,
@@ -267,20 +265,25 @@ setMethod("plot", "fragPattern",
 		  	}
     return(invisible(list(g,labels$vertices,ledges)))
 		  })
-#' PLotting the occurences of a fragPattern object inside
-#' an ms2Lib object.
+#' PLotting the occurences of a fragPattern object
+#' 
+#' Plot the occurences, the spectra overlayed with the matched peaks of a fragmentation pattern.
 #'
 #' @param m2l An ms2lib object.
 #' @param pidx A pattern id or a frag_pattern object.
 #' @param titles A vector of titles to be used. A default tile include id
 #' and precursor will bne used by default
 #' @param byPage The maximum number of spectra to be plotted by page.
+#' @param subOccs Shall some specific occurences be ocnsidered over all the occurences.
+#' @param highlights Shall the peaks covered by the pattern be highlighted.
+#' @param commonAxis Shall all the spectra be plotted with a common x-axis.
 #' @param ... supplementary function to be passed to theplot function.
 #'
-#' @return
+#' @return A list ocntainng the spectra and their coloring in RGB format
 #' @export
 #'
 #' @examples
+#' print("Examples to be put here")
 setMethod("plotOccurences", "ms2Lib", function(m2l,
 											   pidx,
 											   titles = NULL,
@@ -328,9 +331,6 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	###Mass loss are used for matching.
 	loss_mz <- mm2EdgesLabels(m2l)$mz
 
-
-	col_vec <- rainbow(nrow(occs))
-
 	if(is.null(subOccs)){
 		subOccs <- 1:nrow(occs)
 	}else{
@@ -339,21 +339,97 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 		}
 	}
 
-
 	###THE IDX IS HANDLED BY C++ AND SHOULD BE CORRECT.
 	occs_gid <- occs[, 1]
 	occs_pos <- occs[, 2]
-	lmat <- layoutMatrix(min(byPage, length(occs_gid)),margin = 0.07)
+	
+	u_occs_gid <- tapply(occs[,2],INDEX = occs[,1],FUN = function(x){return(x)})
+	ru_occs_gid <- as.numeric(names(u_occs_gid))
+	##We build the colvec_idx
+	col_idx_val <- tapply(1:nrow(occs),INDEX = occs[,1],FUN = function(x){return(x)})
+	
+	col_vec <- rainbow(length(ru_occs_gid))
+	
+	###We aggregate the spectra
+	lmat <- layoutMatrix(min(byPage, length(u_occs_gid )),margin = 0.07)
 	maxv <- max(lmat)-2
 	layout(lmat)
-	
 	xlims <- NULL
 	if(commonAxis){
 	  xlims <- c(0,max(sapply(mgs[occs_gid],function(x) max(vertex_attr(x,"mz"))))*1.05)
 	  
 	}
-
 	
+	res_plot <- vector(mode="list",length=length(u_occs_gid))
+	for (i in 1:length(u_occs_gid)) {
+	  if((i %% 6) == 1){
+	    if(i != 1){
+	      layout(1)
+	      mtext(expression(bold("m/z")),side=1,padj=2)
+	      mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+	      layout(lmat)
+	    }
+	    par(mar=c(0.1,0.1,0.1,0.1))
+	    plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+	    plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+	    par(mar=c(2.5,2,2,0.5))
+	  }
+	  gid <- ru_occs_gid[i]
+	  all_pos <- u_occs_gid[[i]]
+	  
+	  all_maps <- sapply(all_pos,function(x,mg,loss_mz,mgs,g){
+	    get_mapping(mg=mg, patg=g, loss_mass=loss_mz, root = x)
+	  },mg=mgs[[gid]],g=g,loss_mz=loss_mz,simplify=FALSE)
+	  
+	  ###Plotting of the spectra
+	  intv <- vertex_attr(mgs[[gid]], "rel_int")
+	  mzs <- vertex_attr(mgs[[gid]], "mz")
+	  ids <- V(mgs[[gid]])
+	  
+	  ###Peaks are split between matched and non matched.
+	  matched_peaks_idx <- match(unique(unlist(sapply(all_maps,function(x){x[2,]},simplify=FALSE))), ids)
+	  # browser()
+	  non_matched_peaks_idx <- seq(1, length(mzs))[-matched_peaks_idx]
+	  col_seq <- rep("#000000FF",length(mzs))
+	  col_seq[matched_peaks_idx] <- col_vec[i]
+	  res_plot[[i]] <- data.frame(int=intv,mz=mzs,col=col_seq)
+	  
+	  if(!commonAxis){
+	    xlims <- c(0, max(mzs) * 1.05)
+	  }
+	  
+	  plot(
+	    mzs[non_matched_peaks_idx],
+	    intv[non_matched_peaks_idx],
+	    type = "h",
+	    col = "#000000FF",
+	    lwd = 3,
+	    xlim = xlims,
+	    ylim = c(0, max(intv * 1.05)),
+	    main = titles[gid],
+	    xlab = "",
+	    ylab = "",...
+	  )
+	  
+	  ###We add the matched peaks.
+	  ccol <- "#000000FF"
+	  if(highlights){
+	    ccol <- col_vec[i]
+	  }
+	  points(mzs[matched_peaks_idx],
+	         intv[matched_peaks_idx],
+	         type = "h",
+	         col =ccol,
+	         lwd = 3)
+	}
+	if((i%%6) != 1){
+	  layout(1)
+	  mtext(expression(bold("m/z")),side=1,padj=2)
+	  mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+	}
+	par(mar=omar)
+	return(invisible(res_plot))
+
 	res_plot <- vector(mode="list",length=nrow(occs))
 	for (i in 1:length(occs_gid)) {
 	  if((i %% 6) == 1){
@@ -417,10 +493,10 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 			   lwd = 3)
 	}
 	if((i%%6) != 1){
-	  layout(1)
 	  mtext(expression(bold("m/z")),side=1,padj=2)
 	  mtext(expression(bold("intensity")),side=2,padj=-0.2)	
 	}
+	layout(1)
 	par(mar=omar)
 	return(invisible(res_plot))
 })

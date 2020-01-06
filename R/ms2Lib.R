@@ -40,20 +40,8 @@ setMethod("mm2Patterns","ms2Lib",function(m2l){
 	return(m2l@patterns)
 })
 
-setMethod("mm2Lattice","ms2Lib",function(m2l){
-	return(m2l@lattice)
-})
-
-setMethod("mm2LatticeIdxItems","ms2Lib",function(m2l){
-	return(m2l@latticeIdxItems)
-})
-
 setMethod("mm2ReducedPatterns","ms2Lib",function(m2l){
 	return(m2l@reducedPatterns)
-})
-
-setMethod("mm2ReducedLattice","ms2Lib",function(m2l){
-	return(m2l@reducedLattice)
 })
 
 
@@ -111,23 +99,8 @@ setMethod("mm2Patterns<-","ms2Lib",function(m2l,value){
 	m2l
 })
 
-setMethod("mm2Lattice<-","ms2Lib",function(m2l,value){
-	m2l@lattice<- value
-	m2l
-})
-
-setMethod("mm2LatticeIdxItems<-","ms2Lib",function(m2l,value){
-	m2l@latticeIdxItems<- value
-	m2l
-})
-
 setMethod("mm2ReducedPatterns<-","ms2Lib",function(m2l,value){
 	m2l@reducedPatterns<- value
-	m2l
-})
-
-setMethod("mm2ReducedLattice<-","ms2Lib",function(m2l,value){
-	m2l@reducedLattice<- value
 	m2l
 })
 
@@ -141,8 +114,15 @@ isLoss <- function(m2l){
 	m2l@loss
 }
 
-###A list of the recognised format
+##List of the recognised format currently
+
+#' Get the supported input forma for mineMS2
+#'
+#' @return A character vector lsiting the supported format
 #' @export
+#'
+#' @examples
+#' recognisedFormat()
 recognisedFormat <- function(){
 	return(c("mgf"))
 }
@@ -167,13 +147,9 @@ parse_mgf_spectrum2 <- function(filename){
 checkFormat <- function(x){
 	rf <- recognisedFormat()
 	splitted <- strsplit(x,".",fixed=TRUE)
-
-	exts <- sapply(splitted,tail,1)
-
+	exts <- sapply(splitted,FUN = tail,1)
 	is_ok <- exts %in% rf
-
 	if(any(!(is_ok))) stop(paste("Unrecognized format:",exts[!is_ok],"in",x[!is_ok]))
-
 	return(exts)
 }
 
@@ -220,7 +196,9 @@ convert_formula <- function(form_vec){
 #' does not start with \code{'P', 'L', 'S'} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
 #' and it contains an id fields, it will be used. If no ids are furnished, an id will be generated for each spectra in the form \code{'S1', 'S2', ..., 'SN'}
 #' where N is the number of furnished spectra.
+#' @param intThreshold The intensity threshold used to filter out the peaks.
 #' @param infosFromFiles Shall the other informations present in the files be added to the supplementary infos.
+#' @aliases ms2Lib ms2Lib-constructor
 #' @examples
 #' print("examples to be put here")
 ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFromFiles = FALSE){
@@ -353,7 +331,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 
 
 get_formula <- function(m2l){
-  vf <- match("formula",tolower(colnames(m2l@spectraInfo)))
+  vf <- match("formula",tolower(trimws(colnames(m2l@spectraInfo))))
   return(m2l@spectraInfo[,vf])
 }
 
@@ -361,7 +339,7 @@ get_formula <- function(m2l){
 setMethod("show","ms2Lib",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
   if(length(mm2Atoms(object))!=0){
-	  cat("It has",nrow(mm2EdgesLabels(object)),"edges labels built with atoms",paste(mm2Atoms(object),collapse=","),".\n")
+	  cat("It has",nrow(mm2EdgesLabels(object)),"edges labels built with atoms",paste(names(mm2Atoms(object)),collapse=","),".\n")
   }
   cat("The available supplementary informations are:",colnames(mm2SpectraInfos(object)),"\n")
 	cat("It contains: ",length(mm2Patterns(object)),"patterns\n")
@@ -383,12 +361,11 @@ getFormula <- function(m2l){
 
 #' Mine recurrent subgraph from a set of graphs.
 #'
-#' Mine all the complete recurring subgraphs.
+#' Mine all the complete clsoed recurring subgraphs from a set of preconstructed mass graphs objects.
 #'
 #' @param m2l An m2Lib object to be processed.
 #' @param count The number of spectra in which the spectrum need to be sampled.
 #' @param sizeMin The minimum size of the mined patterns.
-#' @param kTree The maximum depth of the path tree.
 #' @param precursor Should only the occurences coming form the root be conserved.
 #'
 #' @return The filled ms2Lib object.
@@ -396,7 +373,7 @@ getFormula <- function(m2l){
 #'
 #' @examples
 #' print("examples to be put here")
-setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2,kTree = NULL, precursor = FALSE){
+setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, precursor = FALSE){
 	if(count<2){
 		warning("'count' parameters set to ",count," it is therefore set to 2.")
 		count <- 2
@@ -409,47 +386,43 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2,kT
 	})
 
 	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("No labels constructed, use the DiscretizeMallLosses function first.")
+		stop("No labels constructed, use the DiscretizeMassLosses function first.")
 	}
 
-	if(is.null(kTree)){
+
+	kTree <- NULL
 	if(nrow(mm2EdgesLabels(m2l))<600){
-		kTree <- 3
-	}else{
 		kTree <- 2
-	}
+	}else{
+		kTree <- 1
 	}
 
 	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
 		###Wide variety of mass losses.
 		warning("sizeMin parameters set to ",sizeMin," risk of computational overhead.")
 	}
+	
+	###WE select the non empty graph to mine the patterns.
+	sel_g <- which(sapply(mm2Dags(m2l),ecount)!=0)
+	if(length(sel_g)==0) stop("No non-empty dags found.")
 
 	###Converting the dags into data.frame.
-	df_edges <- sapply(mm2Dags(m2l),fromIgraphToDf_edges,simplify = FALSE)
-	df_vertices <-sapply(mm2Dags(m2l),fromIgraphToDf_vertices,simplify = FALSE)
-
+	df_edges <- sapply(mm2Dags(m2l),fromIgraphToDf_edges,simplify = FALSE)[sel_g]
+	df_vertices <-sapply(mm2Dags(m2l),fromIgraphToDf_vertices,simplify = FALSE)[sel_g]
+	
 	###Mining the patterns.
 	resRcpp <- mineClosedDags(df_vertices,df_edges,processing,count,kTree,sizeMin,precursor)
 
-	mm2LatticeIdxItems(m2l) <- resRcpp$items
-
 	###Construction via fragPatternc constructor.
-	mm2Patterns(m2l) <- sapply(resRcpp$patterns,fragPattern,USE.NAMES = FALSE)
-	
-	###We reorder the pattenr absed on their graph ids
-	vids <- sapply(mm2Patterns(m2l),makeId)
-	m2l@patterns <- m2l@patterns[order(vids)]
+	mm2Patterns(m2l) <- sapply(resRcpp$patterns,function(x,sel_idx){
+	  temp <- canonicalForm(fragPattern(x))
+	  temp@occurences[,1] <- sel_idx[temp@occurences[,1]]
+	  return(temp)
+	 },USE.NAMES = FALSE,sel_idx=sel_g)
 
 	###Initializing the names of the patterns.
 	for(i in 1:length(m2l@patterns)) mm2Name(m2l@patterns[[i]]) <- paste("P",i,sep="")
-
-
-	###Buillding of the lattice
-	mm2Lattice(m2l) <- graph_from_data_frame(resRcpp$edges,directed=TRUE,resRcpp$nodes)
-
-	###We add a label filed which give all the values of this.
-
+	m2l@reducedPatterns <- seq_along(m2l@patterns)
 
 	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
 	m2l
@@ -499,12 +472,15 @@ mm2get <- function(m2l,arglist){
 #' @param x An ms2Lib oject.
 #' @param i The index, a string starting by S if it a spectrum, P if it's a pattern D if it's a dag, L if it's a loss
 #' F if it's a fragment.
-#' @param drop
+#' @param j unused.
+#' @param drop unused.
+#' @param ... unused.
 #'
 #' @return A list containg the object.
 #' @export
 #'
 #' @examples
+#' print("Example to be put here")
 setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 	if(length(i)==1){
 		 temp <- mm2get(x,parseId(x,i))
@@ -527,12 +503,14 @@ setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 #'
 #' @param x An ms2Lib oject.
 #' @param y The index, a string starting by S if it a spectrum, P if it's a pattern or D if it's a dag.
+#' @param title The title of the plot, only used for dag and spectrum.
 #' @param ... supplementary arguments to be passed by the method.
 #'
 #' @return a fragPattern object of an igraph graph object.
 #' @export
 #'
 #' @examples
+#' print("Examples to be put here")
 setMethod("plot", "ms2Lib",
 		  function(x,
 		  		 y,title=NULL,
@@ -544,10 +522,11 @@ setMethod("plot", "ms2Lib",
 		  	rid <- parseId(x,y)
 		  	if(rid[[1]]=="patterns"){
 		  	  toccs <- x[y]@occurences[,1]
-				return(plot(x[y],title = y,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
+		  	  if(is.null(title)) title <- y
+				return(plot(x[y],title = title,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
 				     atoms=names(x@atoms),formula=get_formula(x)[toccs],...))
 		  	}else if(rid[[1]]=="spectra"){
-		  		plot_Spectrum2(x[y],full=TRUE,...)
+		  		MSnbase:::plot_Spectrum2(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){
 		  	  if(is.null(title)) title="Fragmentation Graph"
 		  		plot_dag(x[y],idx=y,edgeLabels=(mm2EdgesLabels(x)),atoms=x@atoms,title=title,...)
@@ -683,13 +662,16 @@ getInfo <- function(m2l,ids){
 }
 
 
-#' Return the range of iteration on an ms2Lib object.
+#' Return The Range Of Iteration Of MS2Lib Object
+#' 
+#' Return the full range of iteration of different object for an MS2lib object.
 #'
 #' @param m2l AN ms2Lib object
-#' @param type "S","L","P" or "F"
-#' @param reduced Used only if "type" is set to "P".
+#' @param type "S","L" or "P"
+#' @param reduced Used only if "type" is set to "P", shall the filtered pattern set be returned.
+#' @param as.number If as number is selected integer are returned without the prefix.
 #'
-#' @return A character vector giving the existing ids.
+#' @return A character vector giving the existing ids in the ms2Lib object,
 #' @export
 #'
 #' @examples
@@ -738,8 +720,11 @@ setMethod("hasCoverage","ms2Lib",function(x){
 
 
 #' Calculate the coverage of all the patterns in the dataset.
+#' 
+#' Calculate the coverage, the total intensity covered by the patterns on the mass graphs.
+#'  This calculation can be qute long.
 #'
-#' @param m2l The ms2Lib to bo computed.
+#' @param x The ms2Lib to bo computed.
 #'
 #' @return The m2l object with all the coverage calculated.
 #' @export

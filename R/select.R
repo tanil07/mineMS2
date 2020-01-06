@@ -30,13 +30,14 @@ checkSize <- function(vec,pos){
 #'
 #' @param m2l An ms2Lib object.
 #' @param ids Valid IDs of objects.
+#' @param vals the type of value to be returned. Only certain combinations are allowed.
 #'
 #' @return The objects of the correspodning type.
 #' @export
 #'
 #' @examples
 #' print("Examples to be put here")
-select <- function(m2l,ids,vals=c("P","S","L","F"),...){
+select <- function(m2l,ids,vals=c("P","S","L")){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an ms2Lib object.")
 
 	vals <- match.arg(vals)
@@ -224,7 +225,7 @@ all.patterns.losses <- function(m2l,reduced=TRUE){
 }
 
 select.patterns.spectra <- function(m2l,id){
-	temp <- select_patterns_from_spectra(mm2Patterns(m2l),as.integer(substring(id,2)))
+	temp <- select_patterns_from_spectra(mm2Patterns(m2l),as.integer(id))
 	if(length(temp)>0) return(paste("P",temp,sep=""))
 }
 
@@ -283,6 +284,7 @@ checkFTerms <- function(seq_terms){
 #'
 #' @param m2l An ms2Lib object.
 #' @param ids Valid IDs of objects, it mays be a chracter vector with the prefix "P" or an integer or numeric vector
+#' @param type Which criteria is used to determine the best match, F-score, precision or acccuracy
 #' @param returnall Shall all the patterns with a similar F1 score be returned.
 #' @param full Shall only full matches be returned.
 #' @param reduced Shall only the reduced set of patterns be considered.

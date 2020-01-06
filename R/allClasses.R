@@ -9,15 +9,14 @@
 #' @slot spectra A list of spectra sotred under the form of Spectrum2 object.
 #' @slot ids A chracter vector containing the ids of spectra.
 #' @slot dags A list storing the set of graphs object corresponding to the MS-MS spectra.
-#' @slot edgesLabels The discretized edges labels.
-#' @slot nodesLabels The discretized nodes labels.
+#' @slot losses The discretized edges labels.
+#' @slot fragments The discretized nodes labels.
 #' @slot patterns A list storing the fragPattern objects.
-#' @slot lattice The graph reprsentation of the lattice of the patterns.
-#' @slot latticeIdxItems The ids of the nodes which are items in MS2process.
-#' @slot ReducedPatterns The ids of the reduced patterns.
-#' @slot ReducedLattice The graph of the reduced lattice.
-#' @slot k The count of reduced patterns.
-#' @aliases ms2Lib
+#' @slot atoms A list of the atoms used to build the ofmrula aswell as their maximum number.
+#' @slot loss A boolena indicating if the object is built with loss or fragments.
+#' @slot reducedPatterns The ids of the reduced patterns.
+#' @slot k The maximum depth of the ocnstructed k path tree.
+#' @aliases ms2Lib-class
 #' @exportClass ms2Lib
 setClass(
 	"ms2Lib",
@@ -31,10 +30,8 @@ setClass(
 		atoms = "list",
 		patterns = "list",
 		loss = "logical",
-		lattice = "ANY",
-		latticeIdxItems = "integer",
 		reducedPatterns = "integer",
-		reducedLattice = "ANY",
+		# reducedLattice = "ANY",
 		k = "integer"
 	),
 	prototype = list(
@@ -47,12 +44,8 @@ setClass(
 		atoms = list(),
 		patterns = list(),
 		loss = TRUE,
-		lattice = make_empty_graph(),
-		latticeIdxItems = integer(),
 		reducedPatterns = integer(),
-		reducedLattice = make_empty_graph(),
 		k = as.integer(1)
-
 	)
 )
 
@@ -68,13 +61,15 @@ setClass(
 		graph = "ANY",
 		occurences = "matrix",
 		root = "integer",
-		name = "character"
+		name = "character",
+		canonicalForm = "character"
 	),
 	prototype = list(
 		graph = make_empty_graph(),
 		occurences = matrix(0,nrow=0,ncol=2),
 		root = as.integer(1),
-		name = character()
+		name = character(),
+		canonicalForm = character()
 	)
 )
 

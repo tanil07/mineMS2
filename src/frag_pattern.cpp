@@ -4,20 +4,10 @@
 #include "frag_pattern.h"
 #include "k_path_tree.h"
 #include "common.h"
-#include "triangles_list.h"
 
 #include <boost/graph/copy.hpp>
 #include <boost/graph/graphml.hpp>
 #include<Rcpp.h>
-
-
-
-//Reminder of the typedef
-//typedef boost::adjacency_list<
-//    boost::vecS, boost::vecS, boost::bidirectionalS,
-//    node_info, edge_info> pgraph;
-//typedef boost::graph_traits<pgraph> graphTraitp;
-//typedef boost::graph_traits<pgraph>::vertex_descriptor Vertexp;
 
 
 frag_pattern::frag_pattern()
@@ -25,11 +15,8 @@ frag_pattern::frag_pattern()
     //ctor
 };
 
-
-
 std::vector<Extension>::iterator pos_extension(std::vector<Extension>& exts, Extension ext){
-//We fidn the position ot remove
-
+//We find the position ot remove
     auto it = exts.begin();
     auto ie = exts.end();
 
@@ -43,24 +30,12 @@ std::vector<Extension>::iterator pos_extension(std::vector<Extension>& exts, Ext
     return it;
 }
 
-
-//short calcDist(Extension ext,graphp& g, triangles_list& tl){
-//    short odist = g[(std::get<0>(ext))].lab;
-//    short nlab = std::get<2>(ext);
-//    return tl.get_ab(odist,nlab);
-//}
-
-
 void frag_pattern::filterExtensions(k_path_tree& kt){
     std::vector<Extension> nexts;
     std::copy_if(extensions.begin(),extensions.end(),nexts.begin(),
     [this,kt](Extension e)-> bool{
-            // odist = g[(std::get<0>(e))].lab;
-        //short nlab = std::get<2>(e);
         Vertext text = std::get<1>(e);
         short dist =kt.getLab(text);
-        //short dist = lt.get_ab(odist,nlab);
-
         return(dist_prec.find(dist)== dist_prec.end());
     });
 }
@@ -77,7 +52,6 @@ void add_dist(graphp& g,std::vector<Extension>& exts,
             dist.insert(std::get<2>(*ie));
         }else{
             short fdist = t.getLab(std::get<1>(*ie));
-            //std::cout << "fdi : "<<odist<<" "<<std::get<2>(*ie)<<" "<<fdist<<std::endl;
             dist.insert(fdist);
         }
     }
@@ -88,8 +62,6 @@ void rfilterExtensions(graphp gp,std::vector<Extension>& exts,std::unordered_set
     exts.erase(std::remove_if(exts.begin(),
               exts.end(),
               [kt,dist,gp](Extension e)->bool{
-                //short ola = gp[std::get<0>(e)].lab;
-                //short la = std::get<2>(e);
                 short pc = kt.getLab(std::get<1>(e));//FFlt.get_ab(ola,la);
                 if((pc==NULL_LABEL)|(dist.find(pc)!=dist.end())){
                     return true;
@@ -116,7 +88,6 @@ void removeExtensions(std::vector<Extension>& exts, std::vector<short> labs, Ver
                               idx_end,
                               [labs,origin](Extension e)-> bool{
                                     bool temp = std::find(labs.begin(),labs.end(),std::get<2>(e)) != labs.end();
-//                                    if(temp) std::cout << "rr "<<origin <<"_"<<*std::find(labs.begin(),labs.end(),std::get<2>(e));
                                   return(temp);});
     //Countting the number of removeed extensions/
     int counter= 0; //DEBUG
@@ -133,7 +104,6 @@ frag_pattern::frag_pattern(Vertext v,k_path_tree& kt, std::ostream& of){
     //Setting occurences, occurences may be added :
     ktree& t = kt.get_t();
     MapOccurrences& moccs = kt.get_occs();
-    //triangles_list& tl = kt.get_tl();
     adjacencyGraph& adj = kt.get_adj();
     std::vector<occ> toccs(moccs[v].begin(),moccs[v].end());
     occurences = toccs;
@@ -251,12 +221,10 @@ frag_pattern::frag_pattern(frag_pattern& fp,k_path_tree& kt,
 
     //Forbbiden first
     graphp& parent_graph = fp.get_g();
-   // triangles_list& tl = kt.get_tl();
     auto k = kt.get_k();
 
     //We then check if the extension is syntaxically correct.
     short new_lab = std::get<2>(ext);
-    //short dprec_source = parent_graph[source_vertex].lab;
     short depth_source = parent_graph[source_vertex].depth;
     //Specific care to 0 extension
     short new_dist;
@@ -311,7 +279,6 @@ frag_pattern::frag_pattern(frag_pattern& fp,k_path_tree& kt,
 
     //Now the removed exntensions aree incorporated in dist_prec.
     add_dist(g,extensions,lim_ext,dist_prec,kt);
-    //std::cout << "add_dist ";
     auto vfirst = lim_ext;
     auto vlast = extensions.end();
     std::vector<Extension> old_exts(vfirst,vlast);
@@ -351,32 +318,6 @@ std::pair<std::vector<Extension>::iterator,
             std::vector<Extension>::iterator> frag_pattern::get_it_exts(){
             return std::make_pair(extensions.begin(),extensions.end());
 }
-
-//
-////Update the distance preducrosr given an extension.
-//std::vector<Extension>::iterator frag_pattern::update_dist_prec(std::vector<Extension>& pexts,
-//                                                                Extension ext,k_path_tree& kt){
-//    //We find the position of the extension vector.
-//    if(pexts.size()==0){
-//        return pexts.begin();
-//    }
-//    //We get the label of the current node
-//    short vlab =  std::get<2>(ext);
-//
-//    for(auto bext = pexts.begin();bext!=pexts.end();bext++){
-//        short ext_lab = g[std::get<0>(*bext)].lab;
-//        short cval = kt.getLab(std::get<1>(ext));
-//
-//        //The C is added to the value.
-//        if(cval!=NULL_LABEL){
-//            dist_prec.insert(cval);
-//        }
-//    }
-//
-//    return pexts.end();
-//}
-//
-
 
 
 frag_pattern::~frag_pattern()
@@ -436,94 +377,6 @@ void frag_pattern::extendMotif(){
 
 }
 
-//
-////This function reconstruct the full graph, given the triangle list.
-////If las is true only the last element is che
-//void frag_pattern::constructFullGraph(triangles_list& tl){
-//    //For every pair of node we try to reconstruct a value.
-//    graphTraitsp::vertex_iterator bv,ev;
-//    boost::tie(bv,ev)=boost::vertices(g);
-//    std::vector<Vertexp> vexp(bv,ev);
-//
-//    //At first an edge is added between every vertex and the precursor
-//    for(;bv!=ev;bv++){
-//        if(*bv==root) continue;
-//        auto eve = boost::add_edge(root,*bv,g);
-//        g[eve.first].lab = g[*bv].lab;
-//    }
-//
-//    //The vector is sorted in increasing order.
-//    std::sort(vexp.begin(),vexp.end(),
-//    [this](const Vertexp & a, const Vertexp & b) -> bool
-//    {
-//        return ((this->g[a].lab)<(this->g[b].lab));
-//    });
-//
-//    //Now we reconstruct the graph
-//    std::vector<Vertexp>::iterator b1,b2,e2;
-//    for(b1=vexp.begin();b1!=vexp.end();b1++){
-//        //This a
-//        short a = g[*b1].lab;
-//        for(b2=b1,b2++;b2!=vexp.end();b2++){
-//            short c = g[*b2].lab;
-//            bool inserted=false;
-//            graphTraitsp::edge_descriptor e;
-//            short b = tl.get_ac(a,c);
-//            if(b==NULL_LABEL) continue;
-//
-//                boost::tie(e,inserted) = boost::add_edge(*b1,*b2,g);
-//                if(inserted){
-//                    g[e].lab = b;
-//                }
-//        }
-//    }
-//}
-//
-//
-//
-////This function reconstruct the full graph, given the triangle list.
-////it only consider the edge which may be rattached to Vertexp v.
-//void frag_pattern::constructFullGraph(triangles_list& tl,Vertexp v){
-//    //For every pair of node we try to reconstruct a value.
-//    graphTraitsp::vertex_iterator bv,ev;
-//    boost::tie(bv,ev)=boost::vertices(g);
-//    short labv = g[v].lab;
-//
-//    for(;bv!=ev;bv++){
-//        if((*bv)==(v)){
-//            continue;
-//        }
-//        short labo = g[*bv].lab;
-//        graphTraitsp::edge_descriptor e;
-//        bool inserted;
-//
-//        if(labo>labv){
-//            //We insert the edge if needed.
-//            //We try to insert if it does not exist.
-//            //auto ex_edge = boost::edge(v,*bv,g);
-//            //if(!ex_edge.second){
-//                short b = tl.get_ac(labv,labo);
-//                boost::tie(e,inserted) = boost::add_edge(v,*bv,g);
-//                if(inserted){
-//                    g[e].lab = b;
-//                }
-//            //}
-//        }else{
-//            //auto ex_edge = boost::edge(v,*bv,g);
-//            //if(!ex_edge.second){
-//                short b = tl.get_ac(labo,labv);
-//                boost::tie(e,inserted) = boost::add_edge(*bv,v,g);
-//                if(inserted){
-//                    g[e].lab = b;
-//                }
-//            //}
-//        }
-//    }
-//}
-//
-
-
-
 void frag_pattern::reconstructGraphD(std::vector<mass_graph>& D){
     //We get the first occurences
     int n = 0;
@@ -536,10 +389,6 @@ void frag_pattern::reconstructGraphD(std::vector<mass_graph>& D){
         graph& d = mgd.get_g();
 
         Vertex origin = mgd.get_vertex_from_gid(o.idx);
-        //We print all the out edges of the map
-        //DEBUG
-        graphTraits::out_edge_iterator bod,eod;
-        graphTraitsp::out_edge_iterator bop,eop;
 
         //We first get a set of values
         std::map<Vertex,Vertexp> mapping = mapPattern(d,origin,g,root);
@@ -563,9 +412,6 @@ void frag_pattern::reconstructGraphD(std::vector<mass_graph>& D){
                     //Then we add the edge
                     bool inserted=false;
                     graphTraitsp::edge_descriptor new_e;
-                    //Rcpp::Rcerr << "d"<<d[(*itt).first].lab<<"-"<<
-                    //d[targ].lab <<"/g"<< g[vs].lab<<"-" <<
-                    //g[(*pos).second].lab << std::endl;
 
 
                     boost::tie(new_e,inserted) = boost::add_edge(vs,(*pos).second,g);
@@ -596,10 +442,7 @@ bool frag_pattern::isCompleteD(std::vector<mass_graph>& D){
     for(boost::tie(ba,ea)=boost::adjacent_vertices(root,g);ba!=ea;ba++){
         L0.insert(g[*ba].lab);
     }
-//    Rcpp::Rcerr << "L0: ";
-//    for(auto itt = L0.begin();itt!=L0.end();itt++){
-//        Rcpp::Rcerr << *itt <<"_";
-//    }
+
     bool init = true;
     for(auto it=occurences.begin();it!=occurences.end();it++){
         occ& o = (*it);
@@ -651,51 +494,16 @@ bool frag_pattern::isCompleteD(std::vector<mass_graph>& D){
             std::transform(bi,ei,std::inserter(o_in_labs,o_in_labs.begin()),
                            [&gd](Edge e)-> short{return gd[e].lab;});
 
-            //intersectin
+            //intersection the possible extensions
             std::set<short> in_intersect;
             std::set_intersection(in_labs.begin(),in_labs.end(),
                                     o_in_labs.begin(),o_in_labs.end(),
                                   std::inserter(in_intersect,in_intersect.begin()));
-            in_labs=in_intersect;
-
-
-
-
-//            for(boost::tie(bo,eo) = boost::out_edges(v_occ,gd);bo!=eo;bo++){
-//                auto pos = out_labs.find(gd[*bo].lab);
-//                if(pos!=out_labs.end()){
-//                    out_labs.erase(pos);
-//                }
-//            }
-//
-//            graphTraits::in_edge_iterator bi,ei;
-//            for(boost::tie(bi,ei) = boost::in_edges(v_occ,gd);bi!=ei;bi++){
-//                auto pos = in_labs.find(gd[*bi].lab);
-//                if(pos!=in_labs.end()){
-//                    in_labs.erase(pos);
-//                }
-//            }
         }
-
-        //We check if the set is empty.
-//                    Rcpp::Rcerr << "inl: ";
-//            for(auto itt = in_labs.begin();itt!=in_labs.end();itt++){
-//                Rcpp::Rcerr << *itt <<"_";
-//            }
-//            Rcpp::Rcerr << std::endl;
-//                        Rcpp::Rcerr << "outl: ";
-//            for(auto itt = out_labs.begin();itt!=out_labs.end();itt++){
-//                Rcpp::Rcerr << *itt <<"_";
-//            }
-//            Rcpp::Rcerr << std::endl;
-
-
         if( (in_labs.size()==0) & (out_labs.size()==0) ){
-//            Rcpp::Rcerr << "_comp_";
             return true;
         }
     }
-//    Rcpp::Rcerr << "_noncomp_";
     return false;
 }
 
@@ -793,9 +601,6 @@ void frag_pattern::to_reduced_string(){
 void frag_pattern::to_reduced_string(std::ostream& of){
     of << "## ";
     graphTraitsp::vertex_iterator bv,ev;
-//    for(boost::tie(bv,ev)=boost::vertices(g);bv!=ev;bv++){
-//        of<<g[*bv].lab<<"_"<<g[*bv].depth<<"_"<<g[*bv].lab<<" ";
-//    }
     boost::tie(bv,ev)=boost::vertices(g);
     //Debug only
     std::vector< short> temp;
@@ -849,8 +654,6 @@ void frag_pattern::clearPatternFull(){
 
 
 void frag_pattern::to_reduced_string_ext(std::ostream& of){
-//    std::cout<<"g : vertices "<< boost::num_vertices(g)<<" edges " <<
-//    boost::num_edges(g) <<" coherent "<<std::endl;//<<this->isCoherent()<< std::endl;
     of << "## ";
     graphTraitsp::vertex_iterator bv,ev;
     for(boost::tie(bv,ev)=boost::vertices(g);bv!=ev;bv++){
@@ -912,8 +715,6 @@ void frag_pattern::write_graphml(std::string path_graphml)
     //Edge properties.
     dp.property("lab", boost::get(&pedge_info::lab, g));
     dp.property("span", boost::get(&pedge_info::span, g));
-    //dp.property("occs", boost::get(&pgraph_info::occs, g));
-    //dp.property("norm", boost::get(&pgraph_info::norm, g));
     //
     boost::ref_property_map<graphp*,std::string> gnorm(
     get_property(g,&pgraph_info::norm));
@@ -923,13 +724,9 @@ void frag_pattern::write_graphml(std::string path_graphml)
     get_property(g,&pgraph_info::occs));
     dp.property("occs",goccs);
 
-    //std::cout << "Writing..." << path_graphml;
-    //std::cout << "nv:"<<boost::num_vertices(g)<< "ne:"<<boost::num_edges(g)<<std::endl;
-    //boost::write_graphml(std::cout, g, dp, true);
     std::ofstream ofile(path_graphml);
     boost::write_graphml(ofile, g, dp, true);
     ofile.close();
-    //std::cout << "written...";
 }
 
 

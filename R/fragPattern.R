@@ -17,6 +17,11 @@ setMethod("mm2Name", "fragPattern",function(pat){
 })
 
 
+setMethod("mm2CanonicalForm", "fragPattern",function(pat){
+  return(pat@canonicalForm)
+})
+
+
 setMethod("mm2Graph<-", "fragPattern", function(pat,value){
 	pat@graph <- value
 	pat
@@ -34,6 +39,11 @@ setMethod("mm2Root<-","fragPattern", function(pat,value){
 setMethod("mm2Name<-", "fragPattern",function(pat,value){
 	pat@name <- value
 	pat
+})
+
+setMethod("mm2CanonicalForm<-", "fragPattern",function(pat,value){
+  pat@canonicalForm <- value
+  pat
 })
 
 
@@ -57,6 +67,7 @@ setMethod("show","fragPattern",function(object){
 #' and the second giving the nodes.
 #'
 #' @return
+#' The constructed fragPattern object.
 #'
 #' @examples
 #' print("Exmaples to be put here")
@@ -76,6 +87,13 @@ makeId <- function(pat){
   elabs <- edge_attr(pat@graph,'lab',incident_edges(pat@graph,1)[[1]])
   elabs <- paste(sort(elabs),collapse="/")
   elabs
+ }
+
+###Building the canonical form of a pattern as an itemse
+canonicalForm <- function(pat){
+  root_labels <- edge_attr(pat@graph,"lab",incident_edges(pat@graph,1)[[1]])
+  pat@canonicalForm <- paste(root_labels,collapse = "|")
+  return(pat)
 }
 
 

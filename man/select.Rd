@@ -4,12 +4,14 @@
 \alias{select}
 \title{Selection function}
 \usage{
-select(m2l, ids, vals = c("P", "S", "L", "F"), ...)
+select(m2l, ids, vals = c("P", "S", "L"))
 }
 \arguments{
 \item{m2l}{An ms2Lib object.}
 
 \item{ids}{Valid IDs of objects.}
+
+\item{vals}{the type of value to be returned. Only certain combinations are allowed.}
 }
 \value{
 The objects of the correspodning type.

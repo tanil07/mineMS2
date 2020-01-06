@@ -6,7 +6,7 @@ REF_MINEMS2_ATOMS_NAMES <- tabAtoms()$name
 REF_MINEMS2_HALOGENS <- tabAtoms()$name[tabAtoms()$halogen]
 
 
-getAtomsMass <- function(atoms){
+getAtomMass <- function(atoms){
   temp <- tabAtoms()
   temp$mass[temp$name %in% atoms]
 }
@@ -158,12 +158,12 @@ orderByRDBE <- function(lf){
 
 setMethod("%in%",signature=list(x="character",table="LossFormula"),function(x,table){
   vf <- stringToFormula(x,vnames=colnames(table@formula))
-  any(apply(table@formula, 1, function(x, want) isTRUE(all.equal(x, want)), vf))
+  any(apply(table@formula, 1, function(x, want) isTRUE(all.equal(x, want)), want = vf))
 })
 
 setMethod("%in%",signature=list(x="integer",table="LossFormula"),function(x,table){
   names(x) <- colnames(table@formula)
-  any(apply(table@formula, 1, function(x, want) isTRUE(all.equal(x, want)), vf))
+  any(apply(table@formula, 1, function(y, want) isTRUE(all.equal(y, want)),x))
 })
 
 
@@ -210,7 +210,7 @@ is_sub_raw <- function(rf1,rf2){
 
 
 ###Vectorized implementation.
-setMethod("isSubformula",signature = list(x="LossFormula",lf = "character"),function(x,lf){
+setMethod("isSubformula",signature = list(x="LossFormula",lf = "character"),function(x,lf,type=NULL){
   l_atoms <- colnames(x@formula)
   lf <- stringToFormula(lf,vnames=l_atoms)
   vr <-apply(x@formula,1,is_sub_raw,rf2=lf)
@@ -273,6 +273,19 @@ setMethod(length,"LossFormula",function(x){
   nrow(x@formula)
 })
 
+#' Selecting a fornula among the different loss formula possible.
+#'
+#' @param x The Loss formula object
+#' @param i The position of the selected formula
+#' @param j Not used
+#' @param ... Not used
+#' @param drop Not used
+#'
+#' @return The formula as 1xatoms matrix
+#' @export
+#' 
+#' @examples
+#' print("Example to be put here")
 setMethod('[',"LossFormula",function(x,i,j=NULL,...,drop=TRUE){
   x@formula <- x@formula[i,,drop=FALSE]
   return(x)

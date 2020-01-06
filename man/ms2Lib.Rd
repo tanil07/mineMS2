@@ -2,10 +2,16 @@
 % Please edit documentation in R/ms2Lib.R
 \name{ms2Lib}
 \alias{ms2Lib}
+\alias{ms2Lib-constructor}
 \title{ms2Lib constructor}
 \usage{
-ms2Lib(x, suppInfos = NULL, ids = NULL, intThreshold = NULL,
-  infosFromFiles = FALSE)
+ms2Lib(
+  x,
+  suppInfos = NULL,
+  ids = NULL,
+  intThreshold = NULL,
+  infosFromFiles = FALSE
+)
 }
 \arguments{
 \item{x}{May be one of the following
@@ -24,6 +30,8 @@ formula of the molecules.}
 does not start with \code{'P', 'L', 'S'} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
 and it contains an id fields, it will be used. If no ids are furnished, an id will be generated for each spectra in the form \code{'S1', 'S2', ..., 'SN'}
 where N is the number of furnished spectra.}
+
+\item{intThreshold}{The intensity threshold used to filter out the peaks.}
 
 \item{infosFromFiles}{Shall the other informations present in the files be added to the supplementary infos.}
 }

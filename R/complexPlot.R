@@ -3,15 +3,21 @@
 #' Plot patterns graph and occurences of an ms2Lib object.
 #'
 #' @param m2l An ms2Lib object
-#' @param ids THe ids to be plotted or NULL if all the ids are supposed to be plot
-#' @param occurences include the occurences
+#' @param ids The ids to be plotted or NULL if all the ids are supposed to be plot
+#' @param components An id giving the ocmponent of each spectrum to be plotted in first page.
+
+#' @param occurences Shall include the occurences be plotted aswell as the graph.
 #' @param full Shall the full patterns be plotted (it can take some times)
 #' @param byPage Maximum number of occurences by page.
+#' @param titles A vector giving the titles of the MS-MS spectra.
 #'
 #' @export
+#' 
+#' @return Nothing
 #'
 #' @examples
-plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FALSE,byPage=9,titles=NULL,...){
+#' print("Examples to be put here.")
+plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FALSE,byPage=9,titles=NULL){
 
 
 	if(is.null(ids)){
@@ -71,28 +77,4 @@ plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FAL
 
 		plotOccurences(m2l,id)
 	}
-}
-
-
-#' Plot the lattice of an ms2Lib object
-#'
-#' @param m2l The ms2Lib object
-#' @param reduced Shall the reduced lattice or the full lattice be plot.
-#'
-#' @return
-#' @export
-#'
-#' @examples
-plotLattice <- function(m2l,reduced=TRUE){
-	if(vcount(mm2Lattice(m2l))==0) stop("Patterns should have been mined to plot the lattice.")
-	if(reduced){
-		if(vcount(mm2ReducedLattice(m2l))==0) stop("Reduced lattice should have been constructed.")
-	}else{
-
-		if(vcount(mm2Lattice(m2l))==0) stop("Lattice should have been constructed.")
-		stop("Not implemented yet.")
-
-	}
-
-
 }

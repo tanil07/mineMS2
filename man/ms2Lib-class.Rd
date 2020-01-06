@@ -3,7 +3,6 @@
 \docType{class}
 \name{ms2Lib-class}
 \alias{ms2Lib-class}
-\alias{ms2Lib}
 \title{A class storing a set of MS-MS spectra, their associated graphs,
 and some supplemnetary inofmration.}
 \description{
@@ -22,20 +21,18 @@ and informations added by the user eventually.}
 
 \item{\code{dags}}{A list storing the set of graphs object corresponding to the MS-MS spectra.}
 
-\item{\code{edgesLabels}}{The discretized edges labels.}
+\item{\code{losses}}{The discretized edges labels.}
 
-\item{\code{nodesLabels}}{The discretized nodes labels.}
+\item{\code{fragments}}{The discretized nodes labels.}
 
 \item{\code{patterns}}{A list storing the fragPattern objects.}
 
-\item{\code{lattice}}{The graph reprsentation of the lattice of the patterns.}
+\item{\code{atoms}}{A list of the atoms used to build the ofmrula aswell as their maximum number.}
 
-\item{\code{latticeIdxItems}}{The ids of the nodes which are items in MS2process.}
+\item{\code{loss}}{A boolena indicating if the object is built with loss or fragments.}
 
-\item{\code{ReducedPatterns}}{The ids of the reduced patterns.}
+\item{\code{reducedPatterns}}{The ids of the reduced patterns.}
 
-\item{\code{ReducedLattice}}{The graph of the reduced lattice.}
-
-\item{\code{k}}{The count of reduced patterns.}
+\item{\code{k}}{The maximum depth of the ocnstructed k path tree.}
 }}
 

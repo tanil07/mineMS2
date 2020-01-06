@@ -47,7 +47,7 @@ struct pgraph_info{
 //properties of pattern to avoid copy issue a constructor is added
 struct pnode_info{
     pnode_info(short depth=0,short lab=0): depth(depth),lab(lab) {}
-    short depth; //depht is short because it not supposed ot be bigger than 3.
+    short depth; //depth is short because it not supposed ot be bigger than 3.
     short lab; //correspond to the distance form the precursor.
 };
 
@@ -102,7 +102,6 @@ typedef boost::graph_traits<graph> graphTraits;
 typedef boost::graph_traits<graph>::vertex_descriptor Vertex;
 typedef boost::graph_traits<graph>::edge_descriptor Edge;
 typedef std::map<Edge,short> VisitMap;
-//typedef std::map<Vertex,std::vector<std::pair<Vertex,short> > > VisitMap;
 
 //Property map
 typedef boost::property_map<graph,boost::vertex_index_t>::type IndexMap;
@@ -160,11 +159,6 @@ typedef boost::unordered_map<std::string,Vertexl> subgraph_idx;
 typedef short patternKey;
 typedef std::pair<patternKey,short> patternIdx;
 
-//struct hashPatternIdx{;
-
-//}
-
-
 //Operator
 struct less_than
 {
@@ -174,33 +168,5 @@ struct less_than
                 (std::get<2> (ext1) < std::get<2> (ext2)));
     }
 };
-
-
-
-//TYPEDEF USED FOR EXPORTING ONLY
-//The typedef for the new lattice is created.
-
-
-
-//The information stored on the node
-struct export_node_info{
-    export_node_info(int id=0,int noccs=0,int num_losses=0,float score=0.0,
-                     bool item=true): id(id),noccs(noccs),num_losses(num_losses),score(score),item(item) {};
-    //The id associated to the pattern.
-    int id;
-    int noccs;
-    int noccs_unique;
-    int num_losses;
-    float score;
-    bool item;
-};
-
-typedef boost::adjacency_list<
-    boost::vecS, boost::vecS, boost::bidirectionalS,
-    export_node_info, boost::no_property> latticeexport;
-
-typedef boost::graph_traits<latticeexport> graphTraitel;
-typedef graphTraitel::vertex_descriptor Vertexel;
-
 
 #endif // COMMON_H_INCLUDED

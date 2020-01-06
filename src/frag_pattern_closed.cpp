@@ -67,7 +67,6 @@ std::map<Vertex,Vertexp> mapPattern(graph &g,Vertex orvertex,graphp &p,Vertexp r
     //Intermdiate map used to build the mapping
     std::map<short,Vertex> mg;
     graphTraits::out_edge_iterator bo,eo;
-    //IndexMap imap = boost::get(boost::vertex_index,g);
     graphTraits::vertex_iterator bv,ev;
 
     boost::tie(bo,eo)=boost::out_edges(orvertex,g);
@@ -82,26 +81,16 @@ std::map<Vertex,Vertexp> mapPattern(graph &g,Vertex orvertex,graphp &p,Vertexp r
     mapping.insert(std::make_pair(orvertex,rootp));
     graphTraitsp::out_edge_iterator bpo,epo;
     boost::tie(bpo,epo)=boost::out_edges(rootp,p);
-//
-    //Rcpp::Rcerr << "InMap :"<<std::endl;
     for(;bpo!=epo;bpo++){
         auto pos = mg.find(p[*bpo].lab);
         if(pos!=mg.end()){
             bool ins1;
             Edge e1;
-            //Edgep e2;
             boost::tie(e1,ins1)=boost::edge(orvertex,(*pos).second,g);
-            //boost::tie(e2,ins1)=boost::edge(rootp,(*pos).second,g);
-            //Rcpp::Rcerr << g[e1].lab <<"_" << p[*bpo].lab<<std::endl;
             mapping.insert(std::make_pair((*pos).second,boost::target(*bpo,p)));
         }
     }
 
-
-//    std::transform(bpo,epo,std::inserter(mapping,mapping.begin()),
-//                   [&mg,&p](graphTraitsp::edge_descriptor u)->std::pair<Vertex,Vertexp>{
-//        return std::make_pair((*(mg.find(p[u].lab))).second,boost::target(u,p));
-//    });
     return mapping;
 }
 
@@ -145,12 +134,6 @@ bool is_isomorphic(frag_pattern & a,frag_pattern & b){
 //Return true if the two graphs are isomorphic.
 bool is_isomorphic(frag_pattern & a,std::vector<short> & b){
     auto a0 = get_labs(a,a.get_root(),true);
-//    std::cout << "a:"<<std::endl;
-//    for(auto it=a0.begin();it!=a0.end();it++) std::cout << *it <<"_";
-//    std::cout << std::endl;
-//    std::cout << "b:"<<std::endl;
-//    for(auto it=b.begin();it!=b.end();it++) std::cout << *it <<"_";
-//    std::cout << std::endl;
     return (a0==b);
 }
 
@@ -190,13 +173,7 @@ bool is_subgraph(frag_pattern & a,frag_pattern & b){
     boost::tie(bv,ev) = boost::vertices(b.get_g());
     for(;bv!=ev;bv++){
         auto setv = get_labs(b,*bv,true);
-//        of << "setv: "; //DEBUG
-//        print_vec(setv,of);//DEBUG
-//        of << "a0: ";//DEBUG
-//        print_vec(a0,of);//DEBUG
-
         bool iso = std::includes(setv.begin(),setv.end(),a0.begin(),a0.end());
-        //std::cout << a0.size() <<" "<< setv.size() <<" "<< iso <<std::endl;
         if(iso) return iso;
     }
     return false;

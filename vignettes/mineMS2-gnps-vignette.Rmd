@@ -71,7 +71,7 @@ In the rest of this vignette, we show how these patterns can be used to interpre
 ## Loading the GNPS network
 
 The GNPS network may be read using the *igraph* package:
-```{r gnps_network_reading}
+```{r gnps_network_reading, warning=FALSE, message=FALSE}
 library(igraph)
 
 net_gnps <- read_graph(path_network, "graphml")

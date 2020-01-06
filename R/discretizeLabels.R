@@ -74,10 +74,9 @@ reorderAtom <- function(atoms){
 #' @param precPpm The ppm tolerance used ot match the precursor mz to the fragments.
 #' @param precDmz The minimum tolerance used to match the precursor mz to the fragments.
 #' @param atoms A list of the maximum number of atoms authorized during the formula generation process.
-#' If it is NULL, the default list is \code{C:limMzFormula[2]%/%12, H:50, N:6 ,O:6}.
+#' If it is NULL, the default list the maximum of \emph{limMzFormula}/12, H:50, N:6 ,O:6.
 #' @param heteroAtoms a boolean,  ignored if a custom atoms is furnished, add heteroatoms P, Cl, S as possible atoms.
 #' @param mzDigits The number of decimals to write as an information in the graphs.
-#' @param penalizedLosses A chracter vector, the losses which will be penalized. If NULL the table penalizedLossDefault() is used.
 #'
 #' @return An ms2Lib object with filled fileds and constructed dags.
 #' @export
@@ -96,10 +95,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 													 precDmz = 0.02,
 													 atoms = NULL,
 													 heteroAtoms = TRUE,
-													 mzDigits = 4,
-													 penalizedLosses = NULL,
-													 majoredLosses = character(0),
-													 ...) {
+													 mzDigits = 4) {
 
 	message("Discretization of the mass losses...")
 
@@ -140,23 +136,12 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	}
 	
 	m2l@atoms <- reorderAtom(atoms)
-
-
-	if(is.null(penalizedLosses)){
-		penalizedLosses <- penalizedLossesDefault()$formula
-		message("penalizedLosses not furnished, default table is used.")
-	}else{
-		penalizedLosses <- sapply(penalizedLosses,stringToFormula,vnames=names(l_atoms),simplify=FALSE)
-		penalizedLosses <- sapply(penalizedLosses,formulaToString)
-	}
-
 	res_list <- discretizeMassesDifferences(mm2Spectra(m2l),
 								ppm = ppm, dmz = dmz,
 								freq = freq, mzdigits = mzDigits,
 								limFormula = limMzFormula, maxFrag = maxFrags,
 								max_overlap = maxOverlap, strictMatching = strictMatching,
-								prec.ppm = precPpm,prec.dmz = precDmz, atoms = m2l@atoms,
-								floss = penalizedLosses, nfloss = majoredLosses, ...)
+								prec.ppm = precPpm,prec.dmz = precDmz, atoms = m2l@atoms)
 	
 	
 	###At this step we add the formula if necessary.
@@ -243,8 +228,7 @@ discretizeMassesDifferences <- function(list_spec,
 										mzdigits=3, maxFrag = 25,
 										max_overlap=0.05,strictMatching=TRUE,
 										prec.ppm=20,prec.dmz=0.02,
-										atoms = list("C"= max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6) ,
-										floss=NULL,nfloss = NULL,...) {
+										atoms = list("C"= 1000%/%12,"H"=50,"N"=6,"O"=6),...) {
 	list_spec <- lapply(list_spec,getExtendedSpec,maxNum=maxFrag,ppm=prec.ppm,
 						dmz=prec.dmz,relInt = TRUE)
 	list_masses <- lapply(list_spec,'[[',i="mz")
@@ -350,17 +334,6 @@ discretizeMassesDifferences <- function(list_spec,
 		if(is.na(x[xp1])) return(NA_character_)
 		apply(allFormula$formula[x[xp1]:x[xp2],,drop=FALSE],1,formulaToString,vnames=atm_names)
 	})
-	###Finding penalized and advantaged formula.
-	freq_f <- sapply(str_formula,function(x){
-		if(is.na(x[1])) return(FALSE)
-		any(x %in% floss)
-	})
-
-	non_freq_f <- sapply(str_formula,function(x){
-		if(is.na(x[1])) return(FALSE)
-		any(x %in% nfloss)
-	})
-
 
 	###Final strings
 	str_formula <- sapply(str_formula,function(x){
@@ -384,8 +357,6 @@ discretizeMassesDifferences <- function(list_spec,
 							fused = merged_masses$fused[c(to_keep,high_mz_idx)],
 							count=numeric((length(to_keep)+length(high_mz_idx))),
 							formula=c(str_formula[to_keep],rep(NA_character_,length(high_mz_idx))),
-							adv_loss = c(freq_f[to_keep],rep(FALSE,length(high_mz_idx))),
-							pen_loss = c(non_freq_f[to_keep],rep(FALSE,length(high_mz_idx))),
 							carb_only = c(carb_only[to_keep],rep(FALSE,length(high_mz_idx))),
 							nitrogen_only = c(nitrogen_only[to_keep],rep(FALSE,length(high_mz_idx))),
 							ch_only = c(CH_only[to_keep],rep(FALSE,length(high_mz_idx))),
@@ -410,10 +381,6 @@ discretizeMassesDifferences <- function(list_spec,
 		###We keep only the matched edges.
 		pok <- which(!is.na(matched))
 
-		# if(length(pok)==0){
-		# 	toReturn[[i]]<-NA
-		# 	next
-		# }
 		###We keep only the labeled edges.
 		list_matrix[[i]]$mz <- list_matrix[[i]]$mz[pok]
 		list_matrix[[i]]$idx <- list_matrix[[i]]$idx[pok,,drop=FALSE]
@@ -474,119 +441,6 @@ discretizeMassesDifferences <- function(list_spec,
 	}
 	return(list(spectra=list_spec,dags = toReturn, elems = recap_tab))
 }
-
-
-
-#' Discretize the fragments of mass spectrometers.
-#'
-#' Discretize the fragments in a ms2Lib object.
-#'
-#' @param m2l The ms2 lib object to be discretized.
-#' @param adducts A ppm vector giving the adducts names. ADD FUNCTION.
-#' @param ppm the maximum authorized deviation in ppm (parts per million).
-#' @param dmz The maximum authorized deviation in Da.
-#' @param count The minimum number of spectra in which the label needs to be found. Shall be greater or equal to 2.
-#' @param limMzFormula An interval giving the range in which the formula will be calculated.
-#' peaks with a masses lower than the lower term will be ignored while peak with a mass higher than the
-#' higher term won't have formula check.
-#' @param maxFrags The maximum number of fragment allower on the spectra.
-#' @param maxOverlap The degree of overlap allowed between bins. Bins which overlap more are fused.
-#' @param strictMatching Shall the formula matching be strict, or approximated.
-#' @param precPpm The ppm tolerance used ot match the precursor mz to the fragments.
-#' @param precDmz The minimum tolerance used to match the precursor mz to the fragments.
-#' @param atoms A list of the maximum number of atoms authorized during the formula generation process.
-#' If it is NULL, the default list is \code{C:limMzFormula[2]%/%12, H:50, N:6 ,O:6}.
-#' @param heteroAtoms a boolean,  ignored if a custom atoms is furnished, add heteroatoms P, Cl, S as possible atoms.
-#' @param mzDigits The number of decimals to write as an information in the graphs.
-#'
-#' @return An ms2Lib object with filled fileds and constructed dags.
-#' @export
-#'
-#' @examples
-#' print("Examples ot be put here !")
-setMethod("discretizeMassFragments", "ms2Lib", function(m2l,adducts = NULL,
-													 ppm = 7,
-													 dmz = 0.002,
-													 mode=c("POS","NEG"),
-													 count = 2,
-													 limMzFormula = c(50, 250),
-													 maxFrags = 15,
-													 maxOverlap = 0.05,
-													 strictMatching = TRUE,
-													 precPpm = 20,
-													 precDmz = 0.02,
-													 atoms = NULL,
-													 heteroAtoms = TRUE,
-													 mzDigits = 4,
-													 ...) {
-
-	message("Discretization of the fragments...")
-	mode <- match.arg(mode)
-
-	###Paameters checking
-	if(maxFrags>20){
-		stop("mineMS2 is not made to process more than 20 fragments by spectra, please lower
-			 the maxFrags parameters")
-	}
-	if(maxOverlap>0.15){
-		warning("maxOverlap is superior to 0.15, this can lead to incoherent labels.")
-	}
-
-	if((!is.numeric(limMzFormula))|(length(limMzFormula)!=2)){
-		stop("limMzFormula should be a range with 2 floats")
-	}
-
-	if((limMzFormula[1]<=50|limMzFormula[2]>250)){
-		limMzFormula <- c(max(limMzFormula[1],50),min(max(limMzFormula[2],250)))
-		warning("limMzFormula is too wide, to avoid computation issue it have been set to ",
-				limMzFormula[1],"-",limMzFormula[2])
-	}
-
-	if(count==1){
-		warning("count set to a 2.")
-		count <- 2
-	}
-	freq <- count/length(mm2Spectra(m2l))
-	if((freq<0) | (freq>1)){
-		stop("Wrong count value ",count)
-	}
-
-	if(is.null(atoms)){
-		if(heteroAtoms){
-			atoms <- list("C"=max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2)
-		}else{
-			atoms <- list("C"= max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6)
-		}
-	}
-
-
-	if(is.null(adducts)){
-		warnings("No adducts specified")
-		adducts <- rep("H",length(adducts),charge=mode=="POS")
-	}
-
-	res_list <- discretizeFragments(mm2Spectra(m2l),mm2Dags(m2l),
-											adducts,ppm = ppm, dmz = dmz,
-											freq = freq, mzdigits = mzDigits,
-											limFormula = limMzFormula, maxFrag = maxFrags,
-											max_overlap = maxOverlap, strictMatching = strictMatching,
-											prec.ppm = precPpm,prec.dmz = precDmz, atoms = atoms,
-											...)
-
-
-	###Constructing the edges labels
-	templabs <- make_label_frag(res_list$elem)
-	# print(head(templabs))
-	res_list$elem$full_labels <- templabs$full_labs
-	res_list$elem$labs <- templabs$labs
-
-	mm2NodesLabels(m2l) <- res_list$elem
-	mm2Dags(m2l) <- res_list$dags
-
-	message("Fragments discretization finished.")
-	m2l
-	})
-
 
 ###Return an extended spectra and possibly add the precurosr if needed.
 ###If maxnum is not NULL return the top "k" or top "k-1" depending of the inclusion
@@ -819,7 +673,7 @@ checkFracParam <- function (num, maxVal, OneEqualAll = TRUE)
 sumFormula <- function(f1,f2,all_lab=NULL){
 	if(is.na(f1)|is.na(f2)) return(NA)
 	if(is.null(all_lab)){
-		all_lab <- MS2process:::tabAtoms()$name
+		all_lab <- tabAtoms()$name
 	}
 	vf <- rep(0,length(all_lab))
 	names(vf) <- all_lab
@@ -829,176 +683,6 @@ sumFormula <- function(f1,f2,all_lab=NULL){
 	vf <- vf[vf!=0]
 	return(vf)
 }
-
-
-
-
-###We consider that adducts is a vector of adducts.
-discretizeFragments <- function(list_specs,list_graphs,adducts,
-										ppm = 7, dmz = 0.002,
-										freq = 0.05, limFormula=c(50,200),
-										mzdigits=3, maxFrag = 25,
-										max_overlap=0.05,strictMatching=TRUE,
-										prec.ppm=20,prec.dmz=0.02,
-										atoms = list("C"= max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6) ,
-										...) {
-
-	###Making a table of adducts
-	tabAdducts <- makeDfValidAdducts(unique(adducts),1)
-
-	posAdducts <- match(adducts,tabAdducts$name)
-
-	###We first check that the losses have been discretized.
-	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("Losses should have been discretized before discretizing the fragments.")
-	}
-
-
-	list_spec <- lapply(list_spec,getExtendedSpec,maxNum=maxFrag,ppm=prec.ppm,
-						dmz=prec.dmz,relInt = TRUE)
-	list_masses <- lapply(list_spec,'[[',i="mz")
-
-	###removing the adduct masses to obtain neutral molecules.
-	list_mass_w_addducts <- mapply(function(x,y){x-y},list_masses,tabAdducts$massdiff[posAdducts])
-
-
-
-	list_int <- lapply(list_spec,'[[',i="rel_int")
-
-	mean_mzf <- sum(limFormula)/2
-	tol <- diff(limFormula)/2
-	l_atoms <- atoms
-
-	ndiff <- length(list_masses)
-	thresh <- checkFracParam(freq, ndiff)
-	vecsize <- sapply(list_masses,length)
-	vecsample <- rep(seq_along(list_masses), times = vecsize)
-	vmz <- do.call("c",list_masses_w_adducts)
-
-	###We start by discretizing all the values
-	resdisc <-
-		discretizeSequenceByClasses(
-			ppm = ppm,
-			vmz = vmz,
-			vsample = vecsample,
-			dmz = dmz,
-			ndiff = length(list_masses),
-			frac = freq
-		)
-
-	###Now we create all the standard deviation of the masses.
-	masses <- resdisc$discrete_elem[,1]
-	diffv <- resdisc$discrete_elem[,3]-resdisc$discrete_elem[,2]
-
-	###We define the max larg
-	qv <- resdisc$discrete_elem[,4]
-
-	###The standard deviation is created
-	sds <- qv
-
-	fac_sig <- 2
-	###Merging overlapping values.
-	message("Masses merging")
-
-	merged_masses <- gaussianMerging(masses,sds^2,alpha=max_overlap,fac_sig = fac_sig)
-	high_mz_idx <- which(merged_masses$mu>limFormula[2])
-	###Now we check the values which may originates from a formula.
-
-
-	###Generation of all the neutral formula
-	message("Formula generation")
-	allFormula <- fragmentsFormulaGeneration(limFormula,atoms=l_atoms,...)
-
-	##Associating formula with losses.
-	f_masses <- allFormula$masses
-
-	###Now we generate the bmin to fac_sig
-	tval <- f_masses*ppm/10^6
-	sd_f <- ifelse(tval>dmz,tval,dmz)
-
-	maxm <- f_masses+fac_sig*sd_f
-	minm <- f_masses-fac_sig*sd_f
-
-	merginf <- merged_masses$mu-fac_sig*sqrt(merged_masses$sig)
-	mergmax <- merged_masses$mu+fac_sig*sqrt(merged_masses$sig)
-
-	###Now we need to check the overlap between the interval.
-	##Function to parse the Cpp function.
-	matched_inter <- checkInter(minm,maxm,merginf,mergmax)
-	vec_inter <- do.call("cbind",matched_inter)
-
-	atm_names <- colnames(allFormula$formula)
-	###Now we create a table centralizing all the values.
-	str_formula <- NULL
-	freq_f <- NULL
-	non_freq_f <- NULL
-
-	xp1 <- 1
-	xp2 <- 2
-	if(strictMatching){
-		xp1 <- 3
-		xp2 <- 4
-	}
-
-	str_formula <- apply(vec_inter,1,function(x){
-		if(is.na(x[xp1])) return(NA_character_)
-		apply(allFormula$formula[x[xp1]:x[xp2],,drop=FALSE],1,formulaToString,vnames=atm_names)
-	})
-
-
-	###Final strings
-	str_formula <- sapply(str_formula,function(x){
-		if((length(x)==1) && is.na(x)) return(NA_character_)
-		paste(x,collapse = "|")
-	})
-
-	###we filter out intervals without formula.
-	to_keep <- which(!is.na(str_formula))
-
-	###Now we build a recapitulative table, keeping only the mean mz,min mz, formula and label.
-	recap_tab <- data.frame(lab=1:(length(to_keep)+length(high_mz_idx)),mz=merged_masses$mu[c(to_keep,high_mz_idx)],
-							mzmin=merginf[c(to_keep,high_mz_idx)],
-							mzmax=mergmax[c(to_keep,high_mz_idx)],
-							sig=merged_masses$sig[c(to_keep,high_mz_idx)],
-							fused = merged_masses$fused[c(to_keep,high_mz_idx)],
-							count=numeric((length(to_keep)+length(high_mz_idx))),
-							formula=c(str_formula[to_keep],rep(NA_character_,length(high_mz_idx))),
-							stringsAsFactors = FALSE)
-
-	###We just add the fragments informations as nodes attributes.
-    toReturn <- vector(mode = "list", length = length(list_masses))
-
-	for (i in seq_along(list_masses)){
-		###The current graph.
-		g <- list_graphs[[i]]
-
-		###Binning the spectra fragments.
-
-		toReturn[[i]] <- matrix(
-			NA_real_,
-			nrow = length(list_masses[[i]]),
-			ncol = length(list_masses[[i]])
-		)
-		colnames(toReturn[[i]]) <- sprintf(paste('%0.',mzdigits,'f',sep=""),list_masses[[i]])
-
-
-		matched <- disjointBins(rev(list_masses[[i]]), recap_tab$mzmin, recap_tab$mzmax, recap_tab$mz)
-		matched <- rev(matched)
-		###We keep only the matched edges.
-		pok <- which(!is.na(matched))
-
-
-		###We create the graph.
-		idx <- rep(0,length(matched))
-		if(length(pok)!=0){
-			idx[pok] <- matched[pok]
-		}
-
-		list_graphs[[i]] <- set_vertex_attr(list_graphs[[i]],name="frag",value=idx)
-	}
-	return(list(dags = list_graphs, elems = recap_tab))
-}
-
 
 
 ###Function used for labels fusion if there is an incoherence.

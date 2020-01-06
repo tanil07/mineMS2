@@ -33,90 +33,6 @@ getMzDiff <- function(g,occs,mgs,loss_mz){
   return(res_diff)
 }
 
-# 
-# 
-# #Return the formula subformula coherent with the most formula.
-# get_best_label <- function(lf,oformula,mzv,atoms,vrdbe){
-#   
-#   ###Solo
-#   if(length(lf)==1){
-#     vm <- sapply(oformula,isSubformula,x=lf,simplify=TRUE)
-#     return(c(1,1,as.numeric(all(vm))))
-#   }
-#   
-#   bloss <- NULL
-#   bpartial <- 0
-#   bsolo <- 0
-#   if((length(oformula)==1) && is.na(oformula)){
-#     bloss <- 1:length(lf)
-#   }else{
-#     ###Majority vote.
-#     vm <- sapply(oformula,isSubformula,x=lf,simplify=TRUE)
-#     bf <- apply(vm,1,sum)
-#     bloss <- which(bf==max(bf))
-#   }
-#   
-#   ###We keep the one the closest to the furnished mass.
-#   if(length(bloss)>1){
-#     m_atoms <- getAtomsMass(atoms)
-#     vmz <- lf@formula[bloss,] %*% m_atoms
-#     rdbe <- calcRDBE_raw(lf@formula[bloss,],vrdbe)
-#     
-#     ####Now we split the value of t
-#     
-#     bloss <- bloss[which.min(abs(vmz-mzv)*10^6/mzv+abs(rdbe))]
-#     bpartial <- as.numeric(as.numeric(bf[bloss])==nrow(lf@formula))
-#   }else{
-#     bsolo <- 1
-#   }
-#   
-#   ###We return the subformula with the maximum size
-#   c(bloss,bsolo,bpartial)
-#   
-# }
-# 
-# 
-# make_labels_raw <- function(g,occs,elabs,mgs,atoms,attr_name="lab",
-#                             formula=character(0),unknow_label = NA_character_){
-#   
-#   ####We first extract all the edges labels of the gapths
-#   re <- edge_attr(g,attr_name)
-#   ure <- unique(re)
-#   
-#   ###We extract all the formula.
-#   tev <- elabs[ure,,drop=FALSE]
-#   to_choose <- which(!is.na(tev$formula))
-#   
-#   
-#   ###We recompute all the mass for tev.
-#   massdiff <- getMzDiff(g,occs,mgs,elabs$mz)
-#   massdiff <- apply(massdiff,2,mean)
-#   
-#   mzv <- as.numeric(aggregate(massdiff,list(match(re,ure)),FUN=mean)[,2])
-#   
-#   labs <- rep(unknow_label,length(ure))
-#   all_partial <- rep(TRUE,length(ure))
-#   all_solo <- rep(FALSE,length(ure))
-#   
-#   if(length(to_choose) != 0){
-#   ###For all the formula labels we find the best subformula;
-#   mlabs <- sapply(to_choose,function(x,elabs,oformula,atoms,mzr){
-#     lf <- LossFormulaFromSingleString(elabs$formula[x],ref=atoms,sep="|")
-#     vrdbe <- vecRDBE(lf@formula)
-#     bpos <- get_best_label(lf,oformula=oformula,mzv=mzr[x],atoms=atoms,vrdbe=vrdbe)
-#     ####We generate the formula string.
-#     c(formulaToString(lf@formula[bpos[1],],vnames=colnames(lf@formula)),ifelse(bpos[2],"TRUE","FALSE"),
-#       ifelse(bpos[3],"TRUE","FALSE"))
-#     },oformula=formula,atoms=atoms,elabs=tev,mzr=mzv)
-#   
-#   labs[to_choose] <- mlabs[1,]
-#   all_partial[to_choose] <- as.logical(mlabs[3,])
-#   all_solo[to_choose] <- as.logical(mlabs[2,])
-#   }
-#   return(list(id=ure,lab=labs,partial = all_partial,solo=all_solo))
-# }
-
-
 getMinEdgeLabel <- function(g,v,lab="weight",maxsol=TRUE){
   ev <- incident(g,v,"in")
   vattr <- edge_attr(g,ev,name = lab)
@@ -125,9 +41,6 @@ getMinEdgeLabel <- function(g,v,lab="weight",maxsol=TRUE){
   
 }
 
-
-
-# example call : annotateVertices_afg(m2l["P100"],m2l@dags,m2l@losses,atoms=m2l@atoms)
 getSubformulaLossVertices_afg <- function(g,occs,dags,edge_labels,atoms,label_origin,edge_label="lab"){
   
   formula_labels <- edge_labels$formula
@@ -186,11 +99,12 @@ getSubformulaLossVertices_afg <- function(g,occs,dags,edge_labels,atoms,label_or
 }
 
 chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = NULL){
-  # function(lf,oformula,mzv,atoms,vrdbe,subformula = NULL){
   ###Solo
   if(length(lf) == 1){
+    if(length(oformula)==0){
+      return(c(1,1,0))
+    }
     vm <- sapply(oformula,isSubformula,x=lf,simplify=TRUE)
-    
     return(c(1,1,as.numeric(all(vm))))
   }
   
@@ -217,7 +131,6 @@ chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = N
     if((length(lf) > 1) && (length(oformula) > 0)) {
       ###Majority vote.
       vm <- sapply(oformula,isSubformula,x=lf,type="none",simplify=TRUE)
-      if(is.null(dim(vm))) browser()
       bf <- apply(vm,1,sum)
       bloss <- which(bf == max(bf))
     } else {
@@ -227,7 +140,7 @@ chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = N
   
   # We keep the one the closest to the furnished mass.
   if(length(bloss) > 1) {
-    m_atoms <- getAtomsMass(atoms)
+    m_atoms <- getAtomMass(atoms)
     vmz <- lf@formula[bloss,] %*% m_atoms
     rdbe <- calcRDBE_raw(lf@formula[bloss,],vrdbe)
     
@@ -273,9 +186,9 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
   vrdbe <- vecRDBE(allf[[1]]@formula)
   mzv <- massdiff[seq_along(vlab)]
   
-  if(is.null(oformula)){
-    oformula <- sapply(getFormula(m2l)[occs[,1]],LossFormulaFromSingleString,ref=atoms,sep="|")
-  }
+  # if(is.null(oformula)){
+  #   oformula <- sapply(getFormula(m2l)[occs[,1]],LossFormulaFromSingleString,ref=atoms,sep="|")
+  # }
   
   ####Each col correspond to a vertices.
   res <- sapply(seq_along(vlab),function(x,l_origin,voformula,vatoms,subf,vdags,lformula,vmz,vrdbe){
@@ -288,7 +201,7 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
     vrdbe <- vecRDBE(lf@formula)
     rtemp <- chooseVerticesLosses(lf,oformula=voformula,dags,vmz[x],vrdbe=vrdbe,atoms=vatoms,subformula = subf[x+1,])
     return(list(rtemp[2:3],lf[rtemp[1],,drop=FALSE]))
-  },vdags=vdags,voformula=oformula,l_origin=vlab,vatoms = atoms,subf = subformula,
+  },vdags=dags,voformula=oformula,l_origin=vlab,vatoms = atoms,subf = subformula,
   lformula=allf,vmz = mzv,vrdbe=vrdbe)
   return(res)
 }
@@ -316,7 +229,6 @@ makeEdgeLabelWithoutVertices <- function(lf,mzv,oformula,atoms,vrdbe){
   }else{
     ###Majority vote.
     vm <- sapply(oformula,isSubformula,x=lf,type="none",simplify=TRUE)
-    # if(is.null(dim(vm))) browser()
     
     bf <- apply(vm,1,sum)
     bloss <- which(bf==max(bf))
@@ -324,7 +236,7 @@ makeEdgeLabelWithoutVertices <- function(lf,mzv,oformula,atoms,vrdbe){
   
   ###We keep the one the closest to the furnished mass.
   if(length(bloss)>1){
-    m_atoms <- getAtomsMass(atoms)
+    m_atoms <- getAtomMass(atoms)
     vmz <- lf@formula[bloss,] %*% m_atoms
     rdbe <- calcRDBE_raw(lf@formula[bloss,],vrdbe)
     ###mono atom.
@@ -345,10 +257,6 @@ makeEdgeLabelWithoutVertices <- function(lf,mzv,oformula,atoms,vrdbe){
   ###We return the subformula with the maximum size
   c(bloss,bsolo,bpartial)
 }
-
-
-
-
 
 makeEdgeLabel <-
   function(fp,
@@ -490,7 +398,6 @@ annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
   allf <- sapply(elabs$formula[all_edges_lab],function(x,atoms){
     LossFormulaFromSingleString(x,ref = atoms,sep = "|")
   },atoms=atoms,simplify=FALSE)
-  
   
   massdiff <- getMzDiff(g,mm2Occurences(fp),dags,elabs$mz)
   massdiff <- apply(massdiff,2,mean)

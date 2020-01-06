@@ -12,13 +12,6 @@
 #include "mass_graph.h"
 #include "common.h"
 
-
-//mass_graph::mass_graph()
-//{
-//    //ctor
-//}
-
-
 mass_graph::mass_graph(Rcpp::DataFrame df_nodes,Rcpp::DataFrame df_edges){
 	graph gr;
 	Rcpp::NumericVector mz = df_nodes["mz"];
@@ -78,51 +71,15 @@ VisitMap mass_graph::buildVisitMap()
 {
     //We define the map
     VisitMap vmap;
-
     boost::graph_traits<graph>::vertex_iterator bv,ev;
     boost::graph_traits<graph>::edge_iterator be,ee;
     //We iterate on all the vertices.
-
-
     for(boost::tie(be,ee)=edges(g);be!=ee;be++){
         vmap[*be] = 0;
     }
 
     return vmap;
 }
-
-//    for(boost::tie(bv,ev)=boost::vertices(g); bv!=ev; bv++)
-//    {
-        //We push the values
-//        std::vector<std::pair<Vertex,short> > AdjacentNodes;
-//        boost::graph_traits<graph>::adjacency_iterator ai,ai_end;
-//        for (boost::tie(ai, ai_end) = adjacent_vertices(*bv, g);
-//                ai != ai_end; ++ai)
-//        {
-//            std::pair<Vertex,short> temp_pair(*ai,0);
-//            AdjacentNodes.push_back(temp_pair);
-//        }
-
-//        vmap[*bv]=AdjacentNodes;
-//    }
-//    return vmap;
-
-
-
-//TODO ::Load the graph from graphML file
-//mass_graph::mass_graph(std::string filename)
-//{
-//    std::ifstream datafile(filename);
-//    if (!datafile)
-//    {
-//        std::cerr << "No ./ " <<filename <<" file" << std::endl;
-//        return 0;
-//    }
-//
-//    //We read the graph ML file
-//    graph g;
-//
-//}
 
 Vertexp mass_graph::get_vertex_from_gid(short gid){
     IndexMap imap = boost::get(boost::vertex_index,g);
@@ -131,7 +88,6 @@ Vertexp mass_graph::get_vertex_from_gid(short gid){
         if(gid==imap[*bv])     return *bv;
     }
     return graphTraits::null_vertex();
-
 }
 
 
