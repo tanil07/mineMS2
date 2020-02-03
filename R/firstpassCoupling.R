@@ -33,13 +33,19 @@ convertComponent <- function(comp,ids){
 #' @export
 #'
 #' @examples
-#' print("Examples to be put here")
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #Finding explainig component 
+#' fp <- findPatternsExplainingComponents(m2l,list(c(15,12)))
+#' 
+#' #plotting the explaining pattern
+#' plot(m2l,fp[[1]]["id"])
 findPatternsExplainingComponents <- function(m2l,components,metric=c("f1"),ref_label=NULL,threshold=NA_real_,
                                              reduced=TRUE){
 
 
 	###We first convert the ids of the compoentns to creect format.
-	# components <- sapply(components,convertComponent,ids=mm2Ids(m2l),simplify = FALSE)
   if(!is.null(ref_label)){
     components <- sapply(components,function(x,ref){
       ref[x]

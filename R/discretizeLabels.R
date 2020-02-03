@@ -82,7 +82,16 @@ reorderAtom <- function(atoms){
 #' @export
 #'
 #' @examples
-#' print("Examples ot be put here !")
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #Constructing edges labels
+#' m2l <- discretizeMassLosses(m2l,ppm=8,dmz=0.008,count=2,
+#' precPpm=20,precDmz=0.03,maxFrags=15)
+#' 
+#' Constructing edges labels with less frequent atoms
+#' m2l <- discretizeMassLosses(m2l,atoms = 
+#' list("C"=50,"H"=100,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2))
 setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 													 ppm = 7,
 													 dmz = 0.002,
@@ -160,8 +169,6 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	allF <- sapply(res_list$elems$formula[1:plast],function(x,atoms){
 	  orderByRDBE(LossFormula(str_split(x,fixed("|"),simplify=TRUE)[1,],ref=atoms))
 	},atoms=names(m2l@atoms))
-	# sapply(to_correct,function(x) length(x$f1))
-	
 
 	for(i in seq_along(allF)){
 	  
@@ -198,7 +205,6 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 
 	###Constructing the edges labels
 	templabs <- make_label_loss(res_list$elems)
-	# print(head(templabs))
 	res_list$elem$full_labels <- templabs$full_labs
 	res_list$elem$labs <- templabs$labs
 
@@ -445,7 +451,7 @@ discretizeMassesDifferences <- function(list_spec,
 ###Return an extended spectra and possibly add the precurosr if needed.
 ###If maxnum is not NULL return the top "k" or top "k-1" depending of the inclusion
 ###of the precursor.
-#' Return the spectrum considered while building the graph.
+#' Return the spectrum considered by mineMS2 when building the graph.
 #'
 #' @param spec A "Spectrum2" object as defined in msnBase
 #' @param ppm A ppm parameter to match the precursor
@@ -459,9 +465,11 @@ discretizeMassesDifferences <- function(list_spec,
 #' @export
 #'
 #' @examples
-#' print('examples to be put there')
+#' #Loading data
+#' data(m2l)
+#' 
+#' getExtendedSpec(m2l["S10"],maxNum = 15)
 getExtendedSpec <- function(spec,ppm=5,dmz=0.02,removeSup=TRUE,addPrecursor=TRUE, maxNum = NULL, relInt = TRUE){
-
 
 
 	###Reconstruct a spectra form an msnbase object.
@@ -860,18 +868,6 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 	return(list(elems=tempr$elems,dags=tempr$dags,change=anyChange))
 }
 
-
-####There is an issue if a new_lab does not contain all the old labs.
-
-# checkCorrectness <- function(omzmin,omzmax,mzmin,mzmax,newlab,margin=0.0001){
-#   for(i in seq_along(omzmin)){
-#     npos <- newlab[i]
-#     if((mzmin[npos]>omzmin[i])|(mzmax[npos]<omzmax[i])){
-#       message(paste("mistake on",i))
-#       browser()
-#     }
-#   }
-# }
 
 
 cleanupElems <- function(elems,dags,thresh){

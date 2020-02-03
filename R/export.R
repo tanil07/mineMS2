@@ -1,12 +1,16 @@
-#' Export Loss Table
+#' Export Losses Table
 #'
+#' Export the losses table aith the full informations
 #' @param m2l An ms2Lib object
 #'
 #' @return A data.frame with the losses
 #' @export
 #'
 #' @examples
-#' print("examples to be put here")
+#' #Loading the data
+#' data(m2l)
+#' 
+#' head(lossesTable(m2l))
 lossesTable <- function(m2l){
 	if(nrow(mm2EdgesLabels(m2l))==0){
 		stop("No loss labels found, use the 'discretizeMassLosses' loss functions")

@@ -200,7 +200,17 @@ convert_formula <- function(form_vec){
 #' @param infosFromFiles Shall the other informations present in the files be added to the supplementary infos.
 #' @aliases ms2Lib ms2Lib-constructor
 #' @examples
-#' print("examples to be put here")
+#' #We locate the example file
+#' path_demo <- system.file("dataset",package="mineMS2")
+#' path_mgf <- file.path(path_demo,"ex_mgf.mgf")
+#' 
+#' #Simple import
+#' m2l <- ms2Lib(ex_file)
+#' 
+#' #Import inculding some file formula
+#' supp_infos_path <- file.path(path_demo,"ex_supp_infos.csv")
+#' supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
+#' m2l <- ms2Lib(ex_file,suppInfos = supp_infos)
 ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFromFiles = FALSE){
 
 	m2l <- new("ms2Lib")
@@ -366,13 +376,17 @@ getFormula <- function(m2l){
 #' @param m2l An m2Lib object to be processed.
 #' @param count The number of spectra in which the spectrum need to be sampled.
 #' @param sizeMin The minimum size of the mined patterns.
-#' @param precursor Should only the occurences coming form the root be conserved.
+#' @param precursor Should only pattern coming from the root be mined.
 #'
 #' @return The filled ms2Lib object.
 #' @export
 #'
 #' @examples
-#' print("examples to be put here")
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #Mining the subgraphs
+#' m2l <- m2l <- mineClosedSubgraphs(m2l,count=2,sizeMin = 1)
 setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, precursor = FALSE){
 	if(count<2){
 		warning("'count' parameters set to ",count," it is therefore set to 2.")
@@ -480,7 +494,21 @@ mm2get <- function(m2l,arglist){
 #' @export
 #'
 #' @examples
-#' print("Example to be put here")
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #Extracting a spectrum
+#' m2l["S10"]
+#' 
+#' #The associated DAG
+#' m2l["D10"]
+#' 
+#' #Extraction of a pattern
+#' m2l["P54"]
+#' 
+#' #Extraction of loss informations
+#' m2l["L20"]
+
 setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 	if(length(i)==1){
 		 temp <- mm2get(x,parseId(x,i))
@@ -510,7 +538,17 @@ setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 #' @export
 #'
 #' @examples
-#' print("Examples to be put here")
+#' #' #Loading the data
+#' data(m2l)
+#' 
+#' #Plotting a pattern
+#' plot(m2l,"S10")
+#' 
+#' #The associated DAG
+#' plot(m2l,"D10")
+#' 
+#' #Plotting a pattern
+#' plot(m2l,"P53")
 setMethod("plot", "ms2Lib",
 		  function(x,
 		  		 y,title=NULL,
@@ -571,7 +609,14 @@ findMz.L <- function(m2l,mz,tol){
 #' @export
 #'
 #' @examples
-#' print("examples to be put here")
+#' #' #Loading the data
+#' data(m2l)
+#' 
+#' #Finding pattern with a precusor mass of 391.1398 with a tolerance of 0.01
+#' findMz(m2l,391.1398,dmz=0.01)
+#' 
+#' #Fidning a loss with a tolerance of 0.01
+#' findMz(m2l,147,"L",dmz=0.1)
 findMz <- function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
 	type <- match.arg(type)
@@ -611,7 +656,7 @@ getInfo.S <- function(num,m2l){
 		num,c(titles),drop=FALSE])
 }
 
-#' Return the available informationon a lost of a spectra.
+#' Return the available informations on a component of in an ms2Lib object.
 #'
 #' @param m2l An ms2Lib object
 #' @param ids A vector of IDs should be a spectrum or a losses.
@@ -621,7 +666,17 @@ getInfo.S <- function(num,m2l){
 #' @export
 #'
 #' @examples
-#' print("Examples to be put here")
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #Infos on 2 spectra
+#' getInfo(m2l,c("S10","S25"))
+#' 
+#' #Infos on multiple losses
+#' getInfo(m2l,c("L12","L42"))
+#' 
+#' #Example combined with the findMz 
+#' getInfo(findMz(m2l,391.1398,dmz=0.01))
 getInfo <- function(m2l,ids){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
 	authorizedValue <- c("losses","spectra")
@@ -664,7 +719,7 @@ getInfo <- function(m2l,ids){
 
 #' Return The Range Of Iteration Of MS2Lib Object
 #' 
-#' Return the full range of iteration of different object for an MS2lib object.
+#' Return the full range of iteration for different objects for an MS2lib object.
 #'
 #' @param m2l AN ms2Lib object
 #' @param type "S","L" or "P"
@@ -675,8 +730,12 @@ getInfo <- function(m2l,ids){
 #' @export
 #'
 #' @examples
-#' print("Examples to be put here")
-setMethod("vrange","ms2Lib",function(m2l,type=c("S","L","P","F"), reduced=TRUE, as.number=FALSE){
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #Range of iterations for spectra
+#' vrange(m2l,"S")
+setMethod("vrange","ms2Lib",function(m2l,type=c("S","L","P"), reduced=TRUE, as.number=FALSE){
 	type <- match.arg(type)
 	if(type=="S"){
 		if(length(m2l)==0) return(character(0))
@@ -730,7 +789,11 @@ setMethod("hasCoverage","ms2Lib",function(x){
 #' @export
 #'
 #' @examples
-#' print("Examples to be put here")
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #Calculate the coverage for an ms2Lib object
+#' m2l <- calculateCoverage(m2l)
 setMethod("calculateCoverage","ms2Lib",function(x){
   loss_mz <- mm2EdgesLabels(x)$mz
   mgs <- mm2Dags(x)

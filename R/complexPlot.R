@@ -16,7 +16,11 @@
 #' @return Nothing
 #'
 #' @examples
-#' print("Examples to be put here.")
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #plotting the patterns
+#' plotPatterns(m2l,c("P30","P51"))
 plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FALSE,byPage=9,titles=NULL){
 
 

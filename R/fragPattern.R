@@ -68,9 +68,6 @@ setMethod("show","fragPattern",function(object){
 #'
 #' @return
 #' The constructed fragPattern object.
-#'
-#' @examples
-#' print("Exmaples to be put here")
 fragPattern <- function(rlist){
 	fp <- new("fragPattern")
 	mm2Graph(fp) <- graph_from_data_frame(rlist$edges)
