@@ -1,23 +1,21 @@
 ---
 title: "*mineMS2*: Mining of MS fragmentation spectra by frequent subgraph mining."
+package: mineMS2
 author: "Alexis Delabriere and Etienne Thevenot"
 date: "`r Sys.Date()`"
-
+output: 
+  BiocStyle::html_document
 vignette: >
   %\VignetteIndexEntry{mineMS2: Mining of MS fragmentation spectra by frequent subgraph mining}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
   %\VignetteEncoding{UTF-8}
 bibliography: "mineMS2-vignette.bib"
-output: 
-  BiocStyle::pdf_document
+
 ---
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(fig.width=6, fig.height=6, fig.path='figures/')
 ```
-
-# Context
-
 	
 # Initialization
 We first load the MineMS2 package
@@ -26,7 +24,7 @@ library(mineMS2)
 ```
 
 ##Dataset
-A dataset of demonstration is available in this package, it contains 
+A dataset of demonstration is available in this package, it contains 45 spectra extracted from @Hautbergue2017
 
 # Input
 The _mineMS2_ package take as input any of the following format `r recognisedFormat()` and mays also take as input a list _Spectrum2_ object from the _MSnbase_ package. The initial spectra reading is done using the *ms2Lib* constructor.

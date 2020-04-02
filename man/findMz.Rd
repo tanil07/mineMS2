@@ -24,5 +24,12 @@ A character vector giving the IDs of the found losses or elements.
 Search an ms2Lib object givena tolerance in ppm or dmz.
 }
 \examples{
-print("examples to be put here")
+#' #Loading the data
+data(m2l)
+
+#Finding pattern with a precusor mass of 391.1398 with a tolerance of 0.01
+findMz(m2l,391.1398,dmz=0.01)
+
+#Fidning a loss with a tolerance of 0.01
+findMz(m2l,147,"L",dmz=0.1)
 }

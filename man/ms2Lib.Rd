@@ -5,13 +5,8 @@
 \alias{ms2Lib-constructor}
 \title{ms2Lib constructor}
 \usage{
-ms2Lib(
-  x,
-  suppInfos = NULL,
-  ids = NULL,
-  intThreshold = NULL,
-  infosFromFiles = FALSE
-)
+ms2Lib(x, suppInfos = NULL, ids = NULL, intThreshold = NULL,
+  infosFromFiles = FALSE)
 }
 \arguments{
 \item{x}{May be one of the following
@@ -40,5 +35,15 @@ Create a ms2Lib object from file sin the correct format. Eventually add some sup
 may notably include the composition or the ofrmula of the molecules, which will then be used to plot the created graphs..
 }
 \examples{
-print("examples to be put here")
+#We locate the example file
+path_demo <- system.file("dataset",package="mineMS2")
+path_mgf <- file.path(path_demo,"ex_mgf.mgf")
+
+#Simple import
+m2l <- ms2Lib(ex_file)
+
+#Import inculding some file formula
+supp_infos_path <- file.path(path_demo,"ex_supp_infos.csv")
+supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
+m2l <- ms2Lib(ex_file,suppInfos = supp_infos)
 }

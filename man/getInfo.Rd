@@ -2,7 +2,7 @@
 % Please edit documentation in R/ms2Lib.R
 \name{getInfo}
 \alias{getInfo}
-\title{Return the available informationon a lost of a spectra.}
+\title{Return the available informations on a component of in an ms2Lib object.}
 \usage{
 getInfo(m2l, ids)
 }
@@ -17,8 +17,18 @@ getInfo(m2l, ids)
 A data.frame giving informations about the queried elements.
 }
 \description{
-Return the available informationon a lost of a spectra.
+Return the available informations on a component of in an ms2Lib object.
 }
 \examples{
-print("Examples to be put here")
+#Loading the data
+data(m2l)
+
+#Infos on 2 spectra
+getInfo(m2l,c("S10","S25"))
+
+#Infos on multiple losses
+getInfo(m2l,c("L12","L42"))
+
+#Example combined with the findMz 
+getInfo(findMz(m2l,391.1398,dmz=0.01))
 }

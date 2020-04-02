@@ -4,12 +4,9 @@
 \alias{filterPatterns}
 \title{Title}
 \usage{
-filterPatterns(
-  m2l,
-  filter_function = function(x, threshold, num) {     return(sum(x@occurences[,
-    "coverage"] > threshold) >= num) },
-  args = list(threshold = 0.2, num = 2)
-)
+filterPatterns(m2l, filter_function = function(x, threshold, num) {    
+  return(sum(x@occurences[, "coverage"] > threshold) >= num) },
+  args = list(threshold = 0.2, num = 2))
 }
 \arguments{
 \item{m2l}{The ms2Lib object ot be filtered}

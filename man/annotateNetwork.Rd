@@ -4,15 +4,9 @@
 \alias{annotateNetwork}
 \title{Annotation of GNPS network}
 \usage{
-annotateNetwork(
-  components,
-  net,
-  patterns,
-  copy = TRUE,
-  keepattr = c("Compound_Name", "SpectrumID", "DefaultGroups", "cluster index",
-    "precursor mass"),
-  sep_infos = ","
-)
+annotateNetwork(components, net, patterns, copy = TRUE,
+  keepattr = c("Compound_Name", "SpectrumID", "DefaultGroups",
+  "cluster index", "precursor mass"), sep_infos = ",")
 }
 \arguments{
 \item{components}{The components of the GNPS network as integer.}

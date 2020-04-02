@@ -176,7 +176,7 @@ generateCol <- function(ncomp){
   cgnps <- col_gnps()
   ###If needed we expand the values
   while(nrow(cgnps)<ncomp){
-    cgnps <- rbind(cgnps,cbnps)
+    cgnps <- rbind(cgnps,col_gnps())
   }
   vinter <- seq(1,nrow(cgnps),length=ncomp+1)
   cgnps[round(vinter+(vinter[2]-vinter[1])*0.5),1]

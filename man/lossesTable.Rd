@@ -2,7 +2,7 @@
 % Please edit documentation in R/export.R
 \name{lossesTable}
 \alias{lossesTable}
-\title{Export Loss Table}
+\title{Export Losses Table}
 \usage{
 lossesTable(m2l)
 }
@@ -13,8 +13,11 @@ lossesTable(m2l)
 A data.frame with the losses
 }
 \description{
-Export Loss Table
+Export the losses table aith the full informations
 }
 \examples{
-print("examples to be put here")
+#Loading the data
+data(m2l)
+
+head(lossesTable(m2l))
 }

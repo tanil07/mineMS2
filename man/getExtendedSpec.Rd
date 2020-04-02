@@ -2,17 +2,10 @@
 % Please edit documentation in R/discretizeLabels.R
 \name{getExtendedSpec}
 \alias{getExtendedSpec}
-\title{Return the spectrum considered while building the graph.}
+\title{Return the spectrum considered by mineMS2 when building the graph.}
 \usage{
-getExtendedSpec(
-  spec,
-  ppm = 5,
-  dmz = 0.02,
-  removeSup = TRUE,
-  addPrecursor = TRUE,
-  maxNum = NULL,
-  relInt = TRUE
-)
+getExtendedSpec(spec, ppm = 5, dmz = 0.02, removeSup = TRUE,
+  addPrecursor = TRUE, maxNum = NULL, relInt = TRUE)
 }
 \arguments{
 \item{spec}{A "Spectrum2" object as defined in msnBase}
@@ -33,8 +26,11 @@ getExtendedSpec(
 A data.frame containg the mz, intensity and precursor columns.
 }
 \description{
-Return the spectrum considered while building the graph.
+Return the spectrum considered by mineMS2 when building the graph.
 }
 \examples{
-print('examples to be put there')
+#Loading data
+data(m2l)
+
+getExtendedSpec(m2l["S10"],maxNum = 15)
 }

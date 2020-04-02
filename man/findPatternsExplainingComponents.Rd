@@ -4,14 +4,8 @@
 \alias{findPatternsExplainingComponents}
 \title{Find pattern explainig components}
 \usage{
-findPatternsExplainingComponents(
-  m2l,
-  components,
-  metric = c("f1"),
-  ref_label = NULL,
-  threshold = NA_real_,
-  reduced = TRUE
-)
+findPatternsExplainingComponents(m2l, components, metric = c("f1"),
+  ref_label = NULL, threshold = NA_real_, reduced = TRUE)
 }
 \arguments{
 \item{m2l}{An ms2Lib object}
@@ -37,5 +31,12 @@ Find pattern maximizing the socre givne in metrics with each components. Thresho
 has been found. The majority
 }
 \examples{
-print("Examples to be put here")
+#Loading the data
+data(m2l)
+
+#Finding explainig component 
+fp <- findPatternsExplainingComponents(m2l,list(c(15,12)))
+
+#plotting the explaining pattern
+plot(m2l,fp[[1]]["id"])
 }

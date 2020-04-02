@@ -21,6 +21,3 @@ This is an internal constructor which is used to pass form the rcpp
 output to a fragPattern object including the occurences. It should not be
 called directly by the user.
 }
-\examples{
-print("Exmaples to be put here")
-}

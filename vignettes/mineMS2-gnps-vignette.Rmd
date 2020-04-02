@@ -1,12 +1,13 @@
 ---
 title: 'Application to the interpretation of the GNPS components'
 author: "Alexis Delabriere"
-date: "`r doc_date()`"
+date: "`r Sys.Date()`"
 package: "`r pkg_ver('mineMS2')`"
 
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEngine{knitr::knitr}
+  %\VignetteDepends{igraph}
   %\VignetteEncoding{UTF-8}
   %\VignetteKeywords{Metabolomics, MS/MS, Fragmentation pattern, Frequent Subgraph Mining}
 bibliography: "mineMS2-vignette.bib"
