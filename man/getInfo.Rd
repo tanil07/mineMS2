@@ -30,5 +30,5 @@ getInfo(m2l,c("S10","S25"))
 getInfo(m2l,c("L12","L42"))
 
 #Example combined with the findMz 
-getInfo(findMz(m2l,391.1398,dmz=0.01))
+getInfo(m2l,findMz(m2l,391.1398,dmz=0.01))
 }

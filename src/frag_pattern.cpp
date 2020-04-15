@@ -197,7 +197,7 @@ frag_pattern::frag_pattern(Vertext v,k_path_tree& kt, std::ostream& of){
 
 void printOccs(std::set<occ>& occurences){
     for(auto it=occurences.begin();it!=occurences.end();it++){
-        std::cout << (*it).gid << " " << (*it).idx << std::endl;
+        Rcpp::Rcout << (*it).gid << " " << (*it).idx << std::endl;
     }
 }
 
@@ -544,58 +544,58 @@ bool frag_pattern::isCoherent(){
 
 
 void frag_pattern::to_string(){
-    std::cout<<"g : vertices "<< boost::num_vertices(g)<<" edges " <<
+    Rcpp::Rcout<<"g : vertices "<< boost::num_vertices(g)<<" edges " <<
     boost::num_edges(g) <<" coherent "<<this->isCoherent()<< std::endl;
     graphTraitsp::vertex_iterator bv,ev;
     for(boost::tie(bv,ev)=boost::vertices(g);bv!=ev;bv++){
-        std::cout<<g[*bv].lab<<"_"<<g[*bv].depth<<" ";
+        Rcpp::Rcout<<g[*bv].lab<<"_"<<g[*bv].depth<<" ";
     }
-    std::cout<<std::endl;
+    Rcpp::Rcout<<std::endl;
 
     graphTraitsp::edge_iterator bee,eee;
     for(boost::tie(bee,eee)=boost::edges(g);bee!=eee;bee++){
-        std::cout<<boost::source(*bee,g)<<"|"<<g[*bee].lab<<"|"<<boost::target(*bee,g)<<" ";
+        Rcpp::Rcout<<boost::source(*bee,g)<<"|"<<g[*bee].lab<<"|"<<boost::target(*bee,g)<<" ";
     }
-    std::cout<<std::endl;
+    Rcpp::Rcout<<std::endl;
 
 
     //Now we print the occurences
     auto bo=occurences.begin();
     auto eo=occurences.end();
-    std::cout<<"occs : ";
+    Rcpp::Rcout<<"occs : ";
     for(;bo!=eo;bo++){
-        std::cout<<(*bo).gid<<"_"<<(*bo).idx<<" ";
+        Rcpp::Rcout<<(*bo).gid<<"_"<<(*bo).idx<<" ";
     }
-    std::cout<<std::endl;
+    Rcpp::Rcout<<std::endl;
 
     //Extensions
     std::vector<Extension>::iterator be,ee;
     boost::tie(be,ee) = get_it_exts();
-    std::cout <<"its : "<<&(*be)<<std::endl;
-    std::cout<<"exts : ";
+    Rcpp::Rcout <<"its : "<<&(*be)<<std::endl;
+    Rcpp::Rcout<<"exts : ";
     for(;be!=ee;be++){
-        std::cout<<std::get<0>(*be)<<"_"<<std::get<1>(*be)<<"_"<<std::get<2>(*be)<<" ";
+        Rcpp::Rcout<<std::get<0>(*be)<<"_"<<std::get<1>(*be)<<"_"<<std::get<2>(*be)<<" ";
     }
-    std::cout<<std::endl;
+    Rcpp::Rcout<<std::endl;
 
     //Prec _dist plot
     auto bd=dist_prec.begin();
     auto ed=dist_prec.end();
-    std::cout<<"dist_prec : ";
+    Rcpp::Rcout<<"dist_prec : ";
     for(;bd!=ed;bd++){
-        std::cout<<(*bd)<<" ";
+        Rcpp::Rcout<<(*bd)<<" ";
     }
-    std::cout<<std::endl;
+    Rcpp::Rcout<<std::endl;
 }
 
 
 void frag_pattern::to_reduced_string(){
-    std::cout << "## ";
+    Rcpp::Rcout << "## ";
     graphTraitsp::vertex_iterator bv,ev;
     for(boost::tie(bv,ev)=boost::vertices(g);bv!=ev;bv++){
-        std::cout<<g[*bv].lab<<"_"<<g[*bv].depth<<" ";
+        Rcpp::Rcout<<g[*bv].lab<<"_"<<g[*bv].depth<<" ";
     }
-    std::cout<<std::endl;
+    Rcpp::Rcout<<std::endl;
 }
 
 void frag_pattern::to_reduced_string(std::ostream& of){

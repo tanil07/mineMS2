@@ -165,17 +165,20 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 #' plotting a fargPattern object.
 #'
 #' plot a fragPattern associated fragmentation
-#' dag using igraph capabilities.
+#' dag using igraph capabilities. This function should not be called directly by the user.
+#' Call `plot(m2l,"x")` instead.
 #'
 #' @param x The pattern to plot.
 #' @param y Not used at the moment.
 #' @param title The title used for th eplot
 #' @param edgeLabels A vector usually passed automatically by the plot method of the ms2Lib object.
+#' @param dags A list of mass graphs on which the patterns has been calculated.
 #' @param nodeLabel The type of vertex label to be plotted, default means that a will try to be 
 #' determined while label show the raw label as integer.
 #' @param edgeLabel The type of edges label to be plotted, default means that a will try to be 
 #' determined while label show the raw label as integer.
-#' @param atoms The used in the formula in the right order.\.
+#' @param atoms The used in the formula in the right order.
+#' @param formula The formula of the associated dags.
 #' @param mzdigits The number of digits included in the plot of mass differences
 #' @param vertex_size The size of the vertices.
 #' @param vertex_label_cex The size of the vertices label 
@@ -351,7 +354,11 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	col_vec <- rainbow(length(ru_occs_gid))
 	
 	###We aggregate the spectra
-	lmat <- layoutMatrix(min(byPage, length(u_occs_gid )),margin = 0.07)
+	if(commonAxis){
+	  lmat <- layoutMatrix(min(byPage, length(u_occs_gid )),margin = 0.07)
+	}else{
+	  lmat <- layoutMatrix(min(byPage, length(u_occs_gid )),margin=NA)
+	}
 	maxv <- max(lmat)-2
 	layout(lmat)
 	xlims <- NULL
@@ -363,7 +370,7 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	res_plot <- vector(mode="list",length=length(u_occs_gid))
 	for (i in 1:length(u_occs_gid)) {
 	  if((i %% 6) == 1){
-	    if(i != 1){
+	    if(i != 1 & commonAxis){
 	      layout(1)
 	      mtext(expression(bold("m/z")),side=1,padj=2)
 	      mtext(expression(bold("intensity")),side=2,padj=-0.2)	
@@ -396,8 +403,12 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	  
 	  if(!commonAxis){
 	    xlims <- c(0, max(mzs) * 1.05)
+	    xlabtxt <- "m/z"
+	    ylabtxt <- "intensity"
+	  }else{
+	    xlabtxt <- ""
+	    ylabtxt <- ""
 	  }
-	  
 	  plot(
 	    mzs[non_matched_peaks_idx],
 	    intv[non_matched_peaks_idx],
@@ -407,8 +418,8 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	    xlim = xlims,
 	    ylim = c(0, max(intv * 1.05)),
 	    main = titles[gid],
-	    xlab = "",
-	    ylab = "",...
+	    xlab = xlabtxt,
+	    ylab = ylabtxt,...
 	  )
 	  
 	  ###We add the matched peaks.
@@ -422,92 +433,13 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	         col =ccol,
 	         lwd = 3)
 	}
-	if((i%%6) != 1){
+	if((i%%6) != 1 & commonAxis){
 	  layout(1)
 	  mtext(expression(bold("m/z")),side=1,padj=2)
 	  mtext(expression(bold("intensity")),side=2,padj=-0.2)	
 	}
 	par(mar=omar)
 	return(invisible(res_plot))
-
-	res_plot <- vector(mode="list",length=nrow(occs))
-	for (i in 1:length(occs_gid)) {
-	  if((i %% 6) == 1){
-	    if(i != 1){
-	      layout(1)
-	      mtext(expression(bold("m/z")),side=1,padj=2)
-	      mtext(expression(bold("intensity")),side=2,padj=-0.2)	
-	      layout(lmat)
-	    }
-	    par(mar=c(0.1,0.1,0.1,0.1))
-	    plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
-	    plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
-	    par(mar=c(2.5,2,2,0.5))
-	  }
-		gid <- occs_gid[i]
-		pos <- occs_pos[i]
-		map <- get_mapping(mgs[[gid]], g, loss_mz, root = pos)
-
-
-		###Plotting of the spectra
-		intv <- vertex_attr(mgs[[gid]], "rel_int")
-		mzs <- vertex_attr(mgs[[gid]], "mz")
-		ids <- V(mgs[[gid]])
-
-		###Peaks are split between matched and non matched.
-		matched_peaks_idx <- match(map[2,], ids)
-		non_matched_peaks_idx <- seq(1, length(mzs))[-matched_peaks_idx]
-		
-		col_seq <- rep("#000000FF",length(mzs))
-		col_seq[matched_peaks_idx] <- col_vec[subOccs[i]]
-		
-		res_plot[[i]] <- data.frame(int=intv,mz=mzs,col=col_seq)
-		
-		if(!commonAxis){
-		  xlims <- c(0, max(mzs) * 1.05)
-		}
-		
-		
-		plot(
-			mzs[non_matched_peaks_idx],
-			intv[non_matched_peaks_idx],
-			type = "h",
-			col = "#000000FF",
-			lwd = 3,
-			xlim = xlims,
-			ylim = c(0, max(intv * 1.05)),
-			main = titles[gid],
-			xlab = "",
-			ylab = "",...
-		)
-
-		###We add the matched peaks.
-		ccol <- "#000000FF"
-		if(highlights){
-		  ccol <- col_vec[subOccs[i]]
-		}
-		points(mzs[matched_peaks_idx],
-			   intv[matched_peaks_idx],
-			   type = "h",
-			   col =ccol,
-			   lwd = 3)
-	}
-	if((i%%6) != 1){
-	  mtext(expression(bold("m/z")),side=1,padj=2)
-	  mtext(expression(bold("intensity")),side=2,padj=-0.2)	
-	}
-	layout(1)
-	par(mar=omar)
-	return(invisible(res_plot))
 })
-# setMethod("plot","fragPattern",function(x,y=NULL,mode=c("fixed","interactive"),
-# 										 labsNodes=c(),
-# 										 labEdges=c("both","mz","formula"),...){
-#
-#
-#
-#
-#
-# })
 
 

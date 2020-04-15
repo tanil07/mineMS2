@@ -2,7 +2,7 @@
 #'
 #' @param m2l The ms2Lib object ot be filtered
 #' @param filter_function The filtering function this function take as input a pattern and return TRUE or FALSE.
-#' @param args 
+#' @param args A list of supplementary argument to filter_function
 #'
 #' @return The supplementary ms2Lib arguments.
 #' @export

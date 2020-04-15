@@ -47,7 +47,14 @@ setMethod("mm2CanonicalForm<-", "fragPattern",function(pat,value){
 })
 
 
+#' Show information about a fragPattern object
+#' 
+#' Show information about a fragPattern object
+#'
+#' @param object A fragPattern object
 #' @export
+#'
+#' @return None
 setMethod("show","fragPattern",function(object){
 	cat("A fragPattern object with",vcount(mm2Graph(object))-1,"losses occuring ",
 		nrow(mm2Occurences(object)),"times.\n")
@@ -94,6 +101,16 @@ canonicalForm <- function(pat){
 }
 
 
+#' Calculate the coverage of a specific pattern
+#' 
+#' This function should never be called by the user. Call the ms2Linb method
+#'
+#' @param x The pattern
+#' @param mzloss The table of loss
+#' @param mgs the mass graphs mass graphs
+#' @export
+#'
+#' @return The m2l object with all the coverage calculated.
 setMethod("calculateCoverage","fragPattern",function(x,mzloss,mgs){
   occs <- x@occurences
   coverages <- rep(NA_real_,nrow(occs))

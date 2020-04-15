@@ -242,6 +242,7 @@ findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
 #' @param pairThreshold A threshold used to discard the edges to detect components.
 #' @param vname The name of the exported index of the component as verte attribute.
 #' @param eattr The name of the considered similarity measure on the network.
+#' @param convert_component Shall the components be 
 #'
 #' @return A list of the componets to be checked.
 #' @export

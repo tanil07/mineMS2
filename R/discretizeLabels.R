@@ -57,9 +57,9 @@ reorderAtom <- function(atoms){
   return(atoms[match(colnames(lf@formula),names(atoms))])
 }
 
-#' Discretize the mass differences.
+#' Discretize mass differences.
 #'
-#' Build graph using discretized mass differences as edges.
+#' Build mass graphs from MS-MS spectra using discretized mass differences as edges.
 #'
 #' @param m2l The ms2 lib object to be discretized.
 #' @param ppm the maximum authorized deviation in ppm (parts per million).
@@ -89,7 +89,7 @@ reorderAtom <- function(atoms){
 #' m2l <- discretizeMassLosses(m2l,ppm=8,dmz=0.008,count=2,
 #' precPpm=20,precDmz=0.03,maxFrags=15)
 #' 
-#' Constructing edges labels with less frequent atoms
+#' #Constructing edges labels while including heteroatoms
 #' m2l <- discretizeMassLosses(m2l,atoms = 
 #' list("C"=50,"H"=100,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2))
 setMethod("discretizeMassLosses", "ms2Lib", function(m2l,

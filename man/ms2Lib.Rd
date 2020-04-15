@@ -40,10 +40,10 @@ path_demo <- system.file("dataset",package="mineMS2")
 path_mgf <- file.path(path_demo,"ex_mgf.mgf")
 
 #Simple import
-m2l <- ms2Lib(ex_file)
+m2l <- ms2Lib(path_mgf)
 
 #Import inculding some file formula
 supp_infos_path <- file.path(path_demo,"ex_supp_infos.csv")
 supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
-m2l <- ms2Lib(ex_file,suppInfos = supp_infos)
+m2l <- ms2Lib(path_mgf,suppInfos = supp_infos)
 }

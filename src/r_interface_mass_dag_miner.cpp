@@ -28,12 +28,12 @@ Rcpp::List mineClosedDags(List& vertices_list,List& edges_list,LogicalVector& pr
 
 	//Graph parsing.
 	std::ofstream output_stream;
-	mass_dag_miner mgf(mgs,ck,cprec_only,std::cout);
+	mass_dag_miner mgf(mgs,ck,cprec_only,Rcout);
 	Rcerr << "k-Path tree contructed."<<std::endl;
 	Rcerr << "Mining frequent subgraphs. This step may be quite long"<<std::endl;
 	//Frequent subgraph mining
 	mgf.setSizeMin(csize_min);
-	mgf.mineFrequentCompleteDag(cnum,std::cout);
+	mgf.mineFrequentCompleteDag(cnum,Rcout);
 	Rcerr << "Graph mining finished ."<<std::endl;
 
 	//We return a treillis

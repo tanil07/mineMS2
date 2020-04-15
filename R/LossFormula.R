@@ -86,6 +86,13 @@ isKnown <- function(lf){
   nrow(lf@formula)==1
 }
 
+#' Return a string prerpesentation of a lossFormula object
+#'
+#' Return a string presentation of all the possible formula. Should not be used by the user.
+#'
+#' @param x A lossFormula object.
+#'
+#' @return A character vector with all the possible formula for a loss object.
 setMethod("as.character","LossFormula",function(x){
   return(apply(x@formula,1,formulaToString))
 })
@@ -263,12 +270,24 @@ setMethod("idxFormula",signature=list(x="LossFormula",lf="LossFormula"),function
 })
 
 
-
+#' Show lossFormula object
+#'
+#' Show the information about a lossFormula object.
+#'
+#' @param object A lossFormula object.
+#'
+#' @return None
 setMethod("show","LossFormula",function(object){
   cat("A LossFormula object containing",nrow(object@formula),"formula with atoms",paste(colnames(object@formula),collapse = ","))
 })
 
-
+#' Return the number of possible formula for a loss
+#'
+#' Return the number of possible formula for a loss. Normally not used by the user.
+#'
+#' @param x A loss formula object.
+#'
+#' @return The number of possible formula for a loss.
 setMethod(length,"LossFormula",function(x){
   nrow(x@formula)
 })

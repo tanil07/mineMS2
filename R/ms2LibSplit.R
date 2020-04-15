@@ -135,7 +135,14 @@ setMethod("mineClosedSubgraphsByComponent","ms2LibSplit",function(m2l, count = 2
 	m2l
 })
 
-
+#' Show an ms2LibSplit object.
+#'
+#' Get the string representation of an ms2LibSplit object
+#'
+#' @param object An m2Lib object to be shown.
+#'
+#' @return None.
+#' @export
 setMethod("show","ms2LibSplit",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
 	cat("It has",nrow(mm2EdgesLabels(object)),"edges labels.\n")

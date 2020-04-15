@@ -71,7 +71,29 @@ setMethod("mm2Ids<-","ms2Lib",function(m2l,value,check=TRUE){
 	m2l
 })
 
+#' Change the id of spectrum of an ms2Lib object
+#'
+#' Return an ms2Lib object with the new ids
+#'
+#' @details Changing the ids of spectra, which can be useful to plot them.
+#'
+#' @param m2l An m2Lib object.
+#' @param ids The new ids of an ms2Lib objects
+#'
+#' @return An ms2Lib object with modified ids
 #' @export
+#'
+#' @examples
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #Plot with all ids
+#' plotOccurences(m2l,"P15")
+#' 
+#' m2l <- setIds(m2l,paste("spectrum n",1:length(m2l@spectra),sep=""))
+#' 
+#' #Plot with the new ids
+#' plotOccurences(m2l,"P15")
 setMethod("setIds","ms2Lib",function(m2l,ids){
 	mm2Ids(m2l) <- ids
 	m2l
@@ -205,12 +227,12 @@ convert_formula <- function(form_vec){
 #' path_mgf <- file.path(path_demo,"ex_mgf.mgf")
 #' 
 #' #Simple import
-#' m2l <- ms2Lib(ex_file)
+#' m2l <- ms2Lib(path_mgf)
 #' 
 #' #Import inculding some file formula
 #' supp_infos_path <- file.path(path_demo,"ex_supp_infos.csv")
 #' supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
-#' m2l <- ms2Lib(ex_file,suppInfos = supp_infos)
+#' m2l <- ms2Lib(path_mgf,suppInfos = supp_infos)
 ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFromFiles = FALSE){
 
 	m2l <- new("ms2Lib")
@@ -345,7 +367,19 @@ get_formula <- function(m2l){
   return(m2l@spectraInfo[,vf])
 }
 
+#' Show an ms2Lib object.
+#'
+#' Get the string representation of an ms2Lib object
+#'
+#' @param object An m2Lib object to be shown.
+#'
+#' @return None.
 #' @export
+#'
+#' @examples
+#' #Loading the data
+#' data(m2l)
+#' m2l
 setMethod("show","ms2Lib",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
   if(length(mm2Atoms(object))!=0){
@@ -357,7 +391,19 @@ setMethod("show","ms2Lib",function(object){
 											   length(mm2ReducedPatterns(object)),"patterns")
 })
 
+#' Number of patterns of an mss2Lib object
+#'
+#' Return the number of mined patterns of an ms2Lib object
+#'
+#' @param x An m2Lib object to be shown.
+#'
+#' @return The number of mined patterns.
 #' @export
+#'
+#' @examples
+#' #Loading the data
+#' data(m2l)
+#' length(m2l)
 setMethod("length","ms2Lib",function(x){
 	return(length(mm2Spectra(x)))
 })
@@ -371,7 +417,7 @@ getFormula <- function(m2l){
 
 #' Mine recurrent subgraph from a set of graphs.
 #'
-#' Mine all the complete clsoed recurring subgraphs from a set of preconstructed mass graphs objects.
+#' Mine all the complete closed subgraphs from a set of preconstructed mass graphs objects.
 #'
 #' @param m2l An m2Lib object to be processed.
 #' @param count The number of spectra in which the spectrum need to be sampled.
@@ -676,7 +722,7 @@ getInfo.S <- function(num,m2l){
 #' getInfo(m2l,c("L12","L42"))
 #' 
 #' #Example combined with the findMz 
-#' getInfo(findMz(m2l,391.1398,dmz=0.01))
+#' getInfo(m2l,findMz(m2l,391.1398,dmz=0.01))
 getInfo <- function(m2l,ids){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
 	authorizedValue <- c("losses","spectra")

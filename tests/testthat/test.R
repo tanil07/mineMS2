@@ -39,6 +39,7 @@ test_basic_processing <- function() {
                                  remove.multiple = FALSE,
                                  edge.attr.comb = "ignore")
     testthat::expect_is(net_gnps, 'igraph')
+    components <- mineMS2::findGNPSComponents(net_gnps,minSize=3,pairThreshold = 0.9)
     
     patterns <- mineMS2::findPatternsExplainingComponents(m2l,
                                                           components,

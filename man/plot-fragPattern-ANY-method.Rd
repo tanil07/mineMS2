@@ -21,13 +21,17 @@
 
 \item{edgeLabels}{A vector usually passed automatically by the plot method of the ms2Lib object.}
 
+\item{dags}{A list of mass graphs on which the patterns has been calculated.}
+
 \item{nodeLabel}{The type of vertex label to be plotted, default means that a will try to be 
 determined while label show the raw label as integer.}
 
 \item{edgeLabel}{The type of edges label to be plotted, default means that a will try to be 
 determined while label show the raw label as integer.}
 
-\item{atoms}{The used in the formula in the right order.\.}
+\item{atoms}{The used in the formula in the right order.}
+
+\item{formula}{The formula of the associated dags.}
 
 \item{mzdigits}{The number of digits included in the plot of mass differences}
 
@@ -48,7 +52,8 @@ None
 }
 \description{
 plot a fragPattern associated fragmentation
-dag using igraph capabilities.
+dag using igraph capabilities. This function should not be called directly by the user.
+Call `plot(m2l,"x")` instead.
 }
 \examples{
 print("Examples ot be put here.")

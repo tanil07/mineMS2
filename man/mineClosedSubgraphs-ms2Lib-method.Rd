@@ -21,7 +21,7 @@
 The filled ms2Lib object.
 }
 \description{
-Mine all the complete clsoed recurring subgraphs from a set of preconstructed mass graphs objects.
+Mine all the complete closed subgraphs from a set of preconstructed mass graphs objects.
 }
 \examples{
 #Loading the data

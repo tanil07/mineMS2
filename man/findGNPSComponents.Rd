@@ -18,6 +18,8 @@ findGNPSComponents(net, minSize = 3, pairThreshold = 0.9,
 \item{vname}{The name of the exported index of the component as verte attribute.}
 
 \item{eattr}{The name of the considered similarity measure on the network.}
+
+\item{convert_component}{Shall the components be}
 }
 \value{
 A list of the componets to be checked.

@@ -25,10 +25,11 @@ Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
   int count_M = 0;
   int count_I = 0;
   int tot_count = 0;
-  
+  //Rcpp::Rcerr << "IN";
   //We iterate on the full vector.
   int num_patterns = numPatterns();
   
+  //Rcpp::Rcerr << "npat:" << num_patterns << " nitems: "<< num_items;
   //List storing the pattern as a data.frame
   Rcpp::List list_patterns(num_patterns);
   

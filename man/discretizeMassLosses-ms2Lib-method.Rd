@@ -3,7 +3,7 @@
 \docType{methods}
 \name{discretizeMassLosses,ms2Lib-method}
 \alias{discretizeMassLosses,ms2Lib-method}
-\title{Discretize the mass differences.}
+\title{Discretize mass differences.}
 \usage{
 \S4method{discretizeMassLosses}{ms2Lib}(m2l, ppm = 7, dmz = 0.002,
   count = 2, limMzFormula = c(14.5, 200), maxFrags = 15,
@@ -44,7 +44,7 @@ If it is NULL, the default list the maximum of \emph{limMzFormula}/12, H:50, N:6
 An ms2Lib object with filled fileds and constructed dags.
 }
 \description{
-Build graph using discretized mass differences as edges.
+Build mass graphs from MS-MS spectra using discretized mass differences as edges.
 }
 \examples{
 #Loading the data
@@ -54,7 +54,7 @@ data(m2l)
 m2l <- discretizeMassLosses(m2l,ppm=8,dmz=0.008,count=2,
 precPpm=20,precDmz=0.03,maxFrags=15)
 
-Constructing edges labels with less frequent atoms
+#Constructing edges labels while including heteroatoms
 m2l <- discretizeMassLosses(m2l,atoms = 
 list("C"=50,"H"=100,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2))
 }

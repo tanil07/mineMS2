@@ -2,7 +2,7 @@
 title: 'Application to the interpretation of the GNPS components'
 author: "Alexis Delabriere"
 date: "`r Sys.Date()`"
-package: "`r pkg_ver('mineMS2')`"
+package: mineMS2
 
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
@@ -87,7 +87,7 @@ net_gnps <- simplify(net_gnps,remove.multiple = FALSE,edge.attr.comb = "ignore")
 An overview of the GNPS network after this processing is shown below (as visualized with the cytoscape software [@Shannon2003]):
 
 ```{r net_raw, out.width = "500px",fig.align = 'center',echo=FALSE}
-knitr::include_graphics("figures/rawGNPS.png")
+knitr::include_graphics("rawGNPS.png")
 ```
 
 Within this network, the *mineMS2* patterns are useful to interpret the connected components (subgraphs in which any two nodes are connected by a path), the cliques (subgraphs in which any all pairs of nodes are connected), as well as the strong similarities between nodes, as described below.
@@ -139,7 +139,7 @@ write_graph(graph = annotated_net,format = "graphml",file = "ex_annotated_gnps_n
 This network can be visualized in Cytoscape (note that the GraphML format is supported by Cytoscape 3: select 'File > Import > Network from file'; with Cytoscape 2, the GraphMLReader plugin is needed):
 
 ```{r net_annotated, out.width = "500px",fig.align = 'center',echo=FALSE}
-knitr::include_graphics("figures/annotatedGNPS.png")
+knitr::include_graphics("annotatedGNPS.png")
 ```
 
 To visualize the colors, the _enhancedGraphics_ App from Cytoscape is required ('Apps > Install Apps > Search: enhanced Graphics'). Then, in the _Style_ tab from the _Control Panel_, select for the _Image/Chart 1_ the _Column: colorComponents_ and the _Mapping Type: Passthrough Mapping_. Each component is assigned a color: nodes with several colors belong to several components.

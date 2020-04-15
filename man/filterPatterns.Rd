@@ -13,7 +13,7 @@ filterPatterns(m2l, filter_function = function(x, threshold, num) {
 
 \item{filter_function}{The filtering function this function take as input a pattern and return TRUE or FALSE.}
 
-\item{args}{}
+\item{args}{A list of supplementary argument to filter_function}
 }
 \value{
 The supplementary ms2Lib arguments.
