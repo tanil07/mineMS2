@@ -1,7 +1,7 @@
 Package: mineMS2
 Type: Package
 Title: Mining of MS-MS spectra by frequent subgraph mining method
-Version: 0.9.5
+Version: 0.9.6
 Author: Alexis Delabriere
 Maintainer: Alexis Delabriere <alexis.delabriere@hotmail.fr>
 VignetteBuilder: knitr
