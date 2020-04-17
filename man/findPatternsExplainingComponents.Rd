@@ -17,6 +17,8 @@ findPatternsExplainingComponents(m2l, components, metric = c("f1"),
 \item{ref_label}{A set of reference label to be used if the extracted component corresponds to an id over the position ofht e MS-MS spetra in the file}
 
 \item{threshold}{The threshold used to discriminate the dataset}
+
+\item{reduced}{Shall only the filtered patterns be considered}
 }
 \value{
 A list containing one data.frame by component including the following informations:

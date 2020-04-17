@@ -23,6 +23,7 @@ convertComponent <- function(comp,ids){
 #' @param metric The metric used to match a component and the pattern occurence.
 #' @param ref_label A set of reference label to be used if the extracted component corresponds to an id over the position ofht e MS-MS spetra in the file
 #' @param threshold The threshold used to discriminate the dataset
+#' @param reduced Shall only the filtered patterns be considered
 #'
 #' @return A list containing one data.frame by component including the following informations:
 #'   \code{id} The id of the matched patterns.
