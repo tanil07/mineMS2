@@ -1,22 +1,26 @@
 #' @include references.R
 
+#'@export
 setMethod("mm2Graph", "fragPattern",function(pat){
 	return(pat@graph)
 })
 
+#'@export
 setMethod("mm2Occurences", "fragPattern",function(pat){
 	return(pat@occurences)
 })
 
+#'@export
 setMethod("mm2Root", "fragPattern",function(pat){
 	return(pat@root)
 })
 
+#'@export
 setMethod("mm2Name", "fragPattern",function(pat){
 	return(pat@name)
 })
 
-
+#'@export
 setMethod("mm2CanonicalForm", "fragPattern",function(pat){
   return(pat@canonicalForm)
 })

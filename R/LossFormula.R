@@ -5,7 +5,7 @@
 REF_MINEMS2_ATOMS_NAMES <- tabAtoms()$name
 REF_MINEMS2_HALOGENS <- tabAtoms()$name[tabAtoms()$halogen]
 
-
+#'@export
 getAtomMass <- function(atoms){
   temp <- tabAtoms()
   temp$mass[temp$name %in% atoms]
@@ -22,6 +22,7 @@ calcMass<- function(lf,atoms_mass=NULL){
   apply(lf@formula,1,calc_mass_raw,atoms_m=atoms_mass)
 }
 
+#'@export
 LossFormulaFromSingleString <- function(formula,ref,sep="|"){
   allf <- str_split(formula,fixed(sep),simplify=TRUE)[1,]
   LossFormula(allf,ref=ref)
@@ -46,7 +47,20 @@ LossFormula <- function(formula=NULL,ref=NULL){
   
   if(!is.null(ref)) ref<- getAtomsFromRef(ref)
   
-  if(is.null(formula)||((length(formula)==1) & (is.na(formula)))||(nchar(formula)==0)){
+  if(!is.null(formula))
+  {
+    na_tot <- (nchar(formula) == 0)
+    na_c <- TRUE
+    for(i in na_tot)
+    {
+      if (is.na(i) || i == FALSE)
+      {
+        na_c <- FALSE
+      }
+    }
+  }
+
+  if(is.null(formula)||((length(formula)==1) && (is.na(formula)))||(na_c)){
     if(is.null(ref)){
       lf@formula <- matrix(NA_integer_,nrow=0,ncol=0)
     }else{

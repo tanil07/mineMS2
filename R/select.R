@@ -247,7 +247,14 @@ select.spectra.losses <- function(m2l,id){
 
 
 ###Return f1-score,precision,recall
-f1.score <- function(id,idsref,full=FALSE){
+f1.score <- function(id,idsref,m2l,full=FALSE){
+
+	## only for chimiotheque (N in colnames), take the right set of spectra
+	if("N" %in% colnames(m2l@spectraInfo))
+	{
+		spectres <- m2l@spectraInfo['N']
+		id <- spectres[rownames(spectres) %in% id,] 
+	}
 
 	###Calculating the intersection
 	inter <- intersect(id,idsref)
@@ -300,16 +307,16 @@ find.patterns.class <- function(m2l,ids,type=c("f1","precision","size"),
 
 	criterion <- checkFTerms(type)
 
-	idsp <- vrange(m2l,"P",reduced=reduced)
+	idsp <- vrange(m2l,"P",reduced=reduced) ## all patterns
 
 	###The P is removed if needed.
 	if(is.character(ids)&&(startsWith(ids[1],"S"))) ids <- str_sub(ids,2)
 
-	ids <- as.numeric(ids)
+	ids <- as.numeric(ids) ## a component (clique, connected component,...) 
 
 	###We find the best matching ones
 	vf1 <- sapply(idsp,function(x,idr,m2l,fullv){
-		c(f1.score(unique(m2l[x]@occurences[,1]),idr,full=fullv),vcount(m2l[x]@graph))
+		c(f1.score(unique(m2l[x]@occurences[,1]),idr,m2l,full=fullv),vcount(m2l[x]@graph))
 	},idr=ids,m2l=m2l,fullv=full)
 
 	rownames(vf1) <- c("f1","precision","recall","miss","size")

@@ -138,7 +138,8 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 
 	if(is.null(atoms)){
 		if(heteroAtoms){
-			atoms <- list("C"=max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2)
+			#atoms <- list("C"=max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2)
+			atoms <- list("C"=max(limMzFormula)%/%12,"H"=50,"N"=10,"O"=15,"Cl"=2,"S"=2,"P"=2)
 		}else{
 			atoms <- list("C"= max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6)
 		}
@@ -710,7 +711,16 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 	####We get a list of all the possible error in the labels.
 	for(igl in 1:length(dags)){
 		g <- dags[[igl]]
-		if(is.null(g)||is.na(g)){
+		na_f <- TRUE
+		if (!is.null(g))
+		{
+			for(e in is.na(g))
+			{
+				if(!e) na_f <- FALSE
+			}
+		}
+
+		if(is.null(g) || (length(g) == 1 && na_f)){
 			next
 		}
 		adj_list <- adjacent_vertices(g,V(g),"out")
@@ -849,7 +859,15 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 	###Relabeling of the graph
 	for(igl in 1:length(dags)){
 		g <- dags[[igl]]
-		if(is.null(g)||is.na(g)){
+		na_f <- TRUE
+		if (!is.null(g))
+		{
+			for(e in is.na(g))
+			{
+				if(!e) na_f <- FALSE
+			}
+		}
+		if(is.null(g)||(length(g) == 1 && na_f)){
 			next
 		}
 		if(ecount(g)>0){
@@ -874,7 +892,16 @@ cleanupElems <- function(elems,dags,thresh){
   countv <- rep(0,nrow(elems))
   for(igl in 1:length(dags)){
     g <- dags[[igl]]
-    if(is.null(g)||is.na(g)){
+
+   	na_f <- TRUE
+	if (!is.null(g))
+	{
+		for(e in is.na(g))
+		{
+			if(!e) na_f <- FALSE
+		}
+	}
+    if(is.null(g)||(length(g) == 1 && na_f)){
       next
     }
     eg_lab <- edge_attr(g,"lab")
@@ -894,7 +921,16 @@ cleanupElems <- function(elems,dags,thresh){
   ###Now removing the non frequent edges.
   for(igl in 1:length(dags)){
     g <- dags[[igl]]
-    if(is.null(g)||is.na(g)){
+    na_f <- TRUE
+	if (!is.null(g))
+	{
+		for(e in is.na(g))
+		{
+			if(!e) na_f <- FALSE
+		}
+	}
+
+    if(is.null(g)||(length(g) == 1 && na_f)){
       next
     }
     eg_lab <- edge_attr(g,"lab")

@@ -81,7 +81,7 @@ checkSevenGoldenRules <- function(tAtoms,solution,tol=c("low","high"),rules=rep(
 #'
 #'Fast formula generator using the algoirthm described by Bocker
 #'2010. 100 times faster than rcdk.
-#' @param mz The mass to b decomposed.
+#' @param mz The mass to be decomposed.
 #' @param tol The tolerance in ppm.
 #' @param atoms A of constraint on the number of atoms.
 #' @param rules Which of the seven golden rules should be respected
@@ -156,7 +156,7 @@ findFormula <-
 
 
 
-
+#'@export
 formulaToString <- function(vformula,vnames = NULL){
 	if(is.null(vnames))	vnames <- names(vformula)
 	if(is.factor(vnames)) vnames <- as.character(vnames)
@@ -183,7 +183,7 @@ lossesFormulaGeneration <- function(mzrange,atoms=list("C"=15,"H"=50,"O"=20,"N"=
 	mu <- sig+mzrange[1]
 
 
-	###Finding the formula.
+	###Finding the formula (from the mass, give the possible formula)
 	l_formula <- findFormula(mu,sig,atoms=atoms,mgraph=TRUE,scomp=TRUE)
 
 	if(length(l_formula)==0) return(list())

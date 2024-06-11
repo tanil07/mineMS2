@@ -8,38 +8,47 @@ UNKNOWN_FORMULA <- NA_character_
 
 
 ###Accessors
+#'@export
 setMethod("mm2Spectra","ms2Lib",function(m2l){
 	return(m2l@spectra)
 })
 
+#'@export
 setMethod("mm2SpectraInfos","ms2Lib",function(m2l){
 	return(m2l@spectraInfo)
 })
 
+#'@export
 setMethod("mm2Dags","ms2Lib",function(m2l){
 	return(m2l@dags)
 })
 
+#'@export
 setMethod("mm2Ids","ms2Lib",function(m2l){
 	return(m2l@ids)
 })
 
+#'@export
 setMethod("mm2Atoms","ms2Lib",function(m2l){
   return(m2l@atoms)
 })
 
+#'@export
 setMethod("mm2EdgesLabels","ms2Lib",function(m2l){
 	return(m2l@losses)
 })
 
+#'@export
 setMethod("mm2NodesLabels","ms2Lib",function(m2l){
 	return(m2l@fragments)
 })
 
+#'@export
 setMethod("mm2Patterns","ms2Lib",function(m2l){
 	return(m2l@patterns)
 })
 
+#'@export
 setMethod("mm2ReducedPatterns","ms2Lib",function(m2l){
 	return(m2l@reducedPatterns)
 })
@@ -254,7 +263,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 		if(length(x)==1){
 		###Single mgf file or dir
 			if(dir.exists(x)){
-				lfiles <- list.files(x,full.names = TRUE)
+				lfiles <- list.files(x,full.names = FALSE) ## not full path, only the name of the files
 				exts <- checkFormat(lfiles)
 				message("Reading ",length(exts)," files with format(s): ",unique(exts))
 				
@@ -311,7 +320,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 
 	temp_df$title <- make_initial_title(temp_df)
 
-	##Adding the supplementary information if necessary while check for an id fileds.
+	##Adding the supplementary information if necessary while check for an id fields.
 	if(!is.null(suppInfos)){
 		if(nrow(suppInfos)!= length(m2l@spectra)){
 			stop("The number of suppInfos rows (",nrow(suppInfos),
@@ -361,7 +370,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	m2l
 }
 
-
+#'@export
 get_formula <- function(m2l){
   vf <- match("formula",tolower(trimws(colnames(m2l@spectraInfo))))
   return(m2l@spectraInfo[,vf])
@@ -462,7 +471,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 		warning("sizeMin parameters set to ",sizeMin," risk of computational overhead.")
 	}
 	
-	###WE select the non empty graph to mine the patterns.
+	###We select the non empty graph to mine the patterns.
 	sel_g <- which(sapply(mm2Dags(m2l),ecount)!=0)
 	if(length(sel_g)==0) stop("No non-empty dags found.")
 
@@ -608,7 +617,7 @@ setMethod("plot", "ms2Lib",
 		  	  toccs <- x[y]@occurences[,1]
 		  	  if(is.null(title)) title <- y
 				return(plot(x[y],title = title,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
-				     atoms=names(x@atoms),formula=get_formula(x)[toccs],...))
+				     atoms=names(x@atoms),formula=get_formula(x)[toccs],tkplot=TRUE,...))
 		  	}else if(rid[[1]]=="spectra"){
 		  		MSnbase:::plot_Spectrum2(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){

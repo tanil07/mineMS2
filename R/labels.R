@@ -3,7 +3,7 @@
 #' @include fragPattern.R
 
 
-
+#'@export
 ####Return exact mass difference of all the labels for a given fragPattern.
 getMzDiff <- function(g,occs,mgs,loss_mz){
   occs_gid <- occs[, 1]
@@ -375,14 +375,14 @@ makeEdgeLabel <-
                 coherent = coevec, multiple = multipleannot))
   }
 
-
+#'@export
 annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
   ###We first build a set of LossGrpah corresponding ot all the edge labels.
   g <- mm2Graph(fp)
   occs <- mm2Occurences(fp)
   atoms <- atoms
   
-  ####Getting tyhe vertices and the edges to pass, in the right order
+  ####Getting the vertices and the edges to pass, in the right order
   all_edges <- E(g)
   p_root <- tail_of(g,all_edges)==1
   e_origin <- all_edges[p_root]
@@ -451,10 +451,10 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
   },def=HIGH_MASS_LEGEND)
   
   ####If the formula is not solo or partial we add parenthesis
-  vpv <- apply(!vert$info[,1,drop=FALSE],1,any)
+  vpv <- apply(!vert$info[,1,drop=FALSE],1,any) ## vpv : logical vector : if TRUE : several formula
 
   
-  labvert_formula[vpv] <- paste("(",labvert_formula[vpv],")",sep="")
+  labvert_formula[vpv] <- paste("(",labvert_formula[vpv],")",sep="")  ## add parenthesis
   
   labvert <- c("M",paste(labvert,labvert_formula,sep="\n"))
   
@@ -473,7 +473,8 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
   vp[1:(vcount(g)-1)] <- vpv
   pmz <-  labedge==HIGH_MASS_LEGEND
   labedge[pmz] <- sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[pmz])
-  
+
+  ## if several formula, put parenthesis or mz
   vp <- vp|((edg$multiple)&(!pmz))
   
   labedge[vp] <- paste("(",labedge[vp],")",sep="")
