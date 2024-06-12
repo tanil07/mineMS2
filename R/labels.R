@@ -484,7 +484,6 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4, print_formul
 
     #several formula
     labedge[vp] <- paste(sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[vp]), paste("(",labedge[vp],")",sep=""), sep="\n") ## mz + parenthesis 
-    labedge[vp] <- sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[vp]) ## mz
   }
   else{
   ## mz for all edges
