@@ -432,7 +432,7 @@ annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
               mz=list(v=massdiff[p_root][pmm],e=massdiff)))
 }
 
-makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
+makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4, print_formula=TRUE){
   annot <- annotateAFG(p,atoms,dags,elabs,oformula = oformula)
   g <- mm2Graph(p)
   
@@ -456,8 +456,8 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
   
   labvert_formula[vpv] <- paste("(",labvert_formula[vpv],")",sep="")  ## add parenthesis
   
-  labvert <- c("M",paste(labvert,labvert_formula,sep="\n"))
-  
+  if(print_formula) labvert <- c("M",paste(labvert,labvert_formula,sep="\n")) ## to add formula to label edges
+  else labvert <- c("M",labvert)
   
   
   #### We build the edges label.
@@ -477,8 +477,20 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
   ## if several formula, put parenthesis or mz
   vp <- vp|((edg$multiple)&(!pmz))
   
-  labedge[vp] <- paste("(",labedge[vp],")",sep="")
-  
+  if(print_formula)
+  {
+    ## only one formula
+    labedge[!vp&(!pmz)] <- paste(sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[!vp&(!pmz)]), labedge[!vp&(!pmz)], sep="\n") ## mz + formula 
+
+    #several formula
+    labedge[vp] <- paste(sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[vp]), paste("(",labedge[vp],")",sep=""), sep="\n") ## mz + parenthesis 
+    labedge[vp] <- sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[vp]) ## mz
+  }
+  else{
+  ## mz for all edges
+    labedge <- sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e)
+  }
+
   ####For all the high mass label we put the mz diff over the formula.
   return(list(vertices=labvert,edges=labedge))
 }

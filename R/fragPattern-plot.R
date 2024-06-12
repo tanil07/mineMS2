@@ -207,6 +207,7 @@ setMethod("plot", "fragPattern",
 		  		 edge_label_cex=0.7,
 		  		 subNodes = NULL,
 		  		 tkplot = FALSE,
+				 print_formula=TRUE,
 		  		 ...) {
 		    if(is.null(edgeLabels)) stop("Please use the plot function through the ms2Lib object (ex :plot(m2l,'P15'))")
 		  	nodeLabel <- match.arg(nodeLabel)
@@ -222,7 +223,7 @@ setMethod("plot", "fragPattern",
 		  	  oformula <- oformula[filled_formula]
 		  	}
 		  	
-		  	labels <- makeLabelPattern(x,atoms,dags,edgeLabels,oformula=oformula)
+		  	labels <- makeLabelPattern(x,atoms,dags,edgeLabels,oformula=oformula,print_formula=TRUE)
 		  	
 		  	ledges <- NULL
 		  	if(edgeLabel=="formula"){
@@ -325,7 +326,6 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	}
 	
 	
-
 	###Extracting the occurences,dags and the graph.
 	occs <- mm2Occurences(fp)
 	mgs <- mm2Dags(m2l)

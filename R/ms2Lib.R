@@ -606,7 +606,7 @@ setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 #' plot(m2l,"P53")
 setMethod("plot", "ms2Lib",
 		  function(x,
-		  		 y,title=NULL,
+		  		 y,title=NULL,tkplot=FALSE,
 		  		 ...) {
 		  	if(length(y)>1){
 		  		warning("A single if may be plotted on each call, plotting the first element only")
@@ -617,12 +617,12 @@ setMethod("plot", "ms2Lib",
 		  	  toccs <- x[y]@occurences[,1]
 		  	  if(is.null(title)) title <- y
 				return(plot(x[y],title = title,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
-				     atoms=names(x@atoms),formula=get_formula(x)[toccs],tkplot=TRUE,...))
+				     atoms=names(x@atoms),formula=get_formula(x)[toccs],tkplot=tkplot,...))
 		  	}else if(rid[[1]]=="spectra"){
 		  		MSnbase:::plot_Spectrum2(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){
 		  	  if(is.null(title)) title="Fragmentation Graph"
-		  		plot_dag(x[y],idx=y,edgeLabels=(mm2EdgesLabels(x)),atoms=x@atoms,title=title,...)
+		  		plot_dag(x[y],idx=y,edgeLabels=(mm2EdgesLabels(x)),atoms=x@atoms,title=title,tkplot=tkplot,...)
 		  		# stop("DAGS plotting not implemented at the moment.")
 		  	}else if(rid[[1]]=="losses"){
 		  		stop("Impossible to plot a loss")
