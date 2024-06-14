@@ -1,0 +1,13 @@
+CHANGES VERSION 0.9.8
+----------------
+MINOR UPDATE
+    - debug some execution errors (in formula generation)
+    - make possible to display formula or not in the DAG plots and pattern plots
+    - make possible to display dynamic or static graph plots
+
+VERSION 0.9.7
+----------------
+Version of the package in 2019
+    - Discretization of mass losses
+    - FSM algorithm for pattern detection
+    - Comparison with connected components in GNPS network

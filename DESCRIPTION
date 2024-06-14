@@ -1,11 +1,11 @@
 Package: mineMS2
 Type: Package
 Title: Mining of MS-MS spectra by frequent subgraph mining method
-Version: 0.9.7
-Author: Alexis Delabriere
-Maintainer: Alexis Delabriere <alexis.delabriere@hotmail.fr>
+Version: 0.9.8
+Author: Alexis Delabriere, Coline Gianfrotta
+Maintainer: Coline Gianfrotta <coline.gianfrotta@cea.fr>
 VignetteBuilder: knitr
-Description: Mine MS-NS soectra using a frequent subgraph minning appraoch. This packaged also integrate a direct annotation  of MS-MS network.
+Description: Mine MS-NS spectra using a frequent subgraph minning appraoch. This package also integrates a direct annotation of MS-MS network.
 Depends:
     R (>= 3.3.0)
 SystemRequirements: C++11
