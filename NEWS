@@ -1,3 +1,8 @@
+CHANGES VERSION 0.9.10
+----------------
+MINOR UPDATE
+    - add a function in export.R to generate the table of losses with information about the patterns
+
 CHANGES VERSION 0.9.8
 ----------------
 MINOR UPDATE

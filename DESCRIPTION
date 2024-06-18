@@ -1,7 +1,7 @@
 Package: mineMS2
 Type: Package
 Title: Mining of MS-MS spectra by frequent subgraph mining method
-Version: 0.9.8
+Version: 0.9.10
 Author: Alexis Delabriere, Coline Gianfrotta
 Maintainer: Coline Gianfrotta <coline.gianfrotta@cea.fr>
 VignetteBuilder: knitr
@@ -20,7 +20,12 @@ Imports: Rcpp (>= 0.12.13),
 	stringr,
 	MSnbase,
 	methods,
-	Matrix
+	Matrix,
+    webchem,
+    png,
+    ggrepel,
+    ggplot2,
+    patchwork
 LinkingTo: Rcpp,BH
 License: GPL-3
 Encoding: UTF-8
