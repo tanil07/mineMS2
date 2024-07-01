@@ -10,7 +10,9 @@
 #' @param full Shall the full patterns be plotted (it can take some times)
 #' @param byPage Maximum number of occurences by page.
 #' @param titles A vector giving the titles of the MS-MS spectra.
-#'
+#' @param v_ggplot (default TRUE) if TRUE ggplot version for the plotting of the spectra
+#' @param export_pdf (for ggplot version) if TRUE export the spectra to PDF
+#' 
 #' @export
 #' 
 #' @return Nothing
@@ -21,7 +23,7 @@
 #' 
 #' #plotting the patterns
 #' plotPatterns(m2l,c("P30","P51"))
-plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FALSE,byPage=9,titles=NULL){
+plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FALSE,byPage=9,titles=NULL,v_ggplot=TRUE, export_pdf=FALSE){
 
 
 	if(is.null(ids)){
@@ -78,7 +80,23 @@ plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FAL
 				plot(m2l,id)
 			}
 		}
-
-		plotOccurences(m2l,id)
+		if(!v_ggplot)
+		{
+			plotOccurences(m2l,id)
+		}
+		else
+		{
+			p <- plot_pattern_ggplot(m2l, id)
+			if(export_pdf)
+			{
+				pdf(paste(id, ".pdf", sep=""))
+				print(p)
+				dev.off()
+			}
+			else
+			{
+				print(p)
+			}
+		}
 	}
 }

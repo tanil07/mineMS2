@@ -18,6 +18,11 @@
 #' head_of tail_of delete_edges set_edge_attr induced_subgraph incident incident_edges largest.cliques delete_vertices components write_graph
 #' 
 #' @import Rcpp
+#' @importFrom ggplot2 ggplot geom_segment aes xlim ylim ggtitle theme scale_color_manual labs 
+#' @importFrom ggrepel geom_label_repel
+#' @importFrom patchwork inset_element
+#' @importFrom webchem get_csid cs_img
+#' @importFrom png readPNG
 #' @name mineMS2-package
 #' @useDynLib mineMS2
 NULL

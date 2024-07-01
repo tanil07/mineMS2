@@ -1,3 +1,10 @@
+CHANGES VERSION 0.9.11
+----------------
+MINOR UPDATE
+    - new plotting of patterns occurrences with ggplot (plotPatterns parameters: v_ggplot=TRUE, export_pdf=FALSE)
+    (includes mz values of peaks and images of 2D structures if known)
+    - add column N in supplementary information and names of molecules if column name or compound in the supplementary file
+
 CHANGES VERSION 0.9.10
 ----------------
 MINOR UPDATE

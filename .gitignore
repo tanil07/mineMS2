@@ -6,3 +6,4 @@ src/*.o
 tests/testthat/*.pdf
 tests/output
 install_mineMS2.R
+man/*.Rd

@@ -327,6 +327,27 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 				 ") do not match the number of spectra (",
 				 length(m2l@spectra),")furnished")
 		}else{
+
+			## add a N column if not
+			if(!("N" %in% colnames(suppInfos)))
+			{	
+				df_N <- data.frame(N = seq(1, nrow(suppInfos)))
+				suppInfos <- cbind(suppInfos, df_N)
+			}
+			## if name or compounds column
+			if("name" %in% colnames(suppInfos))
+			{
+				colnames(suppInfos)[which(colnames(suppInfos) == "name")] <- "Name"
+			}
+			if("compound" %in% colnames(suppInfos))
+			{
+				colnames(suppInfos)[which(colnames(suppInfos) == "compound")] <- "Name"
+			}
+			if("Compound" %in% colnames(suppInfos))
+			{
+				colnames(suppInfos)[which(colnames(suppInfos) == "Compound")] <- "Name"
+			}
+
 			if("file" %in% colnames(suppInfos)){
 				pm <- match(temp_df$file,suppInfos$file)
 				if(any(is.na(pm))) stop('"file" column furnished, but there was an error matching it against files.')
@@ -341,7 +362,6 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 				mm2Ids(m2l) <- suppInfos[,"id"]
 			}
 		}
-
 	}else{
 		if(!is.null(ids)){
 			mm2Ids(m2l) <- ids

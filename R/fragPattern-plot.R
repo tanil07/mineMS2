@@ -443,3 +443,163 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 })
 
 
+###########################################################################
+
+#' Create a png file containing the 2D structure of the given molecule
+#' (obtained from ChemSpider with the inchi key of the molecule)
+#' @param N the id of the molecule in the tsv file given by path_inchi (must have a column named N with the ids of the molecules)
+#' @param path_inchi the path to the csv file containing the inchi keys	
+#' @param dir_images the path to the directory to store the png images
+#'
+#' @return True if the molecule is found, False otherwise
+createFileCS <- function(N, path_inchi, dir_images)
+{
+    inchi_table <- read.csv(path_inchi, header=TRUE,sep="\t")
+    inchi <- inchi_table[inchi_table$N == N,]
+
+    cs <- get_csid(query=inchi[1,"Inchikey"], from="inchi", match="all")
+   	tryCatch(
+    expr = {
+        cs_img(
+                csid = cs,
+                dir = dir_images,
+                overwrite = TRUE)
+            name_file <- gsub(" ", "_", inchi[1,"Name"])
+
+        file.rename(file.path(dir_images,paste(cs[1,'csid'],".png",sep="")), file.path(dir_images, paste(name_file, ".png", sep="")))
+        return(TRUE)
+    },
+    error = function(e){
+       return(FALSE)
+    })
+}
+
+#' Plotting one spectrum with colored peaks of a pattern (with ggplot)
+#' @param i id of the spectrum in the ms2Lib object
+#' @param loss_mz all mass losses in the dataset
+#' @param mgs all DAGs of the dataset
+#' @param g graph of the pattern 
+#' @param ru_occs_gid numeric ids of the occurrences of the pattern
+#' @param u_occs_gid ids of the occurrences of the pattern
+#' @param titles titles of the occurrences of the pattern (as stored in the ms2Lib object)
+#' @param names names of the occurrences of the pattern (as stored in the ms2Lib object)
+#' @param n N ids of the occurrences of the pattern (as stored in the ms2Lib object) (only for create 2D structure images) 
+#' @param col_vec vector of colours for the peaks of the pattern
+#' @param path_inchi The path to the inchi key of the molecules if known, otherwise NULL
+#' @param dir_images The path to the directory to store the png images
+#' 
+#' @return ggplot object
+plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, titles, names, n, col_vec, path_inchi, dir_images)
+{
+        gid <- ru_occs_gid[i]
+        all_pos <- u_occs_gid[[i]]
+		
+        title <- paste(names[gid], titles[gid], paste("(N", n[gid], ")", sep=""), sep=" ")
+        
+        ##Peaks mapping
+        all_maps <- sapply(all_pos,function(x,mg,loss_mz,mgs,g){
+            get_mapping(mg=mg, patg=g, loss_mass=loss_mz, root = x)
+        },mg=mgs[[gid]],g=g,loss_mz=loss_mz,simplify=FALSE)
+
+        ###Plotting of the spectra
+        intv <- vertex_attr(mgs[[gid]], "rel_int")
+        mzs <- vertex_attr(mgs[[gid]], "mz")
+        ids <- V(mgs[[gid]])
+
+        ###Peaks are split between matched and non matched.
+        matched_peaks_idx <- match(unique(unlist(sapply(all_maps,function(x){x[2,]},simplify=FALSE))), ids)
+
+        non_matched_peaks_idx <- seq(1, length(mzs))[-matched_peaks_idx]
+        col_seq <- rep("#000000",length(mzs))
+        col_seq[matched_peaks_idx] <- col_vec[i]
+        
+        dfr <- data.frame(int = intv, mz = mzs)
+        dfr$col <- col_seq
+		
+		ok <- TRUE
+		if(!is.null(path_inchi)){
+            if(!file.exists(file.path(dir_images, paste(gsub(" ", "_", names[gid]), ".png", sep=""))))
+            {
+                ok <- createFileCS(n[gid], path_inchi, dir_images) ## not ok: inchi not found
+            }
+        }
+       if(!is.null(path_inchi) && ok){
+            path_png <- file.path(dir_images, paste(gsub(" ", "_", names[gid]), ".png", sep=""))
+            img <- readPNG(path_png, TRUE)
+            return(ggplot(dfr, aes(x = mzs, xend = mzs, y = 0, yend = intv, color=col) ) +
+                    geom_segment() +
+                    geom_label_repel(aes(label=mzs, x=mzs, y = intv+1), size=3) +
+                    xlim(max(0, min(mzs)-10),max(mzs)+20)+
+                    ylim(0,max(intv)+20)+
+                    ggtitle(title)+
+                    theme(legend.position = "none") +
+                    scale_color_manual(values=c("#000000", col_vec[i]))+
+                    labs(x = "M/Z", y = "Relative Intensity")+
+                    inset_element(p = img, 
+                        left = 0.75, 
+                        bottom = 0.75, 
+                        right = 1, 
+                        top = 1))
+        }
+        else{ ## no image
+            return(ggplot(dfr, aes(x = mzs, xend = mzs, y = 0, yend = intv, color=col) ) +
+                    geom_segment() +
+                    geom_label_repel(aes(label=mzs, x=mzs, y = intv+1), size=3) +
+                    xlim(max(0, min(mzs)-10),max(mzs)+20)+
+                    ylim(0,max(intv)+20)+
+                    ggtitle(title)+
+                    theme(legend.position = "none") +
+                    scale_color_manual(values=c("#000000", col_vec[i]))+
+                    labs(x = "M/Z", y = "Relative Intensity"))
+        }
+}
+
+#' Plotting the occurences of a fragPattern object (ggplot version)
+#' 
+#' Plot the occurences, the spectra overlayed with the matched peaks of a fragmentation pattern.
+#' @param m2l An ms2lib object.
+#' @param pidx A pattern id or a frag_pattern object.
+#' @param path_inchi The path to the inchi key of the molecules if known (default NULL)
+#' 
+#' @return A list of plots, one for every spectrum
+#' @export
+plot_pattern_ggplot <- function(m2l, pidx, path_inchi=NULL)
+{
+	dir_images <- "images_cs"
+	ifelse(!dir.exists(dir_images), dir.create(dir_images), FALSE)
+
+    fp <- m2l[pidx] ## pattern
+
+    occs <- mm2Occurences(fp)
+	mgs <- mm2Dags(m2l)
+	g <- mm2Graph(fp)
+
+    names <- mm2SpectraInfos(m2l)$Name
+    titles <- mm2SpectraInfos(m2l)$title
+    n <- mm2SpectraInfos(m2l)$N
+
+	###Mass loss are used for matching.
+	loss_mz <- mm2EdgesLabels(m2l)$mz
+    
+    ###THE IDX IS HANDLED BY C++ AND SHOULD BE CORRECT.
+    occs_gid <- occs[, 1]
+    occs_pos <- occs[, 2]
+        
+    u_occs_gid <- tapply(occs[,2],INDEX = occs[,1],FUN = function(x){return(x)})
+    ru_occs_gid <- as.numeric(names(u_occs_gid))
+  
+    col_vec <- rainbow(length(ru_occs_gid))
+    ##darken the colors by 20%
+    col_vec <- unlist(lapply(col_vec, function(x){
+        x <- as.vector(col2rgb(x))
+        x <- sapply(x, function(y){return(max(0,y-y*0.2))})
+        x <- rgb(x[1], x[2], x[3], maxColorValue = 255)
+        return(x)
+    }), use.names = NULL)
+
+    plots <- lapply(seq_along(u_occs_gid), plot_one_spectra, 
+        loss_mz=loss_mz, mgs=mgs, g=g, ru_occs_gid=ru_occs_gid, u_occs_gid=u_occs_gid, titles=titles,
+        names=names, n=n, col_vec = col_vec, path_inchi=path_inchi, dir_images=dir_images)
+
+    return(plots)
+}
