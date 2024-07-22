@@ -156,4 +156,15 @@ relabelOccurrences <- function(pat,newlabs){
 }
 
 
+infoPatterns <- function(m2l, id_p)
+{
+	occs <- mm2Occurences(m2l[id_p])[,'gid']
+	s_occs <- sapply(occs, function(x){return(paste("S",x, sep=""))})
+	infos <- getInfo(m2l, "S")
+
+	df <- infos[rownames(infos) %in% s_occs, names(infos) != "file"]
+  return(df)
+}
+
+
 

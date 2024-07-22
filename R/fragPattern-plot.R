@@ -202,7 +202,7 @@ setMethod("plot", "fragPattern",
 		  		 atoms=c("C","H","O","N","S","P"),
 		  		 formula=NA_character_,
 		  		 mzdigits = 3,
-		  		 vertex_size = 50, ##55
+		  		 vertex_size = 45, ##55
 		  		 vertex_label_cex = 0.7,
 		  		 edge_label_cex=0.7,
 		  		 subNodes = NULL,
@@ -257,6 +257,7 @@ setMethod("plot", "fragPattern",
 		  		plot.igraph(
 		  			g,
 		  			layout = (layout_with_sugiyama(g,maxiter=200)$layout),
+					#layout = (layout_nicely(g)),
 		  			vertex.label = labels$vertices,
 		  			vertex.size = vertex_size,
 		  			vertex.label.cex=vertex_label_cex,
@@ -445,6 +446,9 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 
 ###########################################################################
 
+
+
+
 #' Create a png file containing the 2D structure of the given molecule
 #' (obtained from ChemSpider with the inchi key of the molecule)
 #' @param N the id of the molecule in the tsv file given by path_inchi (must have a column named N with the ids of the molecules)
@@ -452,14 +456,16 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 #' @param dir_images the path to the directory to store the png images
 #'
 #' @return True if the molecule is found, False otherwise
-createFileCS <- function(N, path_inchi, dir_images)
+createFileCS <- function(name, path_inchi, dir_images)
 {
     inchi_table <- read.csv(path_inchi, header=TRUE,sep="\t")
-    inchi <- inchi_table[inchi_table$N == N,]
-
-    cs <- get_csid(query=inchi[1,"Inchikey"], from="inchi", match="all")
+    inchi <- inchi_table[inchi_table$Name == name,]
+	print(name)
+	print(inchi)
+    
    	tryCatch(
     expr = {
+		cs <- get_csid(query=inchi[1,"Inchikey"], from="inchi", match="all")
         cs_img(
                 csid = cs,
                 dir = dir_images,
@@ -516,11 +522,13 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, titles
         dfr <- data.frame(int = intv, mz = mzs)
         dfr$col <- col_seq
 		
+		mzs_rounded <- sapply(mzs, round, digits = 4)
+
 		ok <- TRUE
 		if(!is.null(path_inchi)){
             if(!file.exists(file.path(dir_images, paste(gsub(" ", "_", names[gid]), ".png", sep=""))))
             {
-                ok <- createFileCS(n[gid], path_inchi, dir_images) ## not ok: inchi not found
+                ok <- createFileCS(names[gid], path_inchi, dir_images) ## not ok: inchi not found
             }
         }
        if(!is.null(path_inchi) && ok){
@@ -528,13 +536,13 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, titles
             img <- readPNG(path_png, TRUE)
             return(ggplot(dfr, aes(x = mzs, xend = mzs, y = 0, yend = intv, color=col) ) +
                     geom_segment() +
-                    geom_label_repel(aes(label=mzs, x=mzs, y = intv+1), size=3) +
+                    geom_label_repel(aes(label=mzs_rounded, x=mzs, y = intv+1), size=3) +
                     xlim(max(0, min(mzs)-10),max(mzs)+20)+
                     ylim(0,max(intv)+20)+
                     ggtitle(title)+
-                    theme(legend.position = "none") +
+                    theme(legend.position = "none", plot.title = element_text(size = 10)) +
                     scale_color_manual(values=c("#000000", col_vec[i]))+
-                    labs(x = "M/Z", y = "Relative Intensity")+
+                    labs(x = "m/z", y = "Relative Intensity")+
                     inset_element(p = img, 
                         left = 0.75, 
                         bottom = 0.75, 
@@ -544,13 +552,13 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, titles
         else{ ## no image
             return(ggplot(dfr, aes(x = mzs, xend = mzs, y = 0, yend = intv, color=col) ) +
                     geom_segment() +
-                    geom_label_repel(aes(label=mzs, x=mzs, y = intv+1), size=3) +
+                    geom_label_repel(aes(label=mzs_rounded, x=mzs, y = intv+1), size=3) +
                     xlim(max(0, min(mzs)-10),max(mzs)+20)+
                     ylim(0,max(intv)+20)+
                     ggtitle(title)+
-                    theme(legend.position = "none") +
+                    theme(legend.position = "none", plot.title = element_text(size = 10)) +
                     scale_color_manual(values=c("#000000", col_vec[i]))+
-                    labs(x = "M/Z", y = "Relative Intensity"))
+                    labs(x = "m/z", y = "Relative Intensity"))
         }
 }
 

@@ -1,3 +1,10 @@
+CHANGES VERSION 0.9.12
+----------------
+MINOR UPDATE
+    - plotPatterns now print more information about patterns (molecules information, mass differences information...)
+        (export possible in PDF)
+    - changes in the pattern graph display: PP instead of M and total mz mean
+
 CHANGES VERSION 0.9.11
 ----------------
 MINOR UPDATE
