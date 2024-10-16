@@ -1,0 +1,230 @@
+---
+title: "MineMS2 : Mining of MS fragmentation spectra by frequent subgraph mining"
+author: "Coline Gianfrotta"
+date: "`r Sys.Date()`"
+vignette: >
+  %\VignetteIndexEntry{MineMS2 : Mining of MS fragmentation spectra by frequent subgraph mining}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+output:
+  BiocStyle::html_document:
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE) 
+knitr::opts_chunk$set(fig.width=10, fig.height=6) 
+```
+
+
+# Launching mineMS2
+
+## Installation
+If necessary, install the package mineMS2 (from github to have the latest version):
+```{r install minems2}
+    library(devtools)
+    library(grid)
+    library(gridExtra)
+    library(igraph)
+    library(stringr)
+    #if(!require(mineMS2)) install_github("odisce/mineMS2")
+    load_all()
+    #load_all("C:/Users/CG278150/Desktop/github_minems2/mineMS2/")
+```
+
+
+## Input 
+The _mineMS2_ package takes as input the following format `r recognisedFormat()` or may also may also take as input a list _Spectrum2_ object from the _MSnbase_ package. 
+  
+The initial spectra reading is done using the *ms2Lib* constructor function, and the *ms2Lib* object then centralizes all the spectra information. 
+It can take 3 kinds of inputs :
+
+* A vector of filenames with compatible format (`mineMS2:::recognisedFormat()`)
+	
+* A single directory name in which the files in supported format are stored.
+	
+* A list containg Spectrum2 objects.
+	
+This object can also stores all the supplementary information, given by a csv file.
+This file should contain as much rows as spectra. 
+By default, spectra are associated to rows in the same order, but if the dataset is composed of one spectrum by mgf file, it is possible to match each spectrum to a specific row by using a column _file_.
+```{r loading}
+#Finding the spectra data
+path_dataset <- "//fouet/spi/scidospi/06_Data/MineMS2/Dataset_champignon_A"
+path_mgf <- file.path(path_dataset, "files_champi_A.mgf")
+
+## supplementary information about the spectra can be added, e.g. molecule name, composition
+supp_infos_path <- file.path(path_dataset, "infos_champi_A.csv")
+supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";",encoding="utf-8", quote="") 
+head(supp_infos)
+```
+
+```{r ms2lib_constructor}
+current_dir <- getwd()
+setwd(path_dataset)
+
+### Spectra are read with supplementary information
+m2l <- ms2Lib(path_mgf, suppInfos = supp_infos)
+m2l
+```
+
+
+These supplementary information may also be used to generate an ID for each spectra, which can be used in the functions of the *mineMS2* software, and which is reused into the visualisation. Here fore examples we design an ID composed of the mass and the retention time for the precursor for each spectrum. Initially, this ID is set to S1,S2,...,SN where N is the number of spectra.
+```{r spectrum_id}
+infos <- getInfo(m2l,"S")
+ids <- paste(paste("mz",infos[,"mz"],sep=""),paste("rt",infos[,"rt"],sep=""),sep="_")
+m2l <- setIds(m2l,ids)
+```
+This ID is notably used in the visualisation offered by the *mineMS2* package.
+
+
+Any extracted spectrum may be plot using the *plot* function of the *msnBase* package, using its *id* :
+```{r plotSpec}
+plot(m2l,"S10")
+```
+Here the "S10" index correspond to the 10th spectra. These indexes will be discussed later.
+
+
+## Mass differences discretization
+
+The first step of _mineMS2_ algorithm is to compute all mass differences and discretize them.
+The algorithm uses the method of kernel density estimation, with a gaussian kernel (ref), for the discretization. 
+It uses a density function with a varying bandwidth to take into account the fact that the mass accuracy of mass spectrometers are in ppm. 
+
+This step is very important, as it determines the initial set of graphs. The most important parameters and their meaning are listed here :
+
+* _ppm_: The accuracy of the mass spectrometer in ppm used to determine the bandwidth of the density.
+
+* _dmz_: The minimum deviation use for bandwidth in dalton.
+
+* _count_: The minimum number of spectra in which a loss needs to be present.
+
+* _precPpm_: The ppm tolerance used to match the precursor.
+
+* _precDmz_: The minimum tolerance used to match the precursor.
+
+* _maxFrags_: only the _maxFrags_ most intense peaks will be considered to build the graph (shoul be at most 20, to be done in reasonable time).
+
+* _atoms_ : list of possible atoms for formula generation, along with their respective maximum number (example: `list("C"=50,"H"=100,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2)`) 
+
+* _heteroAtoms_: Shall hetero atoms (*P*,*S*,*Cl*) be used when generating formula for mass differences.
+
+* _limMzFormula_: the range of mass difference values for which formulas will be searched. Higher values will be considered as too high to find a set of formula without ambiguity. They are however kept as mass differences.
+
+The _precPpm_ and _precDmz_ arguments are used to find a peak corresponding to the precursor on the MS-MS spectra. If it is not present an artificial peak is added.
+For each mass difference in the range defined by the argument _limMzFormula_, possible formulas are generated, using a decomposition of possible atoms given by the argument _atoms_.
+If no formula is found, the mass difference is discarded.
+
+Default values are set for every parameters. 
+```{r edge_discretization, message=FALSE}
+m2l <- discretizeMassLosses(m2l,
+                            ppm=15,
+                            dmz=0.007,
+                            count=2,
+							              precPpm=20, 
+                            precDmz=0.02,
+                            maxFrags=15, 
+                            heteroAtoms = TRUE,
+                            limMzFormula = c(14.5, 200))
+```
+
+After this step, the list of discretized mass differences labels may be extracted.
+
+```{r tab_losses}
+head(lossesTable(m2l))
+```
+Each row of this table corresponds to one discretized mass difference, with:
+* the mean value (mz)
+* the minimum value (mzmin) 
+* the maximum value (mzmax)
+* the number of mass differences in it (count)
+* the possible formula(s) if calculated (formula)
+
+
+The step of discretization also constructs the directed acyclic graphs (DAGs) corresponding to the spectra, with vertices as peaks and directed edges as discretized mass differences. 
+Each DAG can be plotted, in a static (_tkplot_ argument to FALSE) or a dynamic way (_tkplot_ argument to TRUE).
+
+```{r plot dag}
+plot(m2l, "D10", tkplot=TRUE)
+```
+The graph *D10* corresponds to the spectrum *S10*.
+
+<!--It is good to note that at this step supplementary information may using the penalizedLosses informations. -->
+
+## Mining frequent subgraphs 
+The next step is to generate the frequent subgraphs among the DAGs.
+To do so, we will use the *mineClosedSubgraphs* function, that implements the FSM algorithm. 
+Two important parameters are the _count_ parameter which is the minimum number of occurrences of a pattern, and the _sizeMin_ parameter which determines the minimum size of the mined graphs. Here we set _sizeMin_ to 1 to mine single mass differences.
+
+```{r graph_mining}
+m2l <- mineClosedSubgraphs(m2l,count=2,sizeMin = 1)
+setwd(current_dir)
+```
+This step can be quite time consuming.
+
+
+## Select information from the *ms2Lib* object
+The *ms2Lib* object includes 3 different data types that can be queried using their *id* (which includes a prefix specifying the data type and a number):
+* the spectra (S)
+* the patterns (P)
+* the mass differences (L) 
+Further information on the functionality of these package is given in the next subsection.
+
+### Spectra
+Spectra may be queried using id starting by "S". It is possible to find a specific spectra by using the _findMz_ function, with the "S" parameter.
+In this example, it searches for spectra with precursor mz values close to 147.0, with certain values of tolerance.
+It returns the *ids* of the spectra if it is found, or an empty vector if not.
+
+```{r spec_plot_example}
+sid <- findMz(m2l,147.0,type="S",ppm=8,dmz=0.2)
+sid
+```
+
+Information about the spectra may be queried using the *getInfo* function :
+```{r get_info_s}
+getInfo(m2l,sid)
+```
+
+The patterns in which the spectra are present may be extracted using the the *select* function : 
+```{r select_s_p}
+pids <- select(m2l,sid,"P")
+pids
+```
+
+## Mass differences
+
+Mass differences *ids* start by the *L* letter. They can be searched using the *findMz* function too. Some information may be extracted using the *getInfo* function. We don't demonstrate it as they are similar to those of spectra. They can be searched against patterns (*P*) or DAGs (*D*) using the *select* function :
+```{r select_l_p}
+##Finding a mass difference corresponding to phenyalanine
+lphenyl <- findMz(m2l,type = "L",147.05,dmz = 0.1)
+pids <- select(m2l,lphenyl,"P")
+pids
+```
+
+## Patterns
+
+Patterns *ids* start by the *P* letter, they can be plotted using the *plotPatterns* function.
+This function displays the following information about a pattern: 
+* a list of supplementary information about the spectra containing the pattern
+* the graph of the pattern
+* the spectra containing the pattern with colored peaks corresponding to vertices of the pattern (plotted with `ggplot`)
+
+This 3 pieces of information can be exported to pdf using the *export_pdf* argument.
+
+(expliquer ce qu'il y a sur le graphe)
+
+```{r patterns_plot_example}
+selected_pattern <- pids[[lphenyl]][3]
+plotPatterns(m2l,selected_pattern)
+```
+
+
+# Session info
+
+Here is the output of `sessionInfo()` on the system on which this document was
+compiled:
+
+```{r sessionInfo, echo=FALSE}
+sessionInfo()
+```
