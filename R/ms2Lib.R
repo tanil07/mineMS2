@@ -288,8 +288,8 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 
 	mm2Spectra(m2l) <- do.call("c",mm2Spectra(m2l))
 	
-	if(length(mm2Spectra(m2l))>1000){
-	  stop("At the moment it is impossible ot process more than 1000 spectra at the same time.")
+	if(length(mm2Spectra(m2l))>2000){
+	  stop("At the moment it is impossible ot process more than 2000 spectra at the same time.")
 	}
 
 
