@@ -176,7 +176,7 @@ find.patterns.spectra<- function(m2l,ids,reduced=FALSE,metric = c("coverage","si
 
 
 ###select.DATAQUERIED.IDSTYPE
-
+#' @export
 all.patterns.spectra <- function(m2l,reduced=TRUE){
 	ids <- vrange(m2l,"P",reduced=reduced)
 	tp <- m2l[ids]
@@ -191,7 +191,7 @@ all.patterns.spectra <- function(m2l,reduced=TRUE){
 
 
 
-
+#' @export
 all.patterns.losses <- function(m2l,reduced=TRUE){
 	ids <- vrange(m2l,"P",reduced=reduced)
 	tp <- m2l[ids]

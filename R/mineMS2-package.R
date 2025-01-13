@@ -4,7 +4,7 @@
 #'
 #' Mining of MS-MS spectra by frequent subgraph mining method followed. T
 #'
-#' @docType package
+#' "_PACKAGE"
 #' @importFrom graphics plot layout text lines par points mtext
 #' @importFrom grDevices rainbow
 #' @importFrom MSnbase readMgfData precursorMz mz intensity removePeaks
