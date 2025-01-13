@@ -13,7 +13,7 @@
 #' @importFrom Matrix Matrix
 #' @importFrom utils tail txtProgressBar setTxtProgressBar
 #' @importFrom stats density median na.omit pnorm
-#' @importFrom igraph make_empty_graph graph.empty set_vertex_attr add_edges adjacent_vertices V E get.edge.ids edge_attr
+#' @importFrom igraph make_empty_graph graph.empty set_vertex_attr add_edges adjacent_vertices V E E<- V<- get.edge.ids edge_attr
 #' edge_attr<- ecount as_data_frame graph_from_data_frame vcount plot.igraph tkplot layout_with_sugiyama layout_nicely vertex_attr %--%
 #' head_of tail_of delete_edges set_edge_attr induced_subgraph incident incident_edges largest.cliques delete_vertices components write_graph
 #' 
