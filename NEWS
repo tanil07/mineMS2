@@ -4,7 +4,12 @@ MINOR UPDATE
     - change the mgf et csv files for the main vignette (*P. nordicum* version 2024)
     - changes search for cliques in GNPS network: consider all the cliques and all the high similarity edges instead of all the cliques in one particular cover of the graph (one vertex belongs to only one clique)
     - when search for better pattern explaining a component: make possible to return more than one pattern (parameter *top* in *findPatternsExplainingComponents* function)
-    - changes for display patterns for export possible in PDF
+    - changes for plotting patterns:
+         possible export in PDF
+         possible to color some edges in the pattern (ids of edges to color in the parameter *colored_edges* to give to the plot function)
+         some changes in the function *plot_pattern_ggplot* to have title and colors for peaks
+    - add some comments in the main algorithm part
+
 
 CHANGES VERSION 0.9.12
 ----------------
