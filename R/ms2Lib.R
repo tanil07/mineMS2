@@ -190,7 +190,7 @@ parseMS2file_line <- function(x){
 
 make_initial_title <- function(spec_infos){
 	mz_str <- sprintf("%0.3f",spec_infos[,"mz.precursor"])
-	paste("Precursor : ",mz_str," (S",1:nrow(spec_infos),")",sep="")
+	paste("precursor mz: ",mz_str," (S",1:nrow(spec_infos),")",sep="")
 }
 
 
@@ -238,7 +238,7 @@ convert_formula <- function(form_vec){
 #' #Simple import
 #' m2l <- ms2Lib(path_mgf)
 #' 
-#' #Import inculding some file formula
+#' #Import including some file formula
 #' supp_infos_path <- file.path(path_demo,"ex_supp_infos.csv")
 #' supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
 #' m2l <- ms2Lib(path_mgf,suppInfos = supp_infos)
@@ -263,7 +263,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 		if(length(x)==1){
 		###Single mgf file or dir
 			if(dir.exists(x)){
-				lfiles <- list.files(x,full.names = FALSE) ## not full path, only the name of the files
+				lfiles <- list.files(x,full.names = TRUE) ## full path
 				exts <- checkFormat(lfiles)
 				message("Reading ",length(exts)," files with format(s): ",unique(exts))
 				
@@ -282,7 +282,9 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 			###Case of multiples singles spectra
 			exts <- checkFormat(x)
 			message("Reading ",length(exts)," files with format(s): ",unique(exts))
+			
 			mm2Spectra(m2l) <- apply(matrix(c(x,exts),ncol=2,byrow = FALSE),1,parseMS2file_line)
+			
 		}
 	}
 
@@ -292,11 +294,9 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	  stop("At the moment it is impossible ot process more than 2000 spectra at the same time.")
 	}
 
-
 	###data.frame is initialized. With the mass of the precusors
 	temp_df <- data.frame("mz.precursor" = sapply(mm2Spectra(m2l),function(x){
 												  precursorMz(x)}))
-
 
 	if(!is.null(intThreshold)){
 		message("Removing peaks with an intensity lower than ",intThreshold)
@@ -319,7 +319,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	}
 
 	temp_df$title <- make_initial_title(temp_df)
-
+	
 	##Adding the supplementary information if necessary while check for an id fields.
 	if(!is.null(suppInfos)){
 		if(nrow(suppInfos)!= length(m2l@spectra)){
@@ -327,7 +327,6 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 				 ") do not match the number of spectra (",
 				 length(m2l@spectra),")furnished")
 		}else{
-
 			## add a N column if not
 			if(!("N" %in% colnames(suppInfos)))
 			{	
@@ -356,10 +355,9 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 			}else{
 				temp_df <- cbind(temp_df,suppInfos)
 			}
-
 			if(("id" %in% colnames(suppInfos)) &
 			   (is.null(ids))){
-				mm2Ids(m2l) <- suppInfos[,"id"]
+				mm2Ids(m2l) <- as.character(suppInfos[,"id"])
 			}
 		}
 	}else{

@@ -165,7 +165,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	message("Formula extensions")
 	
 	to_correct <- find_combinations_ranges(res_list$elems[1:(plast+1),"mzmin"],res_list$elems[1:(plast+1),"mzmax"],limMzFormula[2])
-	
+
 	###We merge the formula when necessary.
 	allF <- sapply(res_list$elems$formula[1:plast],function(x,atoms){
 	  orderByRDBE(LossFormula(str_split(x,fixed("|"),simplify=TRUE)[1,],ref=atoms))
@@ -179,7 +179,6 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	  for(j in seq_along(pf1)){
 	    
 	    genf <- combineLossFormula(allF[[pf1[j]]],allF[[pf2[j]]])
-	    
 	    allF[[i]] <- addFormula(genf,allF[[i]])
 	    
 	  }
@@ -569,7 +568,8 @@ discretizeSequenceByClasses <- function(ppm,
 					3 * bw,
 				n = nPoints
 			)
-
+		
+		
 		bmin1 <- massInter[i] - 3 * bw
 		bmax1 <- massInter[i+2] + 3 * bw
 
@@ -579,6 +579,9 @@ discretizeSequenceByClasses <- function(ppm,
 		plim = c(-1, 0, 0)
 		if (den$y[2] > den$y[1])
 			plim[3] <- 1
+
+		
+
 		oldMz = previousMz
 		repeat {
 			plim = findLimDensity(den$y, plim[2] + 1, plim[3])
@@ -622,14 +625,14 @@ discretizeSequenceByClasses <- function(ppm,
 			idxgroup[[num_group]] <- porder[selectedPGroup]
 			previousMz <- c(previousMz, mean(vmz[porder[selectedPGroup]]))
 		}
-	}
 
+	}
 	if (num_group < 1) {
 		return(list(dicrete_elem = numeric(0), idx = list()))
 	}
 	listgroup <- listgroup[1:num_group,]
 	idxgroup <- idxgroup[1:num_group]
-	###Reordering by iuncreasing masses.
+	###Reordering by increasing masses.
 	og <- order(listgroup[,1],decreasing=FALSE)
 	listgroup <- listgroup[og,]
 	idxgroup <- idxgroup[og]
@@ -703,12 +706,13 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 	allformula <- sapply(elems$formula,LossFormulaFromSingleString,ref=atoms,sep="|")
   # omzmin <- elems$mzmin
   # omzmax <- elems$mzmax
+
 	###Data structure for triple value, a sparse matrix.
 	stormat <- Matrix(0,nrow=nrow(elems),ncol=nrow(elems),sparse = TRUE)
 	storval <- vector(mode="list",length=1000)
 	nval <- 1
 
-	####We get a list of all the possible error in the labels.
+	####We get a list of all the possible errors in the labels.
 	for(igl in 1:length(dags)){
 		g <- dags[[igl]]
 		na_f <- TRUE
@@ -740,14 +744,14 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 							ma <- min(la,lb)
 							mb <- max(la,lb)
 
-							###We check if the value may be added ot the dataset or not.
+							###We check if the value may be added to the dataset or not.
 							is_in <- stormat[ma,mb]
 							if(is_in==0){
 								###If necessary the storage vector is pushed up
 								if(nval>length(storval)){
 									storval <- c(storval,vector(mode="list",length=length(storval)))
 								}
-								###The position is added ot the dataset.
+								###The position is added to the dataset.
 								stormat[ma,mb] <- nval
 								storval[[nval]] <- c(ma,mb,lc)
 								nval <- nval+1
@@ -767,7 +771,9 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 	}else{
 	  storval <- list()
 	}
-	####Now we have a data structure with all the value, we check which set needs to be fused.
+	#print(storval)
+
+	## Now we have a data structure with all the value, we check which set needs to be fused.
 	vmul <- sapply(storval,function(x){length(unique(x))>3})
 	pmistake <- which(vmul)
 
@@ -777,7 +783,7 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 		nreduc <- sapply(storval[pmistake],length)-3
 	}
 
-	###We we fuse the dataset if necessary
+	###We fuse the dataset if necessary (if an error has been found)
 	to_rm <- numeric(100)
 	idrm <- 1
 	
@@ -787,6 +793,7 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 	idm <- 1
 
 	for(i in pmistake){
+		
 		sv <- storval[[i]]
 
 		a <- sv[1]

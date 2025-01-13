@@ -1,3 +1,11 @@
+CHANGES VERSION 0.9.13
+----------------
+MINOR UPDATE 
+    - change the mgf et csv files for the main vignette (*P. nordicum* version 2024)
+    - changes search for cliques in GNPS network: consider all the cliques and all the high similarity edges instead of all the cliques in one particular cover of the graph (one vertex belongs to only one clique)
+    - when search for better pattern explaining a component: make possible to return more than one pattern (parameter *top* in *findPatternsExplainingComponents* function)
+    - changes for display patterns for export possible in PDF
+
 CHANGES VERSION 0.9.12
 ----------------
 MINOR UPDATE

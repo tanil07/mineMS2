@@ -192,17 +192,25 @@ findAllCliques <- function(net_gnps,minSize = 3,vname="cluster index"){
 	pos_list <- 1
 	list_cliques <- vector(mode="list",length=16) ## to store cliques
 
-	while(length(big_clique)>=minSize){
+	#while(length(big_clique)>=minSize){
 
-		if(pos_list>length(list_cliques)){
-			list_cliques <- c(list_cliques,vector(mode="list",length=length(list_cliques)))
-		}
-		list_cliques[[pos_list]] <- vertex_attr(g,name=vname,index=big_clique) ## name : attribute to retrieve, index : set of vertices
-		pos_list <- pos_list+1
+	#	if(pos_list>length(list_cliques)){
+	#		list_cliques <- c(list_cliques,vector(mode="list",length=length(list_cliques)))
+	#	}
+	#	list_cliques[[pos_list]] <- vertex_attr(g,name=vname,index=big_clique) ## name : attribute to retrieve, index : set of vertices
+	#	pos_list <- pos_list+1
 		###We remove the vertices
-		g <- delete_vertices(g,big_clique)
-		big_clique <- largest_cliques(g)[[1]]
-	}
+	#	g <- delete_vertices(g,big_clique)
+	#	big_clique <- largest_cliques(g)[[1]]
+	#}
+
+  #all_cliques <- max_cliques(g, min=minSize) ## all maximal cliques  
+  all_cliques <- cliques(g, min=minSize) ## all cliques
+  for(clique in all_cliques)
+  {
+    list_cliques[[pos_list]] <- vertex_attr(g,name=vname,index=clique)
+    pos_list <- pos_list+1
+  }
 
 	return(list_cliques[1:max(pos_list-1,1)])
 }
@@ -252,10 +260,6 @@ findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
 findGNPSComponents <- function(net,minSize = 3,pairThreshold=0.9,vname="cluster index",
                                eattr = "cosine_score", convert_component = TRUE){
 
-  if(convert_component){
-    
-  }
-  
 	###Finding all cliques.
 	cliques <- findAllCliques(net,minSize = minSize,vname = vname)
 
@@ -269,8 +273,6 @@ findGNPSComponents <- function(net,minSize = 3,pairThreshold=0.9,vname="cluster 
 	seqSizeConnected <- sapply(connected_components,length)  ## create a list with the sizes of the connected components
 
 	maxSize <-max(seqSizeClique)
-
-
 
 	to_rm <- numeric(0)
 
@@ -315,7 +317,8 @@ findGNPSComponents <- function(net,minSize = 3,pairThreshold=0.9,vname="cluster 
 	out_cliques <- which(is.na(in_cliques)) ## vertices not in cliques
 
 	###All the edges are considered
-	E_edges <-  E(net)[ Vlist %--% Vlist[out_cliques] ]
+	#E_edges <-  E(net)[ Vlist %--% Vlist[out_cliques] ]
+  E_edges <- E(net)
 	E_edges <- E_edges[which(
 		as.numeric(edge_attr(net,eattr,E_edges))>pairThreshold)]
 

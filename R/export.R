@@ -111,6 +111,11 @@ listLossbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_pdf)
                 return(sapply(x, round, digits=4))
     })
 
+    if(length(massdiff_ref) == 3){
+        # one row only
+        massdiff_ref <- data.frame(mz = massdiff_ref[1], mzmin = massdiff_ref[2], mzmax = massdiff_ref[3])
+    }
+
     ## if we want to have the chosen formula 
     toccs <- pattern@occurences[,1]
     formula <- get_formula(m2l)[toccs]

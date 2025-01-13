@@ -185,6 +185,7 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 #' @param edge_label_cex The size of the edges label 
 #' @param subNodes The subset of nodes ot be plotted if necessary
 #' @param tkplot Shall an interactiv eplot be shown using tkplot.
+#' @param colored_edges list of edges id to highlight
 #' @param ... Supplmentary arguments passed to the igraph plot function
 #'
 #' @return None
@@ -202,12 +203,13 @@ setMethod("plot", "fragPattern",
 		  		 atoms=c("C","H","O","N","S","P"),
 		  		 formula=NA_character_,
 		  		 mzdigits = 3,
-		  		 vertex_size = 45, ##55
-		  		 vertex_label_cex = 0.7,
-		  		 edge_label_cex=0.7,
+		  		 vertex_size = 55, ##55
+		  		 vertex_label_cex = 0.8,
+		  		 edge_label_cex=0.8,
 		  		 subNodes = NULL,
 		  		 tkplot = FALSE,
 				 print_formula=TRUE,
+				 colored_edges = c(),
 		  		 ...) {
 		    if(is.null(edgeLabels)) stop("Please use the plot function through the ms2Lib object (ex :plot(m2l,'P15'))")
 		  	nodeLabel <- match.arg(nodeLabel)
@@ -224,7 +226,9 @@ setMethod("plot", "fragPattern",
 		  	}
 		  	
 		  	labels <- makeLabelPattern(x,atoms,dags,edgeLabels,oformula=oformula,print_formula=TRUE)
-		  	
+			E(g)$color <- ifelse(E(g) %in% colored_edges, "darkgreen", "darkgray") 
+			E(g)$color_label <- ifelse(E(g) %in% colored_edges, "darkgreen", "black") 
+
 		  	ledges <- NULL
 		  	if(edgeLabel=="formula"){
 		  	  ledges <- labels$edges
@@ -256,17 +260,20 @@ setMethod("plot", "fragPattern",
 		  	} else{
 		  		plot.igraph(
 		  			g,
-		  			layout = (layout_with_sugiyama(g,maxiter=200)$layout),
-					#layout = (layout_nicely(g)),
+		  			layout = (layout_with_sugiyama(g,maxiter=300)),
+					#layout = (layout_with_graphopt(g)),
 		  			vertex.label = labels$vertices,
 		  			vertex.size = vertex_size,
 		  			vertex.label.cex=vertex_label_cex,
 		  			edge.label.cex=edge_label_cex,
 		  			edge.label = ledges,
 		  			vertex.color = "orange",
+					edge.color = E(g)$color,
+					edge.label.color = E(g)$color_label,
 		  			main=title,
 		  			...
 		  		)
+
 		  	}
     return(invisible(list(g,labels$vertices,ledges)))
 		  })
@@ -487,21 +494,29 @@ createFileCS <- function(name, path_inchi, dir_images)
 #' @param g graph of the pattern 
 #' @param ru_occs_gid numeric ids of the occurrences of the pattern
 #' @param u_occs_gid ids of the occurrences of the pattern
-#' @param titles titles of the occurrences of the pattern (as stored in the ms2Lib object)
+#' @param mzprec precursor mz of the occurrences of the pattern (as stored in the ms2Lib object)
+#' @param rtprec precursor rt of the occurrences of the pattern (if given)
 #' @param names names of the occurrences of the pattern (as stored in the ms2Lib object)
 #' @param n N ids of the occurrences of the pattern (as stored in the ms2Lib object) (only for create 2D structure images) 
 #' @param col_vec vector of colours for the peaks of the pattern
 #' @param path_inchi The path to the inchi key of the molecules if known, otherwise NULL
 #' @param dir_images The path to the directory to store the png images
+#' @param x_lim
 #' 
 #' @return ggplot object
-plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, titles, names, n, col_vec, path_inchi, dir_images)
+plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec, rtprec, names, n, col_vec, path_inchi, dir_images, x_lim)
 {
         gid <- ru_occs_gid[i]
         all_pos <- u_occs_gid[[i]]
 		
-        title <- paste(names[gid], titles[gid], paste("(N", n[gid], ")", sep=""), sep=" ")
-        
+		if(length(rtprec[gid]) == 0)
+		{
+			title <- paste(names[gid], ", precursor m/z:", round(mzprec[gid], digits=3), paste(" (N", n[gid], ")", sep=""), sep="")
+		}
+		else {
+			title <- paste(names[gid], ", precursor m/z:", round(mzprec[gid], digits=3), ", rt:", rtprec[gid], paste(" (N", n[gid], ")", sep=""), sep="")
+		}
+                
         ##Peaks mapping
         all_maps <- sapply(all_pos,function(x,mg,loss_mz,mgs,g){
             get_mapping(mg=mg, patg=g, loss_mass=loss_mz, root = x)
@@ -518,10 +533,18 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, titles
         non_matched_peaks_idx <- seq(1, length(mzs))[-matched_peaks_idx]
         col_seq <- rep("#000000",length(mzs))
         col_seq[matched_peaks_idx] <- col_vec[i]
-        
+
         dfr <- data.frame(int = intv, mz = mzs)
         dfr$col <- col_seq
 		
+		if(length(col_seq[non_matched_peaks_idx]) == 0)
+		{
+			col_values <- c(col_vec[i])
+		}
+		else {
+		   col_values <- c("#000000", col_vec[i])
+		}
+
 		mzs_rounded <- sapply(mzs, round, digits = 4)
 
 		ok <- TRUE
@@ -537,11 +560,11 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, titles
             return(ggplot(dfr, aes(x = mzs, xend = mzs, y = 0, yend = intv, color=col) ) +
                     geom_segment() +
                     geom_label_repel(aes(label=mzs_rounded, x=mzs, y = intv+1), size=3) +
-                    xlim(max(0, min(mzs)-10),max(mzs)+20)+
-                    ylim(0,max(intv)+20)+
+                    xlim(max(0, x_lim[[1]]-10),x_lim[[2]]+20)+
+                    ylim(0,max(intv)+5)+
                     ggtitle(title)+
                     theme(legend.position = "none", plot.title = element_text(size = 10)) +
-                    scale_color_manual(values=c("#000000", col_vec[i]))+
+                    scale_color_manual(values=col_values)+
                     labs(x = "m/z", y = "Relative Intensity")+
                     inset_element(p = img, 
                         left = 0.75, 
@@ -553,11 +576,11 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, titles
             return(ggplot(dfr, aes(x = mzs, xend = mzs, y = 0, yend = intv, color=col) ) +
                     geom_segment() +
                     geom_label_repel(aes(label=mzs_rounded, x=mzs, y = intv+1), size=3) +
-                    xlim(max(0, min(mzs)-10),max(mzs)+20)+
-                    ylim(0,max(intv)+20)+
+                    xlim(max(0, x_lim[[1]]-10),x_lim[[2]]+20)+
+                    ylim(0,max(intv)+5)+
                     ggtitle(title)+
                     theme(legend.position = "none", plot.title = element_text(size = 10)) +
-                    scale_color_manual(values=c("#000000", col_vec[i]))+
+                    scale_color_manual(values=col_values)+
                     labs(x = "m/z", y = "Relative Intensity"))
         }
 }
@@ -573,8 +596,11 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, titles
 #' @export
 plot_pattern_ggplot <- function(m2l, pidx, path_inchi=NULL)
 {
-	dir_images <- "images_cs"
-	ifelse(!dir.exists(dir_images), dir.create(dir_images), FALSE)
+	if(length(path_inchi) != 0)
+	{
+		dir_images <- "cs_pictures"
+		ifelse(!dir.exists(dir_images), dir.create(dir_images), FALSE)
+	}
 
     fp <- m2l[pidx] ## pattern
 
@@ -582,9 +608,17 @@ plot_pattern_ggplot <- function(m2l, pidx, path_inchi=NULL)
 	mgs <- mm2Dags(m2l)
 	g <- mm2Graph(fp)
 
-    names <- mm2SpectraInfos(m2l)$Name
-    titles <- mm2SpectraInfos(m2l)$title
-    n <- mm2SpectraInfos(m2l)$N
+	infos <- mm2SpectraInfos(m2l)
+    names <-infos$Name
+    mz <- infos$mz.precursor
+	if("rt" %in% colnames(infos))
+	{
+		rt <- infos$rt
+	}
+	else {
+		rt <- NULL
+	}
+    n <- infos$N
 
 	###Mass loss are used for matching.
 	loss_mz <- mm2EdgesLabels(m2l)$mz
@@ -604,10 +638,17 @@ plot_pattern_ggplot <- function(m2l, pidx, path_inchi=NULL)
         x <- rgb(x[1], x[2], x[3], maxColorValue = 255)
         return(x)
     }), use.names = NULL)
+	
+	all_mz_peaks <- unlist(sapply(ru_occs_gid, function(x)
+	{
+		return(vertex_attr(mgs[[x]], "mz"))
+	}))
+
+	x_lim <- c(min(all_mz_peaks), max(all_mz_peaks))
 
     plots <- lapply(seq_along(u_occs_gid), plot_one_spectra, 
-        loss_mz=loss_mz, mgs=mgs, g=g, ru_occs_gid=ru_occs_gid, u_occs_gid=u_occs_gid, titles=titles,
-        names=names, n=n, col_vec = col_vec, path_inchi=path_inchi, dir_images=dir_images)
+        loss_mz=loss_mz, mgs=mgs, g=g, ru_occs_gid=ru_occs_gid, u_occs_gid=u_occs_gid, mzprec=mz, rtprec=rt,
+        names=names, n=n, col_vec = col_vec, path_inchi=path_inchi, dir_images=dir_images, x_lim = x_lim)
 
     return(plots)
 }

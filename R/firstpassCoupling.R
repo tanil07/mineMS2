@@ -24,6 +24,7 @@ convertComponent <- function(comp,ids){
 #' @param ref_label A set of reference label to be used if the extracted component corresponds to an id over the position of the MS-MS spetra in the file
 #' @param threshold The threshold used to discriminate the dataset
 #' @param reduced Shall only the filtered patterns be considered
+#' @param top the number of best patterns to return (by default 1)
 #'
 #' @return A list containing one data.frame by component including the following informations:
 #'   \code{id} The id of the matched patterns.
@@ -43,7 +44,7 @@ convertComponent <- function(comp,ids){
 #' #plotting the explaining pattern
 #' plot(m2l,fp[[1]]["id"])
 findPatternsExplainingComponents <- function(m2l,components,metric=c("f1"),ref_label=NULL,threshold=NA_real_,
-                                             reduced=TRUE){
+                                             reduced=TRUE, top = 1){
 
 
 	###We first convert the ids of the components to correct format.
@@ -52,11 +53,10 @@ findPatternsExplainingComponents <- function(m2l,components,metric=c("f1"),ref_l
       ref[x]
     },ref=ref_label,simplify = FALSE)
   }
-
 	###We determine the best format for each found pattern.
-	bpat <- sapply(components,function(x,m2l,type,reduced){
-		find.patterns.class(m2l,x,type = type,full = FALSE,reduced=reduced)
-	},m2l=m2l,type=metric,simplify = FALSE,reduced=reduced)
+	bpat <- sapply(components,function(x,m2l,type,reduced,top){
+		find.patterns.class(m2l,x,type = type,full = FALSE,reduced=reduced, top=top)
+	},m2l=m2l,type=metric,simplify = FALSE,reduced=reduced, top=top)
 
 	###Postprocessing
 	return(bpat)

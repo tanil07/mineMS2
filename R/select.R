@@ -249,7 +249,7 @@ select.spectra.losses <- function(m2l,id){
 ###Return f1-score,precision,recall
 f1.score <- function(id,idsref,m2l,full=FALSE){
 
-	## only for chimiotheque (N in colnames), take the right set of spectra
+	## adds: to take the right set of spectra 
 	if("N" %in% colnames(m2l@spectraInfo))
 	{
 		spectres <- m2l@spectraInfo['N']
@@ -294,7 +294,8 @@ checkFTerms <- function(seq_terms){
 #' @param type Which criteria is used to determine the best match, F-score, precision or acccuracy
 #' @param returnall Shall all the patterns with a similar F1 score be returned.
 #' @param full Shall only full matches be returned.
-#' @param reduced Shall only the reduced set of patterns be considered.
+#' @param reduced Shall only the reduced set of patterns be considered.4
+#' @param top number of best patterns to return
 #' @details The computation of this F1 score.
 #'
 #' @return A data.frame containing two slots, id the ids of the elements and f1_score the f1 score of the elements
@@ -303,7 +304,7 @@ checkFTerms <- function(seq_terms){
 #' @examples
 #' print("Examples to be put here")
 find.patterns.class <- function(m2l,ids,type=c("f1","precision","size"),
-								returnall=FALSE,full=TRUE,reduced=FALSE){
+								returnall=FALSE,full=TRUE,reduced=FALSE, top=1){
 
 	criterion <- checkFTerms(type)
 
@@ -321,7 +322,6 @@ find.patterns.class <- function(m2l,ids,type=c("f1","precision","size"),
 
 	rownames(vf1) <- c("f1","precision","recall","miss","size")
 
-
 	###Two cases, single maximum return or the full list of ranked values returneed.
 	to_return <- NULL
 
@@ -333,7 +333,7 @@ find.patterns.class <- function(m2l,ids,type=c("f1","precision","size"),
 	to_return <- data.frame(id=idsp[pf1],f1=vf1["f1",pf1],
 							precision=vf1["precision",pf1],recall=vf1["recall",pf1],
 							miss=vf1["miss",pf1],size=vf1["size",pf1],stringsAsFactors = FALSE)
-
+	
 	to_return <- to_return[do.call(order, c(decreasing = TRUE, data.frame(to_return[,criterion]))),]
 	if(!returnall){
 		maxval <- to_return[1,criterion]
@@ -341,6 +341,13 @@ find.patterns.class <- function(m2l,ids,type=c("f1","precision","size"),
 		while((posret < nrow(to_return)) && (!is.na(to_return[posret+1,1]))&&
 			  all(to_return[posret+1,criterion] == maxval)){
 			posret <- posret+1
+		}
+		if(posret < top)
+		{
+			while(posret < top && !is.na(to_return[posret+1,1]))
+			{
+				posret <- posret+1
+			}
 		}
 		to_return <- to_return[1:posret,]
 	}

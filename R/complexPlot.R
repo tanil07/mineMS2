@@ -1,15 +1,39 @@
+arrangeSpectra <- function(spectra, step)
+{
+	for(i in seq(1, length(spectra), by=step))
+	{
+		
+		if(i+(step-1) <= length(spectra))
+		{
+			do.call("grid.arrange", c(spectra[i:(i+(step-1))], nrow=step))
+		}
+		else {
+			new_step <- (length(spectra) - i + 1)
+			if(new_step == 1)
+			{
+				do.call("grid.arrange", c(spectra[length(spectra)], nrow=new_step))
+				
+			}else
+			{
+				do.call("grid.arrange", c(spectra[i:length(spectra)], nrow=new_step))
+			}
+		}
+	}
+} 
+
 #' Function to export to PDF the information about a pattern, i.e. list of metabolites containing the pattern, graph of the pattern,
 #' list of mass differences with possible formula and spectra of the metabolites (with colored peaks for vertices in the pattern) 
 #' 
 #' @param m2l ms2Lib object
 #' @param id_p id of the pattern
 #' @param infos data frame containing the list of metabolites
-#' @param res data frame containing the list of mass differences
+#' @param df_mass_diff data frame containing the list of mass differences
 #' @param spectra list of plots for the spectra
+#' @param name_dataset name of the directorty to store the pdf files
 
-printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra)
-{
-				pdf(file.path("patterns", paste("pattern_", id_p, ".pdf", sep="")))
+printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra, name_dataset)
+{	
+				pdf(file.path("patterns", name_dataset, paste("pattern_", id_p, ".pdf", sep="")))
 
 				grid.text("List of metabolites", draw=TRUE, y = 0.9)
 				grid.draw(tableGrob(infos, theme=ttheme_default(base_size = 8)))
@@ -20,30 +44,69 @@ printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra)
 				
 				grid.text("Mass differences in the pattern", draw=TRUE, y = 0.9)
 
-				maxrow <- 35
-				nb_new_lines <- sapply(df_mass_diff$Formula, FUN = str_count, pattern= "\n") + 1
+				maxrow <- 34
+
+				## case where more than maxrow formulas for one mass difference
+				df_mass_diff_formula <- sapply(df_mass_diff$Formula, FUN = function(x)
+				{
+					nb <- str_count(x, "\n")
+					if(!is.na(nb) && nb > maxrow)
+					{
+						x_split <- str_split(x, "\n")
+						x_split <- sapply(seq_along(x_split[[1]]), function(i)
+						{
+							print(i)
+							if(i%%2 == 0)
+							{
+								return(paste(x_split[[1]][i], "\n", sep=""))
+							}
+							else {
+							   return(paste(x_split[[1]][i], ",", sep=""))
+							}
+						})
+						print(x_split)
+						x <- paste(x_split, collapse = "")
+						print(x)
+					}
+					return(x)
+				})
+
+				df_mass_diff$Formula <- df_mass_diff_formula
+				nb_new_lines <- sapply(df_mass_diff_formula, FUN = function(x)
+				{
+					if(is.na(x)) return(1)
+					else return(str_count(x, "\n")+1)
+				})
+				
 				cum_sum <- cumsum(nb_new_lines)
+
 				npages <- ceiling(sum(nb_new_lines)/maxrow)
 
-				idx <- seq(1, which(cum_sum >= maxrow)[[1]]-1)
-				grid.draw(tableGrob(df_mass_diff[idx,],theme=ttheme_default(base_size = 8) ))
+				idx <- seq(1, ifelse(length(which(cum_sum >= maxrow)) == 0, nrow(df_mass_diff), which(cum_sum >= maxrow)[[1]]-1))
+
+				grid.draw(tableGrob(df_mass_diff[idx,],theme=ttheme_default(base_size = 8), rows = NULL))
 				#grid.table(res[idx,], rows=NULL)
-				# if several pages needed
-				for(i in 2:(npages+1))
+
+				if(npages > 1)
 				{
-					cum_sum_temp <- cumsum(nb_new_lines[(tail(idx,1)+1) :length(nb_new_lines)])
-					cum_sum <- c(rep(0,tail(idx,1)), cum_sum_temp)
-					grid.newpage()
-					if(length(which(cum_sum > maxrow)) == 0)
+					# if several pages needed
+					for(i in 2:npages)
 					{
-						idx <- seq(tail(idx,1)+1, length(nb_new_lines))
-					}else {
-						idx <- seq(tail(idx,1)+1, which(cum_sum > maxrow)[[1]]-1)
+						cum_sum_temp <- cumsum(nb_new_lines[(tail(idx,1)+1) :length(nb_new_lines)])
+						cum_sum <- c(rep(0,tail(idx,1)), cum_sum_temp)
+						grid.newpage()
+						if(length(which(cum_sum > maxrow)) == 0)
+						{
+							idx <- seq(tail(idx,1)+1, length(nb_new_lines))
+						}else {
+							idx <- seq(tail(idx,1)+1, which(cum_sum > maxrow)[[1]]-1)
+						}
+						grid.draw(tableGrob(df_mass_diff[idx,], theme=ttheme_default(base_size = 8), rows = NULL))
+						#grid.table(res[idx,], rows=NULL)
 					}
-					grid.draw(tableGrob(df_mass_diff[idx,], theme=ttheme_default(base_size = 8)))
-					#grid.table(res[idx,], rows=NULL)
 				}
-				do.call("grid.arrange", c(spectra, ncol=2))
+
+				arrangeSpectra(spectra, step=2)
 				dev.off()
 }
 
@@ -72,7 +135,16 @@ printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra)
 #' 
 #' #plotting the patterns
 #' plotPatterns(m2l,c("P30","P51"))
-plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FALSE,byPage=9,titles=NULL,v_ggplot=TRUE, export_pdf=FALSE, inchi=NULL){
+plotPatterns <- function(m2l,ids=NULL,
+							components = NULL,
+							occurences=TRUE,
+							full=FALSE,
+							byPage=9,
+							titles=NULL,
+							v_ggplot=TRUE, 
+							export_pdf=FALSE, 
+							inchi=NULL,
+							name_dataset = ""){
 
 
 	if(is.null(ids)){
@@ -146,11 +218,11 @@ plotPatterns <- function(m2l,ids=NULL,components = NULL,occurences=TRUE,full=FAL
 			res <- listLossbyPattern(m2l, m2l[id], golden_rule=TRUE, spec2Annot=FALSE, export_pdf = export_pdf)
 			if(export_pdf)
 			{
-				if(!dir.exists("patterns"))
+				if(!dir.exists(file.path("patterns", name_dataset)))
 				{
-					dir.create("patterns")
+					dir.create(file.path("patterns", name_dataset))
 				}
-				printPDF(m2l, id, infos, res, p)
+				printPDF(m2l, id, infos, res, p, name_dataset)
 			}
 			else
 			{

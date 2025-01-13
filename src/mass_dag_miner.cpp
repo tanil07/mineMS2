@@ -48,6 +48,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
 
     kt.filter_frequent_nodes(freq);
 
+    // S = 1-edge or 2-path patterns
     std::vector<lattice_node> initialPatterns = kt.constructOneEdgeGraphs(of);
     Rcpp::Rcerr <<"Mining initialized with: "<<initialPatterns.size() <<" patterns."<< std::endl;
     
@@ -60,8 +61,8 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
     int insert_error=0;
     int counter = 0;
     int current_1000 = 0;
+    // for P /in S do
     for(auto it=initialPatterns.begin();it!=initialPatterns.end();it++){
-
         //We empty the current stack
         while(!lattice_stack.empty()){
             lattice_stack.pop();
@@ -79,7 +80,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
         int indicator = -1;
         while(counter<LIM_ITER){
             //We always consider the last elemnt of the stack.
-            lattice_node& current_node = lattice_stack.top();
+            lattice_node& current_node = lattice_stack.top(); //top does not remove the element from the stack
 
             //We first check if the current pattern is root.
             bool is_root = current_node.is_root();
@@ -91,6 +92,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
             }
 
             //We try to get the next node.
+            // e = first elements of Exts(P)
             boost::tie(frequent_children,next_node) = current_node.get_next(kt,freq,of);
             bool inserted = false;
             
@@ -98,22 +100,32 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
             counter++;
             if(!frequent_children){
                 if(is_root){
-                	if(sizeMin<=1){  //We only insert it if he is not presnet in any other pattern
-                	    if(current_node.isCompleteD(mgs)){
+                    /* 
+                        Insertion of a pattern of size 1 (if authorized) 
+                    */
+                	if(sizeMin<=1){  //We only insert it if he is not present in any other pattern
+                	    // isClosed(Pe, D)
+                        if(current_node.isCompleteD(mgs)){ // return TRUE if the occurrences of the pattern do not have
+                        // other common outgoing arcs from the root than those in the pattern
                       counter++;
                     	container.insert_closed_pattern(current_node,inserted,of,insert_error);
                 	    }
                 	}
                     break;
                 }else{
+                    /*
+                        Insertion of a pattern of size more than 1
+                    */
+                    // if not root, means that at least one extension has been made 
 
                     //In this case we check that the pattern is complete.
                     //No incoherence found at this step. This ensure that no value
                     //Upper have been found directly in the tree.
                     bool inserted;
                     if(current_node.numOccs() > max_child_occs.top()){
-
+                        
                         //The pattern is inserted in the data structure
+                        // isClosed(Pe, D)
                         if(current_node.isCompleteD(mgs)){
                             current_node.reconstructGraphD(mgs);
                             graphp &gg = current_node.get_g();
@@ -142,11 +154,13 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
                 short& new_occs = max_child_occs.top();
                 if(num_occs_child<new_occs){
                     new_occs = num_occs_child;
-                }
+                } // always zero maybe...
 
                 //The node is added to both stack.
                 lattice_stack.push(next_node);
-                max_child_occs.push(0);
+                ///////////////////////////////////
+                max_child_occs.push(new_occs);
+                //////////////////////////////////
             }
         }
     }
