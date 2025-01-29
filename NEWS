@@ -1,3 +1,10 @@
+CHANGES VERSION 0.9.14
+---------------
+MINOR UPDATE
+    - add README.md
+    - main vignette updated (with P.nordicum for now)
+    - m2l.rda updated in data folder 
+
 CHANGES VERSION 0.9.13
 ----------------
 MINOR UPDATE 
