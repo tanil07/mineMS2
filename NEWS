@@ -1,8 +1,13 @@
+CHANGES VERSION 0.9.16
+---------------
+MINOR UPDATE
+    - remove old .Rmd and .html for the first vignette
+
 CHANGES VERSION 0.9.15
 ---------------
 MINOR UPDATE
     - add figures to README.md
-    
+
 CHANGES VERSION 0.9.14
 ---------------
 MINOR UPDATE
