@@ -79,10 +79,10 @@ setGeneric("mm2CanonicalForm<-", function(pat,value) standardGeneric("mm2Canonic
 #' Discretize mass differences.
 #' 
 #' @description
-#' `discretizeMassLosses` discretize the mass differences iun MS-MS spectra.
+#' `discretizeMassLosses` discretize the mass differences in MS-MS spectra.
 #' 
 #' @param m2l A ms2Lib object
-#' @param ... Supplmentary arguments passed to the discretization method
+#' @param ... Supplementary arguments passed to the discretization method
 #'
 #' @details
 #' This is a generic function: methods can be defined for it directly
@@ -98,7 +98,7 @@ setGeneric("discretizeMassFragments", function(m2l,...) standardGeneric("discret
 #' `mineClosedSubgraphs` Extract frequent closed subgraphs from an ms2Lib object.
 #' 
 #' @param m2l A ms2Lib object
-#' @param ... Supplmentary arguments passed to the mining method
+#' @param ... Supplementary arguments passed to the mining method
 #'
 #' @details
 #' This is a generic function: methods can be defined for it directly
@@ -109,14 +109,14 @@ setGeneric("mineClosedSubgraphs",function(m2l,...) standardGeneric("mineClosedSu
 
 setGeneric("mineClosedSubgraphsByComponent",function(m2l,...) standardGeneric("mineClosedSubgraphsByComponent"))
 
-#' Plot occurences of fragPattern in library object.
+#' Plot occurrences of fragPattern in library object.
 #' 
 #' @description
-#' `plotOccurences` PLot a pattern on his associated fragmentation spectrum.
+#' `plotOccurences` Plot a pattern on its associated fragmentation spectrum.
 #'
 #' @param m2l A ms2Lib object
 #' @param pidx A pattern id to be plotted
-#' @param ... Supplmentary arguments passed to the plotting method
+#' @param ... Supplementary arguments passed to the plotting method
 #'
 #' @details
 #' This is a generic function: methods can be defined for it directly
@@ -139,7 +139,7 @@ setGeneric("scorePatterns",function(m2l,...) standardGeneric("scorePatterns"))
 #' `setIds` set the ids of an ms2Lib objects
 #' 
 #' @param m2l An ms2Lib object
-#' @param ... Supplemetary arguments passed to the setIds method
+#' @param ... Supplementary arguments passed to the setIds method
 #'
 #' @details
 #' This is a generic function: methods can be defined for it directly
@@ -175,10 +175,10 @@ setGeneric("hasCoverage",function(x,...) standardGeneric("hasCoverage"))
 
 ###ms2Lib research generics.
 
-#' Set the componetns of an ms2 library object.
+#' Set the components of an ms2 library object.
 #' 
 #' @description
-#' `vrange` return the range of the differnet elemnts of an ms2Lib object.
+#' `vrange` return the range of the different elements of an ms2Lib object.
 #'
 #' @param m2l An ms2Lib object
 #' @param type The type of range to be returned
@@ -192,7 +192,7 @@ setGeneric("hasCoverage",function(x,...) standardGeneric("hasCoverage"))
 setGeneric("vrange",function(m2l,type,...) standardGeneric("vrange"))
 
 ###ms2LibSplit generics.
-#' Set the componetns of an ms2 library object.
+#' Set the components of an ms2 library object.
 #' 
 #' @description
 #' `setComponents` Set the components of an ms2Lib object.

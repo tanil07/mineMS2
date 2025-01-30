@@ -2,8 +2,6 @@
 #'
 #' Mining of MS-MS spectra by frequent subgraph mining method.
 #'
-#' Mining of MS-MS spectra by frequent subgraph mining method followed. T
-#'
 #' "_PACKAGE"
 #' @importFrom graphics plot layout text lines par points mtext
 #' @importFrom grDevices rainbow

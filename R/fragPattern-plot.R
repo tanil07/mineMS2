@@ -162,36 +162,37 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 
 
 
-#' plotting a fargPattern object.
+#' Plotting a fragPattern object.
 #'
-#' plot a fragPattern associated fragmentation
-#' dag using igraph capabilities. This function should not be called directly by the user.
+#' plot a fragPattern using igraph capabilities. This function should not be called directly by the user.
 #' Call `plot(m2l,"x")` instead.
 #'
 #' @param x The pattern to plot.
 #' @param y Not used at the moment.
-#' @param title The title used for th eplot
+#' @param title The title used for the plot
 #' @param edgeLabels A vector usually passed automatically by the plot method of the ms2Lib object.
-#' @param dags A list of mass graphs on which the patterns has been calculated.
-#' @param nodeLabel The type of vertex label to be plotted, default means that a will try to be 
+#' @param dags A list of mass graphs on which the pattern has been calculated.
+#' @param nodeLabel The type of vertex label to be plotted, default means that will try to be 
 #' determined while label show the raw label as integer.
-#' @param edgeLabel The type of edges label to be plotted, default means that a will try to be 
+#' @param edgeLabel The type of edges label to be plotted, default means that will try to be 
 #' determined while label show the raw label as integer.
-#' @param atoms The used in the formula in the right order.
+#' @param atoms The atoms used in the formula in the right order.
 #' @param formula The formula of the associated dags.
 #' @param mzdigits The number of digits included in the plot of mass differences
 #' @param vertex_size The size of the vertices.
 #' @param vertex_label_cex The size of the vertices label 
 #' @param edge_label_cex The size of the edges label 
 #' @param subNodes The subset of nodes ot be plotted if necessary
-#' @param tkplot Shall an interactiv eplot be shown using tkplot.
-#' @param colored_edges list of edges id to highlight
-#' @param ... Supplmentary arguments passed to the igraph plot function
+#' @param tkplot Shall an interactive plot be shown using tkplot.
+#' @param colored_edges list of edges ids to highlight
+#' @param ... Supplementary arguments passed to the igraph plot function
 #'
 #' @return None
 #'
 #' @examples
-#' print("Examples ot be put here.")
+#' data(m2l)
+#' 
+#' plot(m2l, "P12")
 setMethod("plot", "fragPattern",
 		  function(x,
 		  		 y = NULL,
@@ -277,25 +278,28 @@ setMethod("plot", "fragPattern",
 		  	}
     return(invisible(list(g,labels$vertices,ledges)))
 		  })
-#' PLotting the occurences of a fragPattern object
+	
+#' Plotting the occurences of a fragPattern object
 #' 
 #' Plot the occurences, the spectra overlayed with the matched peaks of a fragmentation pattern.
 #'
 #' @param m2l An ms2lib object.
-#' @param pidx A pattern id or a frag_pattern object.
-#' @param titles A vector of titles to be used. A default tile include id
-#' and precursor will bne used by default
+#' @param pidx A pattern id or a fragPattern object.
+#' @param titles A vector of titles to be used. A default title includes id
+#' and precursor.
 #' @param byPage The maximum number of spectra to be plotted by page.
-#' @param subOccs Shall some specific occurences be ocnsidered over all the occurences.
+#' @param subOccs Shall some specific occurences be considered over all the occurences.
 #' @param highlights Shall the peaks covered by the pattern be highlighted.
 #' @param commonAxis Shall all the spectra be plotted with a common x-axis.
-#' @param ... supplementary function to be passed to theplot function.
+#' @param ... supplementary function to be passed to the plot function.
 #'
-#' @return A list ocntainng the spectra and their coloring in RGB format
+#' @return A list containng the spectra and their coloring in RGB format
 #' @export
 #'
 #' @examples
-#' print("Examples to be put here")
+#' data(m2l)
+#' 
+#' plotOccurences(m2l, "P12")
 setMethod("plotOccurences", "ms2Lib", function(m2l,
 											   pidx,
 											   titles = NULL,
@@ -304,7 +308,7 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 											   highlights=TRUE,
 											   commonAxis=FALSE,
 											   ...) {
-	###Verifying that a correct id have been queried.
+	###Verifying that a correct id has been queried.
   omar <- par("mar")
 	fp <- NULL
 	if (class(pidx) == "fragPattern") {
@@ -334,12 +338,12 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 	}
 	
 	
-	###Extracting the occurences,dags and the graph.
+	###Extracting the occurrences, dags and the graph.
 	occs <- mm2Occurences(fp)
 	mgs <- mm2Dags(m2l)
 	g <- mm2Graph(fp)
 
-	###Mass loss are used for matching.
+	###Mass differences are used for matching.
 	loss_mz <- mm2EdgesLabels(m2l)$mz
 
 	if(is.null(subOccs)){
@@ -454,10 +458,9 @@ setMethod("plotOccurences", "ms2Lib", function(m2l,
 ###########################################################################
 
 
-
-
 #' Create a png file containing the 2D structure of the given molecule
-#' (obtained from ChemSpider with the inchi key of the molecule)
+#' (obtained from ChemSpider with the inchi key of the molecule, needs an API key)
+#' 
 #' @param N the id of the molecule in the tsv file given by path_inchi (must have a column named N with the ids of the molecules)
 #' @param path_inchi the path to the csv file containing the inchi keys	
 #' @param dir_images the path to the directory to store the png images
@@ -467,8 +470,6 @@ createFileCS <- function(name, path_inchi, dir_images)
 {
     inchi_table <- read.csv(path_inchi, header=TRUE,sep="\t")
     inchi <- inchi_table[inchi_table$Name == name,]
-	print(name)
-	print(inchi)
     
    	tryCatch(
     expr = {
@@ -488,8 +489,9 @@ createFileCS <- function(name, path_inchi, dir_images)
 }
 
 #' Plotting one spectrum with colored peaks of a pattern (with ggplot)
+#' 
 #' @param i id of the spectrum in the ms2Lib object
-#' @param loss_mz all mass losses in the dataset
+#' @param loss_mz all mass differences in the dataset
 #' @param mgs all DAGs of the dataset
 #' @param g graph of the pattern 
 #' @param ru_occs_gid numeric ids of the occurrences of the pattern
@@ -497,11 +499,11 @@ createFileCS <- function(name, path_inchi, dir_images)
 #' @param mzprec precursor mz of the occurrences of the pattern (as stored in the ms2Lib object)
 #' @param rtprec precursor rt of the occurrences of the pattern (if given)
 #' @param names names of the occurrences of the pattern (as stored in the ms2Lib object)
-#' @param n N ids of the occurrences of the pattern (as stored in the ms2Lib object) (only for create 2D structure images) 
+#' @param n N ids of the occurrences of the pattern (as stored in the ms2Lib object) (only to create 2D structure images) 
 #' @param col_vec vector of colours for the peaks of the pattern
 #' @param path_inchi The path to the inchi key of the molecules if known, otherwise NULL
 #' @param dir_images The path to the directory to store the png images
-#' @param x_lim
+#' @param x_lim the limits in mz values for the spectra of the pattern
 #' 
 #' @return ggplot object
 plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec, rtprec, names, n, col_vec, path_inchi, dir_images, x_lim)
@@ -594,6 +596,10 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec
 #' 
 #' @return A list of plots, one for every spectrum
 #' @export
+#' 
+#' @examples 
+#' data(m2l)
+#' plot_pattern_ggplot(m2l, "P12")
 plot_pattern_ggplot <- function(m2l, pidx, path_inchi=NULL)
 {
 	if(length(path_inchi) != 0)
@@ -620,7 +626,7 @@ plot_pattern_ggplot <- function(m2l, pidx, path_inchi=NULL)
 	}
     n <- infos$N
 
-	###Mass loss are used for matching.
+	###Mass differences are used for matching.
 	loss_mz <- mm2EdgesLabels(m2l)$mz
     
     ###THE IDX IS HANDLED BY C++ AND SHOULD BE CORRECT.

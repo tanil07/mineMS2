@@ -36,8 +36,7 @@ mergeGaussian <- function(mu,sig,fac_sig=2){
 }
 
 
-
-###A naive algoirthm which split the gaussian according to the dataset.
+###A naive algorithm which splits the gaussian according to the dataset.
 gaussianMerging<- function(mu,sig,alpha=0.01,fac_sig=3){
 	mu <- c(mu,1000)
 	sig <- c(sig,0.01)

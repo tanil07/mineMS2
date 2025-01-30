@@ -9,6 +9,8 @@ OUT.DIR  <- file.path(TEST.DIR, 'output')
 if ( ! dir.exists(OUT.DIR))
     dir.create(OUT.DIR)
 
+NB_SPECTRA <- 52 ## P. verrucosum
+
 # Test basic processing {{{1
 ################################################################################
 
@@ -21,17 +23,31 @@ test_basic_processing <- function() {
 
     m2l <- mineMS2::ms2Lib(path_mgf)
     testthat::expect_is(m2l, 'ms2Lib')
+    
     infos <- mineMS2::getInfo(m2l, "S")
-    ids <- paste(paste0("MZ", infos[,"mz.precursor"]), sep = "_")
+    testthat::expect_is(infos, 'data.frame')
+    testthat::expect_true(nrow(infos) == NB_SPECTRA)
+    ## without supp data, information about the spectra must be the following three:
+    testthat::expect_true(all(c("mz.precursor", "file", "title") %in% names(infos)))
+
+    ids <- paste(paste("MZ", infos[,"mz.precursor"]), sep = "_")
     m2l <- mineMS2::setIds(m2l, ids)
     m2l <- mineMS2::discretizeMassLosses(m2l,
-                                         dmz = 0.008,
-                                         ppm = 8,
-                                         heteroAtoms = FALSE,
+                                         dmz = 0.007,
+                                         ppm = 15,
+                                         heteroAtoms = TRUE,
                                          maxFrags = 15)
+    testthat::expect_is(mm2Dags(m2l), 'list')
+    testthat::expect_is(mm2Dags(m2l)[[1]], 'igraph')
+    testthat::expect_is(mm2EdgesLabels(m2l), 'data.frame')
+
+
     m2l <- mineMS2::mineClosedSubgraphs(m2l,
                                         sizeMin = 1,
                                         count = 2)
+    testthat::expect_is(mm2Patterns(m2l), 'list')
+    testthat::expect_is(mm2Patterns(m2l)[[1]], 'mineMS2::fragPattern')
+    
     mineMS2::plotPatterns(m2l, full = TRUE)
     
     net_gnps <- igraph::read_graph(path_input_graph, "graphml")
@@ -57,11 +73,6 @@ test_basic_processing <- function() {
                         format = "graphml",
                         file = path_output_graph)
     
-    # Compare outputs
-#    testthat::expect_equal(tools::md5sum(path_output_graph),
-#                           tools::md5sum(path_expected_output_graph))
-    # XXX Impossible to compare, since the values of "v_id" tags change all the
-    # time.
 }
 
 # Test MGF filename {{{1

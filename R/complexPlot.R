@@ -21,6 +21,8 @@ arrangeSpectra <- function(spectra, step)
 	}
 } 
 
+#' Export in PDF the information about a pattern 
+#' 
 #' Function to export to PDF the information about a pattern, i.e. list of metabolites containing the pattern, graph of the pattern,
 #' list of mass differences with possible formula and spectra of the metabolites (with colored peaks for vertices in the pattern) 
 #' 
@@ -29,7 +31,7 @@ arrangeSpectra <- function(spectra, step)
 #' @param infos data frame containing the list of metabolites
 #' @param df_mass_diff data frame containing the list of mass differences
 #' @param spectra list of plots for the spectra
-#' @param name_dataset name of the directorty to store the pdf files
+#' @param name_dataset name of the directory to store the pdf files
 
 printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra, name_dataset)
 {	
@@ -110,15 +112,15 @@ printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra, name_dataset)
 				dev.off()
 }
 
-#' Plot patterns and occurences of an ms2Lib object
+#' Plot patterns and occurrences of an ms2Lib object
 #'
-#' Plot patterns graph and occurences of an ms2Lib object.
+#' Plot patterns graph and occurrences of an ms2Lib object.
 #'
 #' @param m2l An ms2Lib object
 #' @param ids The ids to be plotted or NULL if all the ids are supposed to be plot
 #' @param components An id giving the component of each spectrum to be plotted in first page.
 
-#' @param occurences Shall include the occurences be plotted aswell as the graph.
+#' @param occurences Shall include the occurences be plotted as well as the graph.
 #' @param full Shall the full patterns be plotted (it can take some times)
 #' @param byPage Maximum number of occurences by page.
 #' @param titles A vector giving the titles of the MS-MS spectra.
@@ -215,7 +217,7 @@ plotPatterns <- function(m2l,ids=NULL,
 				p <- plot_pattern_ggplot(m2l, id)
 			}
 			infos <- infoPatterns(m2l, id)
-			res <- listLossbyPattern(m2l, m2l[id], golden_rule=TRUE, spec2Annot=FALSE, export_pdf = export_pdf)
+			res <- listMassDiffbyPattern(m2l, m2l[id], golden_rule=TRUE, spec2Annot=FALSE, export_pdf = export_pdf)
 			if(export_pdf)
 			{
 				if(!dir.exists(file.path("patterns", name_dataset)))

@@ -2,7 +2,6 @@
 #' @include references.R
 
 
-
 make_label_dag <- function(elab,atoms,mzdigit=3){
   allf <- sapply(elab$formula,LossFormulaFromSingleString,ref=atoms)
   str_format <- paste("%0.",mzdigit,"f",sep="")
@@ -13,7 +12,6 @@ make_label_dag <- function(elab,atoms,mzdigit=3){
   }
   
   leg <- mapply(tf,allf,elab$mz)
-  ####Depending of the number of 
   return(leg)
 }
 

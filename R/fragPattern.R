@@ -52,13 +52,14 @@ setMethod("mm2CanonicalForm<-", "fragPattern",function(pat,value){
 
 
 #' Show information about a fragPattern object
-#' 
-#' Show information about a fragPattern object
 #'
 #' @param object A fragPattern object
 #' @export
 #'
 #' @return None
+#' @examples
+#' data(m2l)
+#' show(m2l["P12"])
 setMethod("show","fragPattern",function(object){
 	cat("A fragPattern object with",vcount(mm2Graph(object))-1,"losses occuring ",
 		nrow(mm2Occurences(object)),"times.\n")
@@ -67,14 +68,14 @@ setMethod("show","fragPattern",function(object){
 
 #' fragPattern constructor
 #'
-#' This is an internal constructor which is used to pass form the rcpp
-#' output to a fragPattern object including the occurences. It should not be
+#' This is an internal constructor which is used to pass from the rcpp
+#' output to a fragPattern object including the occurrences. It should not be
 #' called directly by the user.
 #'
 #' @param rlist rlist is a list containg 2 fields,
-#' \code{edges}: An edge list which includes the "from","to" and "lab" fileds, which by processed
+#' \code{edges}: An edge list which includes the "from","to" and "lab" fields, which be processed
 #' by the graph_from_data_frame function.
-#' \code{occurences}: A matrix with 2 column, the first giving the id in which the patterns are found
+#' \code{occurences}: A matrix with 2 columns, the first giving the id in which the patterns are found
 #' and the second giving the nodes.
 #'
 #' @return
@@ -97,7 +98,7 @@ makeId <- function(pat){
   elabs
  }
 
-###Building the canonical form of a pattern as an itemse
+###Building the canonical form of a pattern as an itemsep
 canonicalForm <- function(pat){
   root_labels <- edge_attr(pat@graph,"lab",incident_edges(pat@graph,1)[[1]])
   pat@canonicalForm <- paste(root_labels,collapse = "|")
@@ -107,11 +108,11 @@ canonicalForm <- function(pat){
 
 #' Calculate the coverage of a specific pattern
 #' 
-#' This function should never be called by the user. Call the ms2Linb method
+#' This function should never be called by the user. Call the ms2Lib method
 #'
 #' @param x The pattern
-#' @param mzloss The table of loss
-#' @param mgs the mass graphs mass graphs
+#' @param mzloss The table of mass differences
+#' @param mgs the mass graphs (the DAGs)
 #' @export
 #'
 #' @return The m2l object with all the coverage calculated.
@@ -155,7 +156,12 @@ relabelOccurrences <- function(pat,newlabs){
 	pat
 }
 
-
+#' Spectra information for a specific pattern
+#' 
+#' @param m2l a ms2Lib object
+#' @param id_p a fragPattern id (such as "P1")
+#' 
+#' @return a data.frame containing information about the spectra containing the pattern
 infoPatterns <- function(m2l, id_p)
 {
 	occs <- mm2Occurences(m2l[id_p])[,'gid']

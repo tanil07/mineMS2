@@ -27,7 +27,7 @@ tabAtoms <- function(){
 					  stringsAsFactors = FALSE))
 }
 
-###Construct a reference table form a lsit of atoms.
+###Construct a reference table from a lisr of atoms.
 makeDfValidAtoms <- function (clist, mz = NULL)
 {
 	tAtoms <- tabAtoms()

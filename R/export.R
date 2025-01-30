@@ -1,9 +1,9 @@
-#' Export Losses Table
+#' Export Mass differences Table
 #'
-#' Export the losses table aith the full informations
+#' Export the mass differences table with the full informations
 #' @param m2l An ms2Lib object
 #'
-#' @return A data.frame with the losses
+#' @return A data.frame with the list of mass differences
 #' @export
 #'
 #' @examples
@@ -11,23 +11,31 @@
 #' data(m2l)
 #' 
 #' head(lossesTable(m2l))
-lossesTable <- function(m2l){
+massDiffTable <- function(m2l){
 	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("No loss labels found, use the 'discretizeMassLosses' loss functions")
+		stop("No mass differences labels found, use the 'discretizeMassLosses' function to calculate them")
 	}
 	return(mm2EdgesLabels(m2l)[,c("lab","mz","mzmin","mzmax","count","formula"),drop=FALSE])
 
 }
 
-#' Export Losses Table with information about the patterns containing those losses
-#'
+#' Export Mass Differences Table 
 #' 
+#' Export Mass differences Table with information about the patterns containing those mass differences
+#' for each mass difference label, contains its id (lab), the mean mz, the minimum mz, the maximum mz, the number of occurrences (count) 
+#' and the possible formula. It also contains the number of patterns in which this label is found (and their ids)
+#'
 #' @param m2l An ms2Lib object
 #'
-#' @return A data.frame with the losses
+#' @return A data.frame with the list of mass differences
 #' @export
-#'
-lossesTableComplete <- function(m2l){
+#' 
+#' @examples
+#' #Loading the data
+#' data(m2l)
+#' 
+#' head(massDiffTableComplete(m2l))
+massDiffTableComplete <- function(m2l){
 	if(nrow(mm2EdgesLabels(m2l))==0){
 		stop("No loss labels found, use the 'discretizeMassLosses' loss functions")
 	}
@@ -36,38 +44,36 @@ lossesTableComplete <- function(m2l){
         stop("No patterns")
     }
 
-    all_pertes <- mm2EdgesLabels(m2l)[,c("lab","mz","mzmin","mzmax","count","formula"),drop=FALSE]
-	groups_patterns <- rep("", length(all_pertes[,"lab"]))
-    nb_patterns <- rep(0, length(all_pertes[,"lab"]))
+    all_losses <- mm2EdgesLabels(m2l)[,c("lab","mz","mzmin","mzmax","count","formula"),drop=FALSE]
+	groups_patterns <- rep("", length(all_losses[,"lab"]))
+    nb_patterns <- rep(0, length(all_losses[,"lab"]))
 
     patterns <- mm2Patterns(m2l) ## all patterns
 
     i = 1
     for(p in patterns)
     {
-        print(i)
         g <- mm2Graph(p) ## graph of a pattern
-        num_pertes <- unique(edge_attr(g, name="lab"))
-        groups_patterns[num_pertes] <- paste(groups_patterns[num_pertes], i, sep=",")
-        nb_patterns[num_pertes] <- nb_patterns[num_pertes] + 1
+        num_losses <- unique(edge_attr(g, name="lab"))
+        groups_patterns[num_losses] <- paste(groups_patterns[num_losses], i, sep=",")
+        nb_patterns[num_losses] <- nb_patterns[num_losses] + 1
         i <- i+1
     }
 
-    all_pertes[, "nb patterns"] <- nb_patterns
-    all_pertes[, "patterns"] <- groups_patterns
-    return(all_pertes)
+    all_losses[, "nb patterns"] <- nb_patterns
+    all_losses[, "patterns"] <- groups_patterns
+    return(all_losses)
 }
 
 
 formulaSpec2Annot <- function(mass, golden_rule, atoms, index) 
 { 
-    #print(mass)
     annot <- find_compo_from_mass(
         mass_target = mass,
         ppm = 15,
         use_golden_ratio = golden_rule,
         elements_vc = NULL)
-    #print(annot)
+
     formula <- apply(annot, 1, function(x){
     res <- sapply(seq_along(x)[1:(length(x)-3)], function(y){
                     if(x[y] == 0) return("")
@@ -78,23 +84,28 @@ formulaSpec2Annot <- function(mass, golden_rule, atoms, index)
                 if(grepl("Br|K|Si|Na|F", res_string)) return(NULL)
                 return(res_string)
             })
-    #print(formula)
-    formula <- formula[lapply(formula, length) > 0] ## pour enlever les NULL
-    #print(formula)
+    formula <- formula[lapply(formula, length) > 0] ## to remove NULL values
     return(formula)
 }
 
-#' Export Losses Table with information about one pattern
-#' mean mz values of losses for spectra of the pattern
-#' min, mean and max mz values of losses calculated with all the spectra containing the loss
+#' Export Mass differences Table for one pattern
+#' 
+#' Export Mass differences Table with information about one pattern
+#' contains the min, mean and max mz values of losses calculated with all the spectra of the pattern and the loss
 #' formula calculated with the inner algorithm and the package Spec2Annot
 #' 
 #' @param m2l An ms2Lib object
+#' @param pattern a fragPattern object 
+#' @param golden_rule a boolean to consider golden rules or not to construct the formula (used for spec2Annot method)
+#' @param export_pdf a boolean to export in pdf or not
 #'
-#' @return A data.frame with the losses
+#' @return A data.frame with the list of mass differences
 #' @export
-#'
-listLossbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_pdf)
+#' 
+#' @examples 
+#' data(m2l)
+#' listMassDiffbyPattern(m2l, m2l["P20"], golden_rule = TRUE, spec2Annot = TRUE, export_pdf = FALSE)
+listMassDiffbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_pdf)
 {
     graph_pattern <- mm2Graph(pattern)
     elabs <- mm2EdgesLabels(m2l)

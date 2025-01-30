@@ -208,7 +208,7 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
 
 
 
-#Return the formula subformula coherent with the most formula.
+#Return the subformula coherent with the most formula.
 makeEdgeLabelWithoutVertices <- function(lf,mzv,oformula,atoms,vrdbe){
   
   ###Solo

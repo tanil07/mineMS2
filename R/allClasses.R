@@ -1,21 +1,19 @@
-####An object which store a the discrete labels of an ms spectra and a list of spectra as graph.
-
 #'A class storing a set of MS-MS spectra, their associated graphs,
-#'and some supplemnetary inofmration.
+#'and some supplementary information.
 #'
 #' @export
 #' @slot spectraInfo A data.frame including the spectra information at minima the "mz.precursor" field
 #' and informations added by the user eventually.
-#' @slot spectra A list of spectra sotred under the form of Spectrum2 object.
+#' @slot spectra A list of spectra stored under the form of Spectrum2 object.
 #' @slot ids A chracter vector containing the ids of spectra.
 #' @slot dags A list storing the set of graphs object corresponding to the MS-MS spectra.
 #' @slot losses The discretized edges labels.
 #' @slot fragments The discretized nodes labels.
 #' @slot patterns A list storing the fragPattern objects.
-#' @slot atoms A list of the atoms used to build the ofmrula aswell as their maximum number.
-#' @slot loss A boolena indicating if the object is built with loss or fragments.
+#' @slot atoms A list of the atoms used to build the formula as well as their maximum number.
+#' @slot loss A boolean indicating if the object is built with losses or fragments.
 #' @slot reducedPatterns The ids of the reduced patterns.
-#' @slot k The maximum depth of the ocnstructed k path tree.
+#' @slot k The maximum depth of the constructed k path tree.
 #' @aliases ms2Lib-class
 #' @exportClass ms2Lib
 setClass(

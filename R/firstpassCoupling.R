@@ -1,5 +1,3 @@
-
-
 ###Convert components furnished to spectral ids.
 convertComponent <- function(comp,ids){
 	if(is.numeric(comp)){
@@ -13,14 +11,16 @@ convertComponent <- function(comp,ids){
 }
 
 
-#' Find pattern explainig components
-#'
-#' Find pattern maximizing the socre givne in metrics with each components. Threshold may be used to indicate that not match
-#' has been found. The majority
+
+#' Find patterns maximizing a score for each component
+#' 
+#' Find patterns maximizing the score given in metrics for each component.
+#' Threshold may be used to indicate that no match has been found.
+#' Several best patterns can be returned (argument top)
 #'
 #' @param m2l An ms2Lib object
 #' @param components A list containing the components to be explained.
-#' @param metric The metric used to match a component and the pattern occurence.
+#' @param metric The metric or list of metrics used to match a component and the pattern occurrence.
 #' @param ref_label A set of reference label to be used if the extracted component corresponds to an id over the position of the MS-MS spetra in the file
 #' @param threshold The threshold used to discriminate the dataset
 #' @param reduced Shall only the filtered patterns be considered
@@ -29,19 +29,22 @@ convertComponent <- function(comp,ids){
 #' @return A list containing one data.frame by component including the following informations:
 #'   \code{id} The id of the matched patterns.
 #'   \code{f1} The F1-score between the pattern and the component.
-#'   \code{accuracy} The accuracy between the pattern and the component.
+#'   \code{precision} The precision between the pattern and the component.
 #'   \code{recall} The recall between the pattern and the component.
 #'   \code{miss} The miss rate between the pattern and the component.
+#' 	 \code{size} The number of vertices in the graph pattern
 #' @export
 #'
 #' @examples
 #' #Loading the data
 #' data(m2l)
+#' data(net_gnps)
 #' 
 #' #Finding explainig component 
-#' fp <- findPatternsExplainingComponents(m2l,list(c(15,12)))
+#' components <- findGNPSComponents(net_gnps)
+#' fp <- findPatternsExplainingComponents(m2l,components)
 #' 
-#' #plotting the explaining pattern
+#' #Plotting the first explaining pattern
 #' plot(m2l,fp[[1]]["id"])
 findPatternsExplainingComponents <- function(m2l,components,metric=c("f1"),ref_label=NULL,threshold=NA_real_,
                                              reduced=TRUE, top = 1){

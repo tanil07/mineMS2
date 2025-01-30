@@ -86,7 +86,7 @@ reorderAtom <- function(atoms){
 #' data(m2l)
 #' 
 #' #Constructing edges labels
-#' m2l <- discretizeMassLosses(m2l,ppm=8,dmz=0.008,count=2,
+#' m2l <- discretizeMassLosses(m2l,ppm=15,dmz=0.007,count=2,
 #' precPpm=20,precDmz=0.03,maxFrags=15)
 #' 
 #' #Constructing edges labels while including heteroatoms
@@ -108,7 +108,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 
 	message("Discretization of the mass losses...")
 
-	###Paameters checking
+	###Parameters checking
 	if(maxFrags>20){
 		stop("mineMS2 is not made to process more than 20 fragments by spectra, please lower
 			 the maxFrags parameters")
@@ -156,8 +156,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	
 	###At this step we add the formula if necessary.
 
-	
-	###We find the postion of the last elementsapply()
+	###We find the position of the last elementsapply()
 	plast <- which(res_list$elems$mz<limMzFormula[2])
 	plast <- plast[length(plast)]
 	ref <- names(atoms)
@@ -211,7 +210,7 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	mm2EdgesLabels(m2l) <- res_list$elems
 	mm2Dags(m2l) <- res_list$dags
 
-	message("Losses discretization finished ",nrow(res_list$elem)," common losses found.")
+	message("Losses discretization finished ", nrow(res_list$elem)," common losses found.")
 	m2l
 })
 
@@ -449,11 +448,11 @@ discretizeMassesDifferences <- function(list_spec,
 }
 
 ###Return an extended spectra and possibly add the precurosr if needed.
-###If maxnum is not NULL return the top "k" or top "k-1" depending of the inclusion
+###If maximum is not NULL return the top "k" or top "k-1" depending of the inclusion
 ###of the precursor.
 #' Return the spectrum considered by mineMS2 when building the graph.
 #'
-#' @param spec A "Spectrum2" object as defined in msnBase
+#' @param spec A "Spectrum2" object as defined in MSnBase
 #' @param ppm A ppm parameter to match the precursor
 #' @param dmz A minimum deviation in dalton to match the precursor.
 #' @param removeSup A boolean indicating if peaks with a mass higher than the precursor should be remode
@@ -531,7 +530,7 @@ getExtendedSpec <- function(spec,ppm=5,dmz=0.02,removeSup=TRUE,addPrecursor=TRUE
 }
 
 ###Discretize set of values furnished in the vmz vector
-###with a bandwidth given as the minimam between ppm and dmz.
+###with a bandwidth given as the minimum between ppm and dmz.
 ###frac give the minimum number of samples.
 discretizeSequenceByClasses <- function(ppm,
 			 vmz, vsample, ndiff, frac = 0,

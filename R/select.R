@@ -28,16 +28,30 @@ checkSize <- function(vec,pos){
 
 #' Selection function
 #'
-#' @param m2l An ms2Lib object.
-#' @param ids Valid IDs of objects.
-#' @param vals the type of value to be returned. Only certain combinations are allowed.
+#' Return spectra objects, that are present in particular patterns, or mass differences objects that are present in particular patterns or spectra.
 #'
-#' @return The objects of the correspodning type.
+#' @param m2l An ms2Lib object.
+#' @param ids Valid IDs of objects (spectra or mass differences)
+#' @param vals the type of values to be returned. Only certain combinations are allowed: we can search for spectra (S) in patterns (P), or mass differences (L) in spectra (S) or patterns (P)
+#'
+#' @return The objects of the corresponding type.
 #' @export
 #'
 #' @examples
-#' print("Examples to be put here")
-select <- function(m2l,ids,vals=c("P","S","L")){
+#' data(m2l)
+#' 
+#' ## Search for the patterns in which appear the spectrum S1
+#' select(m2l, "S1", "P")
+#' 
+#' ## Search for the patterns in which appear the mass difference L1
+#' select(m2l, "L1", "P")
+#' 
+#' ## Search for the spectra in which appear the mass difference L1
+#' select(m2l, "L1", "S")
+#' 
+#' ## can be combined with the findMz function
+#' select(m2l, findMz(m2l, mz=147, "L", ppm=8, dmz=0.3), "P")
+select <- function(m2l,ids,vals=c("P","S")){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an ms2Lib object.")
 
 	vals <- match.arg(vals)
@@ -71,20 +85,23 @@ select <- function(m2l,ids,vals=c("P","S","L")){
 	}
 }
 
-#' find patterns or spectra form a set of pattern or spectra ids
+#' Find the pattern with the best coverage given a set of spectra.
 #'
-#' find data of type "vals" containing all the ids listed in "ids"
+#' Find the pattern with the best coverage, which means that covered the most intensity, for a set of spectra.
 #'
 #' @param m2l an ms2Lib Object.
-#' @param ids A list of ids to be searched for.
-#' @param vals The type of the returned values.
-#' @param ... supp arguments.
+#' @param ids A list of ids to be searched for (for now, only spectra are implemented).
+#' @param vals The type of the returned values (for now, only patterns are implemented (P)).
+#' @param ... supplementary arguments.
 #'
-#' @return The ids of the patterns or spectra cotaining all the ids.
+#' @return The ids of the patterns or spectra containing all the ids.
 #' @export
 #'
 #' @examples
-#' print("examples to be put here")
+#' data(m2l)
+#' ## The calculation of coverage must have been done before searching
+#' m2l <- calculateCoverage(m2l)
+#' find(m2l, "S7", "P")
 find <- function(m2l,ids,vals=c("P","S"),...){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an ms2Lib object.")
 
@@ -245,11 +262,10 @@ select.spectra.losses <- function(m2l,id){
 }
 
 
-
 ###Return f1-score,precision,recall
 f1.score <- function(id,idsref,m2l,full=FALSE){
 
-	## adds: to take the right set of spectra 
+	## adds: to take the right set of spectra if the ids in the GNPS component correspond to the N indexes in the ms2Lib object 
 	if("N" %in% colnames(m2l@spectraInfo))
 	{
 		spectres <- m2l@spectraInfo['N']
@@ -284,25 +300,23 @@ checkFTerms <- function(seq_terms){
 
 
 
-#' Find biggest F1 score
+#' Find the pattern with the best value of one chosen metric
 #'
-#' Given a list of molecules ids as a character or integer input, find the pattern maximizing the F1 score of
-#' the molecules.
+#' Given a list of molecules ids as characters or integers input, find the pattern maximizing one metric (F1-score, precision, recall, size) among this set of molecules.
 #'
+#' Should not be used directly by the user (is called by the findExplainingPatterns function)
+#' 
 #' @param m2l An ms2Lib object.
-#' @param ids Valid IDs of objects, it mays be a chracter vector with the prefix "P" or an integer or numeric vector
-#' @param type Which criteria is used to determine the best match, F-score, precision or acccuracy
-#' @param returnall Shall all the patterns with a similar F1 score be returned.
+#' @param ids Valid IDs of objects, it mays be a character vector with the prefix "P" or an integer or numeric vector
+#' @param type Which criteria is used to determine the best match, F-score, precision, recall or size of patterns (number of vertices)
+#' @param returnall Shall all the patterns with a similar F1-score be returned.
 #' @param full Shall only full matches be returned.
-#' @param reduced Shall only the reduced set of patterns be considered.4
+#' @param reduced Shall only the reduced set of patterns be considered.
 #' @param top number of best patterns to return
-#' @details The computation of this F1 score.
+#' @details The computation of the metric.
 #'
-#' @return A data.frame containing two slots, id the ids of the elements and f1_score the f1 score of the elements
+#' @return A data.frame containing several slots: the ids of the elements and the values of every metric
 #' @export
-#'
-#' @examples
-#' print("Examples to be put here")
 find.patterns.class <- function(m2l,ids,type=c("f1","precision","size"),
 								returnall=FALSE,full=TRUE,reduced=FALSE, top=1){
 

@@ -100,12 +100,12 @@ isKnown <- function(lf){
   nrow(lf@formula)==1
 }
 
-#' Return a string prerpesentation of a lossFormula object
+#' Calculate a string reresentation of a lossFormula object
 #'
 #' Return a string presentation of all the possible formula. Should not be used by the user.
 #'
 #' @param x A lossFormula object.
-#'
+#' 
 #' @return A character vector with all the possible formula for a loss object.
 setMethod("as.character","LossFormula",function(x){
   return(apply(x@formula,1,formulaToString))
@@ -291,22 +291,23 @@ setMethod("idxFormula",signature=list(x="LossFormula",lf="LossFormula"),function
 #' @param object A lossFormula object.
 #'
 #' @return None
+#' 
 setMethod("show","LossFormula",function(object){
   cat("A LossFormula object containing",nrow(object@formula),"formula with atoms",paste(colnames(object@formula),collapse = ","))
 })
 
-#' Return the number of possible formula for a loss
+#' Calculate the number of possible formula for a mass difference
 #'
-#' Return the number of possible formula for a loss. Normally not used by the user.
+#' Return the number of possible formula for a mass difference. Normally not used by the user.
 #'
 #' @param x A loss formula object.
 #'
-#' @return The number of possible formula for a loss.
+#' @return The number of possible formula for a mass difference.
 setMethod(length,"LossFormula",function(x){
   nrow(x@formula)
 })
 
-#' Selecting a fornula among the different loss formula possible.
+#' Selecting a formula among the different loss formula possible.
 #'
 #' @param x The Loss formula object
 #' @param i The position of the selected formula
@@ -316,9 +317,6 @@ setMethod(length,"LossFormula",function(x){
 #'
 #' @return The formula as 1xatoms matrix
 #' @export
-#' 
-#' @examples
-#' print("Example to be put here")
 setMethod('[',"LossFormula",function(x,i,j=NULL,...,drop=TRUE){
   x@formula <- x@formula[i,,drop=FALSE]
   return(x)
