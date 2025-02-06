@@ -26,7 +26,7 @@ The package can be installed from GitHub with:
 devtools::install_github("odisce/mineMS2")
 ```
 
-## Basic use
+## Getting started with the software
 
 More detailed examples are available in the vignettes.
 
