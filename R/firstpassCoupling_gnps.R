@@ -178,14 +178,14 @@ generateCol <- function(ncomp){
   while(nrow(cgnps)<ncomp){
     cgnps <- rbind(cgnps,col_gnps())
   }
-  print(nrow(cgnps))
+  #print(nrow(cgnps))
   vinter <- c()
   for(i in 1:(ncomp+1))
   {
     rd <- runif(1, min = 1, max = nrow(cgnps))
     if(length(vinter) == 0) diff_vinter <- c(15)
     else diff_vinter <- sapply(vinter, function(x){return(abs(rd-x))})
-    print(diff_vinter)
+    #print(diff_vinter)
     while(min(diff_vinter) < 5)
     {
       rd <- runif(1, min = 1, max = nrow(cgnps))
@@ -193,7 +193,7 @@ generateCol <- function(ncomp){
     }
     vinter <- c(vinter, rd)
   }
-  print(vinter)
+  #print(vinter)
   cgnps[round(vinter), 1]
 
   #vinter <- seq(1,nrow(cgnps),length=ncomp+1)
@@ -333,7 +333,7 @@ findGNPSComponents <- function(net,minSize = 3,pairThreshold=0.9,vname="cluster 
 	in_cliques <- match(Vattr,pcliques) ## vertices in cliques
 	out_cliques <- which(is.na(in_cliques)) ## vertices not in cliques
 
-	###All the edges are considered
+	###Edges with at least one incident vertex that does not belong to a clique
 	E_edges <-  E(net)[ Vlist %--% Vlist[out_cliques] ]
   #E_edges <- E(net)
 	E_edges <- E_edges[which(

@@ -24,6 +24,7 @@
 #' @importFrom Spec2Annot find_compo_from_mass
 #' @import grid
 #' @importFrom gridExtra tableGrob
+#' @importFrom kableExtra kable
 #' @name mineMS2-package
 #' @useDynLib mineMS2
 NULL

@@ -21,6 +21,30 @@ arrangeSpectra <- function(spectra, step)
 	}
 } 
 
+arrangeSpectra2D <- function(spectra, step_row, step_col)
+{
+	step_tot <- step_row*step_col
+	for(i in seq(1, length(spectra), by=step_tot))
+	{
+		
+		if(i+(step_tot-1) <= length(spectra))
+		{
+			do.call("grid.arrange", c(spectra[i:(i+(step_tot-1))], nrow = round(step_tot/2)))
+		}
+		else {
+			new_step <- (length(spectra) - i + 1)
+			if(new_step == 1)
+			{
+				do.call("grid.arrange", c(spectra[length(spectra)], nrow = new_step))
+				
+			}else
+			{
+				do.call("grid.arrange", c(spectra[i:length(spectra)], nrow = round(new_step/2)))
+			}
+		}
+	}
+}
+
 #' Export in PDF the information about a pattern 
 #' 
 #' Function to export to PDF the information about a pattern, i.e. list of metabolites containing the pattern, graph of the pattern,
@@ -126,6 +150,7 @@ printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra, name_dataset)
 #' @param titles A vector giving the titles of the MS-MS spectra.
 #' @param v_ggplot (default TRUE) if TRUE ggplot version for the plotting of the spectra
 #' @param export_pdf (for ggplot version) if TRUE export the spectra to PDF
+#' @param infos_col (for ggplot version) columns names from the spectra information to print
 #' 
 #' @export
 #' 
@@ -146,6 +171,7 @@ plotPatterns <- function(m2l,ids=NULL,
 							v_ggplot=TRUE, 
 							export_pdf=FALSE, 
 							inchi=NULL,
+							infos_col = NULL,
 							name_dataset = ""){
 
 
@@ -208,15 +234,22 @@ plotPatterns <- function(m2l,ids=NULL,
 				plotOccurences(m2l,id)
 		}
 		else
-		{
+		{	
 			if(!is.null(inchi))
 			{
-				p <- plot_pattern_ggplot(m2l, id, path_inchi = inchi)
+				p <- plot_pattern_ggplot(m2l, id, path_inchi = inchi, titles = titles)
 			}
 			else {
-				p <- plot_pattern_ggplot(m2l, id)
+				p <- plot_pattern_ggplot(m2l, id, titles = titles)
 			}
 			infos <- infoPatterns(m2l, id)
+			if(!is.null(infos_col))
+			{
+				infos_to_print <- infos[,infos_col]
+			}
+			else {
+			   infos_to_print <- infos
+			}			
 			res <- listMassDiffbyPattern(m2l, m2l[id], golden_rule=TRUE, spec2Annot=FALSE, export_pdf = export_pdf)
 			if(export_pdf)
 			{
@@ -224,14 +257,15 @@ plotPatterns <- function(m2l,ids=NULL,
 				{
 					dir.create(file.path("patterns", name_dataset))
 				}
-				printPDF(m2l, id, infos, res, p, name_dataset)
+				printPDF(m2l, id, infos_to_print, res, p, name_dataset)
 			}
 			else
 			{
-				print(infos)
+				print(kable(infos_to_print))
 				plot(m2l, id)
-				print(res)
-				print(p)
+				print(kable(res))
+				#print(p)
+				arrangeSpectra2D(p, step_row=2, step_col = 2)
 			}
 		}
 	}

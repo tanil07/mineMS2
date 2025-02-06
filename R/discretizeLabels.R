@@ -192,11 +192,10 @@ setMethod("discretizeMassLosses", "ms2Lib", function(m2l,
 	
 	###Add the fusing part of the edge labels.
 	message("Fusing the edges labels.")
-
 	###Simplifying the DAG if necessary.
 	change <- TRUE
 	niter <- 1
-	while(change&niter<4){
+	while(change&niter<4 && nrow(res_list$elems) > 1){
 		res_list <- fuseElem(elems =res_list$elems ,dags = res_list$dags,thresh=count,atoms = names(atoms))
 		change <- res_list$change
 		niter <- niter+1
@@ -771,7 +770,7 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
 	  storval <- list()
 	}
 	#print(storval)
-
+	if(length(storval) == 0) return(list(elems=elems,dags=dags,change=anyChange))
 	## Now we have a data structure with all the value, we check which set needs to be fused.
 	vmul <- sapply(storval,function(x){length(unique(x))>3})
 	pmistake <- which(vmul)

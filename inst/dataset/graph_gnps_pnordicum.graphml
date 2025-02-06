@@ -1,0 +1,3774 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns">
+    <key attr.name="SUID" attr.type="long" for="node" id="SUID"/>
+    <key attr.name="shared name" attr.type="string" for="node" id="shared name"/>
+    <key attr.name="name" attr.type="string" for="node" id="name"/>
+    <key attr.name="selected" attr.type="boolean" for="node" id="selected"/>
+    <key attr.name="precursor mass" attr.type="double" for="node" id="precursor mass"/>
+    <key attr.name="GNPSLinkout_Network" attr.type="string" for="node" id="GNPSLinkout_Network"/>
+    <key attr.name="G4" attr.type="double" for="node" id="G4"/>
+    <key attr.name="G3" attr.type="double" for="node" id="G3"/>
+    <key attr.name="cluster index" attr.type="long" for="node" id="cluster index"/>
+    <key attr.name="RTMean" attr.type="double" for="node" id="RTMean"/>
+    <key attr.name="RTConsensus" attr.type="double" for="node" id="RTConsensus"/>
+    <key attr.name="UniqueFileSources" attr.type="string" for="node" id="UniqueFileSources"/>
+    <key attr.name="sum(precursor intensity)" attr.type="double" for="node" id="sum(precursor intensity)"/>
+    <key attr.name="DefaultGroups" attr.type="string" for="node" id="DefaultGroups"/>
+    <key attr.name="G6" attr.type="double" for="node" id="G6"/>
+    <key attr.name="GNPSLinkout_Cluster" attr.type="string" for="node" id="GNPSLinkout_Cluster"/>
+    <key attr.name="G2" attr.type="double" for="node" id="G2"/>
+    <key attr.name="G5" attr.type="double" for="node" id="G5"/>
+    <key attr.name="parent mass" attr.type="double" for="node" id="parent mass"/>
+    <key attr.name="G1" attr.type="double" for="node" id="G1"/>
+    <key attr.name="number of spectra" attr.type="long" for="node" id="number of spectra"/>
+    <key attr.name="componentindex" attr.type="string" for="node" id="componentindex"/>
+    <key attr.name="charge" attr.type="long" for="node" id="charge"/>
+    <key attr.name="Compound_Source" attr.type="string" for="node" id="Compound_Source"/>
+    <key attr.name="Ion_Source" attr.type="string" for="node" id="Ion_Source"/>
+    <key attr.name="SharedPeaks" attr.type="string" for="node" id="SharedPeaks"/>
+    <key attr.name="tags" attr.type="string" for="node" id="tags"/>
+    <key attr.name="MQScore" attr.type="string" for="node" id="MQScore"/>
+    <key attr.name="Adduct" attr.type="string" for="node" id="Adduct"/>
+    <key attr.name="SpectrumID" attr.type="string" for="node" id="SpectrumID"/>
+    <key attr.name="INCHI" attr.type="string" for="node" id="INCHI"/>
+    <key attr.name="GNPSLibraryURL" attr.type="string" for="node" id="GNPSLibraryURL"/>
+    <key attr.name="Library_Class" attr.type="string" for="node" id="Library_Class"/>
+    <key attr.name="IonMode" attr.type="string" for="node" id="IonMode"/>
+    <key attr.name="MassDiff" attr.type="string" for="node" id="MassDiff"/>
+    <key attr.name="Smiles" attr.type="string" for="node" id="Smiles"/>
+    <key attr.name="Data_Collector" attr.type="string" for="node" id="Data_Collector"/>
+    <key attr.name="Instrument" attr.type="string" for="node" id="Instrument"/>
+    <key attr.name="PI" attr.type="string" for="node" id="PI"/>
+    <key attr.name="Compound_Name" attr.type="string" for="node" id="Compound_Name"/>
+    <key attr.name="MZErrorPPM" attr.type="string" for="node" id="MZErrorPPM"/>
+    <key attr.name="mz" attr.type="double" for="node" id="mz"/>
+    <key attr.name="rt" attr.type="double" for="node" id="rt"/>
+    <key attr.name="group" attr.type="string" for="node" id="group"/>
+    <key attr.name="polarity" attr.type="string" for="node" id="polarity"/>
+    <key attr.name="id_file" attr.type="int" for="node" id="id_file"/>
+    <key attr.name="peptide formula" attr.type="string" for="node" id="peptide formula"/>
+    <key attr.name="formula" attr.type="string" for="node" id="formula"/>
+    <key attr.name="corrected_rt" attr.type="double" for="node" id="corrected_rt"/>
+    <key attr.name="fungisporins" attr.type="string" for="node" id="fungisporins"/>
+    <key attr.name="linear or cyclic" attr.type="string" for="node" id="linear or cyclic"/>
+    <key attr.name="SUID" attr.type="long" for="edge" id="SUID"/>
+    <key attr.name="shared name" attr.type="string" for="edge" id="shared name"/>
+    <key attr.name="shared interaction" attr.type="string" for="edge" id="shared interaction"/>
+    <key attr.name="name" attr.type="string" for="edge" id="name"/>
+    <key attr.name="selected" attr.type="boolean" for="edge" id="selected"/>
+    <key attr.name="interaction" attr.type="string" for="edge" id="interaction"/>
+    <key attr.name="cosine_score" attr.type="double" for="edge" id="cosine_score"/>
+    <key attr.name="EdgeType" attr.type="string" for="edge" id="EdgeType"/>
+    <key attr.name="property1" attr.type="string" for="edge" id="property1"/>
+    <key attr.name="node2" attr.type="string" for="edge" id="node2"/>
+    <key attr.name="mass_difference" attr.type="string" for="edge" id="mass_difference"/>
+    <key attr.name="EdgeScore" attr.type="double" for="edge" id="EdgeScore"/>
+    <key attr.name="component" attr.type="long" for="edge" id="component"/>
+    <key attr.name="node1" attr.type="string" for="edge" id="node1"/>
+    <key attr.name="explained_intensity" attr.type="double" for="edge" id="explained_intensity"/>
+    <key attr.name="EdgeAnnotation" attr.type="string" for="edge" id="EdgeAnnotation"/>
+    <key attr.name="SUID" attr.type="long" for="graph" id="SUID"/>
+    <key attr.name="shared name" attr.type="string" for="graph" id="shared name"/>
+    <key attr.name="name" attr.type="string" for="graph" id="name"/>
+    <key attr.name="selected" attr.type="boolean" for="graph" id="selected"/>
+    <key attr.name="__Annotations" attr.type="string" for="graph" id="__Annotations"/>
+    <graph edgedefault="directed" id="METABOLOMICS-SNETS-V2-b61ed9d6-download_cytoscape_data-main.graphml">
+        <node id="7539">
+            <data key="SUID">7539</data>
+            <data key="shared name">40</data>
+            <data key="name">Hydrolyzed Cyclo(YWVV)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">566.297</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">40</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=40&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">566.297</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">566.2965</data>
+            <data key="rt">13.24</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">WVVY</data>
+            <data key="formula">C30H39N5O6</data>
+            <data key="corrected_rt">13.24</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7536">
+            <data key="SUID">7536</data>
+            <data key="shared name">44</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">229.107</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">44</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=44&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">229.107</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="mz">229.1071</data>
+            <data key="rt">6.13</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">7</data>
+            <data key="corrected_rt">6.13</data>
+        </node>
+        <node id="7533">
+            <data key="SUID">7533</data>
+            <data key="shared name">22</data>
+            <data key="name">Hydrolyzed Cyclo(VFVF)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">511.291</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">22</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=22&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">511.291</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">511.2906</data>
+            <data key="rt">18.57</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VFVF</data>
+            <data key="formula">C28H38N4O5</data>
+            <data key="corrected_rt">18.57</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7530">
+            <data key="SUID">7530</data>
+            <data key="shared name">33</data>
+            <data key="name">Hydrolyzed Cyclo(YFIV)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">541.299</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">33</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=33&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">541.299</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">541.299</data>
+            <data key="rt">15.43</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VYFI</data>
+            <data key="formula">C29H40N4O6</data>
+            <data key="corrected_rt">15.43</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7527">
+            <data key="SUID">7527</data>
+            <data key="shared name">15</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">341.161</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">15</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=15&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">341.161</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">341.1601</data>
+            <data key="rt">15.06</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="corrected_rt">15.06</data>
+        </node>
+        <node id="7524">
+            <data key="SUID">7524</data>
+            <data key="shared name">12</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">312.29</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">12</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=12&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">312.29</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="mz">312.289</data>
+            <data key="rt">31.75</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="corrected_rt">31.95</data>
+        </node>
+        <node id="7521">
+            <data key="SUID">7521</data>
+            <data key="shared name">48</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">343.176</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">48</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=48&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">343.176</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">343.1756</data>
+            <data key="rt">17.83</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">7</data>
+            <data key="corrected_rt">17.91</data>
+        </node>
+        <node id="7518">
+            <data key="SUID">7518</data>
+            <data key="shared name">18</data>
+            <data key="name">Ochratoxin A</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">404.089</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=4&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">18</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=18&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">404.089</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">4</data>
+            <data key="charge">0</data>
+            <data key="Compound_Source">Isolated</data>
+            <data key="Ion_Source">ESI</data>
+            <data key="SharedPeaks">7</data>
+            <data key="tags">nan</data>
+            <data key="MQScore">0.935534</data>
+            <data key="Adduct">M+H</data>
+            <data key="SpectrumID">CCMSLIB00005727086</data>
+            <data key="INCHI">1S/C20H18ClNO6/c1-10-7-12-14(21)9-13(17(23)16(12)20(27)28-10)18(24)22-15(19(25)26)8-11-5-3-2-4-6-11/h2-6,9-10,15,23H,7-8H2,1H3,(H,22,24)(H,25,26)/t10-,15+/m1/s1</data>
+            <data key="GNPSLibraryURL">http://gnps.ucsd.edu/ProteoSAFe/gnpslibraryspectrum.jsp?SpectrumID=CCMSLIB00005727086</data>
+            <data key="Library_Class">3</data>
+            <data key="IonMode">Positive</data>
+            <data key="MassDiff">0.000396729</data>
+            <data key="Smiles">C[C@@H]1CC2=C(C=C(C(=C2C(=O)O1)O)C(=O)N[C@@H](CC3=CC=CC=C3)C(=O)O)Cl</data>
+            <data key="Data_Collector">Massbank</data>
+            <data key="Instrument">Hybrid FT</data>
+            <data key="PI">Massbank</data>
+            <data key="Compound_Name">Massbank:AC000204 Ochratoxin A|OTA|(-)-N-((5-Chloro-8-hydroxy-3-methyl-1-oxo-7-isochromanyl)carbonyl)-3-phenylalanine</data>
+            <data key="MZErrorPPM">0.981785</data>
+            <data key="mz">404.0891</data>
+            <data key="rt">33.16</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="formula">C20H18NO6Cl</data>
+            <data key="corrected_rt">33.16</data>
+        </node>
+        <node id="7515">
+            <data key="SUID">7515</data>
+            <data key="shared name">50</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">469.243</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=2&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">50</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=50&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">469.243</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">2</data>
+            <data key="charge">0</data>
+            <data key="mz">469.243</data>
+            <data key="rt">24.04</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">7</data>
+            <data key="corrected_rt">24.04</data>
+        </node>
+        <node id="7512">
+            <data key="SUID">7512</data>
+            <data key="shared name">5</data>
+            <data key="name">LL-P880alpha</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">215.128</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">5</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=5&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">215.128</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="mz">215.1276</data>
+            <data key="rt">13.91</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="formula">C11H18O4</data>
+            <data key="corrected_rt">13.94</data>
+        </node>
+        <node id="7509">
+            <data key="SUID">7509</data>
+            <data key="shared name">24</data>
+            <data key="name">Cyclo(R1VVF)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">525.27</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">24</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=24&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">525.27</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">525.27</data>
+            <data key="rt">25.82</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">R1VVF</data>
+            <data key="formula">C28H36N4O6</data>
+            <data key="corrected_rt">25.82</data>
+            <data key="fungisporins">unknown</data>
+            <data key="linear or cyclic">cyclic</data>
+        </node>
+        <node id="7506">
+            <data key="SUID">7506</data>
+            <data key="shared name">30</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">537.306</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">30</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=30&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">537.306</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">537.3061</data>
+            <data key="rt">24.4</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="corrected_rt">24.4</data>
+        </node>
+        <node id="7503">
+            <data key="SUID">7503</data>
+            <data key="shared name">28</data>
+            <data key="name">Hydrolyzed fungisporin B</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">527.285</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">28</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=28&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">527.285</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">527.2853</data>
+            <data key="rt">12.75</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VYFV</data>
+            <data key="formula">C28H38N4O6</data>
+            <data key="corrected_rt">12.75</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7500">
+            <data key="SUID">7500</data>
+            <data key="shared name">20</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">497.374</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">20</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=20&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">497.374</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">497.3741</data>
+            <data key="rt">43.63</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="corrected_rt">43.63</data>
+        </node>
+        <node id="7497">
+            <data key="SUID">7497</data>
+            <data key="shared name">21</data>
+            <data key="name">Hydrolyzed fungisporin A</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">511.291</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">21</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=21&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">511.291</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">511.2906</data>
+            <data key="rt">17.9</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VFFV</data>
+            <data key="formula">C28H38N405</data>
+            <data key="corrected_rt">17.9</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7494">
+            <data key="SUID">7494</data>
+            <data key="shared name">36</data>
+            <data key="name">Hydrolyzed Fungisporin D VFWV</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">550.302</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">36</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=36&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">550.302</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">550.3015</data>
+            <data key="rt">17.09</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VFWV</data>
+            <data key="formula">C30H39N5O5</data>
+            <data key="corrected_rt">17.09</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7491">
+            <data key="SUID">7491</data>
+            <data key="shared name">8</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">237.185</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">8</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=8&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">237.185</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="mz">237.1847</data>
+            <data key="rt">23.12</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="corrected_rt">23.12</data>
+        </node>
+        <node id="7488">
+            <data key="SUID">7488</data>
+            <data key="shared name">46</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">237.185</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">46</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=46&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">237.185</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="mz">237.1847</data>
+            <data key="rt">22.12</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">7</data>
+            <data key="corrected_rt">22.12</data>
+        </node>
+        <node id="7485">
+            <data key="SUID">7485</data>
+            <data key="shared name">11</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">275.185</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">11</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=11&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">275.185</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">275.1849</data>
+            <data key="rt">18.1</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="corrected_rt">18.1</data>
+        </node>
+        <node id="7482">
+            <data key="SUID">7482</data>
+            <data key="shared name">35</data>
+            <data key="name">Cyclo(YWVV)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">548.287</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">35</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=35&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">548.287</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">548.2866</data>
+            <data key="rt">29.45</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">YWVV</data>
+            <data key="formula">C30H37N5O5</data>
+            <data key="corrected_rt">29.45</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">cyclic</data>
+        </node>
+        <node id="7479">
+            <data key="SUID">7479</data>
+            <data key="shared name">4</data>
+            <data key="name">PC-2</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">213.112</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">4</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=4&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">213.112</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">213.1119</data>
+            <data key="rt">15.65</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="formula">C11H16O4</data>
+            <data key="corrected_rt">15.75</data>
+        </node>
+        <node id="7476">
+            <data key="SUID">7476</data>
+            <data key="shared name">31</data>
+            <data key="name">Hydrolyzed Cyclo(VR2FV)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">537.306</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">31</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=31&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">537.306</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">537.3061</data>
+            <data key="rt">23.07</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VR2FV</data>
+            <data key="formula">C28H42N4O5</data>
+            <data key="corrected_rt">23.07</data>
+            <data key="fungisporins">unknown</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7473">
+            <data key="SUID">7473</data>
+            <data key="shared name">41</data>
+            <data key="name">Hydrolyzed Cyclo(R1R2VF)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">576.318</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">41</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=41&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">576.318</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">576.318</data>
+            <data key="rt">21.0</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">R1R2VF</data>
+            <data key="formula">C30H43N5O5</data>
+            <data key="corrected_rt">21.0</data>
+            <data key="fungisporins">unknown</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7470">
+            <data key="SUID">7470</data>
+            <data key="shared name">27</data>
+            <data key="name">Hydrolyzed Cyclo(FFIV)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">525.306</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">27</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=27&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">525.306</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">525.306</data>
+            <data key="rt">20.92</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VFFI</data>
+            <data key="corrected_rt">20.92</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7467">
+            <data key="SUID">7467</data>
+            <data key="shared name">43</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">180.102</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">43</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=43&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">180.102</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">180.1016</data>
+            <data key="rt">3.96</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">7</data>
+            <data key="corrected_rt">3.96</data>
+        </node>
+        <node id="7464">
+            <data key="SUID">7464</data>
+            <data key="shared name">19</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">467.3</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">19</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=19&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">467.3</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">467.2999</data>
+            <data key="rt">30.46</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="corrected_rt">30.46</data>
+        </node>
+        <node id="7461">
+            <data key="SUID">7461</data>
+            <data key="shared name">37</data>
+            <data key="name">Hydrolyzed Fungisporin D VFWV</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">550.302</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">37</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=37&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">550.302</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">550.3015</data>
+            <data key="rt">17.84</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VFWV</data>
+            <data key="formula">C30H39N5O5</data>
+            <data key="corrected_rt">17.84</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7458">
+            <data key="SUID">7458</data>
+            <data key="shared name">23</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">521.289</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">23</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=23&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">521.289</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">521.2885</data>
+            <data key="rt">39.52</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="corrected_rt">39.52</data>
+        </node>
+        <node id="7455">
+            <data key="SUID">7455</data>
+            <data key="shared name">42</data>
+            <data key="name">R1GFFV</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">668.34</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">42</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=42&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">668.34</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">668.3396</data>
+            <data key="rt">23.86</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">R1GFFV</data>
+            <data key="formula">C38H45N5O6</data>
+            <data key="corrected_rt">23.86</data>
+            <data key="fungisporins">unknown</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7452">
+            <data key="SUID">7452</data>
+            <data key="shared name">34</data>
+            <data key="name">Hydrolyzed Cyclo(YFVI)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">541.299</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">34</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=34&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">541.299</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">541.299</data>
+            <data key="rt">13.84</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">IYFV</data>
+            <data key="formula">C29H40N4O6</data>
+            <data key="corrected_rt">13.84</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7449">
+            <data key="SUID">7449</data>
+            <data key="shared name">9</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">253.18</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">9</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=9&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">253.18</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="mz">253.1794</data>
+            <data key="rt">9.66</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="corrected_rt">9.66</data>
+        </node>
+        <node id="7446">
+            <data key="SUID">7446</data>
+            <data key="shared name">17</data>
+            <data key="name">Ochratoxin B</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">370.128</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=4&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">17</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=17&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">370.128</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">4</data>
+            <data key="charge">0</data>
+            <data key="mz">370.1283</data>
+            <data key="rt">26.51</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="formula">C20H19NO6</data>
+            <data key="corrected_rt">26.51</data>
+        </node>
+        <node id="7443">
+            <data key="SUID">7443</data>
+            <data key="shared name">39</data>
+            <data key="name">Hydrolyzed Cyclo(YWVV)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">566.297</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">39</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=39&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">566.297</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">566.2965</data>
+            <data key="rt">12.26</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VYWV</data>
+            <data key="formula">C30H39N5O6</data>
+            <data key="corrected_rt">12.26</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7440">
+            <data key="SUID">7440</data>
+            <data key="shared name">47</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">253.18</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">47</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=47&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">253.18</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="Compound_Source">Isolated</data>
+            <data key="Ion_Source">ESI</data>
+            <data key="SharedPeaks">6</data>
+            <data key="tags">nan</data>
+            <data key="MQScore">0.776166</data>
+            <data key="Adduct">M+H</data>
+            <data key="SpectrumID">CCMSLIB00005727923</data>
+            <data key="INCHI">1S/C15H24O3/c1-8-5-13(17)14(18)9(2)12(16)6-11-10(8)7-15(11,3)4/h9-11,13-14,17-18H,1,5-7H2,2-4H3/t9-,10+,11-,13-,14+/m1/s1</data>
+            <data key="GNPSLibraryURL">http://gnps.ucsd.edu/ProteoSAFe/gnpslibraryspectrum.jsp?SpectrumID=CCMSLIB00005727923</data>
+            <data key="Library_Class">3</data>
+            <data key="IonMode">Positive</data>
+            <data key="MassDiff">0.0007019039999999999</data>
+            <data key="Smiles">C[C@H]1[C@@H]([C@@H](CC(=C)[C@@H]2CC([C@@H]2CC1=O)(C)C)O)O</data>
+            <data key="Data_Collector">Massbank</data>
+            <data key="Instrument">Hybrid FT</data>
+            <data key="PI">Massbank</data>
+            <data key="Compound_Name">Massbank:AC000278 Walleminone|(1R,4S,5S,6R,9R)-5,6-dihydroxy-4,11,11-trimethyl-8-methylidenebicyclo[7.2.0]undecan-3-one</data>
+            <data key="MZErrorPPM">2.77236</data>
+            <data key="mz">253.1795</data>
+            <data key="rt">23.15</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">7</data>
+            <data key="corrected_rt">23.15</data>
+        </node>
+        <node id="7437">
+            <data key="SUID">7437</data>
+            <data key="shared name">13</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">337.272</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">13</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=13&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">337.272</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">337.2731</data>
+            <data key="rt">37.14</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="corrected_rt">37.14</data>
+        </node>
+        <node id="7434">
+            <data key="SUID">7434</data>
+            <data key="shared name">2</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">481.29</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">2</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=2&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">481.29</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">481.2905</data>
+            <data key="rt">44.16</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">1</data>
+            <data key="corrected_rt">44.22</data>
+        </node>
+        <node id="7431">
+            <data key="SUID">7431</data>
+            <data key="shared name">49</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">469.243</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=2&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">49</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=49&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">469.243</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">2</data>
+            <data key="charge">0</data>
+            <data key="mz">469.243</data>
+            <data key="rt">21.18</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">7</data>
+            <data key="corrected_rt">21.18</data>
+        </node>
+        <node id="7428">
+            <data key="SUID">7428</data>
+            <data key="shared name">7</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">237.185</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">7</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=7&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">237.185</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="mz">237.1847</data>
+            <data key="rt">17.16</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="corrected_rt">17.16</data>
+        </node>
+        <node id="7425">
+            <data key="SUID">7425</data>
+            <data key="shared name">26</data>
+            <data key="name">Hydrolyzed Cyclo(FFIV)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">525.306</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">26</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=26&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">525.306</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">525.306</data>
+            <data key="rt">20.2</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VFFI</data>
+            <data key="formula">C29H40N4O5</data>
+            <data key="corrected_rt">20.2</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7422">
+            <data key="SUID">7422</data>
+            <data key="shared name">14</data>
+            <data key="name">Aurantiomide C</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">341.16</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">14</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=14&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">341.16</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">341.1605</data>
+            <data key="rt">20.09</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="formula">C18H20N4O3</data>
+            <data key="corrected_rt">20.09</data>
+        </node>
+        <node id="7419">
+            <data key="SUID">7419</data>
+            <data key="shared name">32</data>
+            <data key="name">Hydrolyzed Cyclo(R1FFV)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">539.286</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">32</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=32&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">539.286</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">539.2859</data>
+            <data key="rt">26.91</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">R1FFV</data>
+            <data key="formula">C29H38N4O5</data>
+            <data key="corrected_rt">26.91</data>
+            <data key="fungisporins">unknown</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7416">
+            <data key="SUID">7416</data>
+            <data key="shared name">6</data>
+            <data key="name">LL-P880 beta</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">231.123</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">6</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=6&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">231.123</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="mz">231.1227</data>
+            <data key="rt">5.66</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="formula">C11H18O5</data>
+            <data key="corrected_rt">5.66</data>
+        </node>
+        <node id="7413">
+            <data key="SUID">7413</data>
+            <data key="shared name">38</data>
+            <data key="name">Hydrolyzed Fungisporin D WVVF</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">550.302</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">38</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=38&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">550.302</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">550.3015</data>
+            <data key="rt">18.93</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">WVVF</data>
+            <data key="formula">C30H39N5O5</data>
+            <data key="corrected_rt">18.93</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7410">
+            <data key="SUID">7410</data>
+            <data key="shared name">16</data>
+            <data key="name">Anacine</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">343.176</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">16</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=16&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">343.176</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">343.1758</data>
+            <data key="rt">12.69</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="formula">C18H22N4O3</data>
+            <data key="corrected_rt">12.8</data>
+        </node>
+        <node id="7407">
+            <data key="SUID">7407</data>
+            <data key="shared name">45</data>
+            <data key="name">LL-P880gamma</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">229.107</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">45</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=45&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">229.107</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="mz">229.1071</data>
+            <data key="rt">5.55</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">7</data>
+            <data key="formula">C11H16O5</data>
+            <data key="corrected_rt">5.55</data>
+        </node>
+        <node id="7404">
+            <data key="SUID">7404</data>
+            <data key="shared name">25</data>
+            <data key="name">Hydrolyzed Cyclo(FFVI)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">525.306</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">25</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=25&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">525.306</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">525.3051</data>
+            <data key="rt">19.55</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">IFFV</data>
+            <data key="formula">C29H40N4O5</data>
+            <data key="corrected_rt">19.55</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7347">
+            <data key="SUID">7347</data>
+            <data key="shared name">10</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">253.18</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=3&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">10</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=10&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">253.18</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">3</data>
+            <data key="charge">0</data>
+            <data key="Compound_Source">Commercial</data>
+            <data key="Ion_Source">LC-ESI</data>
+            <data key="SharedPeaks">8</data>
+            <data key="tags">nan</data>
+            <data key="MQScore">0.712113</data>
+            <data key="Adduct">M+H</data>
+            <data key="SpectrumID">CCMSLIB00000081035</data>
+            <data key="INCHI">nan</data>
+            <data key="GNPSLibraryURL">http://gnps.ucsd.edu/ProteoSAFe/gnpslibraryspectrum.jsp?SpectrumID=CCMSLIB00000081035</data>
+            <data key="Library_Class">3</data>
+            <data key="IonMode">Positive</data>
+            <data key="MassDiff">0.0363007</data>
+            <data key="Smiles">nan</data>
+            <data key="Data_Collector">Sirenas Marine Discovery</data>
+            <data key="Instrument">qTof</data>
+            <data key="PI">Sirenas Marine Discovery</data>
+            <data key="Compound_Name">B12A04</data>
+            <data key="MZErrorPPM">143.358</data>
+            <data key="mz">253.1794</data>
+            <data key="rt">22.09</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="corrected_rt">22.09</data>
+        </node>
+        <node id="7344">
+            <data key="SUID">7344</data>
+            <data key="shared name">1</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">481.29</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">1</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=1&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">481.29</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">481.2905</data>
+            <data key="rt">43.82</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">1</data>
+            <data key="corrected_rt">43.82</data>
+        </node>
+        <node id="7341">
+            <data key="SUID">7341</data>
+            <data key="shared name">29</data>
+            <data key="name">Fungisporin D</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">532.291</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">29</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=29&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">532.291</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">532.2908</data>
+            <data key="rt">36.36</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">4</data>
+            <data key="peptide formula">VFWV</data>
+            <data key="formula">C30H37N5O4</data>
+            <data key="corrected_rt">36.36</data>
+            <data key="fungisporins">known</data>
+            <data key="linear or cyclic">cyclic</data>
+        </node>
+        <node id="7338">
+            <data key="SUID">7338</data>
+            <data key="shared name">51</data>
+            <data key="name">Hydrolyzed Cyclo(VIVF) ou Cyclo(VLVF)</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">477.309</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">51</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=51&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">477.309</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">1</data>
+            <data key="charge">0</data>
+            <data key="mz">477.309</data>
+            <data key="rt">16.92</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">7</data>
+            <data key="peptide formula">VIVF ou VLVF</data>
+            <data key="formula">C25H40N4O5</data>
+            <data key="corrected_rt">16.92</data>
+            <data key="fungisporins">unknown</data>
+            <data key="linear or cyclic">linear</data>
+        </node>
+        <node id="7278">
+            <data key="SUID">7278</data>
+            <data key="shared name">3</data>
+            <data key="name">Verrucolone</data>
+            <data key="selected">false</data>
+            <data key="precursor mass">147.065</data>
+            <data key="GNPSLinkout_Network">https://gnps.ucsd.edu/ProteoSAFe/result.jsp?view=network_displayer&amp;componentindex=-1&amp;task=b61ed9d65df1437684aa4c8aba9466dd&amp;show=true</data>
+            <data key="G4">0.0</data>
+            <data key="G3">0.0</data>
+            <data key="cluster index">3</data>
+            <data key="RTMean">0.0</data>
+            <data key="RTConsensus">0.0</data>
+            <data key="UniqueFileSources">files_champi_B.mgf</data>
+            <data key="sum(precursor intensity)">0.0</data>
+            <data key="DefaultGroups">G1</data>
+            <data key="G6">0.0</data>
+            <data key="GNPSLinkout_Cluster">https://gnps.ucsd.edu//ProteoSAFe/result.jsp?task=b61ed9d65df1437684aa4c8aba9466dd&amp;view=cluster_details&amp;protein=3&amp;show=true</data>
+            <data key="G2">0.0</data>
+            <data key="G5">0.0</data>
+            <data key="parent mass">147.065</data>
+            <data key="G1">1.0</data>
+            <data key="number of spectra">1</data>
+            <data key="componentindex">-1</data>
+            <data key="charge">0</data>
+            <data key="mz">147.064</data>
+            <data key="rt">3.12</data>
+            <data key="group">B</data>
+            <data key="polarity">pos</data>
+            <data key="id_file">3</data>
+            <data key="formula">C6H10O4</data>
+            <data key="corrected_rt">3.12</data>
+        </node>
+        <edge source="7527" target="7527">
+            <data key="SUID">7911</data>
+            <data key="shared name">15 (-) 15</data>
+            <data key="shared interaction">-</data>
+            <data key="name">15 (-) 15</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">15</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">15</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7524" target="7536">
+            <data key="SUID">7908</data>
+            <data key="shared name">12 (-) 44</data>
+            <data key="shared interaction">-</data>
+            <data key="name">12 (-) 44</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7057</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">12</data>
+            <data key="node2">44</data>
+            <data key="mass_difference">83.183</data>
+            <data key="EdgeScore">0.7057</data>
+            <data key="component">-1</data>
+            <data key="node1">12</data>
+            <data key="explained_intensity">12.0</data>
+        </edge>
+        <edge source="7521" target="7521">
+            <data key="SUID">7905</data>
+            <data key="shared name">48 (-) 48</data>
+            <data key="shared interaction">-</data>
+            <data key="name">48 (-) 48</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">48</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">48</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7509" target="7533">
+            <data key="SUID">7902</data>
+            <data key="shared name">24 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">24 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6044</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">24</data>
+            <data key="mass_difference">-13.979</data>
+            <data key="EdgeScore">0.6044</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+        </edge>
+        <edge source="7503" target="7533">
+            <data key="SUID">7899</data>
+            <data key="shared name">28 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">28 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8056</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">28</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.8056</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7503" target="7530">
+            <data key="SUID">7896</data>
+            <data key="shared name">28 (-) 33</data>
+            <data key="shared interaction">-</data>
+            <data key="name">28 (-) 33</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9996</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">28</data>
+            <data key="node2">33</data>
+            <data key="mass_difference">-14.014</data>
+            <data key="EdgeScore">0.9996</data>
+            <data key="component">-1</data>
+            <data key="node1">28</data>
+            <data key="explained_intensity">28.0</data>
+            <data key="EdgeAnnotation">methanol (-H2O):CH2</data>
+        </edge>
+        <edge source="7500" target="7500">
+            <data key="SUID">7893</data>
+            <data key="shared name">20 (-) 20</data>
+            <data key="shared interaction">-</data>
+            <data key="name">20 (-) 20</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">20</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">20</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7497" target="7503">
+            <data key="SUID">7890</data>
+            <data key="shared name">21 (-) 28</data>
+            <data key="shared interaction">-</data>
+            <data key="name">21 (-) 28</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9744</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">28</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.9744</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7497" target="7533">
+            <data key="SUID">7887</data>
+            <data key="shared name">21 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">21 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8509</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">22</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.8509</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+        </edge>
+        <edge source="7494" target="7533">
+            <data key="SUID">7884</data>
+            <data key="shared name">36 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">36 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6758</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">36</data>
+            <data key="mass_difference">-39.011</data>
+            <data key="EdgeScore">0.6758</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">C2HN</data>
+        </edge>
+        <edge source="7494" target="7497">
+            <data key="SUID">7881</data>
+            <data key="shared name">36 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">36 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8353</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">36</data>
+            <data key="mass_difference">-39.011</data>
+            <data key="EdgeScore">0.8353</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">C2HN</data>
+        </edge>
+        <edge source="7488" target="7491">
+            <data key="SUID">7878</data>
+            <data key="shared name">46 (-) 8</data>
+            <data key="shared interaction">-</data>
+            <data key="name">46 (-) 8</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9381</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">8</data>
+            <data key="node2">46</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.9381</data>
+            <data key="component">-1</data>
+            <data key="node1">8</data>
+            <data key="explained_intensity">8.0</data>
+        </edge>
+        <edge source="7485" target="7485">
+            <data key="SUID">7875</data>
+            <data key="shared name">11 (-) 11</data>
+            <data key="shared interaction">-</data>
+            <data key="name">11 (-) 11</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">11</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">11</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7482" target="7539">
+            <data key="SUID">7872</data>
+            <data key="shared name">35 (-) 40</data>
+            <data key="shared interaction">-</data>
+            <data key="name">35 (-) 40</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6529</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">35</data>
+            <data key="node2">40</data>
+            <data key="mass_difference">-18.010</data>
+            <data key="EdgeScore">0.6529</data>
+            <data key="component">-1</data>
+            <data key="node1">35</data>
+            <data key="explained_intensity">35.0</data>
+            <data key="EdgeAnnotation">H2O</data>
+        </edge>
+        <edge source="7479" target="7479">
+            <data key="SUID">7869</data>
+            <data key="shared name">4 (-) 4</data>
+            <data key="shared interaction">-</data>
+            <data key="name">4 (-) 4</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">4</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">4</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7476" target="7533">
+            <data key="SUID">7866</data>
+            <data key="shared name">31 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">31 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7464</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">31</data>
+            <data key="mass_difference">-26.016</data>
+            <data key="EdgeScore">0.7464</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">C2H2</data>
+        </edge>
+        <edge source="7476" target="7503">
+            <data key="SUID">7863</data>
+            <data key="shared name">31 (-) 28</data>
+            <data key="shared interaction">-</data>
+            <data key="name">31 (-) 28</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7995</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">28</data>
+            <data key="node2">31</data>
+            <data key="mass_difference">-10.021</data>
+            <data key="EdgeScore">0.7995</data>
+            <data key="component">-1</data>
+            <data key="node1">28</data>
+            <data key="explained_intensity">28.0</data>
+        </edge>
+        <edge source="7476" target="7506">
+            <data key="SUID">7860</data>
+            <data key="shared name">31 (-) 30</data>
+            <data key="shared interaction">-</data>
+            <data key="name">31 (-) 30</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6174</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">30</data>
+            <data key="node2">31</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.6174</data>
+            <data key="component">-1</data>
+            <data key="node1">30</data>
+            <data key="explained_intensity">30.0</data>
+        </edge>
+        <edge source="7476" target="7497">
+            <data key="SUID">7857</data>
+            <data key="shared name">31 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">31 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.792</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">31</data>
+            <data key="mass_difference">-26.016</data>
+            <data key="EdgeScore">0.792</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">C2H2</data>
+        </edge>
+        <edge source="7473" target="7533">
+            <data key="SUID">7854</data>
+            <data key="shared name">41 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">41 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8097</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">41</data>
+            <data key="mass_difference">-65.027</data>
+            <data key="EdgeScore">0.8097</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">C4H3N</data>
+        </edge>
+        <edge source="7473" target="7497">
+            <data key="SUID">7851</data>
+            <data key="shared name">41 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">41 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.684</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">41</data>
+            <data key="mass_difference">-65.027</data>
+            <data key="EdgeScore">0.684</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">C4H3N</data>
+        </edge>
+        <edge source="7473" target="7476">
+            <data key="SUID">7848</data>
+            <data key="shared name">41 (-) 31</data>
+            <data key="shared interaction">-</data>
+            <data key="name">41 (-) 31</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6797</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">31</data>
+            <data key="node2">41</data>
+            <data key="mass_difference">-39.012</data>
+            <data key="EdgeScore">0.6797</data>
+            <data key="component">-1</data>
+            <data key="node1">31</data>
+            <data key="explained_intensity">31.0</data>
+            <data key="EdgeAnnotation">C2HN</data>
+        </edge>
+        <edge source="7470" target="7533">
+            <data key="SUID">7845</data>
+            <data key="shared name">27 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">27 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.846</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">27</data>
+            <data key="mass_difference">-14.015</data>
+            <data key="EdgeScore">0.846</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">methanol (-H2O):CH2</data>
+        </edge>
+        <edge source="7470" target="7530">
+            <data key="SUID">7842</data>
+            <data key="shared name">27 (-) 33</data>
+            <data key="shared interaction">-</data>
+            <data key="name">27 (-) 33</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6957</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">27</data>
+            <data key="node2">33</data>
+            <data key="mass_difference">-15.993</data>
+            <data key="EdgeScore">0.6957</data>
+            <data key="component">-1</data>
+            <data key="node1">27</data>
+            <data key="explained_intensity">27.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7470" target="7494">
+            <data key="SUID">7839</data>
+            <data key="shared name">27 (-) 36</data>
+            <data key="shared interaction">-</data>
+            <data key="name">27 (-) 36</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6508</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">27</data>
+            <data key="node2">36</data>
+            <data key="mass_difference">-24.995</data>
+            <data key="EdgeScore">0.6508</data>
+            <data key="component">-1</data>
+            <data key="node1">27</data>
+            <data key="explained_intensity">27.0</data>
+        </edge>
+        <edge source="7470" target="7497">
+            <data key="SUID">7836</data>
+            <data key="shared name">27 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">27 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7139</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">27</data>
+            <data key="mass_difference">-14.015</data>
+            <data key="EdgeScore">0.7139</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">methanol (-H2O):CH2</data>
+        </edge>
+        <edge source="7467" target="7467">
+            <data key="SUID">7833</data>
+            <data key="shared name">43 (-) 43</data>
+            <data key="shared interaction">-</data>
+            <data key="name">43 (-) 43</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">43</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">43</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7464" target="7464">
+            <data key="SUID">7830</data>
+            <data key="shared name">19 (-) 19</data>
+            <data key="shared interaction">-</data>
+            <data key="name">19 (-) 19</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">19</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">19</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7461" target="7539">
+            <data key="SUID">7827</data>
+            <data key="shared name">37 (-) 40</data>
+            <data key="shared interaction">-</data>
+            <data key="name">37 (-) 40</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8857</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">37</data>
+            <data key="node2">40</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.8857</data>
+            <data key="component">-1</data>
+            <data key="node1">37</data>
+            <data key="explained_intensity">37.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7461" target="7533">
+            <data key="SUID">7824</data>
+            <data key="shared name">37 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">37 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8696</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">37</data>
+            <data key="mass_difference">-39.011</data>
+            <data key="EdgeScore">0.8696</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">C2HN</data>
+        </edge>
+        <edge source="7461" target="7503">
+            <data key="SUID">7821</data>
+            <data key="shared name">37 (-) 28</data>
+            <data key="shared interaction">-</data>
+            <data key="name">37 (-) 28</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8372</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">28</data>
+            <data key="node2">37</data>
+            <data key="mass_difference">-23.016</data>
+            <data key="EdgeScore">0.8372</data>
+            <data key="component">-1</data>
+            <data key="node1">28</data>
+            <data key="explained_intensity">28.0</data>
+        </edge>
+        <edge source="7461" target="7476">
+            <data key="SUID">7818</data>
+            <data key="shared name">37 (-) 31</data>
+            <data key="shared interaction">-</data>
+            <data key="name">37 (-) 31</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8216</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">31</data>
+            <data key="node2">37</data>
+            <data key="mass_difference">-12.995</data>
+            <data key="EdgeScore">0.8216</data>
+            <data key="component">-1</data>
+            <data key="node1">31</data>
+            <data key="explained_intensity">31.0</data>
+        </edge>
+        <edge source="7461" target="7473">
+            <data key="SUID">7815</data>
+            <data key="shared name">37 (-) 41</data>
+            <data key="shared interaction">-</data>
+            <data key="name">37 (-) 41</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7504</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">37</data>
+            <data key="node2">41</data>
+            <data key="mass_difference">-26.016</data>
+            <data key="EdgeScore">0.7504</data>
+            <data key="component">-1</data>
+            <data key="node1">37</data>
+            <data key="explained_intensity">37.0</data>
+            <data key="EdgeAnnotation">C2H2</data>
+        </edge>
+        <edge source="7461" target="7470">
+            <data key="SUID">7812</data>
+            <data key="shared name">37 (-) 27</data>
+            <data key="shared interaction">-</data>
+            <data key="name">37 (-) 27</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.645</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">27</data>
+            <data key="node2">37</data>
+            <data key="mass_difference">-24.995</data>
+            <data key="EdgeScore">0.645</data>
+            <data key="component">-1</data>
+            <data key="node1">27</data>
+            <data key="explained_intensity">27.0</data>
+        </edge>
+        <edge source="7461" target="7497">
+            <data key="SUID">7809</data>
+            <data key="shared name">37 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">37 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8463</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">37</data>
+            <data key="mass_difference">-39.011</data>
+            <data key="EdgeScore">0.8463</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">C2HN</data>
+        </edge>
+        <edge source="7458" target="7458">
+            <data key="SUID">7806</data>
+            <data key="shared name">23 (-) 23</data>
+            <data key="shared interaction">-</data>
+            <data key="name">23 (-) 23</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">23</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">23</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7455" target="7476">
+            <data key="SUID">7803</data>
+            <data key="shared name">42 (-) 31</data>
+            <data key="shared interaction">-</data>
+            <data key="name">42 (-) 31</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6254</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">31</data>
+            <data key="node2">42</data>
+            <data key="mass_difference">-131.034</data>
+            <data key="EdgeScore">0.6254</data>
+            <data key="component">-1</data>
+            <data key="node1">31</data>
+            <data key="explained_intensity">31.0</data>
+        </edge>
+        <edge source="7452" target="7533">
+            <data key="SUID">7800</data>
+            <data key="shared name">34 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">34 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7946</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">34</data>
+            <data key="mass_difference">-30.008</data>
+            <data key="EdgeScore">0.7946</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">CH2O</data>
+        </edge>
+        <edge source="7452" target="7503">
+            <data key="SUID">7797</data>
+            <data key="shared name">34 (-) 28</data>
+            <data key="shared interaction">-</data>
+            <data key="name">34 (-) 28</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.978</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">28</data>
+            <data key="node2">34</data>
+            <data key="mass_difference">-14.014</data>
+            <data key="EdgeScore">0.978</data>
+            <data key="component">-1</data>
+            <data key="node1">28</data>
+            <data key="explained_intensity">28.0</data>
+            <data key="EdgeAnnotation">methanol (-H2O):CH2</data>
+        </edge>
+        <edge source="7452" target="7497">
+            <data key="SUID">7794</data>
+            <data key="shared name">34 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">34 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8877</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">34</data>
+            <data key="mass_difference">-30.008</data>
+            <data key="EdgeScore">0.8877</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">CH2O</data>
+        </edge>
+        <edge source="7452" target="7476">
+            <data key="SUID">7791</data>
+            <data key="shared name">34 (-) 31</data>
+            <data key="shared interaction">-</data>
+            <data key="name">34 (-) 31</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7841</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">31</data>
+            <data key="node2">34</data>
+            <data key="mass_difference">-3.993</data>
+            <data key="EdgeScore">0.7841</data>
+            <data key="component">-1</data>
+            <data key="node1">31</data>
+            <data key="explained_intensity">31.0</data>
+        </edge>
+        <edge source="7452" target="7461">
+            <data key="SUID">7788</data>
+            <data key="shared name">34 (-) 37</data>
+            <data key="shared interaction">-</data>
+            <data key="name">34 (-) 37</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7954</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">34</data>
+            <data key="node2">37</data>
+            <data key="mass_difference">-9.003</data>
+            <data key="EdgeScore">0.7954</data>
+            <data key="component">-1</data>
+            <data key="node1">34</data>
+            <data key="explained_intensity">34.0</data>
+        </edge>
+        <edge source="7449" target="7488">
+            <data key="SUID">7785</data>
+            <data key="shared name">9 (-) 46</data>
+            <data key="shared interaction">-</data>
+            <data key="name">9 (-) 46</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6605</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">9</data>
+            <data key="node2">46</data>
+            <data key="mass_difference">15.995</data>
+            <data key="EdgeScore">0.6605</data>
+            <data key="component">-1</data>
+            <data key="node1">9</data>
+            <data key="explained_intensity">9.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7449" target="7491">
+            <data key="SUID">7782</data>
+            <data key="shared name">9 (-) 8</data>
+            <data key="shared interaction">-</data>
+            <data key="name">9 (-) 8</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6392</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">8</data>
+            <data key="node2">9</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.6392</data>
+            <data key="component">-1</data>
+            <data key="node1">8</data>
+            <data key="explained_intensity">8.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7446" target="7518">
+            <data key="SUID">7779</data>
+            <data key="shared name">17 (-) 18</data>
+            <data key="shared interaction">-</data>
+            <data key="name">17 (-) 18</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9581</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">17</data>
+            <data key="node2">18</data>
+            <data key="mass_difference">-33.961</data>
+            <data key="EdgeScore">0.9581</data>
+            <data key="component">-1</data>
+            <data key="node1">17</data>
+            <data key="explained_intensity">17.0</data>
+        </edge>
+        <edge source="7443" target="7494">
+            <data key="SUID">7776</data>
+            <data key="shared name">39 (-) 36</data>
+            <data key="shared interaction">-</data>
+            <data key="name">39 (-) 36</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9463</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">36</data>
+            <data key="node2">39</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.9463</data>
+            <data key="component">-1</data>
+            <data key="node1">36</data>
+            <data key="explained_intensity">36.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7443" target="7530">
+            <data key="SUID">7773</data>
+            <data key="shared name">39 (-) 33</data>
+            <data key="shared interaction">-</data>
+            <data key="name">39 (-) 33</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7274</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">33</data>
+            <data key="node2">39</data>
+            <data key="mass_difference">-24.997</data>
+            <data key="EdgeScore">0.7274</data>
+            <data key="component">-1</data>
+            <data key="node1">33</data>
+            <data key="explained_intensity">33.0</data>
+        </edge>
+        <edge source="7443" target="7503">
+            <data key="SUID">7770</data>
+            <data key="shared name">39 (-) 28</data>
+            <data key="shared interaction">-</data>
+            <data key="name">39 (-) 28</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8696</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">28</data>
+            <data key="node2">39</data>
+            <data key="mass_difference">-39.011</data>
+            <data key="EdgeScore">0.8696</data>
+            <data key="component">-1</data>
+            <data key="node1">28</data>
+            <data key="explained_intensity">28.0</data>
+            <data key="EdgeAnnotation">C2HN</data>
+        </edge>
+        <edge source="7440" target="7488">
+            <data key="SUID">7767</data>
+            <data key="shared name">47 (-) 46</data>
+            <data key="shared interaction">-</data>
+            <data key="name">47 (-) 46</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6729</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">46</data>
+            <data key="node2">47</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.6729</data>
+            <data key="component">-1</data>
+            <data key="node1">46</data>
+            <data key="explained_intensity">46.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7440" target="7512">
+            <data key="SUID">7764</data>
+            <data key="shared name">47 (-) 5</data>
+            <data key="shared interaction">-</data>
+            <data key="name">47 (-) 5</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7747</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">5</data>
+            <data key="node2">47</data>
+            <data key="mass_difference">-38.052</data>
+            <data key="EdgeScore">0.7747</data>
+            <data key="component">-1</data>
+            <data key="node1">5</data>
+            <data key="explained_intensity">5.0</data>
+        </edge>
+        <edge source="7440" target="7491">
+            <data key="SUID">7761</data>
+            <data key="shared name">47 (-) 8</data>
+            <data key="shared interaction">-</data>
+            <data key="name">47 (-) 8</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6635</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">8</data>
+            <data key="node2">47</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.6635</data>
+            <data key="component">-1</data>
+            <data key="node1">8</data>
+            <data key="explained_intensity">8.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7437" target="7437">
+            <data key="SUID">7758</data>
+            <data key="shared name">13 (-) 13</data>
+            <data key="shared interaction">-</data>
+            <data key="name">13 (-) 13</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">13</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">13</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7434" target="7434">
+            <data key="SUID">7755</data>
+            <data key="shared name">2 (-) 2</data>
+            <data key="shared interaction">-</data>
+            <data key="name">2 (-) 2</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">2</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">2</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7431" target="7515">
+            <data key="SUID">7752</data>
+            <data key="shared name">49 (-) 50</data>
+            <data key="shared interaction">-</data>
+            <data key="name">49 (-) 50</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9858</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">49</data>
+            <data key="node2">50</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.9858</data>
+            <data key="component">-1</data>
+            <data key="node1">49</data>
+            <data key="explained_intensity">49.0</data>
+        </edge>
+        <edge source="7428" target="7449">
+            <data key="SUID">7749</data>
+            <data key="shared name">7 (-) 9</data>
+            <data key="shared interaction">-</data>
+            <data key="name">7 (-) 9</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8812</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">7</data>
+            <data key="node2">9</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.8812</data>
+            <data key="component">-1</data>
+            <data key="node1">7</data>
+            <data key="explained_intensity">7.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7428" target="7491">
+            <data key="SUID">7746</data>
+            <data key="shared name">7 (-) 8</data>
+            <data key="shared interaction">-</data>
+            <data key="name">7 (-) 8</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7259</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">7</data>
+            <data key="node2">8</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.7259</data>
+            <data key="component">-1</data>
+            <data key="node1">7</data>
+            <data key="explained_intensity">7.0</data>
+        </edge>
+        <edge source="7428" target="7488">
+            <data key="SUID">7743</data>
+            <data key="shared name">7 (-) 46</data>
+            <data key="shared interaction">-</data>
+            <data key="name">7 (-) 46</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7693</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">7</data>
+            <data key="node2">46</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.7693</data>
+            <data key="component">-1</data>
+            <data key="node1">7</data>
+            <data key="explained_intensity">7.0</data>
+        </edge>
+        <edge source="7428" target="7440">
+            <data key="SUID">7740</data>
+            <data key="shared name">7 (-) 47</data>
+            <data key="shared interaction">-</data>
+            <data key="name">7 (-) 47</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.746</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">7</data>
+            <data key="node2">47</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.746</data>
+            <data key="component">-1</data>
+            <data key="node1">7</data>
+            <data key="explained_intensity">7.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7425" target="7494">
+            <data key="SUID">7737</data>
+            <data key="shared name">26 (-) 36</data>
+            <data key="shared interaction">-</data>
+            <data key="name">26 (-) 36</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7159</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">26</data>
+            <data key="node2">36</data>
+            <data key="mass_difference">-24.995</data>
+            <data key="EdgeScore">0.7159</data>
+            <data key="component">-1</data>
+            <data key="node1">26</data>
+            <data key="explained_intensity">26.0</data>
+        </edge>
+        <edge source="7425" target="7470">
+            <data key="SUID">7734</data>
+            <data key="shared name">26 (-) 27</data>
+            <data key="shared interaction">-</data>
+            <data key="name">26 (-) 27</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7363</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">26</data>
+            <data key="node2">27</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.7363</data>
+            <data key="component">-1</data>
+            <data key="node1">26</data>
+            <data key="explained_intensity">26.0</data>
+        </edge>
+        <edge source="7425" target="7497">
+            <data key="SUID">7731</data>
+            <data key="shared name">26 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">26 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9868</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">26</data>
+            <data key="mass_difference">-14.015</data>
+            <data key="EdgeScore">0.9868</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">methanol (-H2O):CH2</data>
+        </edge>
+        <edge source="7425" target="7530">
+            <data key="SUID">7728</data>
+            <data key="shared name">26 (-) 33</data>
+            <data key="shared interaction">-</data>
+            <data key="name">26 (-) 33</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.98</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">26</data>
+            <data key="node2">33</data>
+            <data key="mass_difference">-15.993</data>
+            <data key="EdgeScore">0.98</data>
+            <data key="component">-1</data>
+            <data key="node1">26</data>
+            <data key="explained_intensity">26.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7425" target="7533">
+            <data key="SUID">7725</data>
+            <data key="shared name">26 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">26 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8335</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">26</data>
+            <data key="mass_difference">-14.015</data>
+            <data key="EdgeScore">0.8335</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">methanol (-H2O):CH2</data>
+        </edge>
+        <edge source="7422" target="7422">
+            <data key="SUID">7722</data>
+            <data key="shared name">14 (-) 14</data>
+            <data key="shared interaction">-</data>
+            <data key="name">14 (-) 14</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">14</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">14</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7419" target="7419">
+            <data key="SUID">7719</data>
+            <data key="shared name">32 (-) 32</data>
+            <data key="shared interaction">-</data>
+            <data key="name">32 (-) 32</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">32</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">32</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7416" target="7536">
+            <data key="SUID">7716</data>
+            <data key="shared name">6 (-) 44</data>
+            <data key="shared interaction">-</data>
+            <data key="name">6 (-) 44</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6641</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">6</data>
+            <data key="node2">44</data>
+            <data key="mass_difference">2.016</data>
+            <data key="EdgeScore">0.6641</data>
+            <data key="component">-1</data>
+            <data key="node1">6</data>
+            <data key="explained_intensity">6.0</data>
+            <data key="EdgeAnnotation">H2</data>
+        </edge>
+        <edge source="7413" target="7539">
+            <data key="SUID">7713</data>
+            <data key="shared name">38 (-) 40</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 40</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9688</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">38</data>
+            <data key="node2">40</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.9688</data>
+            <data key="component">-1</data>
+            <data key="node1">38</data>
+            <data key="explained_intensity">38.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7413" target="7533">
+            <data key="SUID">7710</data>
+            <data key="shared name">38 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9323</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">-39.011</data>
+            <data key="EdgeScore">0.9323</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">C2HN</data>
+        </edge>
+        <edge source="7413" target="7452">
+            <data key="SUID">7707</data>
+            <data key="shared name">38 (-) 34</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 34</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7072</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">34</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">-9.003</data>
+            <data key="EdgeScore">0.7072</data>
+            <data key="component">-1</data>
+            <data key="node1">34</data>
+            <data key="explained_intensity">34.0</data>
+        </edge>
+        <edge source="7413" target="7482">
+            <data key="SUID">7704</data>
+            <data key="shared name">38 (-) 35</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 35</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6352</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">35</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">-2.015</data>
+            <data key="EdgeScore">0.6352</data>
+            <data key="component">-1</data>
+            <data key="node1">35</data>
+            <data key="explained_intensity">35.0</data>
+            <data key="EdgeAnnotation">H2</data>
+        </edge>
+        <edge source="7413" target="7476">
+            <data key="SUID">7701</data>
+            <data key="shared name">38 (-) 31</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 31</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7659</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">31</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">-12.995</data>
+            <data key="EdgeScore">0.7659</data>
+            <data key="component">-1</data>
+            <data key="node1">31</data>
+            <data key="explained_intensity">31.0</data>
+        </edge>
+        <edge source="7413" target="7473">
+            <data key="SUID">7698</data>
+            <data key="shared name">38 (-) 41</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 41</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8229</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">38</data>
+            <data key="node2">41</data>
+            <data key="mass_difference">-26.016</data>
+            <data key="EdgeScore">0.8229</data>
+            <data key="component">-1</data>
+            <data key="node1">38</data>
+            <data key="explained_intensity">38.0</data>
+            <data key="EdgeAnnotation">C2H2</data>
+        </edge>
+        <edge source="7413" target="7470">
+            <data key="SUID">7695</data>
+            <data key="shared name">38 (-) 27</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 27</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6079</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">27</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">-24.995</data>
+            <data key="EdgeScore">0.6079</data>
+            <data key="component">-1</data>
+            <data key="node1">27</data>
+            <data key="explained_intensity">27.0</data>
+        </edge>
+        <edge source="7413" target="7503">
+            <data key="SUID">7692</data>
+            <data key="shared name">38 (-) 28</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 28</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7076</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">28</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">-23.016</data>
+            <data key="EdgeScore">0.7076</data>
+            <data key="component">-1</data>
+            <data key="node1">28</data>
+            <data key="explained_intensity">28.0</data>
+        </edge>
+        <edge source="7413" target="7497">
+            <data key="SUID">7689</data>
+            <data key="shared name">38 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7555</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">-39.011</data>
+            <data key="EdgeScore">0.7555</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">C2HN</data>
+        </edge>
+        <edge source="7413" target="7461">
+            <data key="SUID">7686</data>
+            <data key="shared name">38 (-) 37</data>
+            <data key="shared interaction">-</data>
+            <data key="name">38 (-) 37</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8814</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">37</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.8814</data>
+            <data key="component">-1</data>
+            <data key="node1">37</data>
+            <data key="explained_intensity">37.0</data>
+        </edge>
+        <edge source="7410" target="7410">
+            <data key="SUID">7683</data>
+            <data key="shared name">16 (-) 16</data>
+            <data key="shared interaction">-</data>
+            <data key="name">16 (-) 16</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">16</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">16</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7407" target="7416">
+            <data key="SUID">7680</data>
+            <data key="shared name">45 (-) 6</data>
+            <data key="shared interaction">-</data>
+            <data key="name">45 (-) 6</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6348</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">6</data>
+            <data key="node2">45</data>
+            <data key="mass_difference">2.016</data>
+            <data key="EdgeScore">0.6348</data>
+            <data key="component">-1</data>
+            <data key="node1">6</data>
+            <data key="explained_intensity">6.0</data>
+            <data key="EdgeAnnotation">H2</data>
+        </edge>
+        <edge source="7407" target="7536">
+            <data key="SUID">7677</data>
+            <data key="shared name">45 (-) 44</data>
+            <data key="shared interaction">-</data>
+            <data key="name">45 (-) 44</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.909</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">44</data>
+            <data key="node2">45</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.909</data>
+            <data key="component">-1</data>
+            <data key="node1">44</data>
+            <data key="explained_intensity">44.0</data>
+        </edge>
+        <edge source="7407" target="7512">
+            <data key="SUID">7674</data>
+            <data key="shared name">45 (-) 5</data>
+            <data key="shared interaction">-</data>
+            <data key="name">45 (-) 5</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6882</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">5</data>
+            <data key="node2">45</data>
+            <data key="mass_difference">-13.979</data>
+            <data key="EdgeScore">0.6882</data>
+            <data key="component">-1</data>
+            <data key="node1">5</data>
+            <data key="explained_intensity">5.0</data>
+        </edge>
+        <edge source="7407" target="7428">
+            <data key="SUID">7671</data>
+            <data key="shared name">45 (-) 7</data>
+            <data key="shared interaction">-</data>
+            <data key="name">45 (-) 7</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7332</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">7</data>
+            <data key="node2">45</data>
+            <data key="mass_difference">8.078</data>
+            <data key="EdgeScore">0.7332</data>
+            <data key="component">-1</data>
+            <data key="node1">7</data>
+            <data key="explained_intensity">7.0</data>
+        </edge>
+        <edge source="7407" target="7488">
+            <data key="SUID">7668</data>
+            <data key="shared name">45 (-) 46</data>
+            <data key="shared interaction">-</data>
+            <data key="name">45 (-) 46</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6352</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">45</data>
+            <data key="node2">46</data>
+            <data key="mass_difference">-8.078</data>
+            <data key="EdgeScore">0.6352</data>
+            <data key="component">-1</data>
+            <data key="node1">45</data>
+            <data key="explained_intensity">45.0</data>
+        </edge>
+        <edge source="7404" target="7533">
+            <data key="SUID">7665</data>
+            <data key="shared name">25 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">25 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8018</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">25</data>
+            <data key="mass_difference">-14.015</data>
+            <data key="EdgeScore">0.8018</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+            <data key="EdgeAnnotation">methanol (-H2O):CH2</data>
+        </edge>
+        <edge source="7404" target="7470">
+            <data key="SUID">7662</data>
+            <data key="shared name">25 (-) 27</data>
+            <data key="shared interaction">-</data>
+            <data key="name">25 (-) 27</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7777</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">25</data>
+            <data key="node2">27</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.7777</data>
+            <data key="component">-1</data>
+            <data key="node1">25</data>
+            <data key="explained_intensity">25.0</data>
+        </edge>
+        <edge source="7404" target="7413">
+            <data key="SUID">7659</data>
+            <data key="shared name">25 (-) 38</data>
+            <data key="shared interaction">-</data>
+            <data key="name">25 (-) 38</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7048</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">25</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">-24.995</data>
+            <data key="EdgeScore">0.7048</data>
+            <data key="component">-1</data>
+            <data key="node1">25</data>
+            <data key="explained_intensity">25.0</data>
+        </edge>
+        <edge source="7404" target="7452">
+            <data key="SUID">7656</data>
+            <data key="shared name">25 (-) 34</data>
+            <data key="shared interaction">-</data>
+            <data key="name">25 (-) 34</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9067</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">25</data>
+            <data key="node2">34</data>
+            <data key="mass_difference">-15.993</data>
+            <data key="EdgeScore">0.9067</data>
+            <data key="component">-1</data>
+            <data key="node1">25</data>
+            <data key="explained_intensity">25.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7404" target="7497">
+            <data key="SUID">7653</data>
+            <data key="shared name">25 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">25 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9086</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">25</data>
+            <data key="mass_difference">-14.015</data>
+            <data key="EdgeScore">0.9086</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+            <data key="EdgeAnnotation">methanol (-H2O):CH2</data>
+        </edge>
+        <edge source="7404" target="7476">
+            <data key="SUID">7650</data>
+            <data key="shared name">25 (-) 31</data>
+            <data key="shared interaction">-</data>
+            <data key="name">25 (-) 31</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7312</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">25</data>
+            <data key="node2">31</data>
+            <data key="mass_difference">-12.000</data>
+            <data key="EdgeScore">0.7312</data>
+            <data key="component">-1</data>
+            <data key="node1">25</data>
+            <data key="explained_intensity">25.0</data>
+            <data key="EdgeAnnotation">C</data>
+        </edge>
+        <edge source="7404" target="7503">
+            <data key="SUID">7647</data>
+            <data key="shared name">25 (-) 28</data>
+            <data key="shared interaction">-</data>
+            <data key="name">25 (-) 28</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8613</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">25</data>
+            <data key="node2">28</data>
+            <data key="mass_difference">-1.979</data>
+            <data key="EdgeScore">0.8613</data>
+            <data key="component">-1</data>
+            <data key="node1">25</data>
+            <data key="explained_intensity">25.0</data>
+        </edge>
+        <edge source="7404" target="7461">
+            <data key="SUID">7644</data>
+            <data key="shared name">25 (-) 37</data>
+            <data key="shared interaction">-</data>
+            <data key="name">25 (-) 37</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8239</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">25</data>
+            <data key="node2">37</data>
+            <data key="mass_difference">-24.995</data>
+            <data key="EdgeScore">0.8239</data>
+            <data key="component">-1</data>
+            <data key="node1">25</data>
+            <data key="explained_intensity">25.0</data>
+        </edge>
+        <edge source="7347" target="7536">
+            <data key="SUID">7641</data>
+            <data key="shared name">10 (-) 44</data>
+            <data key="shared interaction">-</data>
+            <data key="name">10 (-) 44</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6796</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">10</data>
+            <data key="node2">44</data>
+            <data key="mass_difference">24.073</data>
+            <data key="EdgeScore">0.6796</data>
+            <data key="component">-1</data>
+            <data key="node1">10</data>
+            <data key="explained_intensity">10.0</data>
+        </edge>
+        <edge source="7347" target="7491">
+            <data key="SUID">7638</data>
+            <data key="shared name">10 (-) 8</data>
+            <data key="shared interaction">-</data>
+            <data key="name">10 (-) 8</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6737</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">8</data>
+            <data key="node2">10</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.6737</data>
+            <data key="component">-1</data>
+            <data key="node1">8</data>
+            <data key="explained_intensity">8.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7347" target="7512">
+            <data key="SUID">7635</data>
+            <data key="shared name">10 (-) 5</data>
+            <data key="shared interaction">-</data>
+            <data key="name">10 (-) 5</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.793</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">5</data>
+            <data key="node2">10</data>
+            <data key="mass_difference">-38.052</data>
+            <data key="EdgeScore">0.793</data>
+            <data key="component">-1</data>
+            <data key="node1">5</data>
+            <data key="explained_intensity">5.0</data>
+        </edge>
+        <edge source="7347" target="7428">
+            <data key="SUID">7632</data>
+            <data key="shared name">10 (-) 7</data>
+            <data key="shared interaction">-</data>
+            <data key="name">10 (-) 7</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7604</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">7</data>
+            <data key="node2">10</data>
+            <data key="mass_difference">-15.995</data>
+            <data key="EdgeScore">0.7604</data>
+            <data key="component">-1</data>
+            <data key="node1">7</data>
+            <data key="explained_intensity">7.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7347" target="7488">
+            <data key="SUID">7629</data>
+            <data key="shared name">10 (-) 46</data>
+            <data key="shared interaction">-</data>
+            <data key="name">10 (-) 46</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6917</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">10</data>
+            <data key="node2">46</data>
+            <data key="mass_difference">15.995</data>
+            <data key="EdgeScore">0.6917</data>
+            <data key="component">-1</data>
+            <data key="node1">10</data>
+            <data key="explained_intensity">10.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7347" target="7407">
+            <data key="SUID">7626</data>
+            <data key="shared name">10 (-) 45</data>
+            <data key="shared interaction">-</data>
+            <data key="name">10 (-) 45</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6267</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">10</data>
+            <data key="node2">45</data>
+            <data key="mass_difference">24.073</data>
+            <data key="EdgeScore">0.6267</data>
+            <data key="component">-1</data>
+            <data key="node1">10</data>
+            <data key="explained_intensity">10.0</data>
+        </edge>
+        <edge source="7347" target="7449">
+            <data key="SUID">7623</data>
+            <data key="shared name">10 (-) 9</data>
+            <data key="shared interaction">-</data>
+            <data key="name">10 (-) 9</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7244</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">9</data>
+            <data key="node2">10</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.7244</data>
+            <data key="component">-1</data>
+            <data key="node1">9</data>
+            <data key="explained_intensity">9.0</data>
+        </edge>
+        <edge source="7347" target="7440">
+            <data key="SUID">7620</data>
+            <data key="shared name">10 (-) 47</data>
+            <data key="shared interaction">-</data>
+            <data key="name">10 (-) 47</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.9694</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">10</data>
+            <data key="node2">47</data>
+            <data key="mass_difference">0.000</data>
+            <data key="EdgeScore">0.9694</data>
+            <data key="component">-1</data>
+            <data key="node1">10</data>
+            <data key="explained_intensity">10.0</data>
+        </edge>
+        <edge source="7344" target="7344">
+            <data key="SUID">7617</data>
+            <data key="shared name">1 (-) 1</data>
+            <data key="shared interaction">-</data>
+            <data key="name">1 (-) 1</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">1</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">1</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+        <edge source="7341" target="7539">
+            <data key="SUID">7614</data>
+            <data key="shared name">29 (-) 40</data>
+            <data key="shared interaction">-</data>
+            <data key="name">29 (-) 40</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6071</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">29</data>
+            <data key="node2">40</data>
+            <data key="mass_difference">-34.006</data>
+            <data key="EdgeScore">0.6071</data>
+            <data key="component">-1</data>
+            <data key="node1">29</data>
+            <data key="explained_intensity">29.0</data>
+            <data key="EdgeAnnotation">O2H2:H2O2</data>
+        </edge>
+        <edge source="7341" target="7413">
+            <data key="SUID">7611</data>
+            <data key="shared name">29 (-) 38</data>
+            <data key="shared interaction">-</data>
+            <data key="name">29 (-) 38</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.611</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">29</data>
+            <data key="node2">38</data>
+            <data key="mass_difference">-18.011</data>
+            <data key="EdgeScore">0.611</data>
+            <data key="component">-1</data>
+            <data key="node1">29</data>
+            <data key="explained_intensity">29.0</data>
+            <data key="EdgeAnnotation">H2O</data>
+        </edge>
+        <edge source="7341" target="7482">
+            <data key="SUID">7608</data>
+            <data key="shared name">29 (-) 35</data>
+            <data key="shared interaction">-</data>
+            <data key="name">29 (-) 35</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.96</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">29</data>
+            <data key="node2">35</data>
+            <data key="mass_difference">-15.996</data>
+            <data key="EdgeScore">0.96</data>
+            <data key="component">-1</data>
+            <data key="node1">29</data>
+            <data key="explained_intensity">29.0</data>
+            <data key="EdgeAnnotation">O</data>
+        </edge>
+        <edge source="7341" target="7509">
+            <data key="SUID">7605</data>
+            <data key="shared name">29 (-) 24</data>
+            <data key="shared interaction">-</data>
+            <data key="name">29 (-) 24</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8425</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">24</data>
+            <data key="node2">29</data>
+            <data key="mass_difference">-7.021</data>
+            <data key="EdgeScore">0.8425</data>
+            <data key="component">-1</data>
+            <data key="node1">24</data>
+            <data key="explained_intensity">24.0</data>
+        </edge>
+        <edge source="7341" target="7461">
+            <data key="SUID">7602</data>
+            <data key="shared name">29 (-) 37</data>
+            <data key="shared interaction">-</data>
+            <data key="name">29 (-) 37</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6051</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">29</data>
+            <data key="node2">37</data>
+            <data key="mass_difference">-18.011</data>
+            <data key="EdgeScore">0.6051</data>
+            <data key="component">-1</data>
+            <data key="node1">29</data>
+            <data key="explained_intensity">29.0</data>
+            <data key="EdgeAnnotation">H2O</data>
+        </edge>
+        <edge source="7338" target="7413">
+            <data key="SUID">7599</data>
+            <data key="shared name">51 (-) 38</data>
+            <data key="shared interaction">-</data>
+            <data key="name">51 (-) 38</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7364</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">38</data>
+            <data key="node2">51</data>
+            <data key="mass_difference">72.993</data>
+            <data key="EdgeScore">0.7364</data>
+            <data key="component">-1</data>
+            <data key="node1">38</data>
+            <data key="explained_intensity">38.0</data>
+            <data key="EdgeAnnotation">C2HO3</data>
+        </edge>
+        <edge source="7338" target="7470">
+            <data key="SUID">7596</data>
+            <data key="shared name">51 (-) 27</data>
+            <data key="shared interaction">-</data>
+            <data key="name">51 (-) 27</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7954</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">27</data>
+            <data key="node2">51</data>
+            <data key="mass_difference">47.997</data>
+            <data key="EdgeScore">0.7954</data>
+            <data key="component">-1</data>
+            <data key="node1">27</data>
+            <data key="explained_intensity">27.0</data>
+        </edge>
+        <edge source="7338" target="7533">
+            <data key="SUID">7593</data>
+            <data key="shared name">51 (-) 22</data>
+            <data key="shared interaction">-</data>
+            <data key="name">51 (-) 22</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.791</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">22</data>
+            <data key="node2">51</data>
+            <data key="mass_difference">33.982</data>
+            <data key="EdgeScore">0.791</data>
+            <data key="component">-1</data>
+            <data key="node1">22</data>
+            <data key="explained_intensity">22.0</data>
+        </edge>
+        <edge source="7338" target="7452">
+            <data key="SUID">7590</data>
+            <data key="shared name">51 (-) 34</data>
+            <data key="shared interaction">-</data>
+            <data key="name">51 (-) 34</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.748</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">34</data>
+            <data key="node2">51</data>
+            <data key="mass_difference">63.990</data>
+            <data key="EdgeScore">0.748</data>
+            <data key="component">-1</data>
+            <data key="node1">34</data>
+            <data key="explained_intensity">34.0</data>
+            <data key="EdgeAnnotation">C4O</data>
+        </edge>
+        <edge source="7338" target="7473">
+            <data key="SUID">7587</data>
+            <data key="shared name">51 (-) 41</data>
+            <data key="shared interaction">-</data>
+            <data key="name">51 (-) 41</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.6304</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">41</data>
+            <data key="node2">51</data>
+            <data key="mass_difference">99.009</data>
+            <data key="EdgeScore">0.6304</data>
+            <data key="component">-1</data>
+            <data key="node1">41</data>
+            <data key="explained_intensity">41.0</data>
+        </edge>
+        <edge source="7338" target="7497">
+            <data key="SUID">7584</data>
+            <data key="shared name">51 (-) 21</data>
+            <data key="shared interaction">-</data>
+            <data key="name">51 (-) 21</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7221</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">21</data>
+            <data key="node2">51</data>
+            <data key="mass_difference">33.982</data>
+            <data key="EdgeScore">0.7221</data>
+            <data key="component">-1</data>
+            <data key="node1">21</data>
+            <data key="explained_intensity">21.0</data>
+        </edge>
+        <edge source="7338" target="7404">
+            <data key="SUID">7581</data>
+            <data key="shared name">51 (-) 25</data>
+            <data key="shared interaction">-</data>
+            <data key="name">51 (-) 25</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.8355</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">25</data>
+            <data key="node2">51</data>
+            <data key="mass_difference">47.997</data>
+            <data key="EdgeScore">0.8355</data>
+            <data key="component">-1</data>
+            <data key="node1">25</data>
+            <data key="explained_intensity">25.0</data>
+        </edge>
+        <edge source="7338" target="7503">
+            <data key="SUID">7578</data>
+            <data key="shared name">51 (-) 28</data>
+            <data key="shared interaction">-</data>
+            <data key="name">51 (-) 28</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7104</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">28</data>
+            <data key="node2">51</data>
+            <data key="mass_difference">49.976</data>
+            <data key="EdgeScore">0.7104</data>
+            <data key="component">-1</data>
+            <data key="node1">28</data>
+            <data key="explained_intensity">28.0</data>
+        </edge>
+        <edge source="7338" target="7461">
+            <data key="SUID">7572</data>
+            <data key="shared name">51 (-) 37</data>
+            <data key="shared interaction">-</data>
+            <data key="name">51 (-) 37</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">0.7752</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">37</data>
+            <data key="node2">51</data>
+            <data key="mass_difference">72.993</data>
+            <data key="EdgeScore">0.7752</data>
+            <data key="component">-1</data>
+            <data key="node1">37</data>
+            <data key="explained_intensity">37.0</data>
+            <data key="EdgeAnnotation">C2HO3</data>
+        </edge>
+        <edge source="7278" target="7278">
+            <data key="SUID">7542</data>
+            <data key="shared name">3 (-) 3</data>
+            <data key="shared interaction">-</data>
+            <data key="name">3 (-) 3</data>
+            <data key="selected">false</data>
+            <data key="interaction">-</data>
+            <data key="cosine_score">1.0</data>
+            <data key="EdgeType">Cosine</data>
+            <data key="property1">1.0</data>
+            <data key="node2">3</data>
+            <data key="mass_difference">0.0</data>
+            <data key="EdgeScore">1.0</data>
+            <data key="component">-1</data>
+            <data key="node1">3</data>
+            <data key="explained_intensity">1.0</data>
+        </edge>
+    </graph>
+</graphml>

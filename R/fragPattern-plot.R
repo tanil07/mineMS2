@@ -504,19 +504,23 @@ createFileCS <- function(name, path_inchi, dir_images)
 #' @param path_inchi The path to the inchi key of the molecules if known, otherwise NULL
 #' @param dir_images The path to the directory to store the png images
 #' @param x_lim the limits in mz values for the spectra of the pattern
+#' @param title the title for the spectra. If NULL, the title will be set automatically
 #' 
 #' @return ggplot object
-plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec, rtprec, names, n, col_vec, path_inchi, dir_images, x_lim)
+plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec, rtprec, names, n, col_vec, path_inchi, dir_images, x_lim, title = NULL)
 {
         gid <- ru_occs_gid[i]
         all_pos <- u_occs_gid[[i]]
 		
-		if(length(rtprec[gid]) == 0)
+		if(is.null(title))
 		{
-			title <- paste(names[gid], ", precursor m/z:", round(mzprec[gid], digits=3), paste(" (N", n[gid], ")", sep=""), sep="")
-		}
-		else {
-			title <- paste(names[gid], ", precursor m/z:", round(mzprec[gid], digits=3), ", rt:", rtprec[gid], paste(" (N", n[gid], ")", sep=""), sep="")
+			if(length(rtprec[gid]) == 0)
+			{
+				title <- paste(names[gid], ", precursor m/z:", round(mzprec[gid], digits=3), paste(" (N", n[gid], ")", sep=""), sep="")
+			}
+			else {
+				title <- paste(names[gid], ", precursor m/z:", round(mzprec[gid], digits=3), ", rt:", rtprec[gid], paste(" (N", n[gid], ")", sep=""), sep="")
+			}
 		}
                 
         ##Peaks mapping
@@ -592,6 +596,7 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec
 #' Plot the occurences, the spectra overlayed with the matched peaks of a fragmentation pattern.
 #' @param m2l An ms2lib object.
 #' @param pidx A pattern id or a frag_pattern object.
+#' @param titles A list of titles for the spectra. If NULL, a title will be set automatically
 #' @param path_inchi The path to the inchi key of the molecules if known (default NULL)
 #' 
 #' @return A list of plots, one for every spectrum
@@ -600,7 +605,7 @@ plot_one_spectra <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec
 #' @examples 
 #' data(m2l)
 #' plot_pattern_ggplot(m2l, "P12")
-plot_pattern_ggplot <- function(m2l, pidx, path_inchi=NULL)
+plot_pattern_ggplot <- function(m2l, pidx, titles = NULL, path_inchi=NULL)
 {
 	if(length(path_inchi) != 0)
 	{
@@ -654,7 +659,7 @@ plot_pattern_ggplot <- function(m2l, pidx, path_inchi=NULL)
 
     plots <- lapply(seq_along(u_occs_gid), plot_one_spectra, 
         loss_mz=loss_mz, mgs=mgs, g=g, ru_occs_gid=ru_occs_gid, u_occs_gid=u_occs_gid, mzprec=mz, rtprec=rt,
-        names=names, n=n, col_vec = col_vec, path_inchi=path_inchi, dir_images=dir_images, x_lim = x_lim)
+        names=names, n=n, col_vec = col_vec, path_inchi=path_inchi, dir_images=dir_images, x_lim = x_lim, title = NULL)
 
     return(plots)
 }

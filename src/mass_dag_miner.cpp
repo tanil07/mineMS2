@@ -79,7 +79,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
         lattice_node next_node;
         int indicator = -1;
         while(counter<LIM_ITER){
-            //We always consider the last elemnt of the stack.
+            //We always consider the last element of the stack.
             lattice_node& current_node = lattice_stack.top(); //top does not remove the element from the stack
 
             //We first check if the current pattern is root.
