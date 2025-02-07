@@ -28,7 +28,9 @@ Imports: Rcpp (>= 0.12.13),
     png,
     ggrepel,
     ggplot2,
-    patchwork
+    patchwork,
+    kableExtra,
+    gridExtra
 LinkingTo: Rcpp,BH
 License: GPL-3
 Encoding: UTF-8
