@@ -14,7 +14,7 @@ Depends:
     R (>= 3.3.0)
 SystemRequirements: C++11
 Suggests: devtools, knitr, rmarkdown, testthat (>= 2.0.0), tools
-Imports: ggplot2, ggrepel, gridExtra, igraph, Matrix, methods, MSnbase, patchwork, png, Rcpp (>= 0.12.13), stringr, webchem
+Imports: ggplot2, ggrepel, gridExtra, igraph, kableExtra, Matrix, methods, MSnbase, patchwork, png, Rcpp (>= 0.12.13), stringr, webchem
 LinkingTo: Rcpp,BH
 License: GPL-3
 Encoding: UTF-8
