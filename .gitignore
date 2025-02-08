@@ -6,3 +6,4 @@ src/*.o
 tests/testthat/*.pdf
 tests/output
 man/*.Rd
+vignettes/*.html
