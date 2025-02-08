@@ -120,7 +120,7 @@ The included dataset, which is used in the examples and vignettes, consists of 5
 
 ## Contacts
 
-[alexis.delabriere\@hotmail.fr](mailto:alexis.delabriere@hotmail.fr){.email}, [coline.gianfrotta\@cea.fr](mailto:coline.gianfrotta@cea.fr){.email}, and [etienne.thevenot\@cea.fr](mailto:etienne.thevenot@cea.fr){.email}
+[alexis.delabriere\@hotmail.fr](mailto:alexis.delabriere@hotmail.fr), [coline.gianfrotta\@cea.fr](mailto:coline.gianfrotta@cea.fr), and [etienne.thevenot\@cea.fr](mailto:etienne.thevenot@cea.fr)
 
 ## References
 
