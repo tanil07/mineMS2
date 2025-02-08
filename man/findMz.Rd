@@ -2,7 +2,7 @@
 % Please edit documentation in R/ms2Lib.R
 \name{findMz}
 \alias{findMz}
-\title{Search in an ms2Lib object?}
+\title{Finding a spectrum or a m/z difference}
 \usage{
 findMz(m2l, mz, type = c("S", "L"), ppm = 15, dmz = 0.01)
 }
@@ -11,25 +11,25 @@ findMz(m2l, mz, type = c("S", "L"), ppm = 15, dmz = 0.01)
 
 \item{mz}{A double giving the mass to be searched.}
 
-\item{type}{The data to be search, "S" for spectra and "L" for losses}
+\item{type}{The data to be search, "S" for spectra and "L" for m/z differences}
 
 \item{ppm}{The tolerance in ppm}
 
 \item{dmz}{The minimum tolerance in Da, if the ppm tolerance is lower in Da than this threshold, this threshold is selected.}
 }
 \value{
-A character vector giving the IDs of the found losses or elements.
+A character vector giving the IDs of the found m/z differences or elements.
 }
 \description{
-Search an ms2Lib object givena tolerance in ppm or dmz.
+Search for a spectrum (S) or a m/z difference (L) in an ms2Lib object given a tolerance in ppm or dmz.
 }
 \examples{
 #' #Loading the data
 data(m2l)
 
-#Finding pattern with a precusor mass of 391.1398 with a tolerance of 0.01
-findMz(m2l,391.1398,dmz=0.01)
+#Finding a spectrum (or several spectra) with a precusor mass of 391.1398 with a tolerance of 0.01
+findMz(m2l,"S",391.1398,dmz=0.01)
 
-#Fidning a loss with a tolerance of 0.01
+#Finding an m/z difference of 147 with a tolerance of 0.01
 findMz(m2l,147,"L",dmz=0.1)
 }

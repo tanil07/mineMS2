@@ -2,15 +2,17 @@
 % Please edit documentation in R/ms2Lib.R
 \name{recognisedFormat}
 \alias{recognisedFormat}
-\title{Get the supported input forma for mineMS2}
+\title{Get the supported input format for mineMS2
+For now, the only supported format is mgf.}
 \usage{
 recognisedFormat()
 }
 \value{
-A character vector lsiting the supported format
+A character vector listing the supported format
 }
 \description{
-Get the supported input forma for mineMS2
+Get the supported input format for mineMS2
+For now, the only supported format is mgf.
 }
 \examples{
 recognisedFormat()

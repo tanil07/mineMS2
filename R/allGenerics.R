@@ -1,5 +1,5 @@
+# ms2Lib object getter ----
 
-###ms2Lib object getter
 setGeneric("mm2Spectra", function(m2l) standardGeneric("mm2Spectra"))
 
 setGeneric("mm2Dags", function(m2l) standardGeneric("mm2Dags"))
@@ -24,7 +24,8 @@ setGeneric("mm2ReducedLattice", function(m2l) standardGeneric("mm2ReducedLattice
 
 setGeneric("mm2Atoms", function(m2l) standardGeneric("mm2Atoms"))
 
-###ms2Lib object setter
+# ms2Lib object setter ----
+
 setGeneric("mm2Spectra<-", function(m2l,value) standardGeneric("mm2Spectra<-"))
 
 setGeneric("mm2Dags<-", function(m2l,value) standardGeneric("mm2Dags<-"))
@@ -50,7 +51,8 @@ setGeneric("mm2ReducedLattice<-", function(m2l,value) standardGeneric("mm2Reduce
 setGeneric("mm2Atoms<-", function(m2l,value) standardGeneric("mm2Atoms<-"))
 
 
-###fragPattern object getter
+# fragPattern object getter ----
+
 setGeneric("mm2Graph", function(pat) standardGeneric("mm2Graph"))
 
 setGeneric("mm2Occurences", function(pat) standardGeneric("mm2Occurences"))
@@ -62,7 +64,8 @@ setGeneric("mm2Name", function(pat) standardGeneric("mm2Name"))
 setGeneric("mm2CanonicalForm", function(pat) standardGeneric("mm2CanonicalForm"))
 
 
-###fragPattern object setter
+# fragPattern object setter ----
+
 setGeneric("mm2Graph<-", function(pat,value) standardGeneric("mm2Graph<-"))
 
 setGeneric("mm2Occurences<-", function(pat,value) standardGeneric("mm2Occurences<-"))
@@ -74,12 +77,14 @@ setGeneric("mm2Name<-", function(pat,value) standardGeneric("mm2Name<-"))
 setGeneric("mm2CanonicalForm<-", function(pat,value) standardGeneric("mm2CanonicalForm<-"))
 
 
-###ms2Lib specific generics.
+# ms2Lib specific generics ----
 
-#' Discretize mass differences.
+## discretizeMzDifferences ----
+
+#' Discretize m/z differences.
 #' 
 #' @description
-#' `discretizeMassLosses` discretize the mass differences in MS-MS spectra.
+#' `discretizeMzDifferences` discretize the m/z differences in MS/MS spectra.
 #' 
 #' @param m2l A ms2Lib object
 #' @param ... Supplementary arguments passed to the discretization method
@@ -89,9 +94,11 @@ setGeneric("mm2CanonicalForm<-", function(pat,value) standardGeneric("mm2Canonic
 #' or via the [Summary()] group generic. For this to work properly,
 #' the arguments `...` should be unnamed, and dispatch is on the
 #' first argument.
-setGeneric("discretizeMassLosses", function(m2l,...) standardGeneric("discretizeMassLosses"))
+setGeneric("discretizeMzDifferences", function(m2l,...) standardGeneric("discretizeMzDifferences"))
 
-setGeneric("discretizeMassFragments", function(m2l,...) standardGeneric("discretizeMassFragments"))
+setGeneric("discretizeMzFragments", function(m2l,...) standardGeneric("discretizeMzFragments"))
+
+## mineClosedSubgraphs ----
 
 #' Extract frequent closed subgraphs.
 #' 
@@ -108,22 +115,6 @@ setGeneric("discretizeMassFragments", function(m2l,...) standardGeneric("discret
 setGeneric("mineClosedSubgraphs",function(m2l,...) standardGeneric("mineClosedSubgraphs"))
 
 setGeneric("mineClosedSubgraphsByComponent",function(m2l,...) standardGeneric("mineClosedSubgraphsByComponent"))
-
-#' Plot occurrences of fragPattern in library object.
-#' 
-#' @description
-#' `plotOccurences` Plot a pattern on its associated fragmentation spectrum.
-#'
-#' @param m2l A ms2Lib object
-#' @param pidx A pattern id to be plotted
-#' @param ... Supplementary arguments passed to the plotting method
-#'
-#' @details
-#' This is a generic function: methods can be defined for it directly
-#' or via the [Summary()] group generic. For this to work properly,
-#' the arguments `...` should be unnamed, and dispatch is on the
-#' first argument.
-setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurences"))
 
 setGeneric("exportLattice",function(m2l,filename,...) standardGeneric("exportLattice"))
 
@@ -171,9 +162,7 @@ setGeneric("calculateCoverage",function(x,...) standardGeneric("calculateCoverag
 
 setGeneric("hasCoverage",function(x,...) standardGeneric("hasCoverage"))
 
-
-
-###ms2Lib research generics.
+# ms2Lib research generics ----
 
 #' Set the components of an ms2 library object.
 #' 
@@ -191,7 +180,8 @@ setGeneric("hasCoverage",function(x,...) standardGeneric("hasCoverage"))
 #' first argument.
 setGeneric("vrange",function(m2l,type,...) standardGeneric("vrange"))
 
-###ms2LibSplit generics.
+# ms2LibSplit generics ----
+
 #' Set the components of an ms2 library object.
 #' 
 #' @description
@@ -208,5 +198,66 @@ setGeneric("vrange",function(m2l,type,...) standardGeneric("vrange"))
 #' first argument.
 setGeneric("setComponents",function(m2l,components,...) standardGeneric("setComponents"))
 
-###LossFormula generic
+# MzDiffFormula generic
 setGeneric("idxFormula",function(x,lf,...) standardGeneric("idxFormula"))
+
+# Plots ----
+
+#' Plot occurrences of fragPattern in library object.
+#' 
+#' @description
+#' `plotOccurences` Plot a pattern on its associated fragmentation spectrum.
+#'
+#' @param m2l A ms2Lib object
+#' @param pidx A pattern id to be plotted
+#' @param ... Supplementary arguments passed to the plotting method
+#'
+#' @details
+#' This is a generic function: methods can be defined for it directly
+#' or via the [Summary()] group generic. For this to work properly,
+#' the arguments `...` should be unnamed, and dispatch is on the
+#' first argument.
+setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurences"))
+
+### plotPatterns ----
+
+#' Plot patterns and spectra occurrences of an ms2Lib object
+#'
+#' @description
+#' `plotPatterns` plot the pattern graphs and supports (spectra occurrences) of an ms2Lib object.
+#'
+#' @param m2l An ms2Lib object
+#' @param ids The ids to be plotted or NULL to plot all ids
+#' @param components An id giving the component of each spectrum to be plotted in first page
+#' @param occurences Shall the occurrences be plotted as well as the pattern?
+#' @param full Shall the full patterns be plotted?
+#' @param byPage Maximum number of occurrences by page
+#' @param titles A vector giving the titles of the MS/MS spectra
+#' @param v_ggplot (default TRUE) if TRUE ggplot version for the plotting of the spectra
+#' @param export_pdf (for ggplot version) if TRUE export the spectra to PDF
+#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "Name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
+#' @param infos_col (for ggplot version) columns names from the spectra information to print
+#' @param save_dir name of the directory to store the pdf files
+#' @param ... supplementary argument passed to the methods
+#' @return Nothing
+#' @examples
+#' #Loading the data
+#' data(m2l)
+#' 
+#' #plotting the patterns
+#' plotPatterns(m2l,c("P30","P51"))
+#' @rdname plotPatterns
+#' @export
+setGeneric("plotPatterns", function(m2l,
+                                    ids = NULL,
+                                    components = NULL,
+                                    occurences = TRUE,
+                                    full = FALSE,
+                                    byPage = 9,
+                                    titles = NULL,
+                                    v_ggplot = TRUE, 
+                                    export_pdf = FALSE, 
+                                    path_inchi = NULL,
+                                    infos_col = NULL,
+                                    save_dir = "",
+                                    ...) standardGeneric("plotPatterns"))

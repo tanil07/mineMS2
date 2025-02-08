@@ -2,43 +2,56 @@
 % Please edit documentation in R/firstpassCoupling.R
 \name{findPatternsExplainingComponents}
 \alias{findPatternsExplainingComponents}
-\title{Find pattern explainig components}
+\title{Find patterns maximizing a score for each component}
 \usage{
-findPatternsExplainingComponents(m2l, components, metric = c("f1"),
-  ref_label = NULL, threshold = NA_real_, reduced = TRUE)
+findPatternsExplainingComponents(
+  m2l,
+  components,
+  metric = c("f1"),
+  ref_label = NULL,
+  threshold = NA_real_,
+  reduced = TRUE,
+  top = 1
+)
 }
 \arguments{
 \item{m2l}{An ms2Lib object}
 
 \item{components}{A list containing the components to be explained.}
 
-\item{metric}{The metric used to match a component and the pattern occurence.}
+\item{metric}{The metric or list of metrics used to match a component and the pattern occurrence.}
 
-\item{ref_label}{A set of reference label to be used if the extracted component corresponds to an id over the position ofht e MS-MS spetra in the file}
+\item{ref_label}{A set of reference label to be used if the extracted component corresponds to an id over the position of the MS-MS spetra in the file}
 
 \item{threshold}{The threshold used to discriminate the dataset}
 
 \item{reduced}{Shall only the filtered patterns be considered}
+
+\item{top}{the number of best patterns to return (by default 1)}
 }
 \value{
 A list containing one data.frame by component including the following informations:
   \code{id} The id of the matched patterns.
   \code{f1} The F1-score between the pattern and the component.
-  \code{accuracy} The accuracy between the pattern and the component.
+  \code{precision} The precision between the pattern and the component.
   \code{recall} The recall between the pattern and the component.
   \code{miss} The miss rate between the pattern and the component.
+	 \code{size} The number of vertices in the graph pattern
 }
 \description{
-Find pattern maximizing the socre givne in metrics with each components. Threshold may be used to indicate that not match
-has been found. The majority
+Find patterns maximizing the score given in metrics for each component.
+Threshold may be used to indicate that no match has been found.
+Several best patterns can be returned (argument top)
 }
 \examples{
 #Loading the data
 data(m2l)
+data(net_gnps)
 
 #Finding explainig component 
-fp <- findPatternsExplainingComponents(m2l,list(c(15,12)))
+components <- findGNPSComponents(net_gnps)
+fp <- findPatternsExplainingComponents(m2l,components)
 
-#plotting the explaining pattern
+#Plotting the first explaining pattern
 plot(m2l,fp[[1]]["id"])
 }

@@ -1,43 +1,43 @@
-#' Export Mass differences Table
+#' Export m/z differences Table
 #'
-#' Export the mass differences table with the full informations
+#' Export the m/z differences table with the full information
 #' @param m2l An ms2Lib object
 #'
-#' @return A data.frame with the list of mass differences
+#' @return A data.frame with the list of m/z differences
 #' @export
 #'
 #' @examples
 #' #Loading the data
 #' data(m2l)
 #' 
-#' head(lossesTable(m2l))
-massDiffTable <- function(m2l){
-	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("No mass differences labels found, use the 'discretizeMassLosses' function to calculate them")
+#' head(mzDiffTable(m2l))
+mzDiffTable <- function(m2l){
+	if (nrow(mm2EdgesLabels(m2l)) == 0) {
+		stop("No m/z difference labels found, use the 'discretizeMzDifferences' method to calculate them")
 	}
-	return(mm2EdgesLabels(m2l)[,c("lab","mz","mzmin","mzmax","count","formula"),drop=FALSE])
+	return(mm2EdgesLabels(m2l)[,c("lab","mz","mzmin","mzmax","count","formula"),drop = FALSE])
 
 }
 
-#' Export Mass Differences Table 
+#' Export m/z differences Table 
 #' 
-#' Export Mass differences Table with information about the patterns containing those mass differences
-#' for each mass difference label, contains its id (lab), the mean mz, the minimum mz, the maximum mz, the number of occurrences (count) 
+#' Export m/z differences Table with information about the patterns containing those m/z differences
+#' for each m/z difference label, contains its id (lab), the mean mz, the minimum mz, the maximum mz, the number of occurrences (count) 
 #' and the possible formula. It also contains the number of patterns in which this label is found (and their ids)
 #'
 #' @param m2l An ms2Lib object
 #'
-#' @return A data.frame with the list of mass differences
+#' @return A data.frame with the list of m/z differences
 #' @export
 #' 
 #' @examples
 #' #Loading the data
 #' data(m2l)
 #' 
-#' head(massDiffTableComplete(m2l))
-massDiffTableComplete <- function(m2l){
+#' head(mzDiffTableComplete(m2l))
+mzDiffTableComplete <- function(m2l){
 	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("No loss labels found, use the 'discretizeMassLosses' loss functions")
+		stop("No m/z difference labels found, use the 'discretizeMzDifferences' method")
 	}
     if(length(mm2Patterns(m2l)) == 0)
     {
@@ -88,9 +88,9 @@ formulaSpec2Annot <- function(mass, golden_rule, atoms, index)
     return(formula)
 }
 
-#' Export Mass differences Table for one pattern
+#' Export m/z differences Table for one pattern
 #' 
-#' Export Mass differences Table with information about one pattern
+#' Export m/z differences Table with information about one pattern
 #' contains the min, mean and max mz values of losses calculated with all the spectra of the pattern and the loss
 #' formula calculated with the inner algorithm and the package Spec2Annot
 #' 
@@ -99,13 +99,13 @@ formulaSpec2Annot <- function(mass, golden_rule, atoms, index)
 #' @param golden_rule a boolean to consider golden rules or not to construct the formula (used for spec2Annot method)
 #' @param export_pdf a boolean to export in pdf or not
 #'
-#' @return A data.frame with the list of mass differences
+#' @return A data.frame with the list of m/z differences
 #' @export
 #' 
 #' @examples 
 #' data(m2l)
-#' listMassDiffbyPattern(m2l, m2l["P20"], golden_rule = TRUE, spec2Annot = TRUE, export_pdf = FALSE)
-listMassDiffbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_pdf)
+#' listMzDiffbyPattern(m2l, m2l["P20"], golden_rule = TRUE, spec2Annot = TRUE, export_pdf = FALSE)
+listMzDiffbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_pdf)
 {
     graph_pattern <- mm2Graph(pattern)
     elabs <- mm2EdgesLabels(m2l)
@@ -113,7 +113,7 @@ listMassDiffbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_
     atoms <- names(mm2Atoms(m2l))
 
     
-    ## list of mass differences (mean of mz values of the losses in the molecules of the pattern)
+    ## list of m/z differences (mean of mz values of the losses in the molecules of the pattern)
     massdiff <- getMzDiff(graph_pattern,mm2Occurences(pattern),mm2Dags(m2l),elabs$mz)
     massdiff <- apply(massdiff,2,mean)
 
@@ -151,7 +151,7 @@ listMassDiffbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_
     all_edges_lab <- edge_attr(graph_pattern,name = "lab")
     allf_and_chosen <- elabs$formula[all_edges_lab]
     list_loss_formula <- sapply(elabs$formula[all_edges_lab],function(x,atoms){
-      LossFormulaFromSingleString(x,ref = atoms,sep = "|")
+      MzDiffFormulaFromSingleString(x,ref = atoms,sep = "|")
     },atoms=atoms,simplify=TRUE)
 
     m_atoms <- getAtomMass(atoms)
@@ -196,40 +196,40 @@ listMassDiffbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_
         colnames(df) <- c("mz", "possible_formula_mean_pat", "possible_formula_mean_tot")
         if(export_pdf)
         {
-            res <- data.frame("Mass\ndiff\nmean" = massdiff_ref[,"mz"], 
-                                "Mass\ndiff\nmin" = massdiff_ref[,"mzmin"], 
-                                "Mass\ndiff\nmax" = massdiff_ref[,"mzmax"], 
+            res <- data.frame("Mz\ndiff\nmean" = massdiff_ref[,"mz"], 
+                                "Mz\ndiff\nmin" = massdiff_ref[,"mzmin"], 
+                                "Mz\ndiff\nmax" = massdiff_ref[,"mzmax"], 
                                 "Formula" = allf, "Chosen\nformula" = chosen_formula, 
                                 "Formula\nspec2Annot\nmean" = df[,"possible_formula_mean_tot"])
-            res <- res[order(res$"Mass\ndiff\nmean\npat"),]
+            res <- res[order(res$Mz.diff.mean),]
         }
         else {
-            res <- data.frame( "Mass_diff_mean" = massdiff_ref[,"mz"], 
-                                "Mass_diff_min" = massdiff_ref[,"mzmin"], 
-                                "Mass_diff_max" = massdiff_ref[,"mzmax"], 
+            res <- data.frame("Mz_diff_mean" = massdiff_ref[,"mz"], 
+                                "Mz_diff_min" = massdiff_ref[,"mzmin"], 
+                                "Mz_diff_max" = massdiff_ref[,"mzmax"], 
                                 "Formula" = allf, "Chosen_formula" = chosen_formula, 
                                 "Formula_spec2Annot_mean" = df[,"possible_formula_mean_tot"])
-            res <- res[order(res$"Mass_diff_mean_pat"),]
+            res <- res[order(res$Mz_diff_mean),]
         }
     }
     else
     {
         if(export_pdf)
         {
-            res <- data.frame("Mass\ndiff\nmean" = massdiff_ref[,"mz"], 
-                                "Mass\ndiff\nmin" = massdiff_ref[,"mzmin"], 
-                                "Mass\ndiff\nmax" = massdiff_ref[,"mzmax"], 
+            res <- data.frame("Mz\ndiff\nmean" = massdiff_ref[,"mz"], 
+                                "Mz\ndiff\nmin" = massdiff_ref[,"mzmin"], 
+                                "Mz\ndiff\nmax" = massdiff_ref[,"mzmax"], 
                                 "Formula" = allf, 
                                 "Chosen\nformula" = chosen_formula)
-            res <- res[order(res$Mass.diff.mean),]
+            res <- res[order(res$Mz.diff.mean),]
         }
         else {
-           res <- data.frame("Mass_diff_mean" = massdiff_ref[,"mz"], 
-                                "Mass_diff_min" = massdiff_ref[,"mzmin"], 
-                                "Mass_diff_max" = massdiff_ref[,"mzmax"], 
+           res <- data.frame("Mz_diff_mean" = massdiff_ref[,"mz"], 
+                                "Mz_diff_min" = massdiff_ref[,"mzmin"], 
+                                "Mz_diff_max" = massdiff_ref[,"mzmax"], 
                                 "Formula" = allf, 
                                 "Chosen_formula" = chosen_formula)
-            res <- res[order(res$"Mass_diff_mean"),]
+            res <- res[order(res$Mz_diff_mean),]
         }
     }
     return(res[!duplicated(res), ])

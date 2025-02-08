@@ -111,8 +111,8 @@ canonicalForm <- function(pat){
 #' This function should never be called by the user. Call the ms2Lib method
 #'
 #' @param x The pattern
-#' @param mzloss The table of mass differences
-#' @param mgs the mass graphs (the DAGs)
+#' @param mzloss The table of m/z differences
+#' @param mgs the m/z graphs (the DAGs)
 #' @export
 #'
 #' @return The m2l object with all the coverage calculated.

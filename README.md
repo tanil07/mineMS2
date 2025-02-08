@@ -1,102 +1,127 @@
-# The ***mineMS2*** R package:  Mining of MS/MS spectra by frequent subgraph mining to help structural interpretation
+# mineMS2: Annotation of spectral libraries with exact fragmentation patterns
 
 ## Description
 
-This package implements an algorithm to compute **fragmentation patterns** in a set of MS/MS spectra. These fragmentation patterns represent sets of **common mass differences** within subsets of spectra in the dataset. 
+The search for similarities within a collection of MS/MS spectra is a powerful approach to facilitate the identification of new metabolites. mineMS2 implements an innovative strategy to extract frequent fragmentation patterns containing shared m/z differences between subsets of the spectra.
 
-This algorithm takes as input a set of MS/MS spectra in *mgf* format and is composed of two main steps:
+This package implements an algorithm to compute **fragmentation patterns** in a set of MS/MS spectra. These fragmentation patterns represent sets of **common m/z differences** within subsets of spectra in the dataset.
 
-- every spectrum is represented by a graph, called *fragmentation graph*, containing the fragments of the spectrum and the mass differences between the fragments, when they comply with certain conditions.
-- frequent subgraphs are searched among the fragmentation graphs, corresponding to sets of common mass differences
+## Method
 
-These two steps are summarized in the following figure:
+This algorithm takes as input a set of MS/MS spectra in *mgf* format and consists of two main steps (Figure 1):
+
+1.  every spectrum is represented by a graph, called *fragmentation graph*, containing the fragments of the spectrum and the m/z differences between the fragments, when they comply with certain conditions.
+2.  frequent subgraphs are searched among the fragmentation graphs, corresponding to sets of common m/z differences
 
 ![](vignettes/figures/mineMS2_input_output.png)
 
-It is then possible to compare these fragmentation patterns with GNPS network components or chemical families as illustrated in the following figure.
+Fig. 1:
+
+It is then possible to compare these fragmentation patterns with GNPS network components or chemical families (Figure 2).
 
 ![](vignettes/figures/explain_patterns.png)
+
+Fig. 2:
 
 ## Installation
 
 The package can be installed from GitHub with:
 
-```r 
+``` r
 #install.packages("devtools")
 devtools::install_github("odisce/mineMS2")
 ```
 
-## Getting started with the software
+## Getting started
 
 More detailed examples are available in the vignettes.
 
 ### Input
-The package needs spectra in *mgf* format as input. It is also possible to furnish supplementary information about the spectra (e.g. chemical formula, retention time, ...) in a *csv* file. 
 
-```r
+The package takes as input an *mgf* file containing the collection of spectra. Additional metadata about the spectra (e.g. chemical formula, retention time, ...) may be provided as a supplementary *csv* file.
+
+``` r
 path_mgf <- system.file("dataset/dda_msms_pnordicum.mgf", package = "mineMS2")
 supp_infos_path <- system.file("dataset/dda_msms_pnordicum_supp.csv", package = "mineMS2")
 supp_infos <- read.table(supp_infos_path,header = TRUE, sep = ";", encoding = "utf-8", quote = "")
 ```
 
-### Computing fragmentation patterns
-An *ms2Lib* object is created, allowing to store the information about the spectra. 
+### Computing the fragmentation patterns
 
-```r
-    m2l <- ms2Lib(path_mgf, suppInfos = supp_infos)
+The *ms2Lib* object that will store the patterns is first initialized with the spectral data (and metadata):
+
+``` r
+library(mineMS2)
+m2l <- ms2Lib(path_mgf, suppInfos = supp_infos)
 ```
 
-The two steps of the algorithm are computing with two dedicated functions. 
+The two steps of the algorithm are then applied to the *ms2Lib* object:
 
-```r
-        m2l <- discretizeMassLosses(m2l,
-                            ppm = 15,
-                            dmz = 0.007,
-                            count = 2,)
-        m2l <- mineClosedSubgraphs(m2l, count = 2, sizeMin = 1)
+``` r
+m2l <- discretizeMzDifferences(m2l, ppm = 15, dmz = 0.007, count = 2)
+m2l <- mineClosedSubgraphs(m2l, count = 2, sizeMin = 1)
 ```
 
-The fragmentation patterns are stored in the *ms2Lib* object in a *patterns* attribute. It is possible to vizualise information about a pattern (P1) with a plotting function. 
+The computed fragmentation patterns are stored in the *patterns* slot of the *ms2Lib* object.
 
-```r
-    plotPatterns(m2l, "P1")
+### Analyzing the patterns
+
+The spectra, m/z differences, and patterns can be queried from the *ms2Lib* object, visualized, and exported with several methods including:
+
+-   `mzDiffTable` : to get the list of all m/z differences in the MS/MS collection
+
+-   `plot` :
+
+-   `findMz` :
+
+-   `select` :
+
+-   `plotPatterns` :
+
+It is possible to visualize information about a pattern (P1) with a plotting function.
+
+``` r
+plotPatterns(m2l, "P1")
 ```
 
-### Interpretation of GNPS components
+For a more detailed description of the mineMS2 features, please see to the *mineMS2_main* vignette.
 
-A GNPS network on the same MS/MS data must be furnished in *graphml* format.
+### Interpreting GNPS components
 
-```r
-    path_network <- system.file("dataset/graph_metgem_pverru.graphml", package = "mineMS2")
+A GNPS network on the same MS/MS data must be included in the *graphml* format.
 
-    net_gnps <- read_graph(path_network, "graphml")
+``` r
+path_network <- system.file("dataset/graph_gnps_pnordicum.graphml", package = "mineMS2")
+net_gnps <- read_graph(path_network, "graphml")
 ```
 
 The components of the network are then calculated and the patterns which maximize a chosen metric (such as F1-score, recall or precision) for every component are returned.
 
-```r
+``` r
 components <- findGNPSComponents(net_gnps, minSize = 3, pairThreshold = 0.9)
-patterns <- findPatternsExplainingComponents(m2l, components, metric = c("recall", "precision","size"), top = 1)
+patterns <- findPatternsExplainingComponents(m2l, components, metric = c("recall", "precision", "size"), top = 1)
 ```
+
 ## Vignettes
 
-Two vignettes provide detailed examples of mineMS2 use. 
+Two vignettes provide detailed examples of mineMS2 use.
 
-The first vignette `main-minems2.Rmd` gives details on the different steps of the algorithms and shows how to plot and explore the resulting fragmentation patterns and mass differences. 
+-   `mineMS2_main.Rmd` gives details on the different steps of the algorithms and shows how to plot and explore the resulting fragmentation patterns and m/z differences.
 
-The second vignette `gnps-minems2.Rmd` shows how to use mineMS2 to explain GNPS components and gives some practical examples.
-
+-   `mineMS2_coupling-to-gnps.Rmd` shows how to use mineMS2 to explain GNPS components and gives some practical examples.
 
 ## Dataset
 
-A dataset is furnished as an example in the *dataset* folder. It is composed of 52 spectra from an untargeted study [1] on the secondary metabolism of a species of fungi called *Penicillium verrucosum*.
-
-The two vignettes use this dataset to present examples of results. 
+The included dataset, which is used in the examples and vignettes, consists of 51 spectra from the untargeted study of the secondary metabolism of *Penicillium nordicum* (Hautbergue *et al.*, 2019).
 
 ## Citation
 
-**mineMS2: Annotation of spectral libraries with exact fragmentation patterns**. Alexis Delabrière, Coline Gianfrotta, Sylvain Dechaumet, Annelaure Damont, Thaïs Hautbergue, Pierrick Roger, Emilien Jamin, Christophe Junot, François Fenaille, Etienne A. Thévenot
+**mineMS2: Annotation of spectral libraries with exact fragmentation patterns**. Alexis Delabrière, Coline Gianfrotta, Sylvain Dechaumet, Annelaure Damont, Thaïs Hautbergue, Pierrick Roger, Emilien Jamin, Christophe Junot, François Fenaille and Etienne A. Thévenot.
 
-## Bibliography
+## Contacts
 
-[1] Thaïs Hautbergue, Olivier Puel, Souria Tadrist, Lauriane Meneghetti, Michel Péan, Marcel Delaforge, Laurent Debrauwer, Isabelle P. Oswald, et Emilien L. Jamin. **Evidencing 98 secondary metabolites of Penicillium verrucosum using substrate isotopic labeling and high-resolution mass spectrometry** . *Journal of Chromatography B*, Identification of molecules from non-targeted analysis, 1071 (2017): 29‑43. 
+[alexis.delabriere\@hotmail.fr](mailto:alexis.delabriere@hotmail.fr){.email}, [coline.gianfrotta\@cea.fr](mailto:coline.gianfrotta@cea.fr){.email}, and [etienne.thevenot\@cea.fr](mailto:etienne.thevenot@cea.fr){.email}
+
+## References
+
+Hautbergue,T. *et al.* (2019) Combination of isotope labeling and molecular networking of tandem mass spectrometry data to reveal 69 unknown metabolites produced by Penicillium nordicum. *Analytical Chemistry*. [DOI:[10.1021/acs.analchem.9b01634](DOI:%5B10.1021/acs.analchem.9b01634){.uri}](https://doi.org/10.1021/acs.analchem.9b01634).

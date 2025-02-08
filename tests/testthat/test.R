@@ -32,11 +32,11 @@ test_basic_processing <- function() {
 
     ids <- paste(paste("MZ", infos[,"mz.precursor"]), sep = "_")
     m2l <- mineMS2::setIds(m2l, ids)
-    m2l <- mineMS2::discretizeMassLosses(m2l,
-                                         dmz = 0.007,
-                                         ppm = 15,
-                                         heteroAtoms = TRUE,
-                                         maxFrags = 15)
+    m2l <- mineMS2::discretizeMzDifferences(m2l,
+                                            dmz = 0.007,
+                                            ppm = 15,
+                                            heteroAtoms = TRUE,
+                                            maxFrags = 15)
     testthat::expect_is(mm2Dags(m2l), 'list')
     testthat::expect_is(mm2Dags(m2l)[[1]], 'igraph')
     testthat::expect_is(mm2EdgesLabels(m2l), 'data.frame')

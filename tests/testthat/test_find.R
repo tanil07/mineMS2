@@ -5,7 +5,7 @@ test_select_data <- function()
 {
     data(m2l)
 
-    ## Find spectra or mass differences by mz
+    ## Find spectra or m/z differences by mz
     res1 <- findMz(m2l, 391.1398, dmz = 0.01, type="S")
     testthat::expect_true(all(res1 == c("S32", "S33")))
     
@@ -19,7 +19,7 @@ test_select_data <- function()
     res1 <- select(m2l, "S2", "P")
     testthat::expect_true(res1 == "P42")
 
-    ## Finding spectra containing mass diff is not implemented
+    ## Finding spectra containing m/z diff is not implemented
     testthat::expect_error(select(m2l, "S2", "L"))
 
     ##Finding best covering pattern in terms of intensity for a spectrum

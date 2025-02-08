@@ -2,22 +2,22 @@
 % Please edit documentation in R/ms2Lib.R
 \name{getInfo}
 \alias{getInfo}
-\title{Return the available informations on a component of in an ms2Lib object.}
+\title{Available information}
 \usage{
 getInfo(m2l, ids)
 }
 \arguments{
 \item{m2l}{An ms2Lib object}
 
-\item{ids}{A vector of IDs should be a spectrum or a losses.}
+\item{ids}{A vector of IDs should be spectra or a m/z differences.}
 
-\item{...}{Supplementary information ot be passed to the getInfo function.}
+\item{...}{Supplementary information to be passed to the getInfo function.}
 }
 \value{
-A data.frame giving informations about the queried elements.
+A data.frame giving information about the queried elements.
 }
 \description{
-Return the available informations on a component of in an ms2Lib object.
+Return the available information on an element of an ms2Lib object.
 }
 \examples{
 #Loading the data
@@ -25,6 +25,9 @@ data(m2l)
 
 #Infos on 2 spectra
 getInfo(m2l,c("S10","S25"))
+
+#Infos on all the spectra
+getInfo(m2l, "S")
 
 #Infos on multiple losses
 getInfo(m2l,c("L12","L42"))

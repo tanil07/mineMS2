@@ -33,7 +33,7 @@ mass_dag_miner::mass_dag_miner(std::vector<mass_graph>& vmasses, int k, bool pre
     mgs = vmasses;
     int counter = 0;
     for(auto it=vmasses.begin();it!=vmasses.end();it++){
-        //Each graph is added to the k path tree which also store the occurences.
+        //Each graph is added to the k path tree which also store the occurrences.
         kt.add_graph(*it,counter,prec_only);
         counter++;
     }
@@ -50,14 +50,14 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
 
     // S = 1-edge or 2-path patterns
     std::vector<lattice_node> initialPatterns = kt.constructOneEdgeGraphs(of);
-    Rcpp::Rcerr <<"Mining initialized with: "<<initialPatterns.size() <<" patterns."<< std::endl;
+    Rcpp::Rcerr <<"Mining initialized with "<<initialPatterns.size() <<" patterns"<< std::endl;
     
     bool frequent_children = true;
     int counv = 0;
     std::stack<short> max_child_occs;
 
     //Used for the closeness predicates.
-    Rcpp::Rcerr << "Mining in process, currently mined: "<<std::endl;
+    Rcpp::Rcerr << "Mining in process: "<<std::endl;
     int insert_error=0;
     int counter = 0;
     int current_1000 = 0;
@@ -164,7 +164,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
             }
         }
     }
-    Rcpp::Rcerr<<"Explored "<< counv<<" graphs. "<<container.numSubgraphs()<<" closed frequent subgraphs found."<<std::endl;
+    Rcpp::Rcerr<<""<< counv<<" graphs explored; "<<container.numSubgraphs()<<" closed frequent subgraphs found"<<std::endl;
 }
 
 

@@ -28,11 +28,11 @@ checkSize <- function(vec,pos){
 
 #' Selection function
 #'
-#' Return spectra objects, that are present in particular patterns, or mass differences objects that are present in particular patterns or spectra.
+#' Return spectra objects, that contain particular patterns, or m/z differences objects that are present in particular patterns or spectra.
 #'
 #' @param m2l An ms2Lib object.
-#' @param ids Valid IDs of objects (spectra or mass differences)
-#' @param vals the type of values to be returned. Only certain combinations are allowed: we can search for spectra (S) in patterns (P), or mass differences (L) in spectra (S) or patterns (P)
+#' @param ids Valid IDs of objects (spectra or m/z differences)
+#' @param vals the type of values to be returned. Only certain combinations are allowed: we can search for spectra (S) in patterns (P), or m/z differences (L) in spectra (S) or patterns (P)
 #'
 #' @return The objects of the corresponding type.
 #' @export
@@ -43,10 +43,10 @@ checkSize <- function(vec,pos){
 #' ## Search for the patterns in which appear the spectrum S1
 #' select(m2l, "S1", "P")
 #' 
-#' ## Search for the patterns in which appear the mass difference L1
+#' ## Search for the patterns in which appear the m/z difference L1
 #' select(m2l, "L1", "P")
 #' 
-#' ## Search for the spectra in which appear the mass difference L1
+#' ## Search for the spectra in which appear the m/z difference L1
 #' select(m2l, "L1", "S")
 #' 
 #' ## can be combined with the findMz function

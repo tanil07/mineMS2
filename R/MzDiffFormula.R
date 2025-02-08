@@ -23,9 +23,9 @@ calcMass<- function(lf,atoms_mass=NULL){
 }
 
 #'@export
-LossFormulaFromSingleString <- function(formula,ref,sep="|"){
+MzDiffFormulaFromSingleString <- function(formula,ref,sep="|"){
   allf <- str_split(formula,fixed(sep),simplify=TRUE)[1,]
-  LossFormula(allf,ref=ref)
+  MzDiffFormula(allf,ref=ref)
 }
 
 getAtomsFromRef <- function(ref){
@@ -41,9 +41,9 @@ getAtomsFromRef <- function(ref){
 }
 
 
-LossFormula <- function(formula=NULL,ref=NULL){
+MzDiffFormula <- function(formula=NULL,ref=NULL){
   ####We check the class of the arguments
-  lf <- new("LossFormula")
+  lf <- new("MzDiffFormula")
   
   if(!is.null(ref)) ref<- getAtomsFromRef(ref)
   
@@ -100,22 +100,22 @@ isKnown <- function(lf){
   nrow(lf@formula)==1
 }
 
-#' Calculate a string reresentation of a lossFormula object
+#' Calculate a string reresentation of a MzDiffFormula object
 #'
 #' Return a string presentation of all the possible formula. Should not be used by the user.
 #'
-#' @param x A lossFormula object.
+#' @param x A MzDiffFormula object.
 #' 
 #' @return A character vector with all the possible formula for a loss object.
-setMethod("as.character","LossFormula",function(x){
+setMethod("as.character","MzDiffFormula",function(x){
   return(apply(x@formula,1,formulaToString))
 })
 
 ###Return a Loss formula
-combineLossFormula <- function(f1,f2,maxf=3){
+combineMzDiffFormula <- function(f1,f2,maxf=3){
             ####We combine all the elements 1 by one.
             if(ncol(f1@formula)!=ncol(f2@formula)) stop("Non compatible formula.")
-            if((nrow(f1@formula)==0)|(nrow(f2@formula)==0)) return(LossFormula(ref=ncol(f1@formula)))
+            if((nrow(f1@formula)==0)|(nrow(f2@formula)==0)) return(MzDiffFormula(ref=ncol(f1@formula)))
   
             maxf1 <- min(maxf,nrow(f1@formula))
             maxf2 <- min(maxf,nrow(f2@formula))
@@ -127,7 +127,7 @@ combineLossFormula <- function(f1,f2,maxf=3){
             },y=f2@formula[1:maxf2,,drop=FALSE]))
             # tm <- do.call(rbind,tm)
             tempm <- matrix(c(tm),byrow=FALSE,ncol=ncol(f1@formula))
-            LossFormula(tempm,ref=colnames(f1@formula))
+            MzDiffFormula(tempm,ref=colnames(f1@formula))
 }
 
 
@@ -177,12 +177,12 @@ orderByRDBE <- function(lf){
 }
 
 
-setMethod("%in%",signature=list(x="character",table="LossFormula"),function(x,table){
+setMethod("%in%",signature=list(x="character",table="MzDiffFormula"),function(x,table){
   vf <- stringToFormula(x,vnames=colnames(table@formula))
   any(apply(table@formula, 1, function(x, want) isTRUE(all.equal(x, want)), want = vf))
 })
 
-setMethod("%in%",signature=list(x="integer",table="LossFormula"),function(x,table){
+setMethod("%in%",signature=list(x="integer",table="MzDiffFormula"),function(x,table){
   names(x) <- colnames(table@formula)
   any(apply(table@formula, 1, function(y, want) isTRUE(all.equal(y, want)),x))
 })
@@ -190,8 +190,8 @@ setMethod("%in%",signature=list(x="integer",table="LossFormula"),function(x,tabl
 
 
 
-####Methods to add a formula to LossFormula.
-setMethod("addFormula",signature = list(x = "LossFormula",lf = "ANY"),function(x,lf){
+####Methods to add a formula to MzDiffFormula.
+setMethod("addFormula",signature = list(x = "MzDiffFormula",lf = "ANY"),function(x,lf){
   l_atoms <- colnames(x@formula)
   
   if(typeof(lf)=="character"){
@@ -206,7 +206,7 @@ setMethod("addFormula",signature = list(x = "LossFormula",lf = "ANY"),function(x
 })
 
 
-setMethod("addFormula",signature = list(x = "LossFormula",lf = "LossFormula"),function(x,lf){
+setMethod("addFormula",signature = list(x = "MzDiffFormula",lf = "MzDiffFormula"),function(x,lf){
   if(any(colnames(lf@formula)!=colnames(x@formula))) stop("Incompatible atoms in formula.")
   l_atoms <- colnames(lf@formula)
   
@@ -231,7 +231,7 @@ is_sub_raw <- function(rf1,rf2){
 
 
 ###Vectorized implementation.
-setMethod("isSubformula",signature = list(x="LossFormula",lf = "character"),function(x,lf,type=NULL){
+setMethod("isSubformula",signature = list(x="MzDiffFormula",lf = "character"),function(x,lf,type=NULL){
   l_atoms <- colnames(x@formula)
   lf <- stringToFormula(lf,vnames=l_atoms)
   vr <-apply(x@formula,1,is_sub_raw,rf2=lf)
@@ -239,7 +239,7 @@ setMethod("isSubformula",signature = list(x="LossFormula",lf = "character"),func
 })
 
 ###We suppose that he columns are ordered correctly.
-setMethod("isSubformula",signature = list(x="integer",lf = "LossFormula"),function(x,lf){
+setMethod("isSubformula",signature = list(x="integer",lf = "MzDiffFormula"),function(x,lf){
   # l_atoms <- colnames(x@formula)
   # lf <- stringToFormula(lf,vnames=l_atoms)
   vr <-apply(lf@formula,1,is_sub_raw,rf1=x)
@@ -247,7 +247,7 @@ setMethod("isSubformula",signature = list(x="integer",lf = "LossFormula"),functi
 })
 
 
-setMethod("isSubformula",signature = list(x="LossFormula",lf="LossFormula"),function(x,lf,type=c("any","none")){
+setMethod("isSubformula",signature = list(x="MzDiffFormula",lf="MzDiffFormula"),function(x,lf,type=c("any","none")){
   type <- match.arg(type)
   l_atoms <- colnames(x@formula)
   agg <- function(x){x}
@@ -269,41 +269,41 @@ setMethod("isSubformula",signature = list(x="LossFormula",lf="LossFormula"),func
 
 
 
-setMethod("idxFormula",signature=list(x="character",lf="LossFormula"),function(x,lf){
+setMethod("idxFormula",signature=list(x="character",lf="MzDiffFormula"),function(x,lf){
   vf <- stringToFormula(x,vnames=colnames(lf@formula))
   which(apply(lf@formula, 1, function(x, want) isTRUE(all.equal(x, want)), x))
 })
 
-setMethod("idxFormula",signature=list(x="integer",lf="LossFormula"),function(x,lf){
+setMethod("idxFormula",signature=list(x="integer",lf="MzDiffFormula"),function(x,lf){
   names(x) <- colnames(lf@formula)
   which(apply(lf@formula, 1, function(x, want) isTRUE(all.equal(x, want)), want=x))
 })
 
-setMethod("idxFormula",signature=list(x="LossFormula",lf="LossFormula"),function(x,lf){
+setMethod("idxFormula",signature=list(x="MzDiffFormula",lf="MzDiffFormula"),function(x,lf){
   which(apply(lf@formula, 1, function(x, want) isTRUE(all.equal(x, want)), x@formula))
 })
 
 
-#' Show lossFormula object
+#' Show MzDiffFormula object
 #'
-#' Show the information about a lossFormula object.
+#' Show the information about a MzDiffFormula object.
 #'
-#' @param object A lossFormula object.
+#' @param object A MzDiffFormula object.
 #'
 #' @return None
 #' 
-setMethod("show","LossFormula",function(object){
-  cat("A LossFormula object containing",nrow(object@formula),"formula with atoms",paste(colnames(object@formula),collapse = ","))
+setMethod("show","MzDiffFormula",function(object){
+  cat("A MzDiffFormula object containing",nrow(object@formula),"formula with atoms",paste(colnames(object@formula),collapse = ","))
 })
 
-#' Calculate the number of possible formula for a mass difference
+#' Calculate the number of possible formula for a m/z difference
 #'
-#' Return the number of possible formula for a mass difference. Normally not used by the user.
+#' Return the number of possible formula for a m/z difference. Normally not used by the user.
 #'
 #' @param x A loss formula object.
 #'
-#' @return The number of possible formula for a mass difference.
-setMethod(length,"LossFormula",function(x){
+#' @return The number of possible formula for a m/z difference.
+setMethod(length,"MzDiffFormula",function(x){
   nrow(x@formula)
 })
 
@@ -317,7 +317,7 @@ setMethod(length,"LossFormula",function(x){
 #'
 #' @return The formula as 1xatoms matrix
 #' @export
-setMethod('[',"LossFormula",function(x,i,j=NULL,...,drop=TRUE){
+setMethod('[',"MzDiffFormula",function(x,i,j=NULL,...,drop=TRUE){
   x@formula <- x@formula[i,,drop=FALSE]
   return(x)
 })

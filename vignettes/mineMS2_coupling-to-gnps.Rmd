@@ -10,7 +10,7 @@ vignette: >
   %\VignetteDepends{igraph}
   %\VignetteEncoding{UTF-8}
   %\VignetteKeywords{Metabolomics, MS/MS, Fragmentation pattern, Frequent Subgraph Mining}
-bibliography: "mineMS2-vignette.bib"
+bibliography: "mineMS2_references.bib"
 output:
   BiocStyle::html_document:
     toc_float: true
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(fig.path = "figures/")
 
 # Introduction
 
-This vignette describes the use of the _mineMS2_ software coupled to the GNPS MS/MS molecular networking methodology [@watrous_mass_2012]. In this example, the molecular network has been precomputed on the GNPS website and extracted in the *.graphML* format (file  *graph_gnps_pnordicum.graphml* inside the *dataset* subdirectory of the _mineMS2_ installation folder). We strongly recommend to compute the patterns and the GNPS network on the same .mgf file to avoid matching issues.
+This vignette describes the use of the _mineMS2_ software coupled to the GNPS MS/MS molecular networking methodology [@Watrous2012]. In this example, the molecular network has been precomputed on the GNPS website and extracted in the *.graphML* format (file  *graph_gnps_pnordicum.graphml* inside the *dataset* subdirectory of the _mineMS2_ installation folder). We strongly recommend to compute the patterns and the GNPS network on the same .mgf file to avoid matching issues.
 
 # Pre-requisites
 
@@ -36,7 +36,7 @@ Secondary metabolites of *Penicillium nordicum* have been studied by Data Depend
 The initialization loads the required packages and extracts the data paths.
 
 ```{r path_gnps}
-if(!require(mineMS2)) install_github("odisce/mineMS2")
+if (!require(mineMS2)) install_github("odisce/mineMS2")
 library(mineMS2)
 
 path_demo <- system.file("dataset",package = "mineMS2")
@@ -48,8 +48,8 @@ path_supp_info <- file.path(path_demo, "dda_msms_pnordicum_supp.csv")
 ## Patterns mining
 
 The pattern mining step is detailed in the [mineMS2 main vignette](main-minems2.html). Briefly, 
-1. all mass differences within the spectra are computed, 
-2. a graph representation of each MS/MS spectrum using the mass differences as edges is built (Directed Acyclic Graph, DAG), and 
+1. all m/z differences within the spectra are computed, 
+2. a graph representation of each MS/MS spectrum using the m/z differences as edges is built (Directed Acyclic Graph, DAG), and 
 3. the DAGs are mined to extract frequent patterns.
 
 ```{r pattern_computing,message=FALSE}
@@ -64,7 +64,7 @@ ids <- paste(paste("MZ",infos[,"mz"]), paste0("RT",infos[,"rt"]), sep = "_")
 m2l <- setIds(m2l,ids)
 
 ### DAGs are created
-m2l <- discretizeMassLosses(m2l, dmz = 0.007, ppm = 15, maxFrags = 15)
+m2l <- discretizeMzDifferences(m2l, dmz = 0.007, ppm = 15, maxFrags = 15)
 
 ### Patterns are detected
 m2l <- mineClosedSubgraphs(m2l, sizeMin = 1, count = 2)
@@ -146,7 +146,7 @@ patterns[[8]]
 The ids of the best pattern for all the components can then be extracted: `r sapply(patterns,'[',i=1,j="id")`.
 
 These patterns can be viewed using the _plot_ and _plot\_pattern\_ggplot_ functions, which are wrapped inside the _plotPatterns_ function for convenience. 
-This function also generates information about the spectra and the mass differences in the pattern. 
+This function also generates information about the spectra and the m/z differences in the pattern. 
 the *infos_col* parameter is used to select the spectra information to be included. If NULL, all the available information will be displayed. 
 It may be used to generate a pdf output (*export_pdf* argument).
 ```{r pattern_plotting, fig.align='center', results = 'asis'}
@@ -189,8 +189,8 @@ id_pat <- patterns[[6]][1,"id"]
 plotPatterns(m2l, id_pat ,infos_col = c("mz.precursor", "rt", "Name"), export_pdf = FALSE)
 ```
 
-This component is composed of 21 spectra, and we see that 19 out of the 21 fragmentation spectra share a mass difference of $99.0683$, that is not present in any other spectra in the dataset (precision = 1).
-The proposed formula for this mass difference are $H_9O_3N_3$, $C_5H_9ON$ and $C_2H_{13}ONS$.
+This component is composed of 21 spectra, and we see that 19 out of the 21 fragmentation spectra share a m/z difference of $99.0683$, that is not present in any other spectra in the dataset (precision = 1).
+The proposed formula for this m/z difference are $H_9O_3N_3$, $C_5H_9ON$ and $C_2H_{13}ONS$.
 In particular, $C_5H_9ON$ could correspond to a loss of valine, which is consistent with the metabolites of this component, that are tetrapeptides composed notably of valine residues.
 
 As another example, within this connected component, the circled clique in the figure below is explained by a larger pattern.
@@ -204,12 +204,12 @@ knitr::include_graphics("figures/annotated_graph_gnps_pnordicum_clique.png")
   plotPatterns(m2l, id_pat ,infos_col = c("mz.precursor", "rt", "Name", "peptide.formula"), export_pdf = FALSE)  
 ```
 
-This pattern especially contains a mass difference of $186.079$, with the possible formula $C_{11}H_{10}ON_2$, that can correspond to a loss of tryptophane, which is part of the concerned metabolites.
+This pattern especially contains a m/z difference of $186.079$, with the possible formula $C_{11}H_{10}ON_2$, that can correspond to a loss of tryptophane, which is part of the concerned metabolites.
 
 
 ## Beyond molecular networks: discovering new similarities between spectra
 
-The patterns also help discovering new similarities between spectra. Getting back to the $186.079$ mass difference above, it is now possible to look for this loss in other patterns using the *select* function:
+The patterns also help discovering new similarities between spectra. Getting back to the $186.079$ m/z difference above, it is now possible to look for this loss in other patterns using the *select* function:
 
 ```{r other_phenyalanine}
 L186 <- findMz(m2l, mz = 186.079, ppm = 15, dmz = 0.01, type = "L")
@@ -218,7 +218,7 @@ ids_tryptophane
 ```
 
 
-Several other patterns thus contain this mass difference: `r ids_tryptophane[[1]]`
+Several other patterns thus contain this m/z difference: `r ids_tryptophane[[1]]`
 
 They can be visualized using *plotPatterns*.
 For example, the `r ids_tryptophane[[1]][8]` pattern:
@@ -237,7 +237,7 @@ We thus observe that in addition to the similarity of spectra at m/z $532.09$, $
 
 This similariy is not found by GNPS, maybe for threshold reasons, but is detected by the mineMS2 software.
 
-# Bibliography
+# References
 
 
 

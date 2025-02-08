@@ -1,10 +1,10 @@
 #' @include references.R
-#' @include LossFormula.R
+#' @include MzDiffFormula.R
 #' @include fragPattern.R
 
 
 #'@export
-####Return exact mass difference of all the labels for a given fragPattern.
+####Return exact m/z difference of all the labels for a given fragPattern.
 getMzDiff <- function(g,occs,mgs,loss_mz){
   occs_gid <- occs[, 1]
   occs_pos <- occs[, 2]
@@ -48,7 +48,7 @@ getSubformulaLossVertices_afg <- function(g,occs,dags,edge_labels,atoms,label_or
   uelabs <- unique(elabs)
   idm <- match(elabs,uelabs)
   
-  rlf <- sapply(formula_labels[uelabs],LossFormulaFromSingleString,ref=atoms,sep="|")
+  rlf <- sapply(formula_labels[uelabs],MzDiffFormulaFromSingleString,ref=atoms,sep="|")
   rlf_solo <- sapply(rlf,isKnown)
   
   #####Function body.
@@ -163,7 +163,7 @@ chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = N
   
 }
 
-###allf is supposed to be a set of LossFormula corresponding to the full set of edge labels.
+###allf is supposed to be a set of MzDiffFormula corresponding to the full set of edge labels.
 annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL, edge_label="lab",oformula=NULL){
   g <- mm2Graph(fp)
   occs <- mm2Occurences(fp)
@@ -177,7 +177,7 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
   
   if(is.null(allf)){
     allf <- sapply(elabs$formula[vlab],function(x,atoms){
-      LossFormulaFromSingleString(x,ref = atoms,sep = "|")
+      MzDiffFormulaFromSingleString(x,ref = atoms,sep = "|")
     },atoms=atoms,simplify=TRUE)
   }
 
@@ -186,7 +186,7 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
   mzv <- massdiff[seq_along(vlab)]
 
   # if(is.null(oformula)){
-  #   oformula <- sapply(getFormula(m2l)[occs[,1]],LossFormulaFromSingleString,ref=atoms,sep="|")
+  #   oformula <- sapply(getFormula(m2l)[occs[,1]],MzDiffFormulaFromSingleString,ref=atoms,sep="|")
   # }
   
   ####Each col correspond to a vertices.
@@ -367,7 +367,7 @@ makeEdgeLabel <-
         }
         if(sum(pna)>0)
           for(cp in which(pna)){
-            lf[[p_non_root[non_coherent_edge[cp]]]] <- LossFormula(ref=atoms)
+            lf[[p_non_root[non_coherent_edge[cp]]]] <- MzDiffFormula(ref=atoms)
           }
        }
     }
@@ -396,7 +396,7 @@ annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
   ###Building all the formula.
   all_edges_lab <- edge_attr(g,name = "lab")
   allf <- sapply(elabs$formula[all_edges_lab],function(x,atoms){
-    LossFormulaFromSingleString(x,ref = atoms,sep = "|")
+    MzDiffFormulaFromSingleString(x,ref = atoms,sep = "|")
   },atoms=atoms,simplify=FALSE)
   
   massdiff <- getMzDiff(g,mm2Occurences(fp),dags,elabs$mz)

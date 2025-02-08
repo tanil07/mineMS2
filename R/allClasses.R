@@ -1,4 +1,4 @@
-#'A class storing a set of MS-MS spectra, their associated graphs,
+#'A class storing a set of MS/MS spectra, their associated graphs,
 #'and some supplementary information.
 #'
 #' @export
@@ -17,62 +17,62 @@
 #' @aliases ms2Lib-class
 #' @exportClass ms2Lib
 setClass(
-	"ms2Lib",
-	slot = list(
-		spectraInfo = "data.frame",
-		spectra = "list",
-		ids = "character",
-		dags = "list",
-		losses = "data.frame",
-		fragments = "data.frame",
-		atoms = "list",
-		patterns = "list",
-		loss = "logical",
-		reducedPatterns = "integer",
-		# reducedLattice = "ANY",
-		k = "integer"
-	),
-	prototype = list(
-		spectraInfo = data.frame(),
-		spectra = list(),
-		ids = character(),
-		dags = list(),
-		losses = data.frame(),
-		fragments = data.frame(),
-		atoms = list(),
-		patterns = list(),
-		loss = TRUE,
-		reducedPatterns = integer(),
-		k = as.integer(1)
-	)
+  "ms2Lib",
+  slot = list(
+    spectraInfo = "data.frame",
+    spectra = "list",
+    ids = "character",
+    dags = "list",
+    losses = "data.frame",
+    fragments = "data.frame",
+    atoms = "list",
+    patterns = "list",
+    loss = "logical",
+    reducedPatterns = "integer",
+    # reducedLattice = "ANY",
+    k = "integer"
+  ),
+  prototype = list(
+    spectraInfo = data.frame(),
+    spectra = list(),
+    ids = character(),
+    dags = list(),
+    losses = data.frame(),
+    fragments = data.frame(),
+    atoms = list(),
+    patterns = list(),
+    loss = TRUE,
+    reducedPatterns = integer(),
+    k = as.integer(1)
+  )
 )
 
 setClass("ms2LibSplit",
-		 representation = representation(components = "list",
-		 								idxpcomponents = "numeric"),
-		 contains="ms2Lib")
+         representation = representation(components = "list",
+                                         idxpcomponents = "numeric"),
+         contains="ms2Lib")
 
 
 setClass(
-	"fragPattern",
-	slot = list(
-		graph = "ANY",
-		occurences = "matrix",
-		root = "integer",
-		name = "character",
-		canonicalForm = "character"
-	),
-	prototype = list(
-		graph = make_empty_graph(),
-		occurences = matrix(0,nrow=0,ncol=2),
-		root = as.integer(1),
-		name = character(),
-		canonicalForm = character()
-	)
+  "fragPattern",
+  slot = list(
+    graph = "ANY",
+    occurences = "matrix",
+    root = "integer",
+    name = "character",
+    canonicalForm = "character"
+  ),
+  prototype = list(
+    graph = make_empty_graph(),
+    occurences = matrix(0,nrow=0,ncol=2),
+    root = as.integer(1),
+    name = character(),
+    canonicalForm = character()
+  )
 )
 
 # Formula is a named numeric.
-setClass("LossFormula",
+setClass("MzDiffFormula",
          slot = list(
            formula = "matrix"
          ),

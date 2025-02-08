@@ -4,17 +4,19 @@
 \name{m2l}
 \alias{m2l}
 \title{A test MS2Lib object}
-\format{An object of class \code{ms2Lib} of length 45.}
+\format{
+An object of class \code{ms2Lib} of length 52.
+}
 \usage{
 m2l
 }
 \description{
-An ms2Lib object for 45 spectra of P. Verrucosum.
+An ms2Lib object for 51 spectra of P. verrucosum.
 The known formula have been set correctly. The code to create this 
-object can be found in the vignette.
+object can be found in the main vignette.
 }
 \details{
-The data come from the follwoing paper : Hautbergue et al (2017),
+The data come from the following paper : Hautbergue et al (2017),
  Evidencing 98 secondary metabolites of Penicillium verrucosum 
 using substrate isotopic labeling and high-resolution mass spectrometry,
  Journal of chromatographyt B (15) 17

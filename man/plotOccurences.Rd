@@ -2,7 +2,7 @@
 % Please edit documentation in R/allGenerics.R
 \name{plotOccurences}
 \alias{plotOccurences}
-\title{Plot occurences of fragPattern in library object.}
+\title{Plot occurrences of fragPattern in library object.}
 \usage{
 plotOccurences(m2l, pidx, ...)
 }
@@ -11,10 +11,10 @@ plotOccurences(m2l, pidx, ...)
 
 \item{pidx}{A pattern id to be plotted}
 
-\item{...}{Supplmentary arguments passed to the plotting method}
+\item{...}{Supplementary arguments passed to the plotting method}
 }
 \description{
-`plotOccurences` PLot a pattern on his associated fragmentation spectrum.
+`plotOccurences` Plot a pattern on its associated fragmentation spectrum.
 }
 \details{
 This is a generic function: methods can be defined for it directly

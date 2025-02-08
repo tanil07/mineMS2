@@ -2,34 +2,41 @@
 % Please edit documentation in R/select.R
 \name{find.patterns.class}
 \alias{find.patterns.class}
-\title{Find biggest F1 score}
+\title{Find the pattern with the best value of one chosen metric}
 \usage{
-find.patterns.class(m2l, ids, type = c("f1", "precision", "size"),
-  returnall = FALSE, full = TRUE, reduced = FALSE)
+find.patterns.class(
+  m2l,
+  ids,
+  type = c("f1", "precision", "size"),
+  returnall = FALSE,
+  full = TRUE,
+  reduced = FALSE,
+  top = 1
+)
 }
 \arguments{
 \item{m2l}{An ms2Lib object.}
 
-\item{ids}{Valid IDs of objects, it mays be a chracter vector with the prefix "P" or an integer or numeric vector}
+\item{ids}{Valid IDs of objects, it mays be a character vector with the prefix "P" or an integer or numeric vector}
 
-\item{type}{Which criteria is used to determine the best match, F-score, precision or acccuracy}
+\item{type}{Which criteria is used to determine the best match, F-score, precision, recall or size of patterns (number of vertices)}
 
-\item{returnall}{Shall all the patterns with a similar F1 score be returned.}
+\item{returnall}{Shall all the patterns with a similar F1-score be returned.}
 
 \item{full}{Shall only full matches be returned.}
 
 \item{reduced}{Shall only the reduced set of patterns be considered.}
+
+\item{top}{number of best patterns to return}
 }
 \value{
-A data.frame containing two slots, id the ids of the elements and f1_score the f1 score of the elements
+A data.frame containing several slots: the ids of the elements and the values of every metric
 }
 \description{
-Given a list of molecules ids as a character or integer input, find the pattern maximizing the F1 score of
-the molecules.
+Given a list of molecules ids as characters or integers input, find the pattern maximizing one metric (F1-score, precision, recall, size) among this set of molecules.
 }
 \details{
-The computation of this F1 score.
-}
-\examples{
-print("Examples to be put here")
+Should not be used directly by the user (is called by the findExplainingPatterns function)
+
+The computation of the metric.
 }

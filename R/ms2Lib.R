@@ -1,4 +1,4 @@
-#' @include LossFormula.R
+#' @include MzDiffFormula.R
 
 
 ###CORRESPONDANCE TABLE
@@ -440,7 +440,7 @@ setMethod("length","ms2Lib",function(x){
 
 #' Mine recurrent subgraphs from a set of graphs.
 #'
-#' Mine all the complete closed subgraphs from a set of preconstructed mass graphs objects.
+#' Mine all the complete closed subgraphs from a set of preconstructed fragmentation graphs objects.
 #'
 #' @param m2l An ms2Lib object to be processed.
 #' @param count The minimum number of spectra in which the spectrum need to be sampled.
@@ -458,18 +458,18 @@ setMethod("length","ms2Lib",function(x){
 #' m2l <- mineClosedSubgraphs(m2l,count=2,sizeMin = 1)
 setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, precursor = FALSE){
 	if(count<2){
-		warning("'count' parameters set to ",count," it is therefore set to 2.")
+		warning("'count' parameter too low; value set to 2.")
 		count <- 2
 	}
 
 
-	###Get the data.frame correspoding to the sizes.
+	###Get the data.frame corresponding to the sizes.
 	processing <- sapply(mm2Dags(m2l),function(x){
 		ecount(x)>1
 	})
 
 	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("No labels constructed, use the DiscretizeMassLosses function first.")
+		stop("No labels constructed, use the discretizeMzDifferences method first.")
 	}
 
 
@@ -482,7 +482,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 
 	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
 		###Wide variety of mass losses.
-		warning("sizeMin parameters set to ",sizeMin," risk of computational overhead.")
+		warning("sizeMin parameters set to ", sizeMin, ": risk of computational overload.")
 	}
 	
 	###We select the non empty graph to mine the patterns.
@@ -507,7 +507,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 	for(i in 1:length(m2l@patterns)) mm2Name(m2l@patterns[[i]]) <- paste("P",i,sep="")
 	m2l@reducedPatterns <- seq_along(m2l@patterns)
 
-	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
+	message("Processing completed: ", length(mm2Patterns(m2l)), " patterns mined.")
 	m2l
 })
 
@@ -550,10 +550,10 @@ mm2get <- function(m2l,arglist){
 
 #' Indexing function
 #' 
-#' Return an object given its index: can be a spectrum, a pattern, a DAG or a mass difference.
+#' Return an object given its index: can be a spectrum, a pattern, a DAG or a m/z difference.
 #' 
 #' @param x An ms2Lib oject.
-#' @param i The index, a string starting by S if it is a spectrum, P if it is a pattern D if it is a DAG, L if it is a mass difference label
+#' @param i The index, a string starting by S if it is a spectrum, P if it is a pattern D if it is a DAG, L if it is a m/z difference label
 #' @param j unused.
 #' @param drop unused.
 #' @param ... unused.
@@ -574,7 +574,7 @@ mm2get <- function(m2l,arglist){
 #' #Extraction of a pattern
 #' m2l["P54"]
 #' 
-#' #Extraction of mass difference information
+#' #Extraction of m/z difference information
 #' m2l["L20"]
 
 setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
@@ -661,17 +661,17 @@ findMz.L <- function(m2l,mz,tol){
 	paste("L",matched,sep="")
 }
 
-#' Finding a spectrum or a mass difference
+#' Finding a spectrum or a m/z difference
 #' 
-#' Search for a spectrum (S) or a mass difference (L) in an ms2Lib object given a tolerance in ppm or dmz.
+#' Search for a spectrum (S) or a m/z difference (L) in an ms2Lib object given a tolerance in ppm or dmz.
 #'
 #' @param m2l ms2Lib object
 #' @param mz A double giving the mass to be searched.
-#' @param type The data to be search, "S" for spectra and "L" for mass differences
+#' @param type The data to be search, "S" for spectra and "L" for m/z differences
 #' @param ppm The tolerance in ppm
 #' @param dmz The minimum tolerance in Da, if the ppm tolerance is lower in Da than this threshold, this threshold is selected.
 #'
-#' @return A character vector giving the IDs of the found mass differences or elements.
+#' @return A character vector giving the IDs of the found m/z differences or elements.
 #' @export
 #'
 #' @examples
@@ -681,7 +681,7 @@ findMz.L <- function(m2l,mz,tol){
 #' #Finding a spectrum (or several spectra) with a precusor mass of 391.1398 with a tolerance of 0.01
 #' findMz(m2l,"S",391.1398,dmz=0.01)
 #' 
-#' #Finding a mass difference of 147 with a tolerance of 0.01
+#' #Finding an m/z difference of 147 with a tolerance of 0.01
 #' findMz(m2l,147,"L",dmz=0.1)
 findMz <- function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
 	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
@@ -699,7 +699,7 @@ findMz <- function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
 		return(findMz.L(m2l,mz,tol))
 	}
 	else{
-		stop("The type of data to search must be a spectrum (S) or a mass difference (L)")
+		stop("The type of data to search must be a spectrum (S) or an m/z difference (L)")
 	}
 }
 
@@ -726,7 +726,7 @@ getInfo.S <- function(num,m2l){
 #' Return the available information on an element of an ms2Lib object.
 #'
 #' @param m2l An ms2Lib object
-#' @param ids A vector of IDs should be spectra or a mass differences.
+#' @param ids A vector of IDs should be spectra or a m/z differences.
 #' @param ... Supplementary information to be passed to the getInfo function.
 #'
 #' @return A data.frame giving information about the queried elements.
@@ -792,7 +792,7 @@ getInfo <- function(m2l,ids){
 #' Return the full range of iterations for different objects for an MS2lib object.
 #'
 #' @param m2l An ms2Lib object
-#' @param type "S" for spectra,"L" for mass differences or "P" for patterns
+#' @param type "S" for spectra,"L" for m/z differences or "P" for patterns
 #' @param reduced Used only if "type" is set to "P", shall the filtered pattern set be returned.
 #' @param as.number If as.number is selected integer are returned without the prefix.
 #'

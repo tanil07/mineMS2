@@ -9,7 +9,7 @@ mineClosedSubgraphs(m2l, ...)
 \arguments{
 \item{m2l}{A ms2Lib object}
 
-\item{...}{Supplmentary arguments passed to the mining method}
+\item{...}{Supplementary arguments passed to the mining method}
 }
 \description{
 `mineClosedSubgraphs` Extract frequent closed subgraphs from an ms2Lib object.

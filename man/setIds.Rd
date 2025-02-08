@@ -9,7 +9,7 @@ setIds(m2l, ...)
 \arguments{
 \item{m2l}{An ms2Lib object}
 
-\item{...}{Supplemetary arguments passed to the setIds method}
+\item{...}{Supplementary arguments passed to the setIds method}
 }
 \description{
 `setIds` set the ids of an ms2Lib objects
