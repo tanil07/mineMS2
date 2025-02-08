@@ -124,4 +124,4 @@ The included dataset, which is used in the examples and vignettes, consists of 5
 
 ## References
 
-Hautbergue,T. *et al.* (2019) Combination of isotope labeling and molecular networking of tandem mass spectrometry data to reveal 69 unknown metabolites produced by Penicillium nordicum. *Analytical Chemistry*. [DOI:[10.1021/acs.analchem.9b01634](DOI:%5B10.1021/acs.analchem.9b01634){.uri}](https://doi.org/10.1021/acs.analchem.9b01634).
+Hautbergue,T. *et al.* (2019) Combination of isotope labeling and molecular networking of tandem mass spectrometry data to reveal 69 unknown metabolites produced by Penicillium nordicum. *Analytical Chemistry*. [DOI:10.1021/acs.analchem.9b01634](https://doi.org/10.1021/acs.analchem.9b01634).
