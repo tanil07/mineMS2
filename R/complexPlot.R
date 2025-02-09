@@ -138,6 +138,8 @@ printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra, save_dir)
   dev.off()
 }
 
+# plotPatterns ----
+
 #' @rdname plotPatterns
 #' @export
 setMethod("plotPatterns", "ms2Lib", function(m2l,
@@ -148,11 +150,21 @@ setMethod("plotPatterns", "ms2Lib", function(m2l,
                                              byPage = 9,
                                              titles = NULL,
                                              v_ggplot = TRUE, 
-                                             export_pdf = FALSE, 
                                              path_inchi = NULL,
                                              infos_col = NULL,
-                                             save_dir = ""){
+                                             save_dir = "none"){
   
+  if (!(is.character(save_dir) && length(save_dir) == 1)) {
+    stop("'save_dir' argument should be a character of length 1")
+  } else if (save_dir != "none") {
+    if (!dir.exists(save_dir)) {
+      stop(save_dir, " directory not found")
+    } else {
+      export_pdf <- TRUE
+    }
+  } else {
+    export_pdf <- FALSE
+  }
   
   if(is.null(ids)){
     if(length(mm2ReducedPatterns(m2l))==0){
@@ -232,11 +244,7 @@ setMethod("plotPatterns", "ms2Lib", function(m2l,
       res <- listMzDiffbyPattern(m2l, m2l[id], golden_rule=TRUE, spec2Annot=FALSE, export_pdf = export_pdf)
       if(export_pdf)
       {
-        if(!dir.exists(save_dir))
-        {
-          stop(save_dir, " directory does not exist; please create it")
-        } else
-          printPDF(m2l, id, infos_to_print, res, p, save_dir)
+        printPDF(m2l, id, infos_to_print, res, p, save_dir)
       }
       else
       {

@@ -14,10 +14,9 @@ plotPatterns(
   byPage = 9,
   titles = NULL,
   v_ggplot = TRUE,
-  export_pdf = FALSE,
   path_inchi = NULL,
   infos_col = NULL,
-  save_dir = "",
+  save_dir = "none",
   ...
 )
 
@@ -30,10 +29,9 @@ plotPatterns(
   byPage = 9,
   titles = NULL,
   v_ggplot = TRUE,
-  export_pdf = FALSE,
   path_inchi = NULL,
   infos_col = NULL,
-  save_dir = ""
+  save_dir = "none"
 )
 }
 \arguments{
@@ -53,13 +51,11 @@ plotPatterns(
 
 \item{v_ggplot}{(default TRUE) if TRUE ggplot version for the plotting of the spectra}
 
-\item{export_pdf}{(for ggplot version) if TRUE export the spectra to PDF}
-
 \item{path_inchi}{name of a tabular file containing the inchi keys of the molecules in a column named "Name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)}
 
 \item{infos_col}{(for ggplot version) columns names from the spectra information to print}
 
-\item{save_dir}{name of the directory to store the pdf files}
+\item{save_dir}{name of the directory to store the pdf files (default 'none' in case of display only)}
 
 \item{...}{supplementary argument passed to the methods}
 }

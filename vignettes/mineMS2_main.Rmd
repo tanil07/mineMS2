@@ -23,8 +23,18 @@ knitr::opts_chunk$set(fig.width = 8, fig.height = 6)
 
 # Introduction
 
+mineMS2 is an innovative *de novo* strategy for **searching** **frequent patterns** within a **collection of MS/MS spectra** to help **finding and interpreting structural similarities** between subsets of spectra [@Delabriere].
+Each **pattern is a graph** with **ion peaks as nodes** and **m/z differences as edges**.
+These m/z differences can be **any difference between the m/z values of two peaks of a spectrum**, provided that they are **frequent** (i.e. detected in at least two spectra).
+They therefore include **not only neutral losses but also m/z differences between ions that belong to distinct fragmentation paths** of the precursor, which may also prove specific to the fragmentation of specific molecules.
+The candidate **molecular formulas for each m/z difference** are computed to help interpretation (below 200 Da).
+
+Importantly, this method is **independent of external spectral databases and knowledge of the molecular formula of precursor ions**, to facilitate the characterization of unknown compounds.
+mineMS2 patterns are **complementary to those of MS2LDA** [@vanderHooft2016], the latter consisting of a list of neutral fragments and losses and being obtained using a probabilistic approach.
+In particular, the **structure of mineMS2 patterns in the form of exact graphs** (all m/z differences of the pattern are present in all spectra containing this pattern) **facilitates their chemical interpretation**.
+
 This vignette describes the features of the mineMS2 package to **generate and explore fragmentation patterns in a collection from MS/MS spectra**.
-The companion vignette (*mineMS2_coupling-to-gnps*) further presents the **coupling of mineMS2 with GNPS** to focus on patterns that best explain components of the molecular network.
+The companion vignette (*mineMS2_coupling-to-gnps*) further presents the **coupling of mineMS2 with GNPS** [@Watrous2012] to focus on patterns that best explain components of the molecular network.
 
 ## Data
 
@@ -272,10 +282,10 @@ The `plotPatterns` method applied to a character vector of pattern indices displ
 
 ```{r patterns_plot_example}
 phe_pattern.c <- phe_patterns.ls[[phe_loss.c]][3]
-plotPatterns(pnordicum.msl, phe_pattern.c, export_pdf = FALSE)
+plotPatterns(pnordicum.msl, phe_pattern.c)
 ```
 
-These results can be exported in pdf (one pdf document per pattern) by setting the `export_pdf` argument to `TRUE` and providing the name of the directory to save the pdf files in the `save_dir` argument.
+These results can be exported in pdf (one pdf file per pattern) by setting the `save_dir` argument to the path of the directory to save the files (default to `"none"` for no export).
 
 # Session info
 

@@ -234,10 +234,9 @@ setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurenc
 #' @param byPage Maximum number of occurrences by page
 #' @param titles A vector giving the titles of the MS/MS spectra
 #' @param v_ggplot (default TRUE) if TRUE ggplot version for the plotting of the spectra
-#' @param export_pdf (for ggplot version) if TRUE export the spectra to PDF
 #' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "Name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
 #' @param infos_col (for ggplot version) columns names from the spectra information to print
-#' @param save_dir name of the directory to store the pdf files
+#' @param save_dir name of the directory to store the pdf files (default 'none' in case of display only)
 #' @param ... supplementary argument passed to the methods
 #' @return Nothing
 #' @examples
@@ -256,8 +255,7 @@ setGeneric("plotPatterns", function(m2l,
                                     byPage = 9,
                                     titles = NULL,
                                     v_ggplot = TRUE, 
-                                    export_pdf = FALSE, 
                                     path_inchi = NULL,
                                     infos_col = NULL,
-                                    save_dir = "",
+                                    save_dir = "none",
                                     ...) standardGeneric("plotPatterns"))
