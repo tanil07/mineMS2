@@ -4,6 +4,7 @@
 src/*.o
 .RData
 tests/testthat/*.pdf
-tests/output
+tests/outputs
 man/*.Rd
 vignettes/*.html
+vignettes/figures

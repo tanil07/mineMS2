@@ -64,7 +64,7 @@ printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra, save_dir)
   pdf(file.path(save_dir, paste0("pattern_", id_p, ".pdf")))
   
   grid.text("List of metabolites", draw=TRUE, y = 0.9)
-  grid.draw(tableGrob(infos, theme=ttheme_default(base_size = 8)))
+  grid.draw(tableGrob(infos, theme=gridExtra::ttheme_default(base_size = 8)))
   
   plot(m2l,id_p) ## plot the graph of the pattern
   grid.newpage()
@@ -112,7 +112,7 @@ printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra, save_dir)
   
   idx <- seq(1, ifelse(length(which(cum_sum >= maxrow)) == 0, nrow(df_mass_diff), which(cum_sum >= maxrow)[[1]]-1))
   
-  grid.draw(tableGrob(df_mass_diff[idx,],theme=ttheme_default(base_size = 8), rows = NULL))
+  grid.draw(tableGrob(df_mass_diff[idx,],theme=gridExtra::ttheme_default(base_size = 8), rows = NULL))
   #grid.table(res[idx,], rows=NULL)
   
   if(npages > 1)
@@ -129,7 +129,7 @@ printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra, save_dir)
       }else {
         idx <- seq(tail(idx,1)+1, which(cum_sum > maxrow)[[1]]-1)
       }
-      grid.draw(tableGrob(df_mass_diff[idx,], theme=ttheme_default(base_size = 8), rows = NULL))
+      grid.draw(tableGrob(df_mass_diff[idx,], theme=gridExtra::ttheme_default(base_size = 8), rows = NULL))
       #grid.table(res[idx,], rows=NULL)
     }
   }

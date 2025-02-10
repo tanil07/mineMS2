@@ -4,7 +4,7 @@
 MULTIPLE_FORMULA <- "Formula>2"
 HIGH_MASS <- "high mz"
 
-###Function used to construct the edges labels dataset.
+###Function used to construct the edge labels dataset.
 make_label_loss <- function(lab_edges){
   
   formula <- lab_edges$formula
@@ -85,11 +85,11 @@ reorderAtom <- function(atoms){
 #' #Loading the data
 #' data(m2l)
 #' 
-#' #Constructing edges labels
+#' #Constructing edge labels
 #' m2l <- discretizeMzDifferences(m2l,ppm=15,dmz=0.007,count=2,
 #' precPpm=20,precDmz=0.03,maxFrags=15)
 #' 
-#' #Constructing edges labels while including heteroatoms
+#' #Constructing edge labels while including heteroatoms
 #' m2l <- discretizeMzDifferences(m2l,atoms = 
 #' list("C"=50,"H"=100,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2))
 setMethod("discretizeMzDifferences", "ms2Lib", function(m2l,
@@ -191,7 +191,7 @@ setMethod("discretizeMzDifferences", "ms2Lib", function(m2l,
   
   
   ###Add the fusing part of the edge labels.
-  message("Fusing the edges labels")
+  message("Fusing the edge labels")
   ###Simplifying the DAG if necessary.
   change <- TRUE
   niter <- 1
@@ -201,7 +201,7 @@ setMethod("discretizeMzDifferences", "ms2Lib", function(m2l,
     niter <- niter+1
   }
   
-  ###Constructing the edges labels
+  ###Constructing the edge labels
   templabs <- make_label_loss(res_list$elems)
   res_list$elem$full_labels <- templabs$full_labs
   res_list$elem$labs <- templabs$labs

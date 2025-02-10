@@ -21,7 +21,7 @@ and informations added by the user eventually.}
 
 \item{\code{dags}}{A list storing the set of graphs object corresponding to the MS-MS spectra.}
 
-\item{\code{losses}}{The discretized edges labels.}
+\item{\code{losses}}{The discretized edge labels.}
 
 \item{\code{fragments}}{The discretized nodes labels.}
 

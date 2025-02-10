@@ -145,7 +145,7 @@ setMethod("mineClosedSubgraphsByComponent","ms2LibSplit",function(m2l, count = 2
 #' @export
 setMethod("show","ms2LibSplit",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
-	cat("It has",nrow(mm2EdgesLabels(object)),"edges labels.\n")
+	cat("It has",nrow(mm2EdgesLabels(object)),"edge labels.\n")
 	cat("The available supplementary informations are:",colnames(mm2SpectraInfos(object)),"\n")
 	cat("It contains:",length(mm2Patterns(object)),"patterns\n")
 	if(length(mm2ReducedPatterns(object))!=0) cat("It has been reduced to",

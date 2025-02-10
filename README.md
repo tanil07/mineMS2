@@ -13,15 +13,19 @@ This algorithm takes as input a set of MS/MS spectra in *mgf* format and consist
 1.  every spectrum is represented by a graph, called *fragmentation graph*, containing the fragments of the spectrum and the m/z differences between the fragments, when they comply with certain conditions.
 2.  frequent subgraphs are searched among the fragmentation graphs, corresponding to sets of common m/z differences
 
-![](vignettes/figures/mineMS2_input_output.png)
+![](vignettes/images/mineMS2_input_output.png)
 
 Fig. 1:
 
 It is then possible to compare these fragmentation patterns with GNPS network components or chemical families (Figure 2).
 
-![](vignettes/figures/explain_patterns.png)
+![](vignettes/images/explain_patterns.png)
 
 Fig. 2:
+
+![](vignettes/images/mineMS2_gnps.png)
+
+Fig. 3:
 
 ## Installation
 

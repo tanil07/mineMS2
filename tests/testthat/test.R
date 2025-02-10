@@ -4,22 +4,20 @@
 ################################################################
 
 TEST.DIR <- file.path(getwd(), '..')
-RES.DIR  <- file.path(TEST.DIR, 'res')
-OUT.DIR  <- file.path(TEST.DIR, 'output')
-if ( ! dir.exists(OUT.DIR))
-    dir.create(OUT.DIR)
+IN.DIR  <- file.path(TEST.DIR, 'inputs')
+OUT.DIR  <- file.path(TEST.DIR, 'outputs')
 
 NB_SPECTRA <- 52 ## P. verrucosum
 
-# Test basic processing {{{1
+# Test processing {{{1
 ################################################################################
 
-test_basic_processing <- function() {
+test_processing <- function() {
     
-    path_mgf <- file.path(RES.DIR, 'basic.mgf')
-    path_input_graph <- file.path(RES.DIR, 'basic.graphml')
-    path_expected_output_graph <- file.path(RES.DIR, 'basic_annotated.graphml')
-    path_output_graph <- file.path(OUT.DIR, 'test_basic_processing.graphml')
+    path_mgf <- file.path(IN.DIR, 'test.mgf')
+    path_input_graph <- file.path(IN.DIR, 'test.graphml')
+    path_expected_output_graph <- file.path(IN.DIR, 'test_annotated.graphml')
+    path_output_graph <- file.path(OUT.DIR, 'test_processing.graphml')
 
     m2l <- mineMS2::ms2Lib(path_mgf)
     testthat::expect_is(m2l, 'ms2Lib')
@@ -78,10 +76,10 @@ test_basic_processing <- function() {
 # Test MGF filename {{{1
 ################################################################################
 
-test_basic_mgf_filename <- function() {
+test_mgf_filename <- function() {
     
-    path_mgf <- file.path(RES.DIR, 'basic.mgf')
-    mgf_with_no_ext_mgf <- file.path(OUT.DIR, 'basic.dat')
+    path_mgf <- file.path(IN.DIR, 'test.mgf')
+    mgf_with_no_ext_mgf <- file.path(OUT.DIR, 'test.dat')
     file.copy(path_mgf, mgf_with_no_ext_mgf)
     
     m2l <- mineMS2::ms2Lib(mgf_with_no_ext_mgf)
@@ -92,5 +90,5 @@ test_basic_mgf_filename <- function() {
 ################################################################################
 
 testthat::context('Main tests.')
-testthat::test_that('A basic processing works fine.', test_basic_processing())
-testthat::test_that('We can provide any filename for a single MGF file', test_basic_mgf_filename())
+testthat::test_that('A test processing works fine.', test_processing())
+testthat::test_that('We can provide any filename for a single MGF file', test_mgf_filename())

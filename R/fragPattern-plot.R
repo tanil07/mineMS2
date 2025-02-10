@@ -597,20 +597,17 @@ spectrum_ggplot <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec,
 #' @param m2l ms2lib object.
 #' @param pidx pattern id or a frag_pattern object.
 #' @param titles list of titles for the spectra. If NULL, a title will be set automatically
-#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "Name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
+#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "Name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) in the same directory as path_inchi, and displayed in the plot along the spectra (default NULL)
 #' 
 #' @return A list of plots, one for every spectrum
 #' 
 #' @examples 
 #' data(m2l)
 #' support_ggplot(m2l, "P12")
-support_ggplot <- function(m2l, pidx, titles = NULL, path_inchi=NULL)
+support_ggplot <- function(m2l, pidx, titles = NULL, path_inchi = NULL)
 {
-  if(length(path_inchi) != 0)
-  {
-    dir_images <- "cs_pictures"
-    ifelse(!dir.exists(dir_images), dir.create(dir_images), FALSE)
-  }
+  if (!is.null(path_inchi))
+    dir_images <- dirname(path_inchi)
   
   fp <- m2l[pidx] ## pattern
   
@@ -657,8 +654,11 @@ support_ggplot <- function(m2l, pidx, titles = NULL, path_inchi=NULL)
   x_lim <- c(min(all_mz_peaks), max(all_mz_peaks))
   
   plots <- lapply(seq_along(u_occs_gid), spectrum_ggplot, 
-                  loss_mz=loss_mz, mgs=mgs, g=g, ru_occs_gid=ru_occs_gid, u_occs_gid=u_occs_gid, mzprec=mz, rtprec=rt,
-                  names=names, n=n, col_vec = col_vec, path_inchi=path_inchi, dir_images=dir_images, x_lim = x_lim, title = NULL)
+                  loss_mz=loss_mz, mgs=mgs, g=g,
+                  ru_occs_gid=ru_occs_gid, u_occs_gid=u_occs_gid,
+                  mzprec=mz, rtprec=rt, names=names, n=n, col_vec = col_vec,
+                  path_inchi=path_inchi, dir_images=dir_images, x_lim = x_lim,
+                  title = NULL)
   
   return(plots)
 }
