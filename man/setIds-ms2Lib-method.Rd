@@ -25,10 +25,10 @@ Changing the ids of spectra, which can be useful to plot them.
 data(m2l)
 
 #Plot with all ids
-plotOccurences(m2l,"P15")
+plotOccurrences(m2l,"P15")
 
 m2l <- setIds(m2l,paste("spectrum n",1:length(mm2Spectra(m2l)),sep=""))
 
 #Plot with the new ids
-plotOccurences(m2l,"P15")
+plotOccurrences(m2l,"P15")
 }

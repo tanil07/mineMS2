@@ -30,7 +30,7 @@ class lattice_node : public frag_pattern{
         //The root anf the current extension
         bool root;
         short current_ext;
-        //The number of occurences of the parent, and of the child.
+        //The number of occurrences of the parent, and of the child.
         //Cleaning
         void clean_up();
 };

@@ -1,8 +1,8 @@
 Package: mineMS2
 Type: Package
 Title: mineMS2: Annotation of spectral libraries with exact fragmentation patterns
-Version: 0.9.20
-Date: 2025-02-08
+Version: 0.9.22
+Date: 2025-02-11
 Authors@R: c(
     person(given = "Alexis", family = "Delabriere", email = "alexis.delabriere@hotmail.fr", role = c("aut", "cre")),
     person(given = "Coline", family = "Gianfrotta", email = "coline.gianfrotta@cea.fr", role = "aut"),
@@ -16,7 +16,7 @@ SystemRequirements: C++11
 Suggests: devtools, knitr, rmarkdown, testthat (>= 2.0.0), tools
 Imports: ggplot2, ggrepel, gridExtra, igraph, kableExtra, Matrix, methods, MSnbase, patchwork, png, Rcpp (>= 0.12.13), stringr, webchem
 LinkingTo: Rcpp,BH
-License: GPL-3
+License: CeCILL v2.1
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.3.2

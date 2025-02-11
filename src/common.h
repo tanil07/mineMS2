@@ -77,7 +77,7 @@ typedef boost::adjacency_list<
 typedef boost::graph_traits<ktree> graphTraitst;
 typedef boost::graph_traits<ktree>::vertex_descriptor Vertext;
 
-//Occurences list
+//Occurrences list
 typedef std::map<Vertext, std::set<occ> > MapOccurrences;
 
 

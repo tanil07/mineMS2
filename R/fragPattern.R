@@ -6,8 +6,8 @@ setMethod("mm2Graph", "fragPattern",function(pat){
 })
 
 #'@export
-setMethod("mm2Occurences", "fragPattern",function(pat){
-	return(pat@occurences)
+setMethod("mm2Occurrences", "fragPattern",function(pat){
+	return(pat@occurrences)
 })
 
 #'@export
@@ -31,8 +31,8 @@ setMethod("mm2Graph<-", "fragPattern", function(pat,value){
 	pat
 })
 
-setMethod("mm2Occurences<-", "fragPattern", function(pat,value){
-	pat@occurences <- value
+setMethod("mm2Occurrences<-", "fragPattern", function(pat,value){
+	pat@occurrences <- value
 	pat
 })
 setMethod("mm2Root<-","fragPattern", function(pat,value){
@@ -62,7 +62,7 @@ setMethod("mm2CanonicalForm<-", "fragPattern",function(pat,value){
 #' show(m2l["P12"])
 setMethod("show","fragPattern",function(object){
 	cat("A fragPattern object with",vcount(mm2Graph(object))-1,"losses occuring ",
-		nrow(mm2Occurences(object)),"times.\n")
+		nrow(mm2Occurrences(object)),"times.\n")
 })
 
 
@@ -75,7 +75,7 @@ setMethod("show","fragPattern",function(object){
 #' @param rlist rlist is a list containg 2 fields,
 #' \code{edges}: An edge list which includes the "from","to" and "lab" fields, which be processed
 #' by the graph_from_data_frame function.
-#' \code{occurences}: A matrix with 2 columns, the first giving the id in which the patterns are found
+#' \code{occurrences}: A matrix with 2 columns, the first giving the id in which the patterns are found
 #' and the second giving the nodes.
 #'
 #' @return
@@ -83,7 +83,7 @@ setMethod("show","fragPattern",function(object){
 fragPattern <- function(rlist){
 	fp <- new("fragPattern")
 	mm2Graph(fp) <- graph_from_data_frame(rlist$edges)
-	mm2Occurences(fp) <- rlist$occurences
+	mm2Occurrences(fp) <- rlist$occurrences
 
 	##The root is always 0
 	mm2Root(fp) <- as.integer(0)
@@ -117,7 +117,7 @@ canonicalForm <- function(pat){
 #'
 #' @return The m2l object with all the coverage calculated.
 setMethod("calculateCoverage","fragPattern",function(x,mzloss,mgs){
-  occs <- x@occurences
+  occs <- x@occurrences
   coverages <- rep(NA_real_,nrow(occs))
   for(j in 1:nrow(occs)){
     gid <- occs[j,"gid"]
@@ -140,19 +140,19 @@ setMethod("calculateCoverage","fragPattern",function(x,mzloss,mgs){
   }else{
     occs[,COVERAGE_NAME] <- coverages
   }
-  x@occurences <- occs
+  x@occurrences <- occs
   x
 })
 
 setMethod("hasCoverage","fragPattern",function(x){
-  COVERAGE_NAME %in% colnames(x@occurences)
+  COVERAGE_NAME %in% colnames(x@occurrences)
 })
 
 
 relabelOccurrences <- function(pat,newlabs){
-	tempOccs <- mm2Occurences(pat)
+	tempOccs <- mm2Occurrences(pat)
 	tempOccs[,1] <- newlabs[tempOccs[,1]]
-	mm2Occurences(pat) <- tempOccs
+	mm2Occurrences(pat) <- tempOccs
 	pat
 }
 
@@ -162,10 +162,11 @@ relabelOccurrences <- function(pat,newlabs){
 #' @param id_p a fragPattern id (such as "P1")
 #' 
 #' @return a data.frame containing information about the spectra containing the pattern
+#' @export
 infoPatterns <- function(m2l, id_p)
 {
-	occs <- mm2Occurences(m2l[id_p])[,'gid']
-	s_occs <- sapply(occs, function(x){return(paste("S",x, sep=""))})
+	occs <- mm2Occurrences(m2l[id_p])[,'gid']
+	s_occs <- sapply(occs, function(x){return(paste0("S", x))})
 	infos <- getInfo(m2l, "S")
 
 	df <- infos[rownames(infos) %in% s_occs, names(infos) != "file"]

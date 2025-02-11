@@ -101,12 +101,12 @@ void removeExtensions(std::vector<Extension>& exts, std::vector<short> labs, Ver
 
 //This construtor only produce pattenr with 1 edge or seed pattern.
 frag_pattern::frag_pattern(Vertext v,k_path_tree& kt, std::ostream& of){
-    //Setting occurences, occurences may be added :
+    //Setting occurrences, occurrences may be added :
     ktree& t = kt.get_t();
     MapOccurrences& moccs = kt.get_occs();
     adjacencyGraph& adj = kt.get_adj();
     std::vector<occ> toccs(moccs[v].begin(),moccs[v].end());
-    occurences = toccs;
+    occurrences = toccs;
     short lab = t[v].lab;
     short k = kt.get_k();
 
@@ -195,14 +195,14 @@ frag_pattern::frag_pattern(Vertext v,k_path_tree& kt, std::ostream& of){
     calcNormalForm();
 }
 
-void printOccs(std::set<occ>& occurences){
-    for(auto it=occurences.begin();it!=occurences.end();it++){
+void printOccs(std::set<occ>& occurrences){
+    for(auto it=occurrences.begin();it!=occurrences.end();it++){
         Rcpp::Rcout << (*it).gid << " " << (*it).idx << std::endl;
     }
 }
 
 int frag_pattern::numExts(){return extensions.size();}
-int frag_pattern::numOccs(){return occurences.size();}
+int frag_pattern::numOccs(){return occurrences.size();}
 int frag_pattern::sizeGraph(){return boost::num_vertices(g);}
 
 //TODO see if it is more valuable to store the distance form the root in the patter.
@@ -239,19 +239,19 @@ frag_pattern::frag_pattern(frag_pattern& fp,k_path_tree& kt,
         return;
     }
 
-    //We first check the number of occurences
+    //We first check the number of occurrences
     MapOccurrences& moccs = kt.get_occs();
     std::vector<occ>noccs;
 
-    set_intersection(moccs[tnode].begin(),moccs[tnode].end(),fp.occurences.begin(),fp.occurences.end(),
+    set_intersection(moccs[tnode].begin(),moccs[tnode].end(),fp.occurrences.begin(),fp.occurrences.end(),
                   std::inserter(noccs,noccs.begin()));
 
-    //Creation only if the number of occurences is sufficient.
+    //Creation only if the number of occurrences is sufficient.
     if(int(noccs.size())< fthreshold){
         created = false;
         return;
     }else{
-        occurences = noccs;
+        occurrences = noccs;
     }
 
 
@@ -334,7 +334,7 @@ patternKey frag_pattern::get_key() const{
 }
 
 std::vector<occ>& frag_pattern::get_occs(){
-    return occurences;
+    return occurrences;
 }
 
 void frag_pattern::clearPattern(){
@@ -378,12 +378,12 @@ void frag_pattern::extendMotif(){
 }
 
 void frag_pattern::reconstructGraphD(std::vector<mass_graph>& D){
-    //We get the first occurences
+    //We get the first occurrences
     int n = 0;
 
-    //TODO : change to authorize arbitrary number of occurences.
-    //TODO eventually put te high number of occurences first.
-    for(auto it=occurences.begin();(it != occurences.end())&(n<2);++it,++n){
+    //TODO : change to authorize arbitrary number of occurrences.
+    //TODO eventually put te high number of occurrences first.
+    for(auto it=occurrences.begin();(it != occurrences.end())&(n<2);++it,++n){
         occ& o=(*it);
         mass_graph& mgd=D[o.gid];
         graph& d = mgd.get_g();
@@ -444,12 +444,12 @@ bool frag_pattern::isCompleteD(std::vector<mass_graph>& D){
     }
 
     bool init = true;
-    for(auto it=occurences.begin();it!=occurences.end();it++){
+    for(auto it=occurrences.begin();it!=occurrences.end();it++){
         occ& o = (*it);
         mass_graph& mgd = D[o.gid];
         graph& gd = mgd.get_g();
         Vertex v_occ = mgd.get_vertex_from_gid(o.idx);
-        //Initialisation with the first met occurences.
+        //Initialisation with the first met occurrences.
         if(init){
             init = false;
             graphTraits::out_edge_iterator bo,eo;
@@ -559,9 +559,9 @@ void frag_pattern::to_string(){
     Rcpp::Rcout<<std::endl;
 
 
-    //Now we print the occurences
-    auto bo=occurences.begin();
-    auto eo=occurences.end();
+    //Now we print the occurrences
+    auto bo=occurrences.begin();
+    auto eo=occurrences.end();
     Rcpp::Rcout<<"occs : ";
     for(;bo!=eo;bo++){
         Rcpp::Rcout<<(*bo).gid<<"_"<<(*bo).idx<<" ";
@@ -648,7 +648,7 @@ void frag_pattern::clearPatternFull(){
     graphp temp;
     g = temp;
     extensions.clear();
-    occurences.clear();
+    occurrences.clear();
     dist_prec.clear();
 }
 
@@ -676,7 +676,7 @@ void frag_pattern::to_reduced_string_ext(std::ostream& of){
 std::set<short> frag_pattern::numUniqueOccs(){
 
     std::set<short> unique_gid;
-    for(auto it = occurences.begin();it!=occurences.end();it++){
+    for(auto it = occurrences.begin();it!=occurrences.end();it++){
         unique_gid.insert(it->gid);
     }
     return unique_gid;
@@ -686,11 +686,11 @@ std::set<short> frag_pattern::numUniqueOccs(){
 //Fill the information of the graph.
 void frag_pattern::fill_graph_info(){
 
-    //Writing the occurences
+    //Writing the occurrences
     std::ostringstream tst;
 
 
-    for(auto it = occurences.begin();it!=occurences.end();it++){
+    for(auto it = occurrences.begin();it!=occurrences.end();it++){
         tst <<it->gid <<"_" << it->idx << "|";
     }
 
@@ -730,7 +730,7 @@ void frag_pattern::write_graphml(std::string path_graphml)
 }
 
 
-//Return the pattern as an edge matrix and an occurences matrix.
+//Return the pattern as an edge matrix and an occurrences matrix.
 Rcpp::List frag_pattern::as_igraph_data_frame(){
 
 	int nedges = boost::num_edges(g);
@@ -751,18 +751,18 @@ Rcpp::List frag_pattern::as_igraph_data_frame(){
 		count_edge++;
 	}
 
-	//Filling the occurences matrix
-	Rcpp::IntegerMatrix mat_occs(occurences.size(),2);
+	//Filling the occurrences matrix
+	Rcpp::IntegerMatrix mat_occs(occurrences.size(),2);
 	Rcpp::colnames(mat_occs) = Rcpp::CharacterVector({"gid","idx"});
 	int posmat = 0;
-	for(auto it = occurences.begin(); it != occurences.end(); it++){
+	for(auto it = occurrences.begin(); it != occurrences.end(); it++){
 		mat_occs(posmat,0) = (*it).gid+1;
 		mat_occs(posmat,1) = (*it).idx;
 		posmat++;
 	}
 
 	Rcpp::List res = Rcpp::List::create(Rcpp::Named("edges")=mat_edges,
-                               Rcpp::Named("occurences")=mat_occs);
+                               Rcpp::Named("occurrences")=mat_occs);
 	return(res);
 }
 

@@ -1,3 +1,5 @@
+# ms2Lib ----
+
 #'A class storing a set of MS/MS spectra, their associated graphs,
 #'and some supplementary information.
 #'
@@ -57,14 +59,14 @@ setClass(
   "fragPattern",
   slot = list(
     graph = "ANY",
-    occurences = "matrix",
+    occurrences = "matrix",
     root = "integer",
     name = "character",
     canonicalForm = "character"
   ),
   prototype = list(
     graph = make_empty_graph(),
-    occurences = matrix(0,nrow=0,ncol=2),
+    occurrences = matrix(0,nrow=0,ncol=2),
     root = as.integer(1),
     name = character(),
     canonicalForm = character()

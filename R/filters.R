@@ -15,7 +15,7 @@
 #' print(length(mm2ReducedPatterns(m2l)))
 filterPatterns <-
   function(m2l,filter_function = function(x, threshold, num) {
-             return(sum(x@occurences[, "coverage"] > threshold) >= num)
+             return(sum(x@occurrences[, "coverage"] > threshold) >= num)
            },
            args = list(threshold = 0.2, num = 2)) {
     patt <- mm2Patterns(m2l)

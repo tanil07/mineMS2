@@ -7,7 +7,7 @@
 filterPatterns(
   m2l,
   filter_function = function(x, threshold, num) {
-     return(sum(x@occurences[,
+     return(sum(x@occurrences[,
     "coverage"] > threshold) >= num)
  },
   args = list(threshold = 0.2, num = 2)

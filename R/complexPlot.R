@@ -145,12 +145,12 @@ printPDF <- function(m2l, id_p, infos, df_mass_diff, spectra, save_dir)
 setMethod("plotPatterns", "ms2Lib", function(m2l,
                                              ids = NULL,
                                              components = NULL,
-                                             occurences = TRUE,
+                                             occurrences = TRUE,
                                              full = FALSE,
                                              byPage = 9,
                                              titles = NULL,
-                                             v_ggplot = TRUE, 
                                              path_inchi = NULL,
+                                             ggplot.l = TRUE,
                                              infos_col = NULL,
                                              save_dir = "none"){
   
@@ -192,9 +192,10 @@ setMethod("plotPatterns", "ms2Lib", function(m2l,
     stop("components argument should be a list of the same size than ids.")
   }
   
+  
   for(pid in seq_along(ids)){
     id <- ids[pid]
-    if(!v_ggplot)
+    if(!ggplot.l)
     {
       if(!is.null(titles)){
         if(!is.null(components)){
@@ -222,17 +223,11 @@ setMethod("plotPatterns", "ms2Lib", function(m2l,
           plot(m2l,id)
         }
       }
-      plotOccurences(m2l,id)
+      plotOccurrences(m2l,id)
     }
     else
     {	
-      if(!is.null(path_inchi))
-      {
-        p <- support_ggplot(m2l, id, path_inchi = path_inchi, titles = titles)
-      }
-      else {
-        p <- support_ggplot(m2l, id, titles = titles)
-      }
+      p <- support_ggplot(m2l, id, path_inchi = path_inchi, titles = titles)
       infos <- infoPatterns(m2l, id)
       if(!is.null(infos_col))
       {
@@ -252,7 +247,7 @@ setMethod("plotPatterns", "ms2Lib", function(m2l,
         plot(m2l, id)
         print(kable(res))
         #print(p)
-        arrangeSpectra2D(p, step_row=2, step_col = 2)
+        arrangeSpectra2D(p, step_row = 2, step_col = 2)
       }
     }
   }

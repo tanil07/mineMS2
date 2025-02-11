@@ -75,7 +75,7 @@ class k_path_tree
         std::vector<std::vector<Vertext> > pos;
         ktree t;
 
-        //It stores the occurences under the form of a set of struct
+        //It stores the occurrences under the form of a set of struct
         MapOccurrences moccs;
 
         //List of traingles dependent of the graph too

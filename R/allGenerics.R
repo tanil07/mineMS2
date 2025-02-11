@@ -55,7 +55,7 @@ setGeneric("mm2Atoms<-", function(m2l,value) standardGeneric("mm2Atoms<-"))
 
 setGeneric("mm2Graph", function(pat) standardGeneric("mm2Graph"))
 
-setGeneric("mm2Occurences", function(pat) standardGeneric("mm2Occurences"))
+setGeneric("mm2Occurrences", function(pat) standardGeneric("mm2Occurrences"))
 
 setGeneric("mm2Root", function(pat) standardGeneric("mm2Root"))
 
@@ -68,7 +68,7 @@ setGeneric("mm2CanonicalForm", function(pat) standardGeneric("mm2CanonicalForm")
 
 setGeneric("mm2Graph<-", function(pat,value) standardGeneric("mm2Graph<-"))
 
-setGeneric("mm2Occurences<-", function(pat,value) standardGeneric("mm2Occurences<-"))
+setGeneric("mm2Occurrences<-", function(pat,value) standardGeneric("mm2Occurrences<-"))
 
 setGeneric("mm2Root<-", function(pat,value) standardGeneric("mm2Root<-"))
 
@@ -203,10 +203,12 @@ setGeneric("idxFormula",function(x,lf,...) standardGeneric("idxFormula"))
 
 # Plots ----
 
+## plotOccurrences ----
+
 #' Plot occurrences of fragPattern in library object.
 #' 
 #' @description
-#' `plotOccurences` Plot a pattern on its associated fragmentation spectrum.
+#' `plotOccurrences` Plot a pattern on its associated fragmentation spectrum.
 #'
 #' @param m2l A ms2Lib object
 #' @param pidx A pattern id to be plotted
@@ -217,9 +219,11 @@ setGeneric("idxFormula",function(x,lf,...) standardGeneric("idxFormula"))
 #' or via the [Summary()] group generic. For this to work properly,
 #' the arguments `...` should be unnamed, and dispatch is on the
 #' first argument.
-setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurences"))
+#' @rdname plotOccurrences
+#' @export
+setGeneric("plotOccurrences",function(m2l,pidx,...) standardGeneric("plotOccurrences"))
 
-### plotPatterns ----
+## plotPatterns ----
 
 #' Plot patterns and spectra occurrences of an ms2Lib object
 #'
@@ -229,12 +233,12 @@ setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurenc
 #' @param m2l An ms2Lib object
 #' @param ids The ids to be plotted or NULL to plot all ids
 #' @param components An id giving the component of each spectrum to be plotted in first page
-#' @param occurences Shall the occurrences be plotted as well as the pattern?
+#' @param occurrences Shall the occurrences be plotted as well as the pattern?
 #' @param full Shall the full patterns be plotted?
 #' @param byPage Maximum number of occurrences by page
 #' @param titles A vector giving the titles of the MS/MS spectra
-#' @param v_ggplot (default TRUE) if TRUE ggplot version for the plotting of the spectra
-#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "Name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
+#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
+#' @param ggplot.l (default TRUE) Should the ggplot version be displayed?
 #' @param infos_col (for ggplot version) columns names from the spectra information to print
 #' @param save_dir name of the directory to store the pdf files (default 'none' in case of display only)
 #' @param ... supplementary argument passed to the methods
@@ -250,12 +254,13 @@ setGeneric("plotOccurences",function(m2l,pidx,...) standardGeneric("plotOccurenc
 setGeneric("plotPatterns", function(m2l,
                                     ids = NULL,
                                     components = NULL,
-                                    occurences = TRUE,
+                                    occurrences = TRUE,
                                     full = FALSE,
                                     byPage = 9,
                                     titles = NULL,
                                     v_ggplot = TRUE, 
                                     path_inchi = NULL,
+                                    ggplot.l = TRUE,
                                     infos_col = NULL,
                                     save_dir = "none",
                                     ...) standardGeneric("plotPatterns"))

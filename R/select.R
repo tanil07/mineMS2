@@ -147,7 +147,7 @@ find.patterns.spectra<- function(m2l,ids,reduced=FALSE,metric = c("coverage","si
 	nsol_partial <- 0
 	for(ip in seq_along(idsp)){
 		temp_pat <- m2l[idsp[ip]]
-		occs <- mm2Occurences(temp_pat)
+		occs <- mm2Occurrences(temp_pat)
 		vm <- (ids %in% occs[,"gid"])
 
 		if(all(vm)){
@@ -331,7 +331,7 @@ find.patterns.class <- function(m2l,ids,type=c("f1","precision","size"),
 
 	###We find the best matching ones
 	vf1 <- sapply(idsp,function(x,idr,m2l,fullv){
-		c(f1.score(unique(m2l[x]@occurences[,1]),idr,m2l,full=fullv),vcount(m2l[x]@graph))
+		c(f1.score(unique(m2l[x]@occurrences[,1]),idr,m2l,full=fullv),vcount(m2l[x]@graph))
 	},idr=ids,m2l=m2l,fullv=full)
 
 	rownames(vf1) <- c("f1","precision","recall","miss","size")

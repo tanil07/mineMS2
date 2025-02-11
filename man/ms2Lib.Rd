@@ -21,9 +21,9 @@ ms2Lib(
 \item A single .mgf file regrouping multiple spectra.
 }}
 
-\item{suppInfos}{Supplementary information to be associated to the spectra.
-It should be of the same size as the number of spectra. If there is a "file" column, this
-column is used to match the filenames. A "composition" or "formula" fields may also be present, and is then used to set the
+\item{suppInfos}{Data frame containing the metadata to be associated to the spectra.
+It should be of the same size as the number of spectra. If there is a 'file' column, this
+column is used to match the file names. A 'formula' fields may also be present, and is then used to set the
 formula of the molecules.}
 
 \item{ids}{A supplementary vector giving a set of ids to design the spectra. It may be any character vector which
@@ -33,11 +33,11 @@ where N is the number of furnished spectra.}
 
 \item{intThreshold}{The intensity threshold used to filter out the peaks.}
 
-\item{infosFromFiles}{Shall the other informations present in the files be added to the supplementary infos.}
+\item{infosFromFiles}{Shall the other information present in the files be added to the supplementary data (default: FALSE)}
 }
 \description{
-Create a ms2Lib object from files in the correct format. Eventually add some supplementary informations given in a csv file. 
-This supplementary information may notably include the composition or the formula of the molecules.
+Create a ms2Lib object from files in the correct format. Eventually add some supplementary data given in a tsv file. 
+This supplementary information may notably include the 'name' and the 'formula' of the molecules.
 }
 \examples{
 #We locate the example file

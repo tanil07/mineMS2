@@ -10,7 +10,7 @@ fragPattern(rlist)
 \item{rlist}{rlist is a list containg 2 fields,
 \code{edges}: An edge list which includes the "from","to" and "lab" fields, which be processed
 by the graph_from_data_frame function.
-\code{occurences}: A matrix with 2 columns, the first giving the id in which the patterns are found
+\code{occurrences}: A matrix with 2 columns, the first giving the id in which the patterns are found
 and the second giving the nodes.}
 }
 \value{

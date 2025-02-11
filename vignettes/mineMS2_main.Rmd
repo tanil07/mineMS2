@@ -2,6 +2,7 @@
 title: "mineMS2: Annotation of spectral libraries with exact fragmentation patterns"
 author: "Alexis Delabrière, Coline Gianfrotta and Etienne Thévenot"
 date: "`r Sys.Date()`"
+package:  "`r pkg_ver('mineMS2')`"
 vignette: >
   %\VignetteEncoding{UTF-8}
   %\VignetteIndexEntry{mineMS2: Annotation of spectral libraries with exact fragmentation patterns}
@@ -9,7 +10,10 @@ vignette: >
 bibliography: "mineMS2_references.bib"
 output:
   BiocStyle::html_document:
-    toc_float: true
+    toc: yes
+    toc_depth: 4
+    toc_float:
+      collapsed: false    
 editor_options: 
   markdown: 
     wrap: sentence
@@ -36,9 +40,9 @@ In particular, the **structure of mineMS2 patterns in the form of exact graphs**
 This vignette describes the features of the mineMS2 package to **generate and explore fragmentation patterns in a collection from MS/MS spectra**.
 The companion vignette (*mineMS2_coupling-to-gnps*) further presents the **coupling of mineMS2 with GNPS** [@Watrous2012] to focus on patterns that best explain components of the molecular network.
 
-## Data
+## Data set
 
-The data set included in the package, which is used in both vignettes, consists of 51 spectra from the untargeted study of the secondary metabolism of *Penicillium nordicum* [@Hautbergue2019].
+The dataset used in both vignettes contains 51 MS/MS spectra from secondary metabolites of *Penicillium nordicum* (one spectrum per compound) acquired with a Data Dependent Analysis (DDA) approach on a HPLC system (Luna C18 column; Phenomenex) coupled to an LTQ Orbitrap XL hybrid (Thermo Fisher Scientific) operated in the positive ionization mode at a HCD20 collision energy and a resolution of 7,500 [@Hautbergue2019].
 
 ## Installation
 
@@ -50,7 +54,7 @@ if (!require(mineMS2)) install_github("odisce/mineMS2")
 library(mineMS2)
 ```
 
-# Loading the collection of MS/MS spectra
+# Loading the collection of MS/MS spectra (`ms2Lib`)
 
 The **`ms2Lib`** class is used throughout the workflow to **store the spectra data and metadata, the m/z differences, the fragmentation graphs, and the patterns**.
 
@@ -85,18 +89,27 @@ head(pnordicum_metadata.df)
 
 ```{r ms2lib_constructor}
 # Spectra data and metadata are loaded
-pnordicum.msl <- ms2Lib(pnordicum_mgf.c, suppInfos = pnordicum_metadata.df)
-pnordicum.msl
+pnordicum.m2l <- ms2Lib(pnordicum_mgf.c, suppInfos = pnordicum_metadata.df)
+pnordicum.m2l
 ```
 
-Metadata (e.g. m/z and retention time) can be linked to the IDs of the spectra as follows:
+Note that the two columns *mz.precursor* and *file* have been inserted at the beginning of the metadata table stored in the `ms2Lib` object with the information borrowed from the *mgf* file.
+In addition, if the *formula* column exists in the initial metadata file, white spaces and special characters are omitted in the metadata table of the `ms2Lib` object and `NA` are inserted when specific formulas are missing (when no formula is provided in the initial metadata, a *formula* column full of `NA` is created in the metadata table of the `ms2Lib` object).
+Note that **this formula information is not used by the *mineMS2* algorithms** (for display only) to enable *de novo* characterization of unknown compounds.
+
+The metadata can be get back from the `ms2Lib` object with `getInfo`:
+
+```{r ms2lib_get_metadata}
+ms2lib_metadata.df <- getInfo(pnordicum.m2l, "S")
+head(ms2lib_metadata.df)
+```
+
+These metadata (e.g. m/z and retention time) can be linked to the IDs of the spectra as follows (for display in the plots):
 
 ```{r spectrum_id}
-pnordicum_metadata.df <- getInfo(pnordicum.msl,"S")
-# dataframe storing all the information about the spectra
-pnordicum_ids.c <- paste(paste("mz",pnordicum_metadata.df[,"mz"]),
-                       paste("rt",pnordicum_metadata.df[,"rt"]), sep = "_")
-pnordicum.msl <- setIds(pnordicum.msl,pnordicum_ids.c)
+pnordicum_ids.c <- paste(paste("mz",ms2lib_metadata.df[,"mz"]),
+                         paste("rt",ms2lib_metadata.df[,"rt"]), sep = "_")
+pnordicum.m2l <- setIds(pnordicum.m2l, pnordicum_ids.c)
 ```
 
 ## Visualizing the spectra
@@ -104,26 +117,26 @@ pnordicum.msl <- setIds(pnordicum.msl,pnordicum_ids.c)
 Each spectrum can be displayed with the **`plot`** method by using its ID:
 
 ```{r plot_spectrum}
-plot(pnordicum.msl, "S14")
+plot(pnordicum.m2l, "S14")
 ```
 
 Here the S14 index refers to the 14th spectrum of the collection (from aurantiomide C; precursor m/z 341.1605 and retention time 20.09).
 
 ```{r info_s14}
-getInfo(pnordicum.msl, "S14")[, c("Name", "mz", "corrected_rt")]
+getInfo(pnordicum.m2l, "S14")[, c("name", "mz", "corrected_rt")]
 ```
 
 Note: the list of spectra (as individual `Spectrum2` objects) can be accessed with the `mm2Spectra` method:
 
 ```{r get_spectra, message=FALSE, warning=FALSE}
-ms2_spectra.ls <- mm2Spectra(pnordicum.msl)
+ms2_spectra.ls <- mm2Spectra(pnordicum.m2l)
 ms2_spectrum.ms2 <- ms2_spectra.ls[[14]]
 library(MSnbase) # to use the mz and intensity methods below on the Spectrum2 object
 mz(ms2_spectrum.ms2)
 intensity(ms2_spectrum.ms2)
 ```
 
-# Computing the fragmentation graphs
+# Computing the fragmentation graphs (`discretizeMzDifferences`)
 
 ## m/z differences
 
@@ -159,7 +172,7 @@ The main parameters are listed below:
     -   For m/z differences higher than the `limMzFormula` upper limit, no formula is generated but the m/z difference is kept
 
 ```{r edge_discretization, message=FALSE}
-pnordicum.msl <- discretizeMzDifferences(pnordicum.msl,
+pnordicum.m2l <- discretizeMzDifferences(pnordicum.m2l,
                                        ppm = 15,
                                        dmz = 0.007,
                                        count = 2,
@@ -173,12 +186,12 @@ pnordicum.msl <- discretizeMzDifferences(pnordicum.msl,
 After this step, the list of discretized m/z differences labels may be extracted:
 
 ```{r tab_losses}
-head(mzDiffTable(pnordicum.msl))
+head(mzDiffTable(pnordicum.m2l))
 ```
 
 Each row of this table corresponds to one discretized m/z difference, with:
 
--   *mz*: mean value among the occurences in the spectra collection
+-   *mz*: mean value among the occurrences in the spectra collection
 
 -   *mzmin*: minimum value
 
@@ -191,7 +204,7 @@ Each row of this table corresponds to one discretized m/z difference, with:
 The information about a specific m/z difference can be directly accessed with:
 
 ```{r}
-getInfo(pnordicum.msl, "L187")
+getInfo(pnordicum.m2l, "L187")
 ```
 
 ## Fragmentation graphs
@@ -200,12 +213,12 @@ The step of discretization also builds the **fragmentation graph** for each spec
 Each fragmentation graph can be plotted with the `plot` method in a static or dynamic way (`tkplot` argument set to `FALSE` or `TRUE`, respectively; default: `FALSE`).
 
 ```{r plot_dag}
-plot(pnordicum.msl, "D14")
+plot(pnordicum.m2l, "D14")
 ```
 
 Here, the graph D14 corresponds to the spectrum S14.
 
-# Mining frequent fragmentation patterns
+# Mining frequent fragmentation patterns (`mineClosedSubgraphs`)
 
 The next step consists in **extracting the frequent subgraphs (i.e. the patterns) among the fragmentation graphs**.
 The **`mineClosedSubgraphs`** method has two main parameters:
@@ -217,7 +230,13 @@ The **`mineClosedSubgraphs`** method has two main parameters:
 Here we set `sizeMin` to 1 to include patterns containing a single m/z difference.
 
 ```{r graph_mining}
-pnordicum.msl <- mineClosedSubgraphs(pnordicum.msl, count = 2, sizeMin = 1)
+pnordicum.m2l <- mineClosedSubgraphs(pnordicum.m2l, count = 2, sizeMin = 1)
+```
+
+The total number of extracted patterns is:
+
+```{r pattern_number}
+length(mm2Patterns(pnordicum.m2l))
 ```
 
 # Exploring the patterns
@@ -226,50 +245,50 @@ Spectra (**S**), m/z differences (**L**), fragmentation graphs (**D**), and patt
 The `findMz` and `select` methods are designed to extract spectra, m/z differences, and patterns of interest.
 The `plotPatterns` methods can then be used to the patterns and associated spectra.
 
-## `findMz`: getting spectra or m/z differences close to a specific (precursor) m/z
+## Getting spectra or m/z differences close to a specific (precursor) m/z (`findMz`)
 
 `findMz` gets the IDs of spectra or m/z differences whose m/z (of the precursor ion in the case of spectra) is close to a specific value; it returns the character vector of corresponding IDs (starting with a S or an L, respectively).
 
 -   Use case 1: Looking for spectra with precursor m/z value close to 147.0:
 
 ```{r findMz_spec}
-verrucolone_spectra.vc <- findMz(pnordicum.msl, 147.0, type = "S", ppm = 8, dmz = 0.2)
-getInfo(pnordicum.msl, verrucolone_spectra.vc)
+verrucolone_spectra.vc <- findMz(pnordicum.m2l, 147.0, type = "S", ppm = 8, dmz = 0.2)
+getInfo(pnordicum.m2l, verrucolone_spectra.vc)
 ```
 
 -   Use case 2: Finding an m/z difference corresponding to phenylalanine:
 
 ```{r findMz_loss}
-phe_loss.c <- findMz(pnordicum.msl, type = "L", 147.05, dmz = 0.1)
-getInfo(pnordicum.msl, phe_loss.c)
+phe_loss.c <- findMz(pnordicum.m2l, type = "L", 147.05, dmz = 0.1)
+getInfo(pnordicum.m2l, phe_loss.c)
 ```
 
-## `select`: getting patterns contained in specific spectra or including specific m/z differences
+## Getting patterns contained in specific spectra or including specific m/z differences (`select`)
 
 Based on the spectra (or m/z difference) indices selected above, the `select` method enable to retrieve the patterns that are included in all these spectra (or that contain the m/z differences); it returns a list of pattern indices for the query spectra (or m/z differences).
 
 -   Use case 1: Patterns in the Verrucolone spectrum:
 
 ```{r select_pattern_spectra}
-verrucolone_pattern.ls <- select(pnordicum.msl, verrucolone_spectra.vc, "P")
+verrucolone_pattern.ls <- select(pnordicum.m2l, verrucolone_spectra.vc, "P")
 verrucolone_pattern.ls
 ```
 
 -   Use case 2: Patterns including the loss of phenylalanine:
 
 ```{r select_pattern_dmz}
-phe_patterns.ls <- select(pnordicum.msl, phe_loss.c, "P")
+phe_patterns.ls <- select(pnordicum.m2l, phe_loss.c, "P")
 phe_patterns.ls
 ```
 
 Note that the spectra including the loss of phenylalanine can be retrieved the same way:
 
 ```{r select_spectra_dmz}
-phe_spectra.ls <- select(pnordicum.msl, phe_loss.c, "S")
+phe_spectra.ls <- select(pnordicum.m2l, phe_loss.c, "S")
 phe_spectra.ls
 ```
 
-## `plotPatterns`: visualizing the patterns
+## Visualizing the patterns (`plotPatterns`)
 
 The `plotPatterns` method applied to a character vector of pattern indices displays for each pattern:
 
@@ -283,16 +302,15 @@ The `plotPatterns` method applied to a character vector of pattern indices displ
 
 ```{r patterns_plot_example}
 phe_pattern.c <- phe_patterns.ls[[phe_loss.c]][3]
-plotPatterns(pnordicum.msl, phe_pattern.c)
+plotPatterns(pnordicum.m2l, phe_pattern.c)
 ```
 
-These results can be exported in pdf (one pdf file per pattern) by setting the `save_dir` argument to the path of the directory to save the files (default to `"none"` for no export).
+These results can be exported in pdf (one pdf file per pattern) by setting the `save_dir` argument to the path of the target directory for saving (default to `"none"` for no export).
 
 ```{r export, eval=FALSE}
 dir.create("phe_patterns")
-plotPatterns(pnordicum.msl, phe_pattern.c, save_dir = "phe_patterns")
+plotPatterns(pnordicum.m2l, phe_pattern.c, save_dir = "phe_patterns")
 ```
-
 
 # Session info
 

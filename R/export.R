@@ -114,7 +114,7 @@ listMzDiffbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_pd
 
     
     ## list of m/z differences (mean of mz values of the losses in the molecules of the pattern)
-    massdiff <- getMzDiff(graph_pattern,mm2Occurences(pattern),mm2Dags(m2l),elabs$mz)
+    massdiff <- getMzDiff(graph_pattern,mm2Occurrences(pattern),mm2Dags(m2l),elabs$mz)
     massdiff <- apply(massdiff,2,mean)
 
     massdiff_ref <- elabs[edge_attr(graph_pattern, name="lab"),c("mz", "mzmin", "mzmax")]
@@ -128,10 +128,10 @@ listMzDiffbyPattern <- function(m2l, pattern, golden_rule, spec2Annot, export_pd
     }
 
     ## if we want to have the chosen formula 
-    toccs <- pattern@occurences[,1]
+    toccs <- pattern@occurrences[,1]
     formula <- get_formula(m2l)[toccs]
     
-    oformula <- formula[mm2Occurences(pattern)[,"gid"]]
+    oformula <- formula[mm2Occurrences(pattern)[,"gid"]]
 	filled_formula <- which(sapply(oformula,function(x){(length(x)>0)})&
 		  	                          sapply(oformula,function(x){!is.na(x)}))
 	if(length(filled_formula)==0){

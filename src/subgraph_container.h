@@ -11,7 +11,7 @@
 
 
 
-//This class store the occurences of all the graph.
+//This class store the occurrences of all the graph.
 class subgraph_container
 {
     public:

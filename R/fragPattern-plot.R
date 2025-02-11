@@ -120,7 +120,7 @@ layoutMatrix <- function(n,margin=NA)
 }
 
 
-###Function which map a pattern on an occurences.
+###Function which map a pattern on an occurrences.
 matchMzs <- function(mz1,mz2,ppm=15,dmz=0.03){
   o1 <- order(mz1)
   o2 <- order(mz2)
@@ -160,7 +160,7 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
                 byrow = TRUE,nrow=2))
 }
 
-
+# plot (fragPattern) ----
 
 #' Plotting a fragPattern object.
 #'
@@ -217,7 +217,7 @@ setMethod("plot", "fragPattern",
             edgeLabel <- match.arg(edgeLabel)
             g <- mm2Graph(x)
             ###We determine the edge label
-            oformula <- formula[mm2Occurences(x)[,"gid"]]
+            oformula <- formula[mm2Occurrences(x)[,"gid"]]
             filled_formula <- which(sapply(oformula,function(x){(length(x)>0)})&
                                       sapply(oformula,function(x){!is.na(x)}))
             if(length(filled_formula)==0){
@@ -279,197 +279,220 @@ setMethod("plot", "fragPattern",
             return(invisible(list(g,labels$vertices,ledges)))
           })
 
-#' Plotting the occurences of a fragPattern object
+
+# plotOccurrences ----
+
+#' Plotting the occurrences of a fragPattern object
 #' 
-#' Plot the occurences, the spectra overlayed with the matched peaks of a fragmentation pattern.
+#' Plot the occurrences, the spectra overlayed with the matched peaks of a fragmentation pattern.
 #'
 #' @param m2l An ms2lib object.
 #' @param pidx A pattern id or a fragPattern object.
 #' @param titles A vector of titles to be used. A default title includes id
 #' and precursor.
 #' @param byPage The maximum number of spectra to be plotted by page.
-#' @param subOccs Shall some specific occurences be considered over all the occurences.
-#' @param highlights Shall the peaks covered by the pattern be highlighted.
-#' @param commonAxis Shall all the spectra be plotted with a common x-axis.
+#' @param subOccs Shall some specific occurrences be considered over all the occurrences.
+#' @param highlights Shall the peaks covered by the pattern be highlighted?
+#' @param commonAxis Shall all the spectra be plotted with a common x-axis?
+#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
+#' @param ggplot.l Shall ggplot be used?
+#' @param plot.l Shall the plot be displayed?
 #' @param ... supplementary function to be passed to the plot function.
 #'
-#' @return A list containng the spectra and their coloring in RGB format
+#' @return A list containing the spectra and their coloring in RGB format
 #' @export
 #'
 #' @examples
 #' data(m2l)
 #' 
-#' plotOccurences(m2l, "P12")
-setMethod("plotOccurences", "ms2Lib", function(m2l,
-                                               pidx,
-                                               titles = NULL,
-                                               byPage = 6,
-                                               subOccs=NULL,
-                                               highlights=TRUE,
-                                               commonAxis=FALSE,
-                                               ...) {
-  ###Verifying that a correct id has been queried.
-  omar <- par("mar")
-  fp <- NULL
-  if (class(pidx) == "fragPattern") {
-    fp <- pidx
-  } else if (class(pidx) == "character") {
-    if (length(pidx) > 1)
-      stop("Only a single index may be plotted every times.")
-    fp <- m2l[pidx]
-    if (class(fp) != "fragPattern") {
-      stop("Wrong id, only a fragPattern object may by used by plotOccurences.")
-    }
-  }
+#' plotOccurrences(m2l, "P12")
+setMethod("plotOccurrences", "ms2Lib", function(m2l,
+                                                pidx,
+                                                titles = NULL,
+                                                byPage = 6,
+                                                subOccs=NULL,
+                                                highlights=TRUE,
+                                                commonAxis=FALSE,
+                                                path_inchi = NULL,
+                                                ggplot.l = TRUE,
+                                                plot.l = TRUE,
+                                                ...) {
   
-  if (is.null(titles)){
-    if(all(startsWith(mm2Ids(m2l),"S"))){
-      titles <- mm2SpectraInfos(m2l)$title
-    }else{
-      titles <- paste(mm2Ids(m2l)," (S",1:length(mm2Spectra(m2l)),")",sep="")
-    }
-  }
-  
-  ###We reformat the title if necessary
-  if(length(titles)!=length(mm2Spectra(m2l))){
-    ntitles <- rep("",length(mm2Spectra(m2l)))
-    ntitles[fp@occurences[,1]] <- titles
-    titles <- ntitles
-  }
-  
-  
-  ###Extracting the occurrences, dags and the graph.
-  occs <- mm2Occurences(fp)
-  mgs <- mm2Dags(m2l)
-  g <- mm2Graph(fp)
-  
-  ###m/z differences are used for matching.
-  loss_mz <- mm2EdgesLabels(m2l)$mz
-  
-  if(is.null(subOccs)){
-    subOccs <- 1:nrow(occs)
-  }else{
-    if(all(subOccs>=1)&all(subOccs<=nrow(occs))){
-      occs <- occs[subOccs,,drop=FALSE]
-    }
-  }
-  
-  ###THE IDX IS HANDLED BY C++ AND SHOULD BE CORRECT.
-  occs_gid <- occs[, 1]
-  occs_pos <- occs[, 2]
-  
-  u_occs_gid <- tapply(occs[,2],INDEX = occs[,1],FUN = function(x){return(x)})
-  ru_occs_gid <- as.numeric(names(u_occs_gid))
-  ##We build the colvec_idx
-  col_idx_val <- tapply(1:nrow(occs),INDEX = occs[,1],FUN = function(x){return(x)})
-  
-  col_vec <- rainbow(length(ru_occs_gid))
-  
-  ###We aggregate the spectra
-  if(commonAxis){
-    lmat <- layoutMatrix(min(byPage, length(u_occs_gid )),margin = 0.07)
-  }else{
-    lmat <- layoutMatrix(min(byPage, length(u_occs_gid )),margin=NA)
-  }
-  maxv <- max(lmat)-2
-  layout(lmat)
-  xlims <- NULL
-  if(commonAxis){
-    xlims <- c(0,max(sapply(mgs[occs_gid],function(x) max(vertex_attr(x,"mz"))))*1.05)
+  if (ggplot.l) {
     
-  }
-  
-  res_plot <- vector(mode="list",length=length(u_occs_gid))
-  for (i in 1:length(u_occs_gid)) {
-    if((i %% 6) == 1){
-      if(i != 1 & commonAxis){
-        layout(1)
-        mtext(expression(bold("m/z")),side=1,padj=2)
-        mtext(expression(bold("intensity")),side=2,padj=-0.2)	
-        layout(lmat)
+    spectra_ggplot.ls <- support_ggplot(m2l = m2l,
+                                        pidx = pidx,
+                                        titles = titles,
+                                        path_inchi = path_inchi)
+    if (plot.l)
+      arrangeSpectra2D(spectra_ggplot.ls, step_row = 2, step_col = 2)
+    
+    return(invisible(spectra_ggplot.ls))
+    
+  } else {
+    
+    
+    ###Verifying that a correct id has been queried.
+    omar <- par("mar")
+    fp <- NULL
+    if (class(pidx) == "fragPattern") {
+      fp <- pidx
+    } else if (class(pidx) == "character") {
+      if (length(pidx) > 1)
+        stop("Only a single index may be plotted every times.")
+      fp <- m2l[pidx]
+      if (class(fp) != "fragPattern") {
+        stop("Wrong id, only a fragPattern object may by used by plotOccurrences.")
       }
-      par(mar=c(0.1,0.1,0.1,0.1))
-      plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
-      plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
-      par(mar=c(2.5,2,2,0.5))
     }
-    gid <- ru_occs_gid[i]
-    all_pos <- u_occs_gid[[i]]
     
-    all_maps <- sapply(all_pos,function(x,mg,loss_mz,mgs,g){
-      get_mapping(mg=mg, patg=g, loss_mass=loss_mz, root = x)
-    },mg=mgs[[gid]],g=g,loss_mz=loss_mz,simplify=FALSE)
+    if (is.null(titles)){
+      if(all(startsWith(mm2Ids(m2l),"S"))){
+        titles <- mm2SpectraInfos(m2l)$title
+      }else{
+        titles <- paste(mm2Ids(m2l)," (S",1:length(mm2Spectra(m2l)),")",sep="")
+      }
+    }
     
-    ###Plotting of the spectra
-    intv <- vertex_attr(mgs[[gid]], "rel_int")
-    mzs <- vertex_attr(mgs[[gid]], "mz")
-    ids <- V(mgs[[gid]])
+    ###We reformat the title if necessary
+    if(length(titles)!=length(mm2Spectra(m2l))){
+      ntitles <- rep("",length(mm2Spectra(m2l)))
+      ntitles[fp@occurrences[,1]] <- titles
+      titles <- ntitles
+    }
     
-    ###Peaks are split between matched and non matched.
-    matched_peaks_idx <- match(unique(unlist(sapply(all_maps,function(x){x[2,]},simplify=FALSE))), ids)
-    # browser()
-    non_matched_peaks_idx <- seq(1, length(mzs))[-matched_peaks_idx]
-    col_seq <- rep("#000000FF",length(mzs))
-    col_seq[matched_peaks_idx] <- col_vec[i]
-    res_plot[[i]] <- data.frame(int=intv,mz=mzs,col=col_seq)
     
-    if(!commonAxis){
-      xlims <- c(0, max(mzs) * 1.05)
-      xlabtxt <- "m/z"
-      ylabtxt <- "intensity"
+    ###Extracting the occurrences, dags and the graph.
+    occs <- mm2Occurrences(fp)
+    mgs <- mm2Dags(m2l)
+    g <- mm2Graph(fp)
+    
+    ###m/z differences are used for matching.
+    loss_mz <- mm2EdgesLabels(m2l)$mz
+    
+    if(is.null(subOccs)){
+      subOccs <- 1:nrow(occs)
     }else{
-      xlabtxt <- ""
-      ylabtxt <- ""
+      if(all(subOccs>=1)&all(subOccs<=nrow(occs))){
+        occs <- occs[subOccs,,drop=FALSE]
+      }
     }
-    plot(
-      mzs[non_matched_peaks_idx],
-      intv[non_matched_peaks_idx],
-      type = "h",
-      col = "#000000FF",
-      lwd = 3,
-      xlim = xlims,
-      ylim = c(0, max(intv * 1.05)),
-      main = titles[gid],
-      xlab = xlabtxt,
-      ylab = ylabtxt,...
-    )
     
-    ###We add the matched peaks.
-    ccol <- "#000000FF"
-    if(highlights){
-      ccol <- col_vec[i]
+    ###THE IDX IS HANDLED BY C++ AND SHOULD BE CORRECT.
+    occs_gid <- occs[, 1]
+    occs_pos <- occs[, 2]
+    
+    u_occs_gid <- tapply(occs[,2],INDEX = occs[,1],FUN = function(x){return(x)})
+    ru_occs_gid <- as.numeric(names(u_occs_gid))
+    ##We build the colvec_idx
+    col_idx_val <- tapply(1:nrow(occs),INDEX = occs[,1],FUN = function(x){return(x)})
+    
+    col_vec <- rainbow(length(ru_occs_gid))
+    
+    ###We aggregate the spectra
+    if(commonAxis){
+      lmat <- layoutMatrix(min(byPage, length(u_occs_gid )),margin = 0.07)
+    }else{
+      lmat <- layoutMatrix(min(byPage, length(u_occs_gid )),margin=NA)
     }
-    points(mzs[matched_peaks_idx],
-           intv[matched_peaks_idx],
-           type = "h",
-           col =ccol,
-           lwd = 3)
+    maxv <- max(lmat)-2
+    layout(lmat)
+    xlims <- NULL
+    if(commonAxis){
+      xlims <- c(0,max(sapply(mgs[occs_gid],function(x) max(vertex_attr(x,"mz"))))*1.05)
+      
+    }
+    
+    res_plot <- vector(mode="list",length=length(u_occs_gid))
+    for (i in 1:length(u_occs_gid)) {
+      if((i %% 6) == 1){
+        if(i != 1 & commonAxis){
+          layout(1)
+          mtext(expression(bold("m/z")),side=1,padj=2)
+          mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+          layout(lmat)
+        }
+        par(mar=c(0.1,0.1,0.1,0.1))
+        plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+        plot(1, type="n", xlab="", ylab="", xlim=c(-1, 1), ylim=c(-1, 1),axes=FALSE,ann=FALSE)
+        par(mar=c(2.5,2,2,0.5))
+      }
+      gid <- ru_occs_gid[i]
+      all_pos <- u_occs_gid[[i]]
+      
+      all_maps <- sapply(all_pos,function(x,mg,loss_mz,mgs,g){
+        get_mapping(mg=mg, patg=g, loss_mass=loss_mz, root = x)
+      },mg=mgs[[gid]],g=g,loss_mz=loss_mz,simplify=FALSE)
+      
+      ###Plotting of the spectra
+      intv <- vertex_attr(mgs[[gid]], "rel_int")
+      mzs <- vertex_attr(mgs[[gid]], "mz")
+      ids <- V(mgs[[gid]])
+      
+      ###Peaks are split between matched and non matched.
+      matched_peaks_idx <- match(unique(unlist(sapply(all_maps,function(x){x[2,]},simplify=FALSE))), ids)
+      # browser()
+      non_matched_peaks_idx <- seq(1, length(mzs))[-matched_peaks_idx]
+      col_seq <- rep("#000000FF",length(mzs))
+      col_seq[matched_peaks_idx] <- col_vec[i]
+      res_plot[[i]] <- data.frame(int=intv,mz=mzs,col=col_seq)
+      
+      if(!commonAxis){
+        xlims <- c(0, max(mzs) * 1.05)
+        xlabtxt <- "m/z"
+        ylabtxt <- "intensity"
+      }else{
+        xlabtxt <- ""
+        ylabtxt <- ""
+      }
+      plot(
+        mzs[non_matched_peaks_idx],
+        intv[non_matched_peaks_idx],
+        type = "h",
+        col = "#000000FF",
+        lwd = 3,
+        xlim = xlims,
+        ylim = c(0, max(intv * 1.05)),
+        main = titles[gid],
+        xlab = xlabtxt,
+        ylab = ylabtxt,...
+      )
+      
+      ###We add the matched peaks.
+      ccol <- "#000000FF"
+      if(highlights){
+        ccol <- col_vec[i]
+      }
+      points(mzs[matched_peaks_idx],
+             intv[matched_peaks_idx],
+             type = "h",
+             col =ccol,
+             lwd = 3)
+    }
+    if((i%%6) != 1 & commonAxis){
+      layout(1)
+      mtext(expression(bold("m/z")),side=1,padj=2)
+      mtext(expression(bold("intensity")),side=2,padj=-0.2)	
+    }
+    par(mar=omar)
+    return(invisible(res_plot))
+    
   }
-  if((i%%6) != 1 & commonAxis){
-    layout(1)
-    mtext(expression(bold("m/z")),side=1,padj=2)
-    mtext(expression(bold("intensity")),side=2,padj=-0.2)	
-  }
-  par(mar=omar)
-  return(invisible(res_plot))
 })
-
-
-###########################################################################
 
 
 #' Create a png file containing the 2D structure of the given molecule
 #' (obtained from ChemSpider with the inchi key of the molecule, needs an API key)
 #' 
 #' @param N the id of the molecule in the tsv file given by path_inchi (must have a column named N with the ids of the molecules)
-#' @param path_inchi the path to the csv file containing the inchi keys	
+#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
 #' @param dir_images the path to the directory to store the png images
 #'
 #' @return True if the molecule is found, False otherwise
 createFileCS <- function(name, path_inchi, dir_images)
 {
   inchi_table <- read.csv(path_inchi, header=TRUE,sep="\t")
-  inchi <- inchi_table[inchi_table$Name == name,]
+  inchi <- inchi_table[inchi_table$name == name,]
   
   tryCatch(
     expr = {
@@ -478,7 +501,7 @@ createFileCS <- function(name, path_inchi, dir_images)
         csid = cs,
         dir = dir_images,
         overwrite = TRUE)
-      name_file <- gsub(" ", "_", inchi[1,"Name"])
+      name_file <- gsub(" ", "_", inchi[1,"name"])
       
       file.rename(file.path(dir_images,paste(cs[1,'csid'],".png",sep="")), file.path(dir_images, paste(name_file, ".png", sep="")))
       return(TRUE)
@@ -501,7 +524,7 @@ createFileCS <- function(name, path_inchi, dir_images)
 #' @param names names of the occurrences of the pattern (as stored in the ms2Lib object)
 #' @param n N ids of the occurrences of the pattern (as stored in the ms2Lib object) (only to create 2D structure images) 
 #' @param col_vec vector of colours for the peaks of the pattern
-#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "Name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
+#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
 #' @param dir_images path to the directory to store the png images
 #' @param x_lim the limits in mz values for the spectra of the pattern
 #' @param title the title for the spectra. If NULL, the title will be set automatically
@@ -591,13 +614,13 @@ spectrum_ggplot <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec,
   }
 }
 
-#' Plotting the support of a pattern, i.e. the spectra containing the fragPattern object, with the peaks matching the pattern in color (ggplot version)
+#' Plotting the spectra occurrences of a pattern, i.e. the spectra containing the fragPattern object, with the peaks matching the pattern in color (ggplot version)
 #' 
 #' Plot the spectra occurrences of a pattern, with the matched peaks in color.
 #' @param m2l ms2lib object.
 #' @param pidx pattern id or a frag_pattern object.
 #' @param titles list of titles for the spectra. If NULL, a title will be set automatically
-#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "Name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) in the same directory as path_inchi, and displayed in the plot along the spectra (default NULL)
+#' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) in the same directory as path_inchi, and displayed in the plot along the spectra (default NULL)
 #' 
 #' @return A list of plots, one for every spectrum
 #' 
@@ -611,12 +634,12 @@ support_ggplot <- function(m2l, pidx, titles = NULL, path_inchi = NULL)
   
   fp <- m2l[pidx] ## pattern
   
-  occs <- mm2Occurences(fp)
+  occs <- mm2Occurrences(fp)
   mgs <- mm2Dags(m2l)
   g <- mm2Graph(fp)
   
   infos <- mm2SpectraInfos(m2l)
-  names <-infos$Name
+  names <-infos$name
   mz <- infos$mz.precursor
   if("rt" %in% colnames(infos))
   {

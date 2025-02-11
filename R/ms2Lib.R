@@ -96,12 +96,12 @@ setMethod("mm2Ids<-","ms2Lib",function(m2l,value,check=TRUE){
 #' data(m2l)
 #' 
 #' #Plot with all ids
-#' plotOccurences(m2l,"P15")
+#' plotOccurrences(m2l,"P15")
 #' 
 #' m2l <- setIds(m2l,paste("spectrum n",1:length(mm2Spectra(m2l)),sep=""))
 #' 
 #' #Plot with the new ids
-#' plotOccurences(m2l,"P15")
+#' plotOccurrences(m2l,"P15")
 setMethod("setIds","ms2Lib",function(m2l,ids){
 	mm2Ids(m2l) <- ids
 	m2l
@@ -193,7 +193,7 @@ make_initial_title <- function(spec_infos){
 
 
 convert_formula <- function(form_vec){
-  ###We remove the whitespaces and the special character
+  ###We remove the white spaces and the special character
   form_vec <- trimws(str_replace(form_vec,"\\?|\\-|\\+|\\-",""))
   
   pnf <- which(is.na(form_vec)|(nchar(form_vec)==0))
@@ -205,8 +205,8 @@ convert_formula <- function(form_vec){
 
 #' ms2Lib constructor
 #'
-#' Create a ms2Lib object from files in the correct format. Eventually add some supplementary informations given in a csv file. 
-#' This supplementary information may notably include the composition or the formula of the molecules.
+#' Create a ms2Lib object from files in the correct format. Eventually add some supplementary data given in a tsv file. 
+#' This supplementary information may notably include the 'name' and the 'formula' of the molecules.
 #'
 #' @export
 #' @param x May be one of the following
@@ -215,16 +215,16 @@ convert_formula <- function(form_vec){
 #' \item A list of Spectrum2 objects which will be integrated directly.
 #' \item A single .mgf file regrouping multiple spectra.
 #' }
-#' @param suppInfos Supplementary information to be associated to the spectra.
-#' It should be of the same size as the number of spectra. If there is a "file" column, this
-#' column is used to match the filenames. A "composition" or "formula" fields may also be present, and is then used to set the
+#' @param suppInfos Data frame containing the metadata to be associated to the spectra.
+#' It should be of the same size as the number of spectra. If there is a 'file' column, this
+#' column is used to match the file names. A 'formula' fields may also be present, and is then used to set the
 #' formula of the molecules.
 #' @param ids A supplementary vector giving a set of ids to design the spectra. It may be any character vector which
 #' does not start with \code{'P', 'L', 'S'} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
 #' and if it contains an id fields, it will be used. If no ids are furnished, an id will be generated for each spectra in the form \code{'S1', 'S2', ..., 'SN'}
 #' where N is the number of furnished spectra.
 #' @param intThreshold The intensity threshold used to filter out the peaks.
-#' @param infosFromFiles Shall the other informations present in the files be added to the supplementary infos.
+#' @param infosFromFiles Shall the other information present in the files be added to the supplementary data (default: FALSE)
 #' @aliases ms2Lib ms2Lib-constructor
 #' @examples
 #' #We locate the example file
@@ -275,7 +275,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 				
 			}
 		}else{
-			###Case of multiples singles spectra
+			###Case of multiple individual spectra
 			exts <- checkFormat(x)
 			message("Reading ",length(exts)," files with format(s): ",unique(exts))
 			
@@ -287,10 +287,10 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	mm2Spectra(m2l) <- do.call("c",mm2Spectra(m2l))
 	
 	if(length(mm2Spectra(m2l))>2000){
-	  stop("At the moment it is impossible ot process more than 2000 spectra at the same time.")
+	  stop("At the moment it is impossible ot process more than 2,000 spectra at the same time.")
 	}
 
-	###data.frame is initialized. With the mass of the precusors
+	###data.frame is initialized. With the mass of the precursors
 	temp_df <- data.frame("mz.precursor" = sapply(mm2Spectra(m2l),function(x){
 												  precursorMz(x)}))
 
@@ -329,23 +329,23 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 				df_N <- data.frame(N = seq(1, nrow(suppInfos)))
 				suppInfos <- cbind(suppInfos, df_N)
 			}
-			## if name or compounds column
-			if("name" %in% colnames(suppInfos))
-			{
-				colnames(suppInfos)[which(colnames(suppInfos) == "name")] <- "Name"
-			}
-			if("compound" %in% colnames(suppInfos))
-			{
-				colnames(suppInfos)[which(colnames(suppInfos) == "compound")] <- "Name"
-			}
-			if("Compound" %in% colnames(suppInfos))
-			{
-				colnames(suppInfos)[which(colnames(suppInfos) == "Compound")] <- "Name"
-			}
+			# ## if name or compounds column
+			# if("name" %in% colnames(suppInfos))
+			# {
+			# 	colnames(suppInfos)[which(colnames(suppInfos) == "name")] <- "name"
+			# }
+			# if("compound" %in% colnames(suppInfos))
+			# {
+			# 	colnames(suppInfos)[which(colnames(suppInfos) == "compound")] <- "name"
+			# }
+			# if("Compound" %in% colnames(suppInfos))
+			# {
+			# 	colnames(suppInfos)[which(colnames(suppInfos) == "Compound")] <- "name"
+			# }
 
 			if("file" %in% colnames(suppInfos)){
 				pm <- match(temp_df$file,suppInfos$file)
-				if(any(is.na(pm))) stop('"file" column furnished, but there was an error matching it against files.')
+				if(any(is.na(pm))) stop('"file" column provided, but there was an error matching it against files.')
 
 				temp_df <- cbind(temp_df,suppInfos[pm,])
 			}else{
@@ -413,10 +413,10 @@ setMethod("show","ms2Lib",function(object){
   if(length(mm2Atoms(object))!=0){
 	  cat("It has",nrow(mm2EdgesLabels(object)),"edge labels built with atoms",paste(names(mm2Atoms(object)),collapse=","),".\n")
   }
-  cat("The available supplementary informations are:",colnames(mm2SpectraInfos(object)),"\n")
-	cat("It contains: ",length(mm2Patterns(object)),"patterns\n")
-	if(length(mm2ReducedPatterns(object))!=0) cat("It has been reduced to ",
-											   length(mm2ReducedPatterns(object)),"patterns")
+  cat("The available spectral metadata are:",colnames(mm2SpectraInfos(object)),"\n")
+	cat("It contains:",length(mm2Patterns(object)),"patterns\n")
+	if(length(mm2ReducedPatterns(object))!=0) cat("It has been reduced to",
+											   length(mm2ReducedPatterns(object)), "patterns")
 })
 
 #' Number of patterns of an ms2Lib object
@@ -499,7 +499,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 	###Construction via fragPatternc constructor.
 	mm2Patterns(m2l) <- sapply(resRcpp$patterns,function(x,sel_idx){
 	  temp <- canonicalForm(fragPattern(x))
-	  temp@occurences[,1] <- sel_idx[temp@occurences[,1]]
+	  temp@occurrences[,1] <- sel_idx[temp@occurrences[,1]]
 	  return(temp)
 	 },USE.NAMES = FALSE,sel_idx=sel_g)
 
@@ -552,7 +552,7 @@ mm2get <- function(m2l,arglist){
 #' 
 #' Return an object given its index: can be a spectrum, a pattern, a DAG or a m/z difference.
 #' 
-#' @param x An ms2Lib oject.
+#' @param x An ms2Lib object.
 #' @param i The index, a string starting by S if it is a spectrum, P if it is a pattern D if it is a DAG, L if it is a m/z difference label
 #' @param j unused.
 #' @param drop unused.
@@ -628,7 +628,7 @@ setMethod("plot", "ms2Lib",
 		  	}
 		  	rid <- parseId(x,y)
 		  	if(rid[[1]]=="patterns"){
-		  	  toccs <- x[y]@occurences[,1]
+		  	  toccs <- x[y]@occurrences[,1]
 		  	  if(is.null(title)) title <- y
 				return(plot(x[y],title = title,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
 				     atoms=names(x@atoms),formula=get_formula(x)[toccs],tkplot=tkplot,...))
@@ -840,7 +840,7 @@ hasPatterns <- function(m2l){
 
 setMethod("hasCoverage","ms2Lib",function(x){
   if(hasPatterns(x)){
-    return(COVERAGE_NAME %in% colnames(x@patterns[[1]]@occurences))
+    return(COVERAGE_NAME %in% colnames(x@patterns[[1]]@occurrences))
   }else{
     stop(paste("Patterns need to be computed before obtaining coverage.",sep=""))
   }

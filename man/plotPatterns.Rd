@@ -9,12 +9,13 @@ plotPatterns(
   m2l,
   ids = NULL,
   components = NULL,
-  occurences = TRUE,
+  occurrences = TRUE,
   full = FALSE,
   byPage = 9,
   titles = NULL,
   v_ggplot = TRUE,
   path_inchi = NULL,
+  ggplot.l = TRUE,
   infos_col = NULL,
   save_dir = "none",
   ...
@@ -24,12 +25,12 @@ plotPatterns(
   m2l,
   ids = NULL,
   components = NULL,
-  occurences = TRUE,
+  occurrences = TRUE,
   full = FALSE,
   byPage = 9,
   titles = NULL,
-  v_ggplot = TRUE,
   path_inchi = NULL,
+  ggplot.l = TRUE,
   infos_col = NULL,
   save_dir = "none"
 )
@@ -41,7 +42,7 @@ plotPatterns(
 
 \item{components}{An id giving the component of each spectrum to be plotted in first page}
 
-\item{occurences}{Shall the occurrences be plotted as well as the pattern?}
+\item{occurrences}{Shall the occurrences be plotted as well as the pattern?}
 
 \item{full}{Shall the full patterns be plotted?}
 
@@ -49,9 +50,9 @@ plotPatterns(
 
 \item{titles}{A vector giving the titles of the MS/MS spectra}
 
-\item{v_ggplot}{(default TRUE) if TRUE ggplot version for the plotting of the spectra}
+\item{path_inchi}{name of a tabular file containing the inchi keys of the molecules in a column named "name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)}
 
-\item{path_inchi}{name of a tabular file containing the inchi keys of the molecules in a column named "Name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)}
+\item{ggplot.l}{(default TRUE) Should the ggplot version be displayed?}
 
 \item{infos_col}{(for ggplot version) columns names from the spectra information to print}
 

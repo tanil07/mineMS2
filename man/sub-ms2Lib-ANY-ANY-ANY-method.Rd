@@ -7,7 +7,7 @@
 \S4method{[}{ms2Lib,ANY,ANY,ANY}(x, i, j = NULL, ..., drop = TRUE)
 }
 \arguments{
-\item{x}{An ms2Lib oject.}
+\item{x}{An ms2Lib object.}
 
 \item{i}{The index, a string starting by S if it is a spectrum, P if it is a pattern D if it is a DAG, L if it is a m/z difference label}
 

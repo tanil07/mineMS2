@@ -166,7 +166,7 @@ chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = N
 ###allf is supposed to be a set of MzDiffFormula corresponding to the full set of edge labels.
 annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL, edge_label="lab",oformula=NULL){
   g <- mm2Graph(fp)
-  occs <- mm2Occurences(fp)
+  occs <- mm2Occurrences(fp)
 
   if(is.null(massdiff)){
     massdiff <- getMzDiff(g,occs,dags,elabs$mz)
@@ -342,7 +342,7 @@ makeEdgeLabel <-
       
       if (length(non_coherent_edge) > 0) {
         ###mzv is the mass of the corresponding loss.
-        #oformula correspond to the et of molecular formula of the occurences.
+        #oformula correspond to the et of molecular formula of the occurrences.
         #atoms id the names of the atoms.
         #vrdbe represent the rdbe header.
         tempe <- mapply(
@@ -379,7 +379,7 @@ makeEdgeLabel <-
 annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
   ###We first build a set of LossGraph corresponding to all the edge labels.
   g <- mm2Graph(fp)
-  occs <- mm2Occurences(fp)
+  occs <- mm2Occurrences(fp)
   atoms <- atoms
   
   ####Getting the vertices and the edges to pass, in the right order
@@ -399,7 +399,7 @@ annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
     MzDiffFormulaFromSingleString(x,ref = atoms,sep = "|")
   },atoms=atoms,simplify=FALSE)
   
-  massdiff <- getMzDiff(g,mm2Occurences(fp),dags,elabs$mz)
+  massdiff <- getMzDiff(g,mm2Occurrences(fp),dags,elabs$mz)
   massdiff <- apply(massdiff,2,mean)
 
   ## mean values of mz diff on the full dataset
