@@ -42,7 +42,7 @@ The companion vignette (*mineMS2_coupling-to-gnps*) further presents the **coupl
 
 ## Data set
 
-The dataset used in both vignettes contains 51 MS/MS spectra from secondary metabolites of *Penicillium nordicum* (one spectrum per compound) acquired with a Data Dependent Analysis (DDA) approach on a HPLC system (Luna C18 column; Phenomenex) coupled to an LTQ Orbitrap XL hybrid (Thermo Fisher Scientific) operated in the positive ionization mode at a HCD20 collision energy and a resolution of 7,500 [@Hautbergue2019].
+The dataset used in both vignettes contains 51 MS/MS spectra from secondary metabolites of *Penicillium nordicum* (one spectrum per compound) acquired on an HPLC system (Luna C18 column; Phenomenex) coupled to an LTQ Orbitrap XL hybrid (Thermo Fisher Scientific) operated in the positive ionization mode at a HCD20 collision energy and a resolution of 7,500 [@Hautbergue2019].
 
 ## Installation
 
