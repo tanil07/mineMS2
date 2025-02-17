@@ -5,11 +5,11 @@
 #include <fstream>
 #include <Rcpp.h>
 
-#include <boost/graph/graphml.hpp>
-
 #include "common.h"
 #include "k_path_tree.h"
 #include "adjacencyGraph.h"
+
+#include <boost/graph/graphml.hpp>
 
 class adjacencyGraph;
 class k_path_tree;

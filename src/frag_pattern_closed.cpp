@@ -1,9 +1,10 @@
 #include <iostream>
 
-#include<boost/graph/adjacency_list.hpp>
-
 #include "frag_pattern.h"
 #include "common.h"
+
+#include<boost/graph/adjacency_list.hpp>
+
 
 #include "Rcpp.h"
 

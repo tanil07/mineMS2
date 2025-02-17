@@ -3,12 +3,11 @@
 
 #include <fstream>
 
-#include <boost/functional/hash.hpp>
-#include <Rcpp.h>
-
 #include "common.h"
 #include "frag_pattern.h"
 
+#include <boost/functional/hash.hpp>
+#include <Rcpp.h>
 
 
 //This class store the occurrences of all the graph.

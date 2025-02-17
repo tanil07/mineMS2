@@ -10,6 +10,8 @@
 #include<Rcpp.h>
 
 
+
+
 frag_pattern::frag_pattern()
 {
     //ctor

@@ -1,12 +1,14 @@
 #ifndef MASS_GRAPH_H
 #define MASS_GRAPH_H
 
+
+#include "common.h"
+
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 
 #include <Rcpp.h>
 
-#include "common.h"
 
 
 class mass_graph
@@ -18,7 +20,7 @@ class mass_graph
         //Getter
         graph& get_g();
         Vertex& get_precursor();
-        Vertexp get_vertex_from_gid(short gid);
+        Vertexp get_vertex_from_gid(long long unsigned int gid);
         //Used to build the path tree.
         VisitMap buildVisitMap();
         std::vector<Vertex> roots();

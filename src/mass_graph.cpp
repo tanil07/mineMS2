@@ -3,14 +3,16 @@
 #include <string>
 #include <iostream>
 
+#include "mass_graph.h"
+#include "common.h"
+
 #include <boost/array.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <string>
 
 #include "to_string.h"
-#include "mass_graph.h"
-#include "common.h"
+
 
 mass_graph::mass_graph(Rcpp::DataFrame df_nodes,Rcpp::DataFrame df_edges){
 	graph gr;
@@ -81,7 +83,7 @@ VisitMap mass_graph::buildVisitMap()
     return vmap;
 }
 
-Vertexp mass_graph::get_vertex_from_gid(short gid){
+Vertexp mass_graph::get_vertex_from_gid(long long unsigned int gid){
     IndexMap imap = boost::get(boost::vertex_index,g);
     graphTraits::vertex_iterator bv,ev;
     for(boost::tie(bv,ev)=boost::vertices(g);bv!=ev;bv++){

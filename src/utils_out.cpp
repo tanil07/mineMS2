@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string>
+#include <iostream>
 
 using namespace Rcpp;
 
@@ -241,13 +242,14 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 	int pb = 0;
 	int in_inter = 0;
 	while((pa < Na)&(pb<Nb)){
+		//printf("%d %d %d %d\n", pa, pb, Na, Nb);
 		//AAA*****
 		//****BBB*
 		if(a_max[pa]<=b_min[pb]){
 			pa++;
 			//*****AAA
 			//*BBB****
-		}else if(a_min[pa]>b_max[pb]){
+		}else if(a_min[pa]>=b_max[pb]){ // before, it was strictly superior, do not know why
 			//Last point was the last of an interval.
 			if(in_inter==1){
 				in_inter=0;
@@ -289,6 +291,12 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			}
 			pa++;
 		}
+		//else{
+			//printf("aaaaaaaaaaaahhhhh\n");
+			//printf("%f %f %f %f\n", a_min[pa], b_min[pb], a_max[pa], b_max[pb]);
+			//sleep(15);
+			//exit(0);
+		//}
 	}
 	if((pa==Na)&(in_inter==1)){
 		bin_max[pb]=pa-1;
@@ -360,7 +368,6 @@ IntegerVector bisect_search_borns(double valmin, double valmax, NumericVector bm
   //Rcout <<"in" << std::endl;
   int bleft = 0;
   int bright = bmin.size()-1;
-  int csize = bright - bleft;
   int mid = (bleft+bright)/2;
   
   IntegerVector resn;
@@ -390,7 +397,7 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
   int i = 0;
   int j = 0;
   
-  List to_return(bmin.size());
+  List to_return(N);
   for(int i=0;i<to_return.size();i++){
     
     IntegerVector v1(0);
@@ -402,13 +409,13 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
   double mzmax = cmzmax[0];
   double hmax,hmin;
   IntegerVector res;
-  while( (bmax[i] < mzmax) & (i< bmin.size())){
+  while( (bmax[i] < mzmax) & (i< N)){
     j = i;
     
-    while(((hmin=(bmin[j]+bmin[i])) < mzmax)& (j <bmin.size())){
+    while(((hmin=(bmin[j]+bmin[i])) < mzmax)& (j <N)){
       
       //We calculate the borns
-      double hmax = bmax[j]+bmax[i];
+      hmax = bmax[j]+bmax[i];
       
       //We find the interval limit
       res = bisect_search_borns(hmin,hmax,bmin,bmax);

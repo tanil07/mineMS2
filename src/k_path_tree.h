@@ -1,12 +1,13 @@
 #ifndef K_PATH_TREE_H
 #define K_PATH_TREE_H
 
+#include "common.h"
+
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/array.hpp>
 
 #include "mass_graph.h"
-#include "common.h"
 #include "adjacencyGraph.h"
 
 

@@ -1,3 +1,8 @@
+CHANGES VERSION 0.9.23
+---------------
+MINOR UPDATE
+    - dealing with the warnings during compilation of the package (mostly because of boost package)
+
 CHANGES VERSION 0.9.22
 ---------------
 MINOR UPDATE

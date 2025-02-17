@@ -162,9 +162,11 @@ setMethod("discretizeMzDifferences", "ms2Lib", function(m2l,
   ref <- names(atoms)
   
   message("Formula extensions")
-  
+  time1 <- Sys.time()
   to_correct <- find_combinations_ranges(res_list$elems[1:(plast+1),"mzmin"],res_list$elems[1:(plast+1),"mzmax"],limMzFormula[2])
-  
+  print(Sys.time() - time1)
+
+  time2 <- Sys.time()
   ###We merge the formula when necessary.
   allF <- sapply(res_list$elems$formula[1:plast],function(x,atoms){
     orderByRDBE(MzDiffFormula(str_split(x,fixed("|"),simplify=TRUE)[1,],ref=atoms))
@@ -189,9 +191,10 @@ setMethod("discretizeMzDifferences", "ms2Lib", function(m2l,
     paste(as.character(x),collapse = "|")
   })
   
-  
+  print((Sys.time() - time2))
   ###Add the fusing part of the edge labels.
   message("Fusing the edge labels")
+  time1 <- Sys.time()
   ###Simplifying the DAG if necessary.
   change <- TRUE
   niter <- 1
@@ -208,7 +211,7 @@ setMethod("discretizeMzDifferences", "ms2Lib", function(m2l,
   
   mm2EdgesLabels(m2l) <- res_list$elems
   mm2Dags(m2l) <- res_list$dags
-  
+  print((Sys.time() - time1))
   message("Discretization completed: ", nrow(res_list$elem)," common m/z differences found.")
   m2l
 })
@@ -295,19 +298,21 @@ removeBinsOverlap <- function(mzmin,mzmax,margin=0.00001){
   ###Generation of all the neutral formula
   message("Formula generation")
   
-  ###How ot handle heteroatoms, maximum nuimber of different heteroatoms.
+  ###How ot handle heteroatoms, maximum number of different heteroatoms.
+  time1 <- Sys.time()
   allFormula <- lossesFormulaGeneration(limFormula,atoms=l_atoms,...)
+  
   
   ##Associating formula with losses.
   f_masses <- allFormula$masses
-  
+
   ###Now we generate the bmin to fac_sig
   tval <- f_masses*ppm/10^6
   sd_f <- ifelse(tval>dmz,tval,dmz)
   
   maxm <- f_masses+fac_sig*sd_f
   minm <- f_masses-fac_sig*sd_f
-  
+
   merginf <- merged_masses$mu-fac_sig*sqrt(merged_masses$sig)
   mergmax <- merged_masses$mu+fac_sig*sqrt(merged_masses$sig)
   
@@ -315,9 +320,13 @@ removeBinsOverlap <- function(mzmin,mzmax,margin=0.00001){
   tempmz <- removeBinsOverlap(merginf,mergmax,margin=0)
   merginf <- tempmz$min
   mergmax <- tempmz$max
-  
+
   ###Now we need to check the overlap between the interval.
   ##Function to parse the Cpp function.
+  #print(minm)
+  #print(maxm)
+  #print(merginf)
+  #print(mergmax)
   matched_inter <- checkInter(minm,maxm,merginf,mergmax)
   vec_inter <- do.call("cbind",matched_inter)
   
@@ -333,7 +342,8 @@ removeBinsOverlap <- function(mzmin,mzmax,margin=0.00001){
     xp1 <- 3
     xp2 <- 4
   }
-  
+  print((Sys.time() - time1))
+
   str_formula <- apply(vec_inter,1,function(x){
     if(is.na(x[xp1])) return(NA_character_)
     apply(allFormula$formula[x[xp1]:x[xp2],,drop=FALSE],1,formulaToString,vnames=atm_names)
@@ -390,6 +400,7 @@ removeBinsOverlap <- function(mzmin,mzmax,margin=0.00001){
     list_matrix[[i]]$idx <- list_matrix[[i]]$idx[pok,,drop=FALSE]
     toReturn[[i]][list_matrix[[i]]$idx]<-matched[pok]
     
+  
     ###We create the graph.
     idxnodes <- match(list_masses[[i]],sort(list_masses[[i]],decreasing = FALSE))-1
     dag <- graph.empty(n = nrow(toReturn[[i]]),directed=TRUE)
@@ -427,13 +438,16 @@ removeBinsOverlap <- function(mzmin,mzmax,margin=0.00001){
           nrm <- nrm + length(posf)-1
         }
       }
-      
+
       to_remove <- to_remove[1:(nrm-1)]
       if(nrm>1){
         pf <- pf[-to_remove,]
       }
+      if(!is.null(nrow(pf)))
+      {
+        dag <- add_edges(dag,as.numeric(t(pf)),lab=toReturn[[i]][pf])
+      }
       
-      dag <- add_edges(dag,as.numeric(t(pf)),lab=toReturn[[i]][pf])
       ###We increment the counter value.
       if(ecount(dag)>0){
         tlab <- table(edge_attr(dag,"lab"))

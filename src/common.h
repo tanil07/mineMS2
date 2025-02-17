@@ -3,10 +3,20 @@
 
 #include <tuple>
 
+#define BOOST_NO_AUTO_PTR
+
+_Pragma("GCC diagnostic push")
+_Pragma("GCC diagnostic ignored \"-Wnonnull\"")
+_Pragma("GCC diagnostic ignored \"-Wparentheses\"")
+_Pragma("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
+
+_Pragma("GCC diagnostic pop")
+
 #include <boost/functional/hash.hpp>
+
 
 #define K_PATH_ROOT -1
 #define NULL_LABEL -1

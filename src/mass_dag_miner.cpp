@@ -43,8 +43,6 @@ mass_dag_miner::mass_dag_miner(std::vector<mass_graph>& vmasses, int k, bool pre
 
 
 void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
-    ktree& t = kt.get_t();
-    int init_nodes = boost::num_vertices(t);
 
     kt.filter_frequent_nodes(freq);
 

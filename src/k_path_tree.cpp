@@ -385,7 +385,7 @@ std::vector<Vertext> k_path_tree::find_predecessors(Vertext v)
          std::vector<int> pstr(cpath.size());
          std::transform(cpath.begin(),cpath.end(),pstr.begin(),
                         [this](Vertext v) -> int {return t[v].lab;});
-         for(int ist=0;ist<pstr.size();ist++){
+         for(long long unsigned int ist=0;ist<pstr.size();ist++){
              of << pstr[ist];
              if(ist<pstr.size()-1) of << "_";
          }
