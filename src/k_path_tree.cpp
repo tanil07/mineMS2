@@ -311,6 +311,7 @@ void k_path_tree::filter_frequent_nodes(int noccs)
     std::vector<Vertext> to_rm;
     to_rm.reserve(1024);
 
+    int nb_rm = 0;
     Vertext root_v = get_root();
     boost::tie(vb,ve)=boost::vertices(t);
     //TODO pass this in one pass possibly if it's slow.
@@ -324,10 +325,11 @@ void k_path_tree::filter_frequent_nodes(int noccs)
         if(int(moccs[*vb].size())<noccs)
         {
             to_rm.push_back(*vb);
+            nb_rm = nb_rm+1;
         }
     }
     //Now we remove the chosen node.
-    for(int ir=0; ir<int(to_rm.size()); ir++)
+    for(int ir=0; ir<nb_rm; ir++)
     {
         Vertext v= to_rm[ir];
         if(v != NULL)
