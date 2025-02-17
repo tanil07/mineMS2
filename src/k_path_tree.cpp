@@ -332,13 +332,10 @@ void k_path_tree::filter_frequent_nodes(int noccs)
     for(int ir=0; ir<nb_rm; ir++)
     {
         Vertext v= to_rm[ir];
-        if(v != NULL)
-        {
-            boost::clear_vertex(v,t);
-            boost::remove_vertex(v,t);
-            auto itpos = moccs.find(v);
-            moccs.erase(itpos);
-        }  
+        auto itpos = moccs.find(v);
+        boost::clear_vertex(v,t);
+        boost::remove_vertex(v,t);
+        moccs.erase(itpos); 
     }
 
     //We get the remaining 0 exts en update the adjacency graph
