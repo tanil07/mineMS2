@@ -1,3 +1,8 @@
+CHANGES VERSION 0.9.25
+---------------
+MINOR UPDATE
+    - try to include the test-coverage with codecov
+
 CHANGES VERSION 0.9.24
 ---------------
 MINOR UPDATE

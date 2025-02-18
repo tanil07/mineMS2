@@ -1,5 +1,10 @@
 # mineMS2: Annotation of spectral libraries with exact fragmentation patterns
 
+<!-- badges: start -->
+
+[![Codecov test coverage](https://codecov.io/gh/odisce/mineMS2/graph/badge.svg)](https://app.codecov.io/gh/odisce/mineMS2)
+<!-- badges: end -->
+
 ## Description
 
 The **search for similarities within a collection of MS/MS spectra** is a powerful approach to facilitate the identification of new metabolites (Beniddir *et al.*, 2021). *mineMS2* implements an innovative strategy to **extract frequent fragmentation patterns containing shared m/z differences** between subsets of the spectra (Delabrière *et al.*, in preparation). This method is based on:
