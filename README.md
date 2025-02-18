@@ -3,6 +3,7 @@
 <!-- badges: start -->
 
 [![Codecov test coverage](https://codecov.io/gh/odisce/mineMS2/graph/badge.svg)](https://app.codecov.io/gh/odisce/mineMS2)
+[![R-CMD-check](https://github.com/odisce/mineMS2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/odisce/mineMS2/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Description
