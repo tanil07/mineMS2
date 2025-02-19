@@ -15,16 +15,16 @@ getAtomMass <- function(atoms){
   temp$mass[temp$name %in% atoms]
 }
 
-calc_mass_raw <- function(row,atoms_m){
-  sum(row*atoms_m)
-}
+#calc_mass_raw <- function(row,atoms_m){
+#  sum(row*atoms_m)
+#}
 
-calcMass<- function(lf,atoms_mass=NULL){
-  if(is.null(atoms_mass)){
-    atoms_mass <-getAtomMass(colnames(lf@formula))
-  }
-  apply(lf@formula,1,calc_mass_raw,atoms_m=atoms_mass)
-}
+#calcMass<- function(lf,atoms_mass=NULL){
+#  if(is.null(atoms_mass)){
+#    atoms_mass <-getAtomMass(colnames(lf@formula))
+#  }
+#  apply(lf@formula,1,calc_mass_raw,atoms_m=atoms_mass)
+#}
 
 ##'@export
 MzDiffFormulaFromSingleString <- function(formula,ref,sep="|"){

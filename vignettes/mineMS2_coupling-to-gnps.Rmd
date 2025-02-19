@@ -2,7 +2,7 @@
 title: 'Coupling mineMS2 to GNPS molecular networks'
 author: "Alexis Delabrière, Coline Gianfrotta and Etienne Thévenot"
 date: "`r Sys.Date()`"
-package: "`r pkg_ver('mineMS2')`"
+package: "`r BiocStyle::pkg_ver('mineMS2')`"
 vignette: >
   %\VignetteIndexEntry{Vignette Title}
   %\VignetteDepends{igraph}

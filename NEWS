@@ -1,3 +1,9 @@
+CHANGES VERSION 0.9.27
+---------------
+MINOR UPDATE
+    - add some tests for plotting and discretization step
+    - warnings remain in the checking, but should have no error
+
 CHANGES VERSION 0.9.26
 ---------------
 MINOR UPDATE

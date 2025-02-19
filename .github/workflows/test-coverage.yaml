@@ -22,17 +22,9 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install dependencies
-        run: |
-          install.packages(c("remotes","testthat"),dependencies=TRUE)
-          remotes::install_github("odisce/Spec2Annot")
-        shell: Rscript {0}
-
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::covr, any::xml2
-          needs: coverage
-          exclude: Spec2Annot
 
       - name: Test coverage
         run: |

@@ -206,7 +206,7 @@ generateCol <- function(ncomp){
 findAllCliques <- function(net_gnps,minSize = 3,vname="cluster index"){
 	g <- induced_subgraph(net_gnps,V(net_gnps))
 
-	big_clique <- largest.cliques(g)[[1]] ## first largest clique
+	big_clique <- largest_cliques(g)[[1]] ## first largest clique
 
 	pos_list <- 1
 	list_cliques <- vector(mode="list",length=16) ## to store cliques
@@ -220,7 +220,7 @@ findAllCliques <- function(net_gnps,minSize = 3,vname="cluster index"){
     pos_list <- pos_list+1
       ###We remove the vertices
     g <- delete_vertices(g,big_clique)
-    big_clique <- largest.cliques(g)[[1]]
+    big_clique <- largest_cliques(g)[[1]]
 	}
 
   all_cliques <- max_cliques(g, min=minSize) ## all maximal cliques  
@@ -397,8 +397,10 @@ makeIdxTable <- function(components,maxVertices=70){
 #' @export
 #'
 #' @examples
+#' library(igraph)
 #' data(m2l)
-#' data(molnet_igraph)
+#' data(molnet_df)
+#' molnet_igraph <- graph_from_data_frame(molnet_df, directed = FALSE, vertices = NULL)
 #' components <- findGNPSComponents(molnet_igraph)
 #' patterns <- findPatternsExplainingComponents(m2l, components)
 #' net_gnps_annotated <- annotateNetwork(components, molnet_igraph, patterns)

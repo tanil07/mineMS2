@@ -1,7 +1,7 @@
 Package: mineMS2
 Type: Package
 Title: mineMS2: Annotation of spectral libraries with exact fragmentation patterns
-Version: 0.9.26
+Version: 0.9.28
 Date: 2025-02-11
 Authors@R: c(
     person(given = "Alexis", family = "Delabriere", email = "alexis.delabriere@hotmail.fr", role = c("aut", "cre")),

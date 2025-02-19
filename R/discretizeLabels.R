@@ -663,11 +663,11 @@ generateMatDiff <- function(seqmz){
 }
 
 
-convertMatrixIgraph <- function(x){
-  x[which(!is.na(x),arr.ind = TRUE)] <- 1
-  x[which(is.na(x),arr.ind = TRUE)] <- 0
-  x
-}
+#convertMatrixIgraph <- function(x){
+#  x[which(!is.na(x),arr.ind = TRUE)] <- 1
+#  x[which(is.na(x),arr.ind = TRUE)] <- 0
+#  x
+#}
 
 
 checkFracParam <- function (num, maxVal, OneEqualAll = TRUE)
@@ -695,19 +695,19 @@ checkFracParam <- function (num, maxVal, OneEqualAll = TRUE)
 }
 
 
-sumFormula <- function(f1,f2,all_lab=NULL){
-  if(is.na(f1)|is.na(f2)) return(NA)
-  if(is.null(all_lab)){
-    all_lab <- tabAtoms()$name
-  }
-  vf <- rep(0,length(all_lab))
-  names(vf) <- all_lab
-  vf[all_lab] <- vf[all_lab]+f1
-  vf[all_lab] <- vf[all_lab]+f2
+#sumFormula <- function(f1,f2,all_lab=NULL){
+#  if(is.na(f1)|is.na(f2)) return(NA)
+#  if(is.null(all_lab)){
+#    all_lab <- tabAtoms()$name
+#  }
+#  vf <- rep(0,length(all_lab))
+#  names(vf) <- all_lab
+#  vf[all_lab] <- vf[all_lab]+f1
+#  vf[all_lab] <- vf[all_lab]+f2
   ###We remover the 0
-  vf <- vf[vf!=0]
-  return(vf)
-}
+#  vf <- vf[vf!=0]
+#  return(vf)
+#}
 
 
 ###Function used for labels fusion if there is an incoherence.
@@ -749,7 +749,7 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
           succ <- intersect(adj_list[[n]],adj_list[[na]])
           if(length(succ)!=0){
             for(s in succ){
-              all_ids <- get.edge.ids(g,c(n,na,na,s,n,s))
+              all_ids <- get_edge_ids(g,c(n,na,na,s,n,s))
               la <- lab_sec[all_ids[1]]
               lb <- lab_sec[all_ids[2]]
               lc <- lab_sec[all_ids[3]]

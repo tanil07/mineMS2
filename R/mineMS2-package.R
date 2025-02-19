@@ -11,9 +11,9 @@
 #' @importFrom Matrix Matrix
 #' @importFrom utils tail txtProgressBar setTxtProgressBar read.csv
 #' @importFrom stats density median na.omit pnorm runif
-#' @importFrom igraph make_empty_graph set_vertex_attr add_edges adjacent_vertices V E E<- V<- get.edge.ids edge_attr
+#' @importFrom igraph make_empty_graph set_vertex_attr add_edges adjacent_vertices V E E<- V<- get_edge_ids edge_attr
 #' edge_attr<- ecount as_data_frame graph_from_data_frame vcount plot.igraph tkplot layout_with_sugiyama layout_nicely vertex_attr %--%
-#' head_of tail_of delete_edges set_edge_attr induced_subgraph incident incident_edges largest.cliques delete_vertices components write_graph
+#' head_of tail_of delete_edges set_edge_attr induced_subgraph incident incident_edges largest_cliques delete_vertices components write_graph
 #' max_cliques
 #' 
 #' @import Rcpp
