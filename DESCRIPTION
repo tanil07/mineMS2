@@ -44,4 +44,3 @@ Collate:
     'ms2Lib.R'
     'ms2LibSplit.R'
     'select.R'
-  Remotes: odisce/Spec2Annot
