@@ -392,6 +392,7 @@ removeBinsOverlap <- function(mzmin,mzmax,margin=0.00001){
     list_matrix[[i]]$idx <- list_matrix[[i]]$idx[om_diff,,drop=FALSE]
     
     matched <- disjointBins(list_matrix[[i]]$mz, recap_tab$mzmin, recap_tab$mzmax, recap_tab$mz)
+
     ###We keep only the matched edges.
     pok <- which(!is.na(matched))
     
@@ -403,7 +404,7 @@ removeBinsOverlap <- function(mzmin,mzmax,margin=0.00001){
   
     ###We create the graph.
     idxnodes <- match(list_masses[[i]],sort(list_masses[[i]],decreasing = FALSE))-1
-    dag <- graph.empty(n = nrow(toReturn[[i]]),directed=TRUE)
+    dag <- make_empty_graph(n = nrow(toReturn[[i]]),directed=TRUE)
     dag <- set_vertex_attr(dag,name="mz",value = list_masses[[i]])
     dag <- set_vertex_attr(dag,name="rel_int",value = list_int[[i]])
     dag <- set_vertex_attr(dag,name="label",value = as.integer(idxnodes))

@@ -40,7 +40,7 @@ makeDfValidAtoms <- function (clist, mz = NULL)
 	pRef <- match(ref[pok], tAtoms$name)
 	nmaxAtoms <- ceiling(mz/tAtoms$mass[pRef])
 	vnum <- NULL
-	if (class(clist) == "list") {
+	if (is.list(clist)) {
 		vnum <- unlist(clist)
 	}
 	else {

@@ -63,7 +63,7 @@ setMethod("mm2SpectraInfos<-","ms2Lib",function(m2l,value){
 	m2l
 })
 
-setMethod("mm2Ids<-","ms2Lib",function(m2l,value,check=TRUE){
+setMethod("mm2Ids<-",c("ms2Lib", "character"),function(m2l,value,check=TRUE){
 	if(check & any(startsWith(value,names(CORR_TABLE)))){
 		stop("Forbidden prefixes for ids: ",paste(names(CORR_TABLE),collapse = ", "),
 			 " found in ",value[startsWith(value,names(CORR_TABLE))])
@@ -247,14 +247,14 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 
 	suppMetadata <- NULL
 	###The kind of the acquisition is assessed there.
-	if(class(x)=="list"){
+	if(is.list(x)){
 		if(all(sapply(x,class) == "Spectrum2")){
 			mm2Spectra(m2l) <- x
 		}else{
 			message("Unrecognized input, use one of the constructor described in the ms2Lib doc.")
 		}
 
-	}else if(class(x)=="character"){
+	}else if(is.character(x)){
 		origin <- "file"
 		if(length(x)==1){
 		###Single mgf file or dir
@@ -542,7 +542,7 @@ parseId <- function(m2l,idx){
 }
 
 mm2get <- function(m2l,arglist){
-	if(class(slot(m2l,arglist[[1]]))=="data.frame"){
+	if(is.data.frame(slot(m2l,arglist[[1]]))){
 		return(slot(m2l,arglist[[1]])[arglist[[2]],])
 	}
 	(slot(m2l,arglist[[1]]))[[arglist[[2]]]]
@@ -576,7 +576,6 @@ mm2get <- function(m2l,arglist){
 #' 
 #' #Extraction of m/z difference information
 #' m2l["L20"]
-
 setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 	if(length(i)==1){
 		 temp <- mm2get(x,parseId(x,i))
@@ -601,6 +600,7 @@ setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 #' @param x An ms2Lib oject.
 #' @param y The index, a string starting by S if it a spectrum, P if it's a pattern or D if it's a dag.
 #' @param title The title of the plot. If null, a title is automatically furnished.
+#' @param tkplot if TRUE, for fragmentation graphs ("D"), the plot is dynamic and displayed using tkplot, otherwise it is static.
 #' @param ... supplementary arguments to be passed by the method.
 #'
 #' @return a fragPattern object or nothing
@@ -684,7 +684,7 @@ findMz.L <- function(m2l,mz,tol){
 #' #Finding an m/z difference of 147 with a tolerance of 0.01
 #' findMz(m2l,147,"L",dmz=0.1)
 findMz <- function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
-	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
+	if(!is(m2l,"ms2Lib")) stop("m2l should be an 'ms2Lib' object.")
 	type <- match.arg(type)
 	tol <- max(dmz,mz*ppm*1e-6)
 	if(type=="S"){
@@ -747,8 +747,8 @@ getInfo.S <- function(num,m2l){
 #' 
 #' #Example combined with the findMz 
 #' getInfo(m2l,findMz(m2l,391.1398,dmz=0.01))
-getInfo <- function(m2l,ids){
-	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
+getInfo <- function(m2l,ids,...){
+	if(!is(m2l,"ms2Lib")) stop("m2l should be an 'ms2Lib' object.")
 	authorizedValue <- c("losses","spectra")
 
 	if((length(ids)==1) && (nchar(ids)==1)){

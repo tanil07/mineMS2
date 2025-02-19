@@ -5,7 +5,11 @@
 REF_MINEMS2_ATOMS_NAMES <- tabAtoms()$name
 REF_MINEMS2_HALOGENS <- tabAtoms()$name[tabAtoms()$halogen]
 
-#'@export
+#' Get the mass of an atom 
+#' 
+#' @param atoms atom(s) whose mass is searched for. The possible atoms are "C","H", "O", "N", "F", "Cl", "Br", "I", "Si", "S", "P", "Se"
+#' 
+#' @export
 getAtomMass <- function(atoms){
   temp <- tabAtoms()
   temp$mass[temp$name %in% atoms]
@@ -22,7 +26,7 @@ calcMass<- function(lf,atoms_mass=NULL){
   apply(lf@formula,1,calc_mass_raw,atoms_m=atoms_mass)
 }
 
-#'@export
+##'@export
 MzDiffFormulaFromSingleString <- function(formula,ref,sep="|"){
   allf <- str_split(formula,fixed(sep),simplify=TRUE)[1,]
   MzDiffFormula(allf,ref=ref)

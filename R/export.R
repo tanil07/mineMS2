@@ -97,6 +97,7 @@ formulaSpec2Annot <- function(mass, golden_rule, atoms, index)
 #' @param m2l An ms2Lib object
 #' @param pattern a fragPattern object 
 #' @param golden_rule a boolean to consider golden rules or not to construct the formula (used for spec2Annot method)
+#' @param spec2Annot if TRUE, the formula are calculated using spec2Annot (github/odisce)
 #' @param export_pdf a boolean to export in pdf or not
 #'
 #' @return A data.frame with the list of m/z differences

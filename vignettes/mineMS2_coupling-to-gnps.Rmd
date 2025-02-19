@@ -116,7 +116,7 @@ We also use the `as.undirected` function to remove edge directions.
 ```{r simplify_network}
 molnet.igraph <- simplify(molnet.igraph, remove.multiple = FALSE,
                           edge.attr.comb = "ignore")
-molnet.igraph <- as.undirected(molnet.igraph, mode = "each")
+molnet.igraph <- as_undirected(molnet.igraph, mode = "each")
 ```
 
 An overview of the GNPS network after this processing is shown below (as visualized with the [**Cytoscape**](https://cytoscape.org/) software [@Shannon2003]):

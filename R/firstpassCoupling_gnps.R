@@ -398,10 +398,10 @@ makeIdxTable <- function(components,maxVertices=70){
 #'
 #' @examples
 #' data(m2l)
-#' data(net_gnps)
-#' components <- findGNPSComponents(net_gnps)
+#' data(molnet_igraph)
+#' components <- findGNPSComponents(molnet_igraph)
 #' patterns <- findPatternsExplainingComponents(m2l, components)
-#' net_gnps_annotated <- annotateNetwork(components, net_gnps, patterns)
+#' net_gnps_annotated <- annotateNetwork(components, molnet_igraph, patterns)
 annotateNetwork <- function(components,net,patterns,copy=TRUE,
 							keepattr = c("mz", "rt", "name", "shared name", "formula"),sep_infos=","){
 

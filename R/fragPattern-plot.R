@@ -184,6 +184,7 @@ get_mapping <- function(mg,patg,loss_mass,root=0,tol=0.02,ppm=20){
 #' @param edge_label_cex The size of the edges label 
 #' @param subNodes The subset of nodes ot be plotted if necessary
 #' @param tkplot Shall an interactive plot be shown using tkplot.
+#' @param print_formula if TRUE, the possible formula are indicated for edges and vertices
 #' @param colored_edges list of edges ids to highlight
 #' @param ... Supplementary arguments passed to the igraph plot function
 #'
@@ -335,13 +336,13 @@ setMethod("plotOccurrences", "ms2Lib", function(m2l,
     ###Verifying that a correct id has been queried.
     omar <- par("mar")
     fp <- NULL
-    if (class(pidx) == "fragPattern") {
+    if (is(pidx, "fragPattern")) {
       fp <- pidx
-    } else if (class(pidx) == "character") {
+    } else if (is.character(pidx)) {
       if (length(pidx) > 1)
         stop("Only a single index may be plotted every times.")
       fp <- m2l[pidx]
-      if (class(fp) != "fragPattern") {
+      if (is(fp, "fragPattern")) {
         stop("Wrong id, only a fragPattern object may by used by plotOccurrences.")
       }
     }
@@ -484,7 +485,7 @@ setMethod("plotOccurrences", "ms2Lib", function(m2l,
 #' Create a png file containing the 2D structure of the given molecule
 #' (obtained from ChemSpider with the inchi key of the molecule, needs an API key)
 #' 
-#' @param N the id of the molecule in the tsv file given by path_inchi (must have a column named N with the ids of the molecules)
+#' @param name the name of the molecule in the tsv file given by path_inchi
 #' @param path_inchi name of a tabular file containing the inchi keys of the molecules in a column named "name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)
 #' @param dir_images the path to the directory to store the png images
 #'
@@ -588,7 +589,7 @@ spectrum_ggplot <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec,
     img <- readPNG(path_png, TRUE)
     return(ggplot(dfr, aes(x = mzs, xend = mzs, y = 0, yend = intv, color=col) ) +
              geom_segment() +
-             geom_label_repel(aes(label=mzs_rounded, x=mzs, y = intv+1), size=3) +
+             geom_label_repel(aes(label=mzs_rounded, x=mzs, y = intv+1), size=3, max.overlaps=nrow(dfr)) +
              xlim(max(0, x_lim[[1]]-10),x_lim[[2]]+20)+
              ylim(0,max(intv)+5)+
              ggtitle(title)+
@@ -604,7 +605,7 @@ spectrum_ggplot <- function(i, loss_mz, mgs, g, ru_occs_gid, u_occs_gid, mzprec,
   else{ ## no image
     return(ggplot(dfr, aes(x = mzs, xend = mzs, y = 0, yend = intv, color=col) ) +
              geom_segment() +
-             geom_label_repel(aes(label=mzs_rounded, x=mzs, y = intv+1), size=3) +
+             geom_label_repel(aes(label=mzs_rounded, x=mzs, y = intv+1), size=3, max.overlaps=nrow(dfr)) +
              xlim(max(0, x_lim[[1]]-10),x_lim[[2]]+20)+
              ylim(0,max(intv)+5)+
              ggtitle(title)+

@@ -37,6 +37,9 @@ test_processing <- function() {
     net_gnps <- igraph::simplify(net_gnps,
                                  remove.multiple = FALSE,
                                  edge.attr.comb = "ignore")
+
+    net_gnps <- igraph::as_undirected(net_gnps, mode = "each")
+
     testthat::expect_is(net_gnps, 'igraph')
     components <- mineMS2::findGNPSComponents(net_gnps,minSize=3,pairThreshold = 0.9)
     

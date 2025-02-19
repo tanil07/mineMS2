@@ -1,6 +1,6 @@
 #include <iostream>
 #include <tuple>
-
+#include <R_ext/Random.h>
 
 #include "subgraph_container.h"
 
@@ -144,9 +144,10 @@ std::vector<patternIdx> subgraph_container::getInitialIdxSupermotifs(frag_patter
     graphTraitsp::edge_iterator be,ee;
     boost::tie(be,ee) = boost::edges(g);
 
+    GetRNGstate();
     while(num<nrand){
         //We get a random summit
-        auto rit = std::next(be, std::rand()%(nedges));
+        auto rit = std::next(be, lround(R_unif_index(1e9))%(nedges));
             //We pick the first edge
             short elab = g[*rit].lab;
 
@@ -169,6 +170,7 @@ std::vector<patternIdx> subgraph_container::getInitialIdxSupermotifs(frag_patter
             }
         num++;
     }
+    PutRNGstate();
     return res;
 }
 

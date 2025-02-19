@@ -152,7 +152,8 @@ findFormula <-
 		return(resList[1:max(nsol-1,1)])
 	}
 
-#'@export
+
+##'@export
 formulaToString <- function(vformula,vnames = NULL){
 	if(is.null(vnames))	vnames <- names(vformula)
 	if(is.factor(vnames)) vnames <- as.character(vnames)

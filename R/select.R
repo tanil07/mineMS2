@@ -52,7 +52,7 @@ checkSize <- function(vec,pos){
 #' ## can be combined with the findMz function
 #' select(m2l, findMz(m2l, mz=147, "L", ppm=8, dmz=0.3), "P")
 select <- function(m2l,ids,vals=c("P","S")){
-	if(class(m2l)!="ms2Lib") stop("m2l should be an ms2Lib object.")
+	if(!is(m2l,"ms2Lib")) stop("m2l should be an ms2Lib object.")
 
 	vals <- match.arg(vals)
 
@@ -103,7 +103,7 @@ select <- function(m2l,ids,vals=c("P","S")){
 #' m2l <- calculateCoverage(m2l)
 #' find(m2l, "S7", "P")
 find <- function(m2l,ids,vals=c("P","S"),...){
-	if(class(m2l)!="ms2Lib") stop("m2l should be an ms2Lib object.")
+	if(!is(m2l,"ms2Lib")) stop("m2l should be an ms2Lib object.")
 
 	vals <- match.arg(vals)
 
@@ -191,10 +191,56 @@ find.patterns.spectra<- function(m2l,ids,reduced=FALSE,metric = c("coverage","si
 }
 
 
+#' List all patterns ("P") found for each spectrum (S) or loss (l)
+#'
+#' List all the patterns ("P") found for each spectrum or containing each loss.
+#'
+#' @param m2l an ms2Lib Object.
+#' @param to_list the type of features to search for (only P for now)
+#' @param vals the type of features in which we search for the first feature (S or L for now)
+#' @param reduced if TRUE, we only consider the reduced version of the patterns (with a good coverage)
+#'
+#' @return A list of the ids of the patterns containing the ith spectrum or loss 
+#' @export
+#'
+#' @examples
+#' data(m2l)
+#' #if reduced = TRUE, calculateCoverage must have been executed first
+#' list_all(m2l,"P", "S", reduced=FALSE)
+#' list_all(m2l, vals = "S", reduced=FALSE)
+list_all <- function(m2l, to_list = c("P"), vals=c("S", "L"), reduced = TRUE)
+{
+	ids <- match.arg(ids)
+	if(ids == "P")
+	{
+		return(list_all.patterns(m2l, vals = vals, reduced = reduced))
+	}
+	else {
+	   message("Other ids than 'P' are not implemented")
+	}
+}
+
+##'@export
+list_all.patterns <- function(m2l, vals = c("S", "L"), reduced=TRUE)
+{
+	vals <- match.arg(vals)
+	if(vals == "S")
+	{
+		return(list_all.patterns.spectra(m2l, reduced = reduced))
+	}
+	else if(vals == "L")
+	{
+		return(list_all.patterns.losses(m2l, reduced = reduced))
+	}
+	else{
+		message("Vals should be 'S' or 'L'")
+	}
+}
+
 
 ###select.DATAQUERIED.IDSTYPE
-#' @export
-all.patterns.spectra <- function(m2l,reduced=TRUE){
+##' @export
+list_all.patterns.spectra <- function(m2l,reduced=TRUE){
 	ids <- vrange(m2l,"P",reduced=reduced)
 	tp <- m2l[ids]
 	sapply(patterns_from_spectra(tp,
@@ -208,8 +254,8 @@ all.patterns.spectra <- function(m2l,reduced=TRUE){
 
 
 
-#' @export
-all.patterns.losses <- function(m2l,reduced=TRUE){
+##' @export
+list_all.patterns.losses <- function(m2l,reduced=TRUE){
 	ids <- vrange(m2l,"P",reduced=reduced)
 	tp <- m2l[ids]
 	num_losses <- nrow(mm2EdgesLabels(m2l))

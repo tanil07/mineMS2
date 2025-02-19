@@ -1,7 +1,13 @@
+CHANGES VERSION 0.9.26
+---------------
+MINOR UPDATE
+    - resolve the majority of warnings and erros in checking
+    - tests should pass
+
 CHANGES VERSION 0.9.25
 ---------------
 MINOR UPDATE
-    - try to include the test-coverage with codecov
+    - try to include the test-coverage with codecov and the R CMD CHECK
 
 CHANGES VERSION 0.9.24
 ---------------
