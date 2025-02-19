@@ -22,6 +22,11 @@ jobs:
         with:
           use-public-rspm: true
 
+      - run: |
+          install.packages(c("remotes", "rcmdcheck", "covr"), repos='http://cran.us.r-project.org')           
+          remotes::install_deps(dependencies = TRUE)           
+          remotes::install_github("odisce/Spec2Annot")
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::covr, any::xml2
