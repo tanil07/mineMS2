@@ -22,10 +22,11 @@ jobs:
         with:
           use-public-rspm: true
 
-      - run: |
-          install.packages("remotes", repos='http://cran.us.r-project.org')           
-          remotes::install_deps(dependencies = TRUE)           
+      - name: Install dependencies
+        run: |
+          install.packages(c("remotes","testthat"),dependencies=TRUE)
           remotes::install_github("odisce/Spec2Annot")
+        shell: Rscript {0}
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
