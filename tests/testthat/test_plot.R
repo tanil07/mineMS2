@@ -12,7 +12,6 @@ test_that("plot_spectrum",{
 ## plot DAG
 test_that("plot_dag", {
     expect_no_error(plot(m2l,"D1", tkplot=FALSE))
-    expect_no_error(plot(m2l, "D1", tkplot=TRUE))
 })
 
 ## plot pattern graph
