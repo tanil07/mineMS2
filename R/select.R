@@ -210,7 +210,7 @@ find.patterns.spectra<- function(m2l,ids,reduced=FALSE,metric = c("coverage","si
 #' list_all(m2l, vals = "S", reduced=FALSE)
 list_all <- function(m2l, to_list = c("P"), vals=c("S", "L"), reduced = TRUE)
 {
-	ids <- match.arg(ids)
+	ids <- match.arg(to_list)
 	if(ids == "P")
 	{
 		return(list_all.patterns(m2l, vals = vals, reduced = reduced))

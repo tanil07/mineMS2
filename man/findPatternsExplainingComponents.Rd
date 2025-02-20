@@ -46,10 +46,11 @@ Several best patterns can be returned (argument top)
 \examples{
 #Loading the data
 data(m2l)
-data(net_gnps)
+data(molnet_df)
 
 #Finding explainig component 
-components <- findGNPSComponents(net_gnps)
+molnet_igraph <- graph_from_data_frame(molnet_df, directed = FALSE, vertices = NULL)
+components <- findGNPSComponents(molnet_igraph)
 fp <- findPatternsExplainingComponents(m2l,components)
 
 #Plotting the first explaining pattern
