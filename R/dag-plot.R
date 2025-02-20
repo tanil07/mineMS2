@@ -17,7 +17,7 @@ make_label_dag <- function(elab,atoms,mzdigit=3){
 
 
 plot_dag <- function(g,idx=NULL,
-                     title="Fragmentation graph ",
+                     title=NULL,
                      edgeLabels = NULL,
                      edgeLab = c("formula","none"),
                      mzdigits = 3,
@@ -48,7 +48,7 @@ plot_dag <- function(g,idx=NULL,
   if(is.null(title)){
     title <- paste("Fragmentation graph ",sep="")
     if(!is.null(idx)){
-      tilte <- paste(title,idx)
+      title <- paste(title,idx)
     }
   }
   

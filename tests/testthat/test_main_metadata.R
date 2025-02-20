@@ -2,19 +2,22 @@ data_dir.c <- system.file("dataset", package = "mineMS2")
 
 NB_SPECTRA <- 51 ## P. nordicum
 
-test_processing <- function() {
+test_processing_with_metadata <- function() {
     
     path_mgf <- file.path(data_dir.c, 'dda_msms_pnordicum.mgf')
+    path_metadata <- file.path(data_dir.c, "dda_msms_pnordicum_supp.tsv")
     path_input_graph <- file.path(data_dir.c, 'graph_gnps_pnordicum.graphml')
 
-    m2l <- mineMS2::ms2Lib(path_mgf)
-    testthat::expect_is(m2l, 'ms2Lib')
+    metadata.df <- read.table(path_metadata,
+                                    header = TRUE,
+                                    sep = "\t") 
+
+    m2l_meta <- mineMS2::ms2Lib(path_mgf, suppInfos = metadata.df)
+    testthat::expect_is(m2l_meta, 'ms2Lib')
     
-    infos <- mineMS2::getInfo(m2l, "S")
+    infos <- mineMS2::getInfo(m2l_meta, "S")
     testthat::expect_is(infos, 'data.frame')
     testthat::expect_true(nrow(infos) == NB_SPECTRA)
-    ## without supp data, information about the spectra must be the following three:
-    testthat::expect_true(all(c("mz.precursor", "file", "formula") %in% names(infos)))
 
     ids <- paste(paste("MZ", infos[,"mz.precursor"]), sep = "_")
     m2l <- mineMS2::setIds(m2l, ids)
@@ -30,8 +33,7 @@ test_processing <- function() {
                                         count = 2)
     testthat::expect_is(mm2Patterns(m2l), 'list')
     testthat::expect_is(mm2Patterns(m2l)[[1]], 'fragPattern')
-
-    testthat::expect_no_error(show(m2l))
+    
     
     net_gnps <- igraph::read_graph(path_input_graph, "graphml")
     net_gnps <- igraph::simplify(net_gnps,
@@ -54,9 +56,7 @@ test_processing <- function() {
                                               net_gnps,
                                               patterns)
     testthat::expect_is(annotated_net, 'igraph')
-    rm(m2l)
-    
 }
 
-testthat::context('Main tests.')
-testthat::test_that('A test processing works fine.', test_processing())
+testthat::context('Main tests with metadata.')
+testthat::test_that('A test processing with metadata works fine.', test_processing_with_metadata())

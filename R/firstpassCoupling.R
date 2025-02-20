@@ -1,14 +1,14 @@
 ###Convert components furnished to spectral ids.
-convertComponent <- function(comp,ids){
-	if(is.numeric(comp)){
-		trad <- ids[comp]
-		if(any(is.na(trad))) stop("Invalid component elements: ",comp[is.na(trad)])
-	}else{
-		trad <- match(comp,ids)
-		if(any(is.na(trad))) stop("Invalid component elements: ",comp[is.na(trad)])
-		return(paste("S",trad,sep=""))
-	}
-}
+#convertComponent <- function(comp,ids){
+#	if(is.numeric(comp)){
+#		trad <- ids[comp]
+#		if(any(is.na(trad))) stop("Invalid component elements: ",comp[is.na(trad)])
+#	}else{
+#		trad <- match(comp,ids)
+#		if(any(is.na(trad))) stop("Invalid component elements: ",comp[is.na(trad)])
+#		return(paste("S",trad,sep=""))
+#	}
+#}
 
 
 

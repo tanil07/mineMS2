@@ -272,8 +272,9 @@ findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
 #' @export
 #'
 #' @examples
-#' data(net_gnps)
-#' list_components <- findGNPSComponents(net_gnps, minSize = 3, pairThreshold = 0.9)
+#' data(molnet_df)
+#' molnet_igraph <- graph_from_data_frame(molnet_df, directed = FALSE, vertices = NULL)
+#' list_components <- findGNPSComponents(molnet_igraph, minSize = 3, pairThreshold = 0.9)
 findGNPSComponents <- function(net,minSize = 3,pairThreshold=0.9,vname="cluster index",
                                eattr = "cosine_score"){
 

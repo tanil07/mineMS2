@@ -2,6 +2,8 @@
 ################################################################################
 data(m2l)
 
+data_dir.c <- system.file("dataset", package = "mineMS2")
+
 ## plot spectrum
 test_that("plot_spectrum",{
     expect_no_error(plot(m2l, "S1"))
@@ -10,6 +12,7 @@ test_that("plot_spectrum",{
 ## plot DAG
 test_that("plot_dag", {
     expect_no_error(plot(m2l,"D1", tkplot=FALSE))
+    expect_no_error(plot(m2l, "D1", tkplot=TRUE))
 })
 
 ## plot pattern graph
@@ -30,4 +33,7 @@ test_that("plot_several_features", {
 ## plot patterns with occurrences spectra and information
 test_that("plot_patterns", {
     expect_no_error(plotPatterns(m2l, "P1"))
+    ##export in pdf
+    expect_error(plotPatterns(m2l, "P1", save_dir = c("save", "dir")))
+    expect_no_error(plotPatterns(m2l, "P1", save_dir = data_dir.c))
 })

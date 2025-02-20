@@ -10,11 +10,15 @@
 #' @export
 #'
 #' @examples
+#' ## the coverage must have been calculated before (if not, an error occurs)
+#' m2l <- calculateCoverage(m2l)
+#' 
 #' m2l <- filterPatterns(m2l)
 #' print(length(mm2Patterns(m2l)))
 #' print(length(mm2ReducedPatterns(m2l)))
 filterPatterns <-
   function(m2l,filter_function = function(x, threshold, num) {
+    if(!("coverage" %in% colnames(x@occurrences))) stop("Please run calculateCoverage before filtering patterns")
              return(sum(x@occurrences[, "coverage"] > threshold) >= num)
            },
            args = list(threshold = 0.2, num = 2)) {

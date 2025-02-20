@@ -1,3 +1,10 @@
+CHANGES VERSION 0.9.28
+---------------
+MINOR UPDATE
+    - add some tests for mzDiff exports, patterns filtering, some plottings and separate main tests and main with metadata tests
+    - errors in checking but only for ubuntu (for now, remove ubuntu from R CMD CHECK)
+
+
 CHANGES VERSION 0.9.27
 ---------------
 MINOR UPDATE
