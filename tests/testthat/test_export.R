@@ -11,7 +11,7 @@ test_that("export_mzdifftable",{
 
     path_mgf <- file.path(data_dir.c, 'dda_msms_pnordicum.mgf')
     m2l_without_edges <- mineMS2::ms2Lib(path_mgf)
-    expect_warning(mzDiffTable(m2l_without_edges))
+    expect_error(mzDiffTable(m2l_without_edges))
 })
 
 test_that("export_mzdifftablewithpatterns",{
@@ -21,9 +21,9 @@ test_that("export_mzdifftablewithpatterns",{
 
     path_mgf <- file.path(data_dir.c, 'dda_msms_pnordicum.mgf')
     m2l_without_edges <- mineMS2::ms2Lib(path_mgf)
-    expect_warning(mzDiffTableComplete(m2l_without_edges))
+    expect_error(mzDiffTableComplete(m2l_without_edges))
 
     m2l_without_patterns <- mineMS2::discretizeMzDifferences(m2l_without_edges, dmz = 0.007, ppm = 15,
                                             maxFrags = 15)
-    expect_warning(mzDiffTableComplete(m2l_without_patterns))
+    expect_error(mzDiffTableComplete(m2l_without_patterns))
 })
