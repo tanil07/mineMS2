@@ -14,7 +14,7 @@ Depends:
     R (>= 3.5.0)
 SystemRequirements: C++11
 Suggests: devtools, knitr, rmarkdown, testthat (>= 2.0.0), tools
-Imports: ggplot2, ggrepel, gridExtra, igraph, kableExtra, Matrix, methods, MSnbase, patchwork, png, Rcpp (>= 0.12.13), stringr, webchem, Spec2Annot, BiocStyle, magick
+Imports: ggplot2, ggrepel, gridExtra, igraph, kableExtra, Matrix, methods, MSnbase, patchwork, png, Rcpp (>= 0.12.13), stringr, webchem, Spec2Annot, BiocStyle, magick, markdown
 LinkingTo: Rcpp,BH
 License: CeCILL v2.1
 Encoding: UTF-8
