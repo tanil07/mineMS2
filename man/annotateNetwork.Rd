@@ -33,9 +33,11 @@ The annotated network as an igraph object.
 Annotation of a GNPS network with patterns for each detected component
 }
 \examples{
+library(igraph)
 data(m2l)
-data(net_gnps)
-components <- findGNPSComponents(net_gnps)
+data(molnet_df)
+molnet_igraph <- graph_from_data_frame(molnet_df, directed = FALSE, vertices = NULL)
+components <- findGNPSComponents(molnet_igraph)
 patterns <- findPatternsExplainingComponents(m2l, components)
-net_gnps_annotated <- annotateNetwork(components, net_gnps, patterns)
+molnet_annotated <- annotateNetwork(components, molnet_igraph, patterns)
 }

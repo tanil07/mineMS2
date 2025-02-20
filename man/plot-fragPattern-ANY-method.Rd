@@ -58,6 +58,8 @@ determined while label show the raw label as integer.}
 
 \item{tkplot}{Shall an interactive plot be shown using tkplot.}
 
+\item{print_formula}{if TRUE, the possible formula are indicated for edges and vertices}
+
 \item{colored_edges}{list of edges ids to highlight}
 
 \item{...}{Supplementary arguments passed to the igraph plot function}

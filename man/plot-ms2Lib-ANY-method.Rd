@@ -13,6 +13,8 @@
 
 \item{title}{The title of the plot. If null, a title is automatically furnished.}
 
+\item{tkplot}{if TRUE, for fragmentation graphs ("D"), the plot is dynamic and displayed using tkplot, otherwise it is static.}
+
 \item{...}{supplementary arguments to be passed by the method.}
 }
 \value{

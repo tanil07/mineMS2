@@ -4,7 +4,7 @@
 \alias{getInfo}
 \title{Available information}
 \usage{
-getInfo(m2l, ids)
+getInfo(m2l, ids, ...)
 }
 \arguments{
 \item{m2l}{An ms2Lib object}

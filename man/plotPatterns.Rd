@@ -13,7 +13,6 @@ plotPatterns(
   full = FALSE,
   byPage = 9,
   titles = NULL,
-  v_ggplot = TRUE,
   path_inchi = NULL,
   ggplot.l = TRUE,
   infos_col = NULL,
@@ -52,7 +51,7 @@ plotPatterns(
 
 \item{path_inchi}{name of a tabular file containing the inchi keys of the molecules in a column named "name"; if this table is available, the 2D structures corresponding to the spectra will be retrieved from ChemSpider (webchem package) and displayed in the plot along the spectra (default NULL)}
 
-\item{ggplot.l}{(default TRUE) Should the ggplot version be displayed?}
+\item{ggplot.l}{(default TRUE) Should the ggplot version be displayed}
 
 \item{infos_col}{(for ggplot version) columns names from the spectra information to print}
 

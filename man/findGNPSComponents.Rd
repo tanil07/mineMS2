@@ -30,6 +30,7 @@ A list of the components to be checked.
 Extract the components of a molecular network (the cliques, the connected components and the high similarity pairs)
 }
 \examples{
-data(net_gnps)
-list_components <- findGNPSComponents(net_gnps, minSize = 3, pairThreshold = 0.9)
+data(molnet_df)
+molnet_igraph <- graph_from_data_frame(molnet_df, directed = FALSE, vertices = NULL)
+list_components <- findGNPSComponents(molnet_igraph, minSize = 3, pairThreshold = 0.9)
 }
