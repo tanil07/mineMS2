@@ -7,6 +7,9 @@ test_processing <- function() {
     path_mgf <- file.path(data_dir.c, 'dda_msms_pnordicum.mgf')
     path_input_graph <- file.path(data_dir.c, 'graph_gnps_pnordicum.graphml')
 
+    testthat::expect_no_error(checkFormat(path_mgf))
+    testthat::expect_error(checkFormat(path_input_graph))
+
     m2l <- mineMS2::ms2Lib(path_mgf)
     testthat::expect_is(m2l, 'ms2Lib')
     
@@ -16,14 +19,23 @@ test_processing <- function() {
     ## without supp data, information about the spectra must be the following three:
     testthat::expect_true(all(c("mz.precursor", "file", "formula") %in% names(infos)))
 
+
+    testthat::expect_error(m2l <- mineMS2::setIds(m2l, "mz"))
+    ids_error <-  paste(paste("S", infos[,"mz.precursor"], sep = "_"))
+    testthat::expect_error(m2l <- mineMS2::setIds(m2l, ids_error))
     ids <- paste(paste("MZ", infos[,"mz.precursor"]), sep = "_")
     m2l <- mineMS2::setIds(m2l, ids)
+    testthat::expect_is(mm2Ids(m2l), 'character')
+    testthat::expect_equal(mm2Ids(m2l), ids)
+
     m2l <- mineMS2::discretizeMzDifferences(m2l, dmz = 0.007, ppm = 15,
                                             maxFrags = 15)
     testthat::expect_is(mm2Dags(m2l), 'list')
     testthat::expect_is(mm2Dags(m2l)[[1]], 'igraph')
     testthat::expect_is(mm2EdgesLabels(m2l), 'data.frame')
 
+    testthat::expect_is(mm2NodesLabels(m2l), 'data.frame')
+    testthat::expect_true(nrow(mm2NodesLabels(m2l)) == 0 && ncol(mm2NodesLabels(m2l)) == 0)
 
     m2l <- mineMS2::mineClosedSubgraphs(m2l,
                                         sizeMin = 1,
@@ -54,7 +66,6 @@ test_processing <- function() {
                                               net_gnps,
                                               patterns)
     testthat::expect_is(annotated_net, 'igraph')
-    rm(m2l)
     
 }
 

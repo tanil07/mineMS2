@@ -229,13 +229,13 @@ convert_formula <- function(form_vec){
 #' @examples
 #' #We locate the example file
 #' path_demo <- system.file("dataset",package="mineMS2")
-#' path_mgf <- file.path(path_demo,"dda_msms_pverrucosum.mgf")
+#' path_mgf <- file.path(path_demo,"dda_msms_pnordicum.mgf")
 #' 
 #' #Simple import
 #' m2l <- ms2Lib(path_mgf)
 #' 
 #' #Import including some file formula
-#' supp_infos_path <- file.path(path_demo,"dda_msms_pverrucosum_supp.csv")
+#' supp_infos_path <- file.path(path_demo,"dda_msms_pnordicum_supp.tsv")
 #' supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
 #' m2l <- ms2Lib(path_mgf,suppInfos = supp_infos)
 ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFromFiles = FALSE){
