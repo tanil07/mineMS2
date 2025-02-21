@@ -26,7 +26,7 @@ output to a fragPattern object including the occurrences. It should not be
 called directly by the user.
 }
 \examples{
-load(m2l)
+data(m2l)
 ## igraph object to store the vertices and edges of a pattern
 graph <- mm2Graph(m2l["P1"])
 }

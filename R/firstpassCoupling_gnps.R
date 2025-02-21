@@ -273,8 +273,9 @@ findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
 #'
 #' @examples
 #' data(molnet_df)
-#' molnet_igraph <- graph_from_data_frame(molnet_df, directed = FALSE, vertices = NULL)
+#' molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges, directed = FALSE, vertices = molnet_df$vertices)
 #' list_components <- findGNPSComponents(molnet_igraph, minSize = 3, pairThreshold = 0.9)
+#' print(list_components)
 findGNPSComponents <- function(net,minSize = 3,pairThreshold=0.9,vname="cluster index",
                                eattr = "cosine_score"){
 
@@ -396,9 +397,20 @@ makeIdxTable <- function(components,maxVertices=70){
 #'
 #' @return The annotated network as an igraph object.
 #' @export
+#' @examples
+#' data(m2l)
+#' data(molnet_df)
+#' 
+#' molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges, directed = FALSE, vertices = molnet_df$vertices)
+#' components <- findGNPSComponents(molnet_igraph)
+#' print(length(components))
+#' patterns <- findPatternsExplainingComponents(m2l, components)
+#' print(patterns[[1]])
+#' 
+#' molnet_annotated <- annotateNetwork(components, molnet_igraph, patterns)
 #'
 annotateNetwork <- function(components,net,patterns,copy=TRUE,
-							keepattr = c("mz", "rt", "name", "shared name", "formula"),sep_infos=","){
+							keepattr = c("precursor mass", "rt", "name", "cluster index"),sep_infos=","){
 
   #keepattr = c("Compound_Name","SpectrumID","DefaultGroups",
 	#									 "cluster index","precursor mass")
@@ -423,7 +435,7 @@ annotateNetwork <- function(components,net,patterns,copy=TRUE,
 	COLS_SEQ <- generateCol(length(components))
 
 	###We reorder every nodes order according to the definition
-  ids_in_graph <- as.numeric(vertex_attr(net,name = ID_COL_METGEM))
+  ids_in_graph <- as.numeric(vertex_attr(net,name = ID_COL_GNPS))
 	ids_gnps <- sort(ids_in_graph)
   #print(ids_gnps)
 	

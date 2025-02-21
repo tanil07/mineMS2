@@ -9,7 +9,7 @@ annotateNetwork(
   net,
   patterns,
   copy = TRUE,
-  keepattr = c("mz", "rt", "name", "shared name", "formula"),
+  keepattr = c("precursor mass", "rt", "name", "cluster index"),
   sep_infos = ","
 )
 }
@@ -31,4 +31,17 @@ The annotated network as an igraph object.
 }
 \description{
 Annotation of a GNPS network with patterns for each detected component
+}
+\examples{
+data(m2l)
+data(molnet_df)
+
+molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges, directed = FALSE, vertices = molnet_df$vertices)
+components <- findGNPSComponents(molnet_igraph)
+print(length(components))
+patterns <- findPatternsExplainingComponents(m2l, components)
+print(patterns[[1]])
+
+molnet_annotated <- annotateNetwork(components, molnet_igraph, patterns)
+
 }

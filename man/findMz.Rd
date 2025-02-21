@@ -28,8 +28,8 @@ Search for a spectrum (S) or a m/z difference (L) in an ms2Lib object given a to
 data(m2l)
 
 #Finding a spectrum (or several spectra) with a precusor mass of 391.1398 with a tolerance of 0.01
-findMz(m2l,"S",391.1398,dmz=0.01)
+findMz(m2l, 391.1398, "S", dmz=0.01)
 
 #Finding an m/z difference of 147 with a tolerance of 0.01
-findMz(m2l,147,"L",dmz=0.1)
+findMz(m2l, 147, "L",dmz=0.1)
 }

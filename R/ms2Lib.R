@@ -679,10 +679,10 @@ findMz.L <- function(m2l,mz,tol){
 #' data(m2l)
 #' 
 #' #Finding a spectrum (or several spectra) with a precusor mass of 391.1398 with a tolerance of 0.01
-#' findMz(m2l,"S",391.1398,dmz=0.01)
+#' findMz(m2l, 391.1398, "S", dmz=0.01)
 #' 
 #' #Finding an m/z difference of 147 with a tolerance of 0.01
-#' findMz(m2l,147,"L",dmz=0.1)
+#' findMz(m2l, 147, "L",dmz=0.1)
 findMz <- function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
 	if(!is(m2l,"ms2Lib")) stop("m2l should be an 'ms2Lib' object.")
 	type <- match.arg(type)

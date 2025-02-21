@@ -49,10 +49,11 @@ data(m2l)
 data(molnet_df)
 
 #Finding explainig component 
-molnet_igraph <- graph_from_data_frame(molnet_df, directed = FALSE, vertices = NULL)
+molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges, directed = FALSE, vertices = molnet_df$vertices)
 components <- findGNPSComponents(molnet_igraph)
+print(length(components))
 fp <- findPatternsExplainingComponents(m2l,components)
-
+print(fp[[1]])
 #Plotting the first explaining pattern
-plot(m2l,fp[[1]]["id"])
+plot(m2l,fp[[1]][1,"id"])
 }
