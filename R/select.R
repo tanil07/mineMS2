@@ -213,7 +213,7 @@ list_all <- function(m2l, to_list = c("P"), vals=c("S", "L"), reduced = TRUE)
 	ids <- match.arg(to_list)
 	if(ids == "P")
 	{
-		return(list_all.patterns(m2l, vals = vals, reduced = reduced, ...))
+		return(list_all.patterns(m2l, vals = vals, reduced = reduced))
 	}
 	else {
 	   message("Other ids than 'P' are not implemented")
@@ -226,11 +226,11 @@ list_all.patterns <- function(m2l, vals = c("S", "L"), reduced=TRUE)
 	vals <- match.arg(vals)
 	if(vals == "S")
 	{
-		return(list_all.patterns.spectra(m2l, reduced = reduced, ...))
+		return(list_all.patterns.spectra(m2l, reduced = reduced))
 	}
 	else if(vals == "L")
 	{
-		return(list_all.patterns.losses(m2l, reduced = reduced, ...))
+		return(list_all.patterns.losses(m2l, reduced = reduced))
 	}
 	else{
 		message("Vals should be 'S' or 'L'")
