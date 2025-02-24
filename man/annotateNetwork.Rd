@@ -24,7 +24,7 @@ annotateNetwork(
 
 \item{keepattr}{Which attributes shall be kept on the network}
 
-\item{sep_infos}{The separator used to separate the colors when multiple colors are associated ot a single node.}
+\item{sep_infos}{The separator used to separate the colors when multiple colors are associated to a single node.}
 }
 \value{
 The annotated network as an igraph object.
@@ -36,7 +36,8 @@ Annotation of a GNPS network with patterns for each detected component
 data(m2l)
 data(molnet_df)
 
-molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges, directed = FALSE, vertices = molnet_df$vertices)
+molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges,
+                 directed = FALSE, vertices = molnet_df$vertices)
 components <- findGNPSComponents(molnet_igraph)
 print(length(components))
 patterns <- findPatternsExplainingComponents(m2l, components)

@@ -26,7 +26,20 @@ getAtomMass <- function(atoms){
 #  apply(lf@formula,1,calc_mass_raw,atoms_m=atoms_mass)
 #}
 
-##'@export
+#' Create a MzDiffFormula object from a string representation of formulas
+#' 
+#' Return a MzDiffFormula object containing all the formulas given in the string in parameter.
+#' Should not be used by the user.
+#' 
+#' @param formula string containing one or several formulas 
+#' @param ref list of atom names included in the formula(s)
+#' @param sep character separator to distinguish between formulas
+#'
+#' @export
+#' 
+#' @examples 
+#' MzDiffFormulaFromSingleString(formula = "CH6O3|C4H2O,", ref = c("C", "H", "O"), sep = "|")
+#' 
 MzDiffFormulaFromSingleString <- function(formula,ref,sep="|"){
   allf <- str_split(formula,fixed(sep),simplify=TRUE)[1,]
   MzDiffFormula(allf,ref=ref)
@@ -104,13 +117,15 @@ isKnown <- function(lf){
   nrow(lf@formula)==1
 }
 
-#' Calculate a string reresentation of a MzDiffFormula object
+#' Calculate a string representation of a MzDiffFormula object
 #'
-#' Return a string presentation of all the possible formula. Should not be used by the user.
+#' Return a string representation of all the possible formula. Should not be used by the user.
 #'
 #' @param x A MzDiffFormula object.
 #' 
 #' @return A character vector with all the possible formula for a loss object.
+#' 
+#' @rdname MzDiffFormula-methods
 setMethod("as.character","MzDiffFormula",function(x){
   return(apply(x@formula,1,formulaToString))
 })

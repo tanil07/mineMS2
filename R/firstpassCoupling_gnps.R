@@ -259,7 +259,7 @@ findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
 
 
 #' Extract the components of a molecular network
-#' 
+#'
 #' Extract the components of a molecular network (the cliques, the connected components and the high similarity pairs)
 #'
 #' @param net A GNPS network
@@ -273,12 +273,13 @@ findConnectedComponents <- function(net,minSize = 2,vname="cluster index",...){
 #'
 #' @examples
 #' data(molnet_df)
-#' molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges, directed = FALSE, vertices = molnet_df$vertices)
-#' list_components <- findGNPSComponents(molnet_igraph, minSize = 3, pairThreshold = 0.9)
+#' molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges,
+#'                  directed = FALSE, vertices = molnet_df$vertices)
+#' list_components <- findGNPSComponents(molnet_igraph, minSize = 3,
+#'                     pairThreshold = 0.9)
 #' print(list_components)
-findGNPSComponents <- function(net,minSize = 3,pairThreshold=0.9,vname="cluster index",
-                               eattr = "cosine_score"){
-
+findGNPSComponents <- function(net, minSize = 3, pairThreshold=0.9,
+                              vname="cluster index", eattr = "cosine_score"){
 	###Finding all cliques.
 	cliques <- findAllCliques(net,minSize = minSize,vname = vname)
 
@@ -393,7 +394,7 @@ makeIdxTable <- function(components,maxVertices=70){
 #' @param patterns The set of patterns extracted from an ms2Lib object.
 #' @param copy Shall the igraph object be copied (recommended)
 #' @param keepattr Which attributes shall be kept on the network
-#' @param sep_infos The separator used to separate the colors when multiple colors are associated ot a single node.
+#' @param sep_infos The separator used to separate the colors when multiple colors are associated to a single node.
 #'
 #' @return The annotated network as an igraph object.
 #' @export
@@ -401,7 +402,8 @@ makeIdxTable <- function(components,maxVertices=70){
 #' data(m2l)
 #' data(molnet_df)
 #' 
-#' molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges, directed = FALSE, vertices = molnet_df$vertices)
+#' molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges,
+#'                  directed = FALSE, vertices = molnet_df$vertices)
 #' components <- findGNPSComponents(molnet_igraph)
 #' print(length(components))
 #' patterns <- findPatternsExplainingComponents(m2l, components)

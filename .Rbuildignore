@@ -4,3 +4,5 @@
 ^\.RData$
 ^\.travis\.yml$
 ^\.git$
+^\.github$
+^LICENSE\.md$

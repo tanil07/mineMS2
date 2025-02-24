@@ -22,6 +22,8 @@ setGeneric("mm2ReducedPatterns", function(m2l) standardGeneric("mm2ReducedPatter
 
 setGeneric("mm2ReducedLattice", function(m2l) standardGeneric("mm2ReducedLattice"))
 
+
+
 setGeneric("mm2Atoms", function(m2l) standardGeneric("mm2Atoms"))
 
 # ms2Lib object setter ----
@@ -30,7 +32,7 @@ setGeneric("mm2Spectra<-", function(m2l,value) standardGeneric("mm2Spectra<-"))
 
 setGeneric("mm2Dags<-", function(m2l,value) standardGeneric("mm2Dags<-"))
 
-setGeneric("mm2Ids<-", function(m2l,value,...) standardGeneric("mm2Ids<-"))
+setGeneric("mm2Ids<-", function(m2l,...,value) standardGeneric("mm2Ids<-"))
 
 setGeneric("mm2SpectraInfos<-", function(m2l,value) standardGeneric("mm2SpectraInfos<-"))
 
@@ -55,13 +57,13 @@ setGeneric("mm2Atoms<-", function(m2l,value) standardGeneric("mm2Atoms<-"))
 
 setGeneric("mm2Graph", function(pat) standardGeneric("mm2Graph"))
 
-setGeneric("mm2Occurrences", function(pat) standardGeneric("mm2Occurrences"))
+setGeneric("mm2Occurrences", function(object) standardGeneric("mm2Occurrences"))
 
-setGeneric("mm2Root", function(pat) standardGeneric("mm2Root"))
+setGeneric("mm2Root", function(object) standardGeneric("mm2Root"))
 
-setGeneric("mm2Name", function(pat) standardGeneric("mm2Name"))
+setGeneric("mm2Name", function(object) standardGeneric("mm2Name"))
 
-setGeneric("mm2CanonicalForm", function(pat) standardGeneric("mm2CanonicalForm"))
+setGeneric("mm2CanonicalForm", function(object) standardGeneric("mm2CanonicalForm"))
 
 
 # fragPattern object setter ----
@@ -84,16 +86,12 @@ setGeneric("mm2CanonicalForm<-", function(pat,value) standardGeneric("mm2Canonic
 #' Discretize m/z differences.
 #' 
 #' @description
-#' `discretizeMzDifferences` discretize the m/z differences in MS/MS spectra.
+#' `discretizeMzDifferences` discretizes the m/z differences in MS/MS spectra.
 #' 
 #' @param m2l A ms2Lib object
 #' @param ... Supplementary arguments passed to the discretization method
-#'
-#' @details
-#' This is a generic function: methods can be defined for it directly
-#' or via the [Summary()] group generic. For this to work properly,
-#' the arguments `...` should be unnamed, and dispatch is on the
-#' first argument.
+#' 
+#' @rdname discretizeMzDifferences
 setGeneric("discretizeMzDifferences", function(m2l,...) standardGeneric("discretizeMzDifferences"))
 
 setGeneric("discretizeMzFragments", function(m2l,...) standardGeneric("discretizeMzFragments"))
@@ -102,16 +100,13 @@ setGeneric("discretizeMzFragments", function(m2l,...) standardGeneric("discretiz
 
 #' Extract frequent closed subgraphs.
 #' 
-#' `mineClosedSubgraphs` Extract frequent closed subgraphs from an ms2Lib object.
+#' `mineClosedSubgraphs` extracts frequent closed subgraphs from an ms2Lib object.
 #' 
 #' @param m2l A ms2Lib object
 #' @param ... Supplementary arguments passed to the mining method
+#' 
+#' @rdname mineClosedSubgraphs
 #'
-#' @details
-#' This is a generic function: methods can be defined for it directly
-#' or via the [Summary()] group generic. For this to work properly,
-#' the arguments `...` should be unnamed, and dispatch is on the
-#' first argument.
 setGeneric("mineClosedSubgraphs",function(m2l,...) standardGeneric("mineClosedSubgraphs"))
 
 setGeneric("mineClosedSubgraphsByComponent",function(m2l,...) standardGeneric("mineClosedSubgraphsByComponent"))
@@ -124,19 +119,11 @@ setGeneric("scoreLosses",function(m2l,...) standardGeneric("scoreLosses"))
 
 setGeneric("scorePatterns",function(m2l,...) standardGeneric("scorePatterns"))
 
-#' Set the ids of a MS2lib object
-#' 
-#' @description
-#' `setIds` set the ids of an ms2Lib objects
-#' 
+
 #' @param m2l An ms2Lib object
 #' @param ... Supplementary arguments passed to the setIds method
 #'
-#' @details
-#' This is a generic function: methods can be defined for it directly
-#' or via the [Summary()] group generic. For this to work properly,
-#' the arguments `...` should be unnamed, and dispatch is on the
-#' first argument.
+#' @rdname ms2Lib-methods
 setGeneric("setIds",function(m2l,...) standardGeneric("setIds"))
 
 setGeneric("addFormula",function(x,lf,...) standardGeneric("addFormula"))
@@ -148,16 +135,13 @@ setGeneric("isSubformulaIdx",function(x,lf,...) standardGeneric("isSubformulaIdx
 #' Calculate the relative intensity covered by patterns.
 #' 
 #' @description
-#' `calculateCoverage` calculate the relative intensity covered by a pattern or a library of patterns.
+#' `calculateCoverage` calculates the relative intensity covered by a pattern or a library of patterns.
 #' 
 #' @param x An ms2Lib of a fragPattern object
 #' @param ... supplementary argument passed to the methods
+#' 
+#' @rdname calculateCoverage
 #'
-#' @details
-#' This is a generic function: methods can be defined for it directly
-#' or via the [Summary()] group generic. For this to work properly,
-#' the arguments `...` should be unnamed, and dispatch is on the
-#' first argument.
 setGeneric("calculateCoverage",function(x,...) standardGeneric("calculateCoverage"))
 
 setGeneric("hasCoverage",function(x,...) standardGeneric("hasCoverage"))

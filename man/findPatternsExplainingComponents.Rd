@@ -48,8 +48,9 @@ Several best patterns can be returned (argument top)
 data(m2l)
 data(molnet_df)
 
-#Finding explainig component 
-molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges, directed = FALSE, vertices = molnet_df$vertices)
+#Finding explainig component
+molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges,
+				directed = FALSE, vertices = molnet_df$vertices)
 components <- findGNPSComponents(molnet_igraph)
 print(length(components))
 fp <- findPatternsExplainingComponents(m2l,components)

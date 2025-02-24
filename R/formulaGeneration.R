@@ -153,7 +153,15 @@ findFormula <-
 	}
 
 
-##'@export
+#' Calculate a string representation of one formula 
+#' 
+#' Return the string representation of one formula stored in a MzDiffFormula object.
+#' Should not be used by the user.
+#' 
+#' @param vformula the formula field of an MzDiffFormula object
+#' @param vnames vector of atom names to consider
+#' 
+#' @export
 formulaToString <- function(vformula,vnames = NULL){
 	if(is.null(vnames))	vnames <- names(vformula)
 	if(is.factor(vnames)) vnames <- as.character(vnames)

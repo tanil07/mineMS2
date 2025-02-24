@@ -1,28 +1,61 @@
 #' @include references.R
 
-#'@export
+#' Get the graph of a pattern
+#' 
+#' @name mm2Graph
+#' @aliases fragPattern-mm2Graph
+#' @rdname fragPattern
+#' @export
+#' @examples 
+#' data(m2l)
+#' ## igraph object to store the vertices and edges of a pattern
+#' graph <- mm2Graph(m2l["P1"])
 setMethod("mm2Graph", "fragPattern",function(pat){
 	return(pat@graph)
 })
 
-#'@export
-setMethod("mm2Occurrences", "fragPattern",function(pat){
-	return(pat@occurrences)
+#' Methods for a fragPattern objects 
+#' 
+#' 
+#' @rdname fragPattern-methods
+#' 
+#' @export
+#' @examples 
+#' data(m2l)
+#' 
+#' occs <- mm2Occurrences(m2l["P1"])
+setMethod("mm2Occurrences", "fragPattern",function(object){
+	return(object@occurrences)
 })
 
-#'@export
-setMethod("mm2Root", "fragPattern",function(pat){
-	return(pat@root)
+#' @rdname fragPattern-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' root <- mm2Root(m2l["P1"])
+setMethod("mm2Root", "fragPattern",function(object){
+	return(object@root)
 })
 
-#'@export
-setMethod("mm2Name", "fragPattern",function(pat){
-	return(pat@name)
+#' @rdname fragPattern-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' name_p <- mm2Name(m2l["P1"])
+setMethod("mm2Name", "fragPattern",function(object){
+	return(object@name)
 })
 
-#'@export
-setMethod("mm2CanonicalForm", "fragPattern",function(pat){
-  return(pat@canonicalForm)
+#' @rdname fragPattern-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' can_form <- mm2CanonicalForm(m2l["P1"])
+setMethod("mm2CanonicalForm", "fragPattern",function(object){
+  return(object@canonicalForm)
 })
 
 
@@ -56,9 +89,11 @@ setMethod("mm2CanonicalForm<-", "fragPattern",function(pat,value){
 #' @param object A fragPattern object
 #' @export
 #'
+#' @rdname fragPattern-methods
+#' 
 #' @return None
 #' @examples
-#' data(m2l)
+#' 
 #' show(m2l["P12"])
 setMethod("show","fragPattern",function(object){
 	cat("A fragPattern object with",vcount(mm2Graph(object))-1,"losses occuring ",
@@ -108,12 +143,14 @@ canonicalForm <- function(pat){
 
 #' Calculate the coverage of a specific pattern
 #' 
-#' This function should never be called by the user. Call the ms2Lib method
+#' The S4 method for the fragPattern object should never be called by the user. Call the ms2Lib method instead.
 #'
 #' @param x The pattern
 #' @param mzloss The table of m/z differences
 #' @param mgs the m/z graphs (the DAGs)
-#' @export
+#' @export 
+#' 
+#' @rdname calculateCoverage
 #'
 #' @return The m2l object with all the coverage calculated.
 setMethod("calculateCoverage","fragPattern",function(x,mzloss,mgs){

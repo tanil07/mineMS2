@@ -59,7 +59,7 @@ reorderAtom <- function(atoms){
 
 #' Discretize m/z differences.
 #'
-#' Builds fragmentation graphs from MS/MS spectra using discretized m/z differences as edges.
+#' It also builds fragmentation graphs from MS/MS spectra using discretized m/z differences as edges.
 #'
 #' @param m2l The ms2 lib object to be discretized.
 #' @param ppm the maximum authorized deviation in ppm (parts per million).
@@ -80,7 +80,9 @@ reorderAtom <- function(atoms){
 #'
 #' @return An ms2Lib object with filled fields and constructed dags.
 #' @export
-#'
+#'  
+#' @rdname discretizeMzDifferences
+#' 
 #' @examples
 #' #Loading the data
 #' data(m2l)

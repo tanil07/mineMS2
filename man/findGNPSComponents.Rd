@@ -31,7 +31,9 @@ Extract the components of a molecular network (the cliques, the connected compon
 }
 \examples{
 data(molnet_df)
-molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges, directed = FALSE, vertices = molnet_df$vertices)
-list_components <- findGNPSComponents(molnet_igraph, minSize = 3, pairThreshold = 0.9)
+molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges,
+                 directed = FALSE, vertices = molnet_df$vertices)
+list_components <- findGNPSComponents(molnet_igraph, minSize = 3,
+                    pairThreshold = 0.9)
 print(list_components)
 }

@@ -12,7 +12,6 @@ Rcpp::List mineClosedDags(List& vertices_list,List& edges_list,LogicalVector& pr
 	//Converting the fragmentation graphs into an appropriate forms.
 	std::vector < mass_graph > mgs;
 	int num_graphs = vertices_list.size();
-
 	for(int i = 0; i < num_graphs; i++){
 		Rcpp::DataFrame df_vertices(vertices_list[i]);
 		Rcpp::DataFrame df_edges(edges_list[i]);

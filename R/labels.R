@@ -2,36 +2,7 @@
 #' @include MzDiffFormula.R
 #' @include fragPattern.R
 
-
-#'@export
-####Return exact m/z difference of all the labels for a given fragPattern.
-getMzDiff <- function(g,occs,mgs,loss_mz){
-  occs_gid <- occs[, 1]
-  occs_pos <- occs[, 2]
-  res_diff <- matrix(ncol=ecount(g),nrow=nrow(occs))
-  for (i in 1:length(occs_gid)) {
-    gid <- occs_gid[i]
-    pos <- occs_pos[i]
-    map <- get_mapping(mgs[[gid]], g, loss_mz, root = pos)
-    mzs <- vertex_attr(mgs[[gid]], "mz")
-    ids <- V(mgs[[gid]])
-    ###Matched peaks.
-    matched_peaks_idx <- match(map[2,], ids)
-    
-    ###
-    V_head <- head_of(g,es = E(g))
-    V_tail <- tail_of(g,es = E(g))
-    posh <- match(V_head,map[1,])
-    post <- match(V_tail,map[1,])
-    
-    diffv <- mzs[matched_peaks_idx[post]]-
-      mzs[matched_peaks_idx[posh]]
-    res_diff[i,] <- diffv
-  }
-  
-  
-  return(res_diff)
-}
+#####Labels.R
 
 getMinEdgeLabel <- function(g,v,lab="weight",maxsol=TRUE){
   ev <- incident(g,v,"in")
@@ -375,7 +346,59 @@ makeEdgeLabel <-
                 coherent = coevec, multiple = multipleannot))
   }
 
-#'@export
+#' All the exact m/z differences for a given fragPattern object
+#'
+#' Return all the exact m/z differences for a given fragPattern object.
+#' Should not be used by the user.
+#'
+#' @param g fragPattern object
+#' @param occs list of occurrences in the fragPattern
+#' @param mgs list of fragmentation graphs (DAGs) contained in the fragPattern
+#' @param loss_mz list of all discreized the m/z differences
+#'
+#' @export
+getMzDiff <- function(g, occs, mgs, loss_mz){
+  occs_gid <- occs[, 1]
+  occs_pos <- occs[, 2]
+  res_diff <- matrix(ncol=ecount(g),nrow=nrow(occs))
+  for (i in 1:length(occs_gid)) {
+    gid <- occs_gid[i]
+    pos <- occs_pos[i]
+    map <- get_mapping(mgs[[gid]], g, loss_mz, root = pos)
+    mzs <- vertex_attr(mgs[[gid]], "mz")
+    ids <- V(mgs[[gid]])
+    ###Matched peaks.
+    matched_peaks_idx <- match(map[2,], ids)
+    
+    ###
+    V_head <- head_of(g,es = E(g))
+    V_tail <- tail_of(g,es = E(g))
+    posh <- match(V_head,map[1,])
+    post <- match(V_tail,map[1,])
+    
+    diffv <- mzs[matched_peaks_idx[post]]-
+      mzs[matched_peaks_idx[posh]]
+    res_diff[i,] <- diffv
+  }
+  
+  
+  return(res_diff)
+}
+
+#' Calculate labels (m/z differences) for vertices and edges of a pattern
+#' 
+#' For a specific pattern, this function calculates the labels (m/z differences) for vertices and edges.
+#' Labels for the vertices correspond to m/z differences from the root of the pattern (precursor parent).
+#' 
+#' This function should not be used by the user.
+#' @param fp id of the pattern
+#' @param atoms vector of atom names to consider (for example, CHNOPS)
+#' @param dags vector of the fragmentation graphs (DAGs) contained in the pattern
+#' @param elabs dataframe of all the discretized edge labels (m/z differences) in the dataset
+#' @param oformula vector of precursor formula for each spectra in the pattern, if given
+#' @param edge_label id of the field containing the m/z differences in elabs
+#' 
+#' @export
 annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
   ###We first build a set of LossGraph corresponding to all the edge labels.
   g <- mm2Graph(fp)

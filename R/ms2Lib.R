@@ -6,17 +6,37 @@ CORR_TABLE <- list("D"="dags","S"="spectra","P"="patterns","L"="losses")#"F"="fr
 UNKNOWN_FORMULA <- NA_character_
 
 ###Accessors
-#'@export
+
+#' Methods on ms2lib objects
+#' 
+#' Different atttributes from a ms2Lib object can be accessed using methods.
+#' 
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' spectra <- mm2Spectra(m2l)
 setMethod("mm2Spectra","ms2Lib",function(m2l){
 	return(m2l@spectra)
 })
 
-#'@export
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' infos <- mm2SpectraInfos(m2l)
 setMethod("mm2SpectraInfos","ms2Lib",function(m2l){
 	return(m2l@spectraInfo)
 })
 
-#'@export
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' dags <- mm2Dags(m2l)
 setMethod("mm2Dags","ms2Lib",function(m2l){
 	return(m2l@dags)
 })
@@ -26,27 +46,46 @@ setMethod("mm2Ids","ms2Lib",function(m2l){
 	return(m2l@ids)
 })
 
-#'@export
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' atoms <- mm2Atoms(m2l)
 setMethod("mm2Atoms","ms2Lib",function(m2l){
   return(m2l@atoms)
 })
 
-#'@export
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' edge_labels <- mm2EdgesLabels(m2l)
 setMethod("mm2EdgesLabels","ms2Lib",function(m2l){
 	return(m2l@losses)
 })
 
-#'@export
 setMethod("mm2NodesLabels","ms2Lib",function(m2l){
 	return(m2l@fragments)
 })
 
-#'@export
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' patterns <- mm2Patterns(m2l)
 setMethod("mm2Patterns","ms2Lib",function(m2l){
 	return(m2l@patterns)
 })
 
-#'@export
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' reduced_patterns <- mm2ReducedPatterns(m2l)
 setMethod("mm2ReducedPatterns","ms2Lib",function(m2l){
 	return(m2l@reducedPatterns)
 })
@@ -63,7 +102,7 @@ setMethod("mm2SpectraInfos<-","ms2Lib",function(m2l,value){
 	m2l
 })
 
-setMethod("mm2Ids<-",c("ms2Lib", "character"),function(m2l,value,check=TRUE){
+setMethod("mm2Ids<-","ms2Lib",function(m2l, check=TRUE, value){
 	if(check & any(startsWith(value,names(CORR_TABLE)))){
 		stop("Forbidden prefixes for ids: ",paste(names(CORR_TABLE),collapse = ", "),
 			 " found in ",value[startsWith(value,names(CORR_TABLE))])
@@ -79,17 +118,15 @@ setMethod("mm2Ids<-",c("ms2Lib", "character"),function(m2l,value,check=TRUE){
 })
 
 
-#' Change the id of spectrum of an ms2Lib object
-#'
-#' Return an ms2Lib object with the new ids
-#'
-#' @details Changing the ids of spectra, which can be useful to plot them.
+
+#' @details For the `setIds` method, changing the ids of spectra can be useful to plot them.
 #'
 #' @param m2l An m2Lib object.
 #' @param ids The new ids of an ms2Lib objects
 #'
-#' @return An ms2Lib object with modified ids
 #' @export
+#' 
+#' @rdname ms2Lib-methods
 #'
 #' @examples
 #' #Loading the data
@@ -286,9 +323,9 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 
 	mm2Spectra(m2l) <- do.call("c",mm2Spectra(m2l))
 	
-	if(length(mm2Spectra(m2l))>2000){
-	  stop("At the moment it is impossible ot process more than 2,000 spectra at the same time.")
-	}
+	#if(length(mm2Spectra(m2l))>2000){
+	#  stop("At the moment it is impossible ot process more than 2,000 spectra at the same time.")
+	#}
 
 	###data.frame is initialized. With the mass of the precursors
 	temp_df <- data.frame("mz.precursor" = sapply(mm2Spectra(m2l),function(x){
@@ -384,7 +421,19 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	m2l
 }
 
-#'@export
+#' Get all the precursor formulas of the spectra in the dataset
+#' 
+#' If given as supplementary information, this function returns all
+#' the precursor formulas of the spectra in the dataset
+#' 
+#' @param m2l a ms2Lib object
+#' 
+#' @export
+#' 
+#' @examples 
+#' data(m2l)
+#' 
+#' get_formula(m2l)
 get_formula <- function(m2l){
   vf <- match("formula",tolower(trimws(colnames(m2l@spectraInfo))))
   return(m2l@spectraInfo[,vf])
@@ -449,6 +498,8 @@ setMethod("length","ms2Lib",function(x){
 #'
 #' @return The filled ms2Lib object.
 #' @export
+#' 
+#' @rdname mineClosedSubgraphs
 #'
 #' @examples
 #' #Loading the data
@@ -850,13 +901,11 @@ setMethod("hasCoverage","ms2Lib",function(x){
 
 #' Calculate the coverage
 #' 
-#' Calculate the coverage, which means the total intensity covered by the patterns on the mass graphs.
-#' This calculation can be quite long.
-#'
 #' @param x The ms2Lib to be computed.
 #'
-#' @return The m2l object with all the coverage calculated.
 #' @export
+#' 
+#' @rdname calculateCoverage
 #'
 #' @examples
 #' #Loading the data
