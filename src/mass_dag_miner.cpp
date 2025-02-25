@@ -73,7 +73,7 @@ void mass_dag_miner::mineFrequentCompleteDag(int freq,std::ostream& of){
         //We store the number of occurrences of the child for each node.
         max_child_occs.push(0);
 
-        int LIM_ITER = 1000000;
+        int LIM_ITER = 2000000;
         lattice_node next_node;
         int indicator = -1;
         while(counter<LIM_ITER){
