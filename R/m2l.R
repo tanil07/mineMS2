@@ -11,3 +11,8 @@
 #' Produced by Penicillium Nordicum. Analytical Chemistry 91 (19): 12191–202. 
 #' https://doi.org/10.1021/acs.analchem.9b01634.
 "m2l"
+
+
+#' molecular graph obtained with GNPS for the dataset of MS/MS spectra 
+#' from P. nordicum
+"molnet_df"

@@ -1,29 +1,52 @@
 # ms2Lib object getter ----
 
+#' @rdname ms2Lib-methods
+#' 
+#'
 setGeneric("mm2Spectra", function(m2l) standardGeneric("mm2Spectra"))
 
+#' @rdname ms2Lib-methods
+#' 
+#'
 setGeneric("mm2Dags", function(m2l) standardGeneric("mm2Dags"))
 
+#' @rdname ms2Lib-methods
+#' 
+#'
 setGeneric("mm2Ids", function(m2l) standardGeneric("mm2Ids"))
 
+#' @rdname ms2Lib-methods
+#' 
+#'
 setGeneric("mm2SpectraInfos", function(m2l) standardGeneric("mm2SpectraInfos"))
 
+#' @rdname ms2Lib-methods
+#' 
+#'
 setGeneric("mm2EdgesLabels", function(m2l) standardGeneric("mm2EdgesLabels"))
 
 setGeneric("mm2NodesLabels", function(m2l) standardGeneric("mm2NodesLabels"))
 
+#' @rdname ms2Lib-methods
+#' 
+#'
 setGeneric("mm2Patterns", function(m2l) standardGeneric("mm2Patterns"))
 
 setGeneric("mm2Lattice", function(m2l) standardGeneric("mm2Lattice"))
 
 setGeneric("mm2LatticeIdxItems", function(m2l) standardGeneric("mm2LatticeIdxItems"))
 
+#' @rdname ms2Lib-methods
+#' 
+#'
 setGeneric("mm2ReducedPatterns", function(m2l) standardGeneric("mm2ReducedPatterns"))
 
 setGeneric("mm2ReducedLattice", function(m2l) standardGeneric("mm2ReducedLattice"))
 
 
-
+#' @rdname ms2Lib-methods
+#' 
+#'
 setGeneric("mm2Atoms", function(m2l) standardGeneric("mm2Atoms"))
 
 # ms2Lib object setter ----
@@ -55,14 +78,29 @@ setGeneric("mm2Atoms<-", function(m2l,value) standardGeneric("mm2Atoms<-"))
 
 # fragPattern object getter ----
 
-setGeneric("mm2Graph", function(pat) standardGeneric("mm2Graph"))
+#' @rdname fragPattern-methods
+#' 
+#'
+setGeneric("mm2Graph", function(object) standardGeneric("mm2Graph"))
 
+#' @rdname fragPattern-methods
+#' 
+#'
 setGeneric("mm2Occurrences", function(object) standardGeneric("mm2Occurrences"))
 
+#' @rdname fragPattern-methods
+#' 
+#'
 setGeneric("mm2Root", function(object) standardGeneric("mm2Root"))
 
+#' @rdname fragPattern-methods
+#' 
+#'
 setGeneric("mm2Name", function(object) standardGeneric("mm2Name"))
 
+#' @rdname fragPattern-methods
+#' 
+#'
 setGeneric("mm2CanonicalForm", function(object) standardGeneric("mm2CanonicalForm"))
 
 

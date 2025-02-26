@@ -1,27 +1,26 @@
 #' @include references.R
 
-#' Get the graph of a pattern
-#' 
-#' @name mm2Graph
-#' @aliases fragPattern-mm2Graph
-#' @rdname fragPattern
+## @name mm2Graph
+## @aliases fragPattern-mm2Graph
+
+
+#' Methods for a fragPattern objects 
+#'
+#' @rdname fragPattern-methods
 #' @export
 #' @examples 
 #' data(m2l)
 #' ## igraph object to store the vertices and edges of a pattern
 #' graph <- mm2Graph(m2l["P1"])
-setMethod("mm2Graph", "fragPattern",function(pat){
-	return(pat@graph)
+setMethod("mm2Graph", "fragPattern",function(object){
+	return(object@graph)
 })
 
-#' Methods for a fragPattern objects 
-#' 
-#' 
+
 #' @rdname fragPattern-methods
 #' 
 #' @export
 #' @examples 
-#' data(m2l)
 #' 
 #' occs <- mm2Occurrences(m2l["P1"])
 setMethod("mm2Occurrences", "fragPattern",function(object){
@@ -58,7 +57,6 @@ setMethod("mm2CanonicalForm", "fragPattern",function(object){
   return(object@canonicalForm)
 })
 
-
 setMethod("mm2Graph<-", "fragPattern", function(pat,value){
 	pat@graph <- value
 	pat
@@ -68,6 +66,7 @@ setMethod("mm2Occurrences<-", "fragPattern", function(pat,value){
 	pat@occurrences <- value
 	pat
 })
+
 setMethod("mm2Root<-","fragPattern", function(pat,value){
 	pat@root <- value
 	pat

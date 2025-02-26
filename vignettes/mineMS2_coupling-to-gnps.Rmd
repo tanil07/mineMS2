@@ -4,7 +4,7 @@ author: "Alexis Delabrière, Coline Gianfrotta and Etienne Thévenot"
 date: "`r Sys.Date()`"
 package: "`r BiocStyle::pkg_ver('mineMS2')`"
 vignette: >
-  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteIndexEntry{Coupling mineMS2 to GNPS molecular networks}
   %\VignetteDepends{igraph}
   %\VignetteEncoding{UTF-8}
   %\VignetteKeywords{Metabolomics, MS/MS, Fragmentation pattern, Frequent Subgraph Mining}

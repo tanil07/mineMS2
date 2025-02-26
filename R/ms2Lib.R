@@ -41,7 +41,12 @@ setMethod("mm2Dags","ms2Lib",function(m2l){
 	return(m2l@dags)
 })
 
-#'@export
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples
+#' 
+#' ids <- mm2Ids(m2l)
 setMethod("mm2Ids","ms2Lib",function(m2l){
 	return(m2l@ids)
 })
@@ -92,15 +97,18 @@ setMethod("mm2ReducedPatterns","ms2Lib",function(m2l){
 
 
 ###Setter
+
 setMethod("mm2Spectra<-","ms2Lib",function(m2l,value){
 	m2l@spectra <- value
 	m2l
 })
 
+
 setMethod("mm2SpectraInfos<-","ms2Lib",function(m2l,value){
 	m2l@spectraInfo <- value
 	m2l
 })
+
 
 setMethod("mm2Ids<-","ms2Lib",function(m2l, check=TRUE, value){
 	if(check & any(startsWith(value,names(CORR_TABLE)))){
@@ -151,20 +159,24 @@ setMethod("mm2Dags<-","ms2Lib",function(m2l,value){
 	m2l
 })
 
+
 setMethod("mm2EdgesLabels<-","ms2Lib",function(m2l,value){
 	m2l@losses <- value
 	m2l
 })
+
 
 setMethod("mm2NodesLabels<-","ms2Lib",function(m2l,value){
 	m2l@fragments <- value
 	m2l
 })
 
+
 setMethod("mm2Patterns<-","ms2Lib",function(m2l,value){
 	m2l@patterns<- value
 	m2l
 })
+
 
 setMethod("mm2ReducedPatterns<-","ms2Lib",function(m2l,value){
 	m2l@reducedPatterns<- value
