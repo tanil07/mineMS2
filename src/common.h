@@ -5,15 +5,28 @@
 
 #define BOOST_NO_AUTO_PTR
 
-_Pragma("GCC diagnostic push")
-_Pragma("GCC diagnostic ignored \"-Wnonnull\"")
-_Pragma("GCC diagnostic ignored \"-Wparentheses\"")
-_Pragma("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+#ifdef __APPLE__
+    _Pragma("clang diagnostic push")
+    _Pragma("clang diagnostic ignored \"-Wnonnull\"")
+    _Pragma("clang diagnostic ignored \"-Wparentheses\"")
+    _Pragma("clang diagnostic ignored \"-Wmaybe-uninitialized\"")
 
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_list.hpp>
+    #include <boost/graph/graph_traits.hpp>
+    #include <boost/graph/adjacency_list.hpp>
 
-_Pragma("GCC diagnostic pop")
+    _Pragma("clang diagnostic pop")
+#else
+    _Pragma("GCC diagnostic push")
+    _Pragma("GCC diagnostic ignored \"-Wnonnull\"")
+    _Pragma("GCC diagnostic ignored \"-Wparentheses\"")
+    _Pragma("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+
+    #include <boost/graph/graph_traits.hpp>
+    #include <boost/graph/adjacency_list.hpp>
+
+    _Pragma("GCC diagnostic pop")
+#endif 
+
 
 #include <boost/functional/hash.hpp>
 
@@ -174,7 +187,7 @@ struct less_than
 {
     inline bool operator() (const Extension& ext1, const Extension& ext2)
     {
-        return ((std::get<0>(ext1) < std::get<0> (ext2)) |
+        return ((std::get<0>(ext1) < std::get<0> (ext2)) ||
                 (std::get<2> (ext1) < std::get<2> (ext2)));
     }
 };

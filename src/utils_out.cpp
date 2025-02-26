@@ -184,7 +184,7 @@ NumericVector disjointBins(NumericVector points, NumericVector lower_lim, Numeri
 	int num_match = 0;
 	int in_inter = 0;
 	while((pi < lower_lim.size())&(pp<N)){
-		if((points[pp]>=lower_lim[pi])&(points[pp]<upper_lim[pi])){
+		if((points[pp]>=lower_lim[pi])&&(points[pp]<upper_lim[pi])){
 			//We check if the value is already in a bin or not.
 			in_inter = 1;
 			num_match++;
@@ -263,7 +263,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			//**AAA***
 			//***BBB**
 			//Case where there is an overlap to the left.
-		}else if((a_min[pa]<b_max[pb])&(a_min[pa]>=b_min[pb])){
+		}else if((a_min[pa]<b_max[pb])&&(a_min[pa]>=b_min[pb])){
 			if(in_inter==0){
 				bin_min[pb]=pa;
 				in_inter = 1;
@@ -271,7 +271,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			pa++;
 			//***AAA**
 			//*BBB****
-		}else if((a_max[pa]<b_max[pb])&(a_max[pa]>b_min[pb])){
+		}else if((a_max[pa]<b_max[pb])&&(a_max[pa]>b_min[pb])){
 			if(in_inter==0){
 				bin_min[pb]=pa;
 				in_inter = 1;
@@ -279,7 +279,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			pa++;
 			//***AA***
 			//**BBBB**
-		}else if((a_min[pa]>b_min[pb])&(a_max[pa]<b_max[pb])){
+		}else if((a_min[pa]>b_min[pb])&&(a_max[pa]<b_max[pb])){
 			if(in_inter==0){
 				bin_min[pb]=pa;
 				in_inter = 1;
@@ -287,7 +287,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			pa++;
 			//**AAAA**
 			//***BB***
-		}else if((a_min[pa]<=b_min[pb])&(a_max[pa]>=b_max[pb])){
+		}else if((a_min[pa]<=b_min[pb])&&(a_max[pa]>=b_max[pb])){
 			if(in_inter==0){
 				bin_min[pb]=pa;
 				in_inter = 1;
@@ -311,7 +311,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 		}
 		int beginning = 0;
 		for(int i=bin_min[j];i<=bin_max[j];i++){
-			if((mean_a[i]<=b_max[j])&(mean_a[i]>=b_min[j])){
+			if((mean_a[i]<=b_max[j])&&(mean_a[i]>=b_min[j])){
 				if(beginning==0){
 					hbin_min[j]=i;
 					beginning=1;
@@ -356,7 +356,7 @@ IntegerVector extend_match(double valmin, double valmax, int pos, NumericVector 
     pleft--; 
   }
   
-  while(intersect(valmin,valmax,bmin[pright],bmax[pright]) & (pright<bmin.size())){
+  while(intersect(valmin,valmax,bmin[pright],bmax[pright]) && (pright<bmin.size())){
     pright++; 
   }
   IntegerVector res;

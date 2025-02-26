@@ -23,7 +23,7 @@ std::vector<Extension>::iterator pos_extension(std::vector<Extension>& exts, Ext
     auto ie = exts.end();
 
     for(;it!=ie;it++){
-        if((std::get<0> (*it)==std::get<0>(ext)) &
+        if((std::get<0> (*it)==std::get<0>(ext)) &&
            (std::get<2> (*it)==std::get<2>(ext))){
                 break;
         }
@@ -502,7 +502,7 @@ bool frag_pattern::isCompleteD(std::vector<mass_graph>& D){
                                     o_in_labs.begin(),o_in_labs.end(),
                                   std::inserter(in_intersect,in_intersect.begin()));
         }
-        if( (in_labs.size()==0) & (out_labs.size()==0) ){
+        if( (in_labs.size()==0) && (out_labs.size()==0) ){
             return true;
         }
     }
