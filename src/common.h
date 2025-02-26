@@ -9,7 +9,7 @@
     _Pragma("clang diagnostic push")
     _Pragma("clang diagnostic ignored \"-Wnonnull\"")
     _Pragma("clang diagnostic ignored \"-Wparentheses\"")
-    _Pragma("clang diagnostic ignored \"-Wmaybe-uninitialized\"")
+    _Pragma("clang diagnostic ignored \"-Wconditional-uninitialized\"")
 
     #include <boost/graph/graph_traits.hpp>
     #include <boost/graph/adjacency_list.hpp>
