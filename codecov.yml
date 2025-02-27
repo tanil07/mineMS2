@@ -1,6 +1,7 @@
 comment: false
 
 coverage:
+  range: 50...75 # custom range of coverage colors from red -> yellow -> green
   status:
     project:
       default:
