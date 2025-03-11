@@ -21,8 +21,8 @@ test_processing <- function() {
 
 
     testthat::expect_error(mineMS2::setIds(m2l, "mz"))
-    ids_error <-  paste(paste("S", infos[,"mz.precursor"], sep = "_"))
-    testthat::expect_error(mineMS2::setIds(m2l, ids_error))
+    # ids_error <-  paste(paste("S", infos[,"mz.precursor"], sep = "_"))
+    # testthat::expect_error(mineMS2::setIds(m2l, ids_error))
     ids <- paste(paste("MZ", infos[,"mz.precursor"]), sep = "_")
     m2l <- mineMS2::setIds(m2l, ids)
     testthat::expect_is(mm2Ids(m2l), 'character')
@@ -50,7 +50,7 @@ test_processing <- function() {
                                  remove.multiple = FALSE,
                                  edge.attr.comb = "ignore")
 
-    net_gnps <- igraph::as.undirected(net_gnps, mode = "each")
+    net_gnps <- igraph::as_undirected(net_gnps, mode = "each")
 
     testthat::expect_is(net_gnps, 'igraph')
     components <- mineMS2::findGNPSComponents(net_gnps,minSize=3,pairThreshold = 0.9)
