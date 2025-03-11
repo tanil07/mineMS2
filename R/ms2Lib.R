@@ -110,11 +110,11 @@ setMethod("mm2SpectraInfos<-","ms2Lib",function(m2l,value){
 })
 
 
-setMethod("mm2Ids<-","ms2Lib",function(m2l, value, check = TRUE){
-	if(check & any(startsWith(value,names(CORR_TABLE)))){
-		stop("Forbidden prefixes for ids: ",paste(names(CORR_TABLE),collapse = ", "),
-			 " found in ",value[startsWith(value,names(CORR_TABLE))])
-	}
+setMethod("mm2Ids<-","ms2Lib",function(m2l,value){
+	# if(check & any(startsWith(value,names(CORR_TABLE)))){
+	# 	stop("Forbidden prefixes for ids: ",paste(names(CORR_TABLE),collapse = ", "),
+	# 		 " found in ",value[startsWith(value,names(CORR_TABLE))])
+	# }
 
 	if(length(value) != length(mm2Spectra(m2l))){
 		stop("Number of provided ids (",paste(length(value)),
@@ -409,7 +409,7 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 		if(!is.null(ids)){
 			mm2Ids(m2l) <- ids
 		}else{
-			mm2Ids(m2l,check=FALSE) <- paste("S",1:length(mm2Spectra(m2l)),sep="")
+			mm2Ids(m2l) <- paste("S",1:length(mm2Spectra(m2l)),sep="")
 		}
 	}
 	
