@@ -55,7 +55,7 @@ setGeneric("mm2Spectra<-", function(m2l,value) standardGeneric("mm2Spectra<-"))
 
 setGeneric("mm2Dags<-", function(m2l,value) standardGeneric("mm2Dags<-"))
 
-setGeneric("mm2Ids<-", function(m2l,...,value) standardGeneric("mm2Ids<-"))
+setGeneric("mm2Ids<-", function(m2l,value,...) standardGeneric("mm2Ids<-"))
 
 setGeneric("mm2SpectraInfos<-", function(m2l,value) standardGeneric("mm2SpectraInfos<-"))
 
