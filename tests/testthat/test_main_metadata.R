@@ -4,9 +4,9 @@ NB_SPECTRA <- 51 ## P. nordicum
 
 test_processing_with_metadata <- function() {
     
-    path_mgf <- file.path(data_dir.c, 'dda_msms_pnordicum.mgf')
-    path_metadata <- file.path(data_dir.c, "dda_msms_pnordicum_supp.tsv")
-    path_input_graph <- file.path(data_dir.c, 'graph_gnps_pnordicum.graphml')
+    path_mgf <- file.path(data_dir.c, 'pnordicum_ms2_spectra.mgf')
+    path_metadata <- file.path(data_dir.c, "pnordicum_ms2_info.tsv")
+    path_input_graph <- file.path(data_dir.c, 'pnordicum_ms2_gnps.graphml')
 
     metadata.df <- read.table(path_metadata,
                                     header = TRUE,
@@ -40,7 +40,7 @@ test_processing_with_metadata <- function() {
                                  remove.multiple = FALSE,
                                  edge.attr.comb = "ignore")
 
-    net_gnps <- igraph::as_undirected(net_gnps, mode = "each")
+    net_gnps <- igraph::as.undirected(net_gnps, mode = "each")
 
     testthat::expect_is(net_gnps, 'igraph')
     components <- mineMS2::findGNPSComponents(net_gnps,minSize=3,pairThreshold = 0.9)

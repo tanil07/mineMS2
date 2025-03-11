@@ -42,13 +42,13 @@ This supplementary information may notably include the 'name' and the 'formula' 
 \examples{
 #We locate the example file
 path_demo <- system.file("dataset",package="mineMS2")
-path_mgf <- file.path(path_demo,"dda_msms_pnordicum.mgf")
+path_mgf <- file.path(path_demo,"pnordicum_ms2_spectra.mgf")
 
 #Simple import
 m2l <- ms2Lib(path_mgf)
 
 #Import including some file formula
-supp_infos_path <- file.path(path_demo,"dda_msms_pnordicum_supp.tsv")
+supp_infos_path <- file.path(path_demo,"pnordicum_ms2_info.tsv")
 supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
 m2l <- ms2Lib(path_mgf,suppInfos = supp_infos)
 }

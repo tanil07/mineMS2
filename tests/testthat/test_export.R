@@ -9,7 +9,7 @@ test_that("export_mzdifftable",{
     expect_is(dfDiff, 'data.frame')
     expect_true(nrow(dfDiff) == nrow(mm2EdgesLabels(m2l)))
 
-    path_mgf <- file.path(data_dir.c, 'dda_msms_pnordicum.mgf')
+    path_mgf <- file.path(data_dir.c, 'pnordicum_ms2_spectra.mgf')
     m2l_without_edges <- mineMS2::ms2Lib(path_mgf)
     expect_error(mzDiffTable(m2l_without_edges))
 })
@@ -19,7 +19,7 @@ test_that("export_mzdifftablewithpatterns",{
     expect_is(dfDiff, 'data.frame')
     expect_true(nrow(dfDiff) == nrow(mm2EdgesLabels(m2l)))
 
-    path_mgf <- file.path(data_dir.c, 'dda_msms_pnordicum.mgf')
+    path_mgf <- file.path(data_dir.c, 'pnordicum_ms2_spectra.mgf')
     m2l_without_edges <- mineMS2::ms2Lib(path_mgf)
     expect_error(mzDiffTableComplete(m2l_without_edges))
 

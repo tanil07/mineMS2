@@ -751,7 +751,7 @@ fuseElem <- function(elems,dags,thresh=2,atoms=NULL){
           succ <- intersect(adj_list[[n]],adj_list[[na]])
           if(length(succ)!=0){
             for(s in succ){
-              all_ids <- get_edge_ids(g,c(n,na,na,s,n,s))
+              all_ids <- get.edge.ids(g,c(n,na,na,s,n,s))
               la <- lab_sec[all_ids[1]]
               lb <- lab_sec[all_ids[2]]
               lc <- lab_sec[all_ids[3]]

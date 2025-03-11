@@ -30,7 +30,7 @@ knitr::opts_chunk$set(fig.path = "figures/")
 
 This vignette describes how *mineMS2* can be **coupled to the GNPS MS/MS molecular networking** methodology [@Watrous2012] to **focus on patterns that best explain components** of the network.
 We strongly recommend to **compute the patterns and the GNPS network using the same .mgf input file** to avoid matching issues.
-In this example, the molecular network has been precomputed on the GNPS website and extracted in the *GraphML* format (file *graph_gnps_pnordicum.graphml* inside the *dataset* subdirectory of the *mineMS2* installation folder).
+In this example, the molecular network has been precomputed on the GNPS website and extracted in the *GraphML* format (file *pnordicum_ms2_gnps.graphml* inside the *dataset* subdirectory of the *mineMS2* installation folder).
 
 # Pre-requisites
 
@@ -47,9 +47,9 @@ if (!require(mineMS2)) install_github("odisce/mineMS2")
 library(mineMS2)
 
 data_dir.c <- system.file("dataset",package = "mineMS2")
-spectra_file.c <- file.path(data_dir.c, "dda_msms_pnordicum.mgf")
-metadata_file.c <- file.path(data_dir.c, "dda_msms_pnordicum_supp.tsv")
-network_file.c <- file.path(data_dir.c, "graph_gnps_pnordicum.graphml")
+spectra_file.c <- file.path(data_dir.c, "pnordicum_ms2_spectra.mgf")
+metadata_file.c <- file.path(data_dir.c, "pnordicum_ms2_info.tsv")
+network_file.c <- file.path(data_dir.c, "pnordicum_ms2_gnps.graphml")
 ```
 
 An **`ms2Lib`** object is then initialized with the spectra data (and optionally, metadata).
@@ -116,13 +116,13 @@ We also use the `as.undirected` function to remove edge directions.
 ```{r simplify_network}
 molnet.igraph <- simplify(molnet.igraph, remove.multiple = FALSE,
                           edge.attr.comb = "ignore")
-molnet.igraph <- as_undirected(molnet.igraph, mode = "each")
+molnet.igraph <- as.undirected(molnet.igraph, mode = "each")
 ```
 
 An overview of the GNPS network after this processing is shown below (as visualized with the [**Cytoscape**](https://cytoscape.org/) software [@Shannon2003]):
 
 ```{r net_raw, out.width = "500px", fig.align = 'center', echo=FALSE}
-knitr::include_graphics("images/graph_gnps_pnordicum.png")
+knitr::include_graphics("images/pnordicum_ms2_gnps.png")
 ```
 
 Two clusters (of size 21 and 11, respectively) are detected by GNPS, in addition to 2 pairs.
@@ -238,13 +238,13 @@ The **annotated network** can be exported using the `write_graph` function from 
 ```{r export_graph,eval=FALSE}
 write_graph(graph = molnet_annot.igraph, format = "graphml",
             file = file.path(getwd(),
-                             "annotated_gnps_network_pnordicum.graphml"))
+                             "pnordicum_ms2_gnps_mined.graphml"))
 ```
 
 This network can be **visualized with Cytoscape** (note that the *GraphML* format is supported by Cytoscape 3: select 'File \> Import \> Network from file'; with Cytoscape 2, the GraphMLReader plugin is needed):
 
 ```{r annotated_net, out.width = "500px",fig.align = 'center',echo=FALSE}
-knitr::include_graphics("images/annotated_graph_gnps_pnordicum.png")
+knitr::include_graphics("images/pnordicum_ms2_gnps_mined.png")
 ```
 
 To visualize the colors, the *enhancedGraphics* App from Cytoscape is required ('Apps \> Install Apps \> Search: enhanced Graphics').
@@ -290,7 +290,7 @@ The closest formula for this m/z difference, $C_5H_9ON$, could correspond to a l
 As another example within this cluster, the circled clique in the figure below (component 4) is explained by a larger pattern:
 
 ```{r annotated_net_comp4, out.width = "500px",fig.align = 'center',echo=FALSE}
-knitr::include_graphics("images/annotated_graph_gnps_pnordicum_clique.png")
+knitr::include_graphics("images/pnordicum_ms2_gnps_mined_clique.png")
 ```
 
 ```{r comp4_pattern, results = 'asis', warning = FALSE}
@@ -323,7 +323,7 @@ plotPatterns(pnordicum.m2l, tryptophan_patterns.ls[[1]][8],
 Interestingly, this pattern is included in 7 spectra, that are not all linked together in the GNPS network, but that were identified by the authors of [@Hautbergue2019] as tetrapeptides containing a tryptophan residue.
 
 ```{r tryptophan_pattern_discovery, out.width = "500px",fig.align = 'center',echo=FALSE}
-knitr::include_graphics("images/annotated_graph_gnps_pnordicum_pattern_trp.png")
+knitr::include_graphics("images/pnordicum_ms2_gnps_mined_pattern_trp.png")
 ```
 
 In addition to the similarities of the spectra at m/z $532.09$, $548.28$ and $566.29$ detected by the molecular network, *mineMS2* therefore highlights 4 other metabolites which share the same pattern (circled in red in the figure above), including the $186.079$ loss.

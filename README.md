@@ -2,8 +2,8 @@
 
 <!-- badges: start -->
 
-[![Codecov test coverage](https://codecov.io/gh/odisce/mineMS2/graph/badge.svg)](https://app.codecov.io/gh/odisce/mineMS2)
-[![R-CMD-check](https://github.com/odisce/mineMS2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/odisce/mineMS2/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/odisce/mineMS2/graph/badge.svg)](https://app.codecov.io/gh/odisce/mineMS2) [![R-CMD-check](https://github.com/odisce/mineMS2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/odisce/mineMS2/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
 ## Description
@@ -22,7 +22,7 @@ Each **pattern is a graph** with **ion peaks as nodes** and **m/z differences as
 
 *mineMS2* can be further **coupled to the GNPS MS/MS molecular networking** methodology (Watrous *et al.*, 2012) to **focus on patterns that best explain components** of the network.
 
-![*Coupling mineMS2 to GNPS molecular networks*](vignettes/images/mineMS2_gnps.png)
+![*Coupling mineMS2 to GNPS molecular networks*](vignettes/images/mineMS2_gnps_coupling.png)
 
 ## Installation
 
@@ -55,10 +55,10 @@ The included dataset, which is used in the examples and vignettes, consists of *
 
 ## References
 
-Beniddir,M.A. *et al.* (2021) Advances in decomposing complex metabolite mixtures using substructure- and network-based computational metabolomics approaches. *Nat. Prod. Rep.*, **38**, 1967–1993. [DOI:5B10.1039/D1NP00023C](<https://doi.org/10.1039/D1NP00023C>).
+Beniddir,M.A. *et al.* (2021) Advances in decomposing complex metabolite mixtures using substructure- and network-based computational metabolomics approaches. *Nat. Prod. Rep.*, **38**, 1967–1993. [DOI:5B10.1039/D1NP00023C](https://doi.org/10.1039/D1NP00023C).
 
-Hautbergue,T. *et al.* (2019) Combination of isotope labeling and molecular networking of tandem mass spectrometry data to reveal 69 unknown metabolites produced by penicillium nordicum. *Analytical Chemistry*, [DOI:5B10.1021/acs.analchem.9b01634](<https://doi.org/10.1021/acs.analchem.9b01634>).
+Hautbergue,T. *et al.* (2019) Combination of isotope labeling and molecular networking of tandem mass spectrometry data to reveal 69 unknown metabolites produced by penicillium nordicum. *Analytical Chemistry*, [DOI:5B10.1021/acs.analchem.9b01634](https://doi.org/10.1021/acs.analchem.9b01634).
 
-van der Hooft,J.J.J. *et al.* (2016) Topic modeling for untargeted substructure exploration in metabolomics. *Proceedings of the National Academy of Sciences*, **113**, 13738–13743. [DOI:B10.1073/pnas.1608041113](<https://doi.org/10.1073/pnas.1608041113>).
+van der Hooft,J.J.J. *et al.* (2016) Topic modeling for untargeted substructure exploration in metabolomics. *Proceedings of the National Academy of Sciences*, **113**, 13738–13743. [DOI:B10.1073/pnas.1608041113](https://doi.org/10.1073/pnas.1608041113).
 
-Watrous,J. *et al.* (2012) Mass spectral molecular networking of living microbial colonies. *Proceedings of the National Academy of Sciences*, **109**, E1743–E1752. [DOI:10.1073/pnas.1203689109](<https://doi.org/10.1073/pnas.1203689109>).
+Watrous,J. *et al.* (2012) Mass spectral molecular networking of living microbial colonies. *Proceedings of the National Academy of Sciences*, **109**, E1743–E1752. [DOI:10.1073/pnas.1203689109](https://doi.org/10.1073/pnas.1203689109).

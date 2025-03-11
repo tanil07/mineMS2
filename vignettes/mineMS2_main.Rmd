@@ -75,11 +75,11 @@ By default, spectra are associated to rows in the same order, but if the dataset
 
 ```{r loading}
 # Finding the spectra data
-pnordicum_mgf.c <- system.file("dataset/dda_msms_pnordicum.mgf",
+pnordicum_mgf.c <- system.file("dataset/pnordicum_ms2_spectra.mgf",
                                package = "mineMS2")
 
 # Supplementary information
-pnordicum_metadata.c <- system.file("dataset/dda_msms_pnordicum_supp.tsv",
+pnordicum_metadata.c <- system.file("dataset/pnordicum_ms2_info.tsv",
                                     package = "mineMS2")
 pnordicum_metadata.df <- read.table(pnordicum_metadata.c,
                                     header = TRUE,

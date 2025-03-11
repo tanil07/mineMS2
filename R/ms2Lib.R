@@ -110,14 +110,14 @@ setMethod("mm2SpectraInfos<-","ms2Lib",function(m2l,value){
 })
 
 
-setMethod("mm2Ids<-","ms2Lib",function(m2l, check=TRUE, value){
+setMethod("mm2Ids<-","ms2Lib",function(m2l, value, check = TRUE){
 	if(check & any(startsWith(value,names(CORR_TABLE)))){
 		stop("Forbidden prefixes for ids: ",paste(names(CORR_TABLE),collapse = ", "),
 			 " found in ",value[startsWith(value,names(CORR_TABLE))])
 	}
 
 	if(length(value) != length(mm2Spectra(m2l))){
-		stop("Number of furnished ids (",paste(length(value)),
+		stop("Number of provided ids (",paste(length(value)),
 			 ") should equal to spectra number (",paste(length(mm2Spectra(m2l))),")")
 	}
 	m2l@ids <- value
@@ -278,13 +278,13 @@ convert_formula <- function(form_vec){
 #' @examples
 #' #We locate the example file
 #' path_demo <- system.file("dataset",package="mineMS2")
-#' path_mgf <- file.path(path_demo,"dda_msms_pnordicum.mgf")
+#' path_mgf <- file.path(path_demo,"pnordicum_ms2_spectra.mgf")
 #' 
 #' #Simple import
 #' m2l <- ms2Lib(path_mgf)
 #' 
 #' #Import including some file formula
-#' supp_infos_path <- file.path(path_demo,"dda_msms_pnordicum_supp.tsv")
+#' supp_infos_path <- file.path(path_demo,"pnordicum_ms2_info.tsv")
 #' supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
 #' m2l <- ms2Lib(path_mgf,suppInfos = supp_infos)
 ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFromFiles = FALSE){

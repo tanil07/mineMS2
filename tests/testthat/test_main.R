@@ -4,8 +4,8 @@ NB_SPECTRA <- 51 ## P. nordicum
 
 test_processing <- function() {
     
-    path_mgf <- file.path(data_dir.c, 'dda_msms_pnordicum.mgf')
-    path_input_graph <- file.path(data_dir.c, 'graph_gnps_pnordicum.graphml')
+    path_mgf <- file.path(data_dir.c, 'pnordicum_ms2_spectra.mgf')
+    path_input_graph <- file.path(data_dir.c, 'pnordicum_ms2_gnps.graphml')
 
     testthat::expect_no_error(checkFormat(path_mgf))
     testthat::expect_error(checkFormat(path_input_graph))
@@ -20,9 +20,9 @@ test_processing <- function() {
     testthat::expect_true(all(c("mz.precursor", "file", "formula") %in% names(infos)))
 
 
-    testthat::expect_error(m2l <- mineMS2::setIds(m2l, "mz"))
+    testthat::expect_error(mineMS2::setIds(m2l, "mz"))
     ids_error <-  paste(paste("S", infos[,"mz.precursor"], sep = "_"))
-    testthat::expect_error(m2l <- mineMS2::setIds(m2l, ids_error))
+    testthat::expect_error(mineMS2::setIds(m2l, ids_error))
     ids <- paste(paste("MZ", infos[,"mz.precursor"]), sep = "_")
     m2l <- mineMS2::setIds(m2l, ids)
     testthat::expect_is(mm2Ids(m2l), 'character')
@@ -50,7 +50,7 @@ test_processing <- function() {
                                  remove.multiple = FALSE,
                                  edge.attr.comb = "ignore")
 
-    net_gnps <- igraph::as_undirected(net_gnps, mode = "each")
+    net_gnps <- igraph::as.undirected(net_gnps, mode = "each")
 
     testthat::expect_is(net_gnps, 'igraph')
     components <- mineMS2::findGNPSComponents(net_gnps,minSize=3,pairThreshold = 0.9)
