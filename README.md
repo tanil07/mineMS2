@@ -43,7 +43,8 @@ The included dataset, which is used in the examples and vignettes, consists of *
 
 ## Citation
 
-**mineMS2: Annotation of spectral libraries with exact fragmentation patterns**. Alexis Delabrière, Coline Gianfrotta, Sylvain Dechaumet, Annelaure Damont, Thaïs Hautbergue, Pierrick Roger, Emilien Jamin, Olivier Puel, Christophe Junot, François Fenaille and Etienne A. Thévenot.
+Delabrière A., Gianfrotta G., Dechaumet S., Damont A., Hautbergue T., Roger P., Jamin E.L., Puel O., Junot C., Fenaille F. and Thévenot E.A. (2025) mineMS2: Annotation of spectral libraries with exact fragmentation patterns. [https://doi.org/10.26434/chemrxiv-2025-3c9z1](https://doi.org/10.26434/chemrxiv-2025-3c9z1).
+
 
 ## Contacts
 
