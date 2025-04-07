@@ -13,7 +13,7 @@ Description: Mine MS/MS spectra using a frequent subgraph mining appraoch. This 
 Depends:
     R (>= 3.5.0)
 SystemRequirements: C++11
-Suggests: devtools, knitr, rmarkdown, testthat (>= 2.0.0), tools
+Suggests: devtools, knitr, rbibutils, rmarkdown, testthat (>= 2.0.0), tools
 Imports: ggplot2, ggrepel, gridExtra, igraph, kableExtra, Matrix, methods, MSnbase, patchwork, png, Rcpp (>= 0.12.13), stringr, webchem, Spec2Annot, BiocStyle, magick, markdown
 LinkingTo: Rcpp,BH
 License: file LICENSE
