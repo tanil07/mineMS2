@@ -33,9 +33,9 @@ The package can be installed from GitHub with:
 devtools::install_github("odisce/mineMS2")
 ```
 
-## Vignettes
+## Tutorials (vignettes)
 
-Two vignettes detail how to **compute and explore the fragmentation patterns** (**`mineMS2_main.Rmd`**) and how to **focus on the patterns that best explain components of the molecular network** (**`mineMS2_coupling-to-gnps.Rmd`**).
+Two vignettes detail how to **compute and explore the fragmentation patterns** ([vignettes/mineMS2_main.html](https://htmlpreview.github.io/?https://github.com/odisce/mineMS2/blob/master/vignettes/mineMS2_main.html)) and how to **focus on the patterns that best explain components of the molecular network** ([vignettes/mineMS2_coupling-to-gnps.html](https://htmlpreview.github.io/?https://github.com/odisce/mineMS2/blob/master/vignettes/mineMS2_coupling-to-gnps.html)).
 
 ## Dataset
 
