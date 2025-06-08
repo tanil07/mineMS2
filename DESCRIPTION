@@ -44,4 +44,4 @@ Collate:
     'ms2Lib.R'
     'ms2LibSplit.R'
     'select.R'
-Remotes: Spec2Annot=github::odisce/Spec2Annot
+Remotes: git::https://github.com/odisce/Spec2Annot.git@main
