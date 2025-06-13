@@ -14,7 +14,7 @@ The **search for similarities within a collection of MS/MS spectra** is a powerf
 
 2.  an efficient **frequent-subgraph mining** algorithm to extract patterns
 
-![*Principle of the mineMS2 pattern mining approach*](vignettes/images/mineMS2_input_output.png)
+![*Principle of the mineMS2 pattern mining approach*](vignettes/images/mineMS2_workflow.png)
 
 Each **pattern is a graph** with **ion peaks as nodes** and **m/z differences as edges**. These m/z differences can be **any difference between the m/z values of two peaks of a spectrum**, provided that they are **frequent** (i.e. detected in at least two spectra). They therefore include **not only neutral losses but also m/z differences between ions that belong to distinct fragmentation paths** of the precursor, which may also prove specific to the fragmentation of specific molecules. The candidate **molecular formulas for each m/z difference** are computed to help interpretation (below 200 Da).
 
