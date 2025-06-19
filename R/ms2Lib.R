@@ -503,12 +503,12 @@ setMethod("length","ms2Lib",function(x){
 #'
 #' Mine all the complete closed subgraphs from a set of preconstructed fragmentation graphs objects.
 #'
-#' @param m2l An ms2Lib object to be processed.
-#' @param count The minimum number of spectra in which the spectrum need to be sampled.
-#' @param sizeMin The minimum size of the mined patterns.
-#' @param precursor Should only pattern coming from the root be mined.
+#' @param m2l ms2Lib object to be processed
+#' @param count Minimum number of spectra in which a pattern is found; must be at least 2 [default: 2]
+#' @param sizeMin Minimum size of the mined patterns [default: 1]
+#' @param precursor Should only patterns coming from the root be mined? [default: FALSE]
 #'
-#' @return The filled ms2Lib object.
+#' @return The updated ms2Lib object with the mined patterns.
 #' @export
 #' 
 #' @rdname mineClosedSubgraphs
@@ -518,8 +518,8 @@ setMethod("length","ms2Lib",function(x){
 #' data(m2l)
 #' 
 #' #Mining the subgraphs
-#' m2l <- mineClosedSubgraphs(m2l,count=2,sizeMin = 1)
-setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, precursor = FALSE){
+#' m2l <- mineClosedSubgraphs(m2l)
+setMethod("mineClosedSubgraphs", "ms2Lib", function(m2l, count = 2, sizeMin = 1, precursor = FALSE){
 	if(count<2){
 		warning("'count' parameter too low; value set to 2.")
 		count <- 2
@@ -543,9 +543,8 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 		kTree <- 1
 	}
 
-	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
-		###Wide variety of mass losses.
-		warning("sizeMin parameters set to ", sizeMin, ": risk of computational overload.")
+	if (sizeMin == 1 & nrow(mm2EdgesLabels(m2l)) > 600) {
+		warning("Large amount of m/z differences (> 600): sizeMin parameter set to 2 to avoid computational overload.")
 	}
 	
 	###We select the non empty graph to mine the patterns.

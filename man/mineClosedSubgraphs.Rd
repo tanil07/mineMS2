@@ -7,21 +7,21 @@
 \usage{
 mineClosedSubgraphs(m2l, ...)
 
-\S4method{mineClosedSubgraphs}{ms2Lib}(m2l, count = 2, sizeMin = 2, precursor = FALSE)
+\S4method{mineClosedSubgraphs}{ms2Lib}(m2l, count = 2, sizeMin = 1, precursor = FALSE)
 }
 \arguments{
-\item{m2l}{An ms2Lib object to be processed.}
+\item{m2l}{ms2Lib object to be processed}
 
 \item{...}{Supplementary arguments passed to the mining method}
 
-\item{count}{The minimum number of spectra in which the spectrum need to be sampled.}
+\item{count}{Minimum number of spectra in which a pattern is found; must be at least 2 [default: 2]}
 
-\item{sizeMin}{The minimum size of the mined patterns.}
+\item{sizeMin}{Minimum size of the mined patterns [default: 1]}
 
-\item{precursor}{Should only pattern coming from the root be mined.}
+\item{precursor}{Should only patterns coming from the root be mined? [default: FALSE]}
 }
 \value{
-The filled ms2Lib object.
+The updated ms2Lib object with the mined patterns.
 }
 \description{
 `mineClosedSubgraphs` extracts frequent closed subgraphs from an ms2Lib object.
@@ -33,5 +33,5 @@ Mine all the complete closed subgraphs from a set of preconstructed fragmentatio
 data(m2l)
 
 #Mining the subgraphs
-m2l <- mineClosedSubgraphs(m2l,count=2,sizeMin = 1)
+m2l <- mineClosedSubgraphs(m2l)
 }

@@ -27,7 +27,7 @@ knitr::opts_chunk$set(fig.width = 8, fig.height = 6)
 
 # Introduction
 
-mineMS2 is an innovative *de novo* strategy for **searching** **frequent patterns** within a **collection of MS/MS spectra** to help **finding and interpreting structural similarities** between subsets of spectra [@Delabriere].
+mineMS2 is an innovative *de novo* strategy for **searching** **frequent patterns** within a **collection of MS/MS spectra** to help **finding and interpreting structural similarities** between subsets of spectra [@Delabriere_2025_MineMS2AnnotationSpectral].
 Each **pattern is a graph** with **ion peaks as nodes** and **m/z differences as edges**.
 These m/z differences can be **any difference between the m/z values of two peaks of a spectrum**, provided that they are **frequent** (i.e. detected in at least two spectra).
 They therefore include **not only neutral losses but also m/z differences between ions that belong to distinct fragmentation paths** of the precursor, which may also prove specific to the fragmentation of specific molecules.
@@ -146,9 +146,9 @@ Note that these m/z differences include not only the neutral losses but also dif
 This step is very important, as it determines the initial set of fragmentation graphs.
 The main parameters are listed below:
 
--   `ppm`: The accuracy of the mass spectrometer in *ppm* used to determine the bandwidth of the kernel density estimation (default: `7`)
+-   `ppm`: The accuracy of the mass spectrometer in *ppm* used to determine the bandwidth of the kernel density estimation (default: `15`)
 
--   `dmz`: The minimum deviation used for bandwidth (in Da; default: `0.002`)
+-   `dmz`: The minimum deviation used for bandwidth (in Da; default: `0.007`)
 
 -   `count`: The minimum number of spectra in which a m/z difference needs to be present to be considered as frequent (default: `2`)
 
@@ -160,7 +160,7 @@ The main parameters are listed below:
 
 -   `maxFrags`: only the `maxFrags` most intense peaks will be considered to build the graph (should be at most 20 to be done in reasonable time; default: `15`)
 
--   `atoms`: list of possible atoms for formula generation, along with their respective maximum number (default: `list("C"=16,"H"=50,"N"=10,"O"=15,"Cl"=2,"S"=2,"P"=2)`)
+-   `atoms`: list of possible atoms for formula generation, along with their respective maximum number (default: `list("C"=max(limMzFormula)%/%12,"H"=50,"N"=10,"O"=15,"Cl"=2,"S"=2,"P"=2)`)
 
 -   `heteroAtoms`: Indicates whether hetero atoms (P,S,Cl) should be used when generating formula for m/z differences (default: `TRUE`)
 
@@ -171,16 +171,18 @@ The main parameters are listed below:
 
     -   For m/z differences higher than the `limMzFormula` upper limit, no formula is generated but the m/z difference is kept
 
+We use the default value of the parameters to process the `pnordicum.m2l` spectral collection:
+
 ```{r edge_discretization, message=FALSE}
 pnordicum.m2l <- discretizeMzDifferences(pnordicum.m2l,
-                                       ppm = 15,
-                                       dmz = 0.007,
-                                       count = 2,
-                                       precPpm = 20,
-                                       precDmz = 0.02,
-                                       maxFrags = 15,
-                                       heteroAtoms = TRUE,
-                                       limMzFormula = c(14.5, 200))
+                                         ppm = 15,
+                                         dmz = 0.007,
+                                         count = 2,
+                                         precPpm = 20,
+                                         precDmz = 0.02,
+                                         maxFrags = 15,
+                                         heteroAtoms = TRUE,
+                                         limMzFormula = c(14.5, 200))
 ```
 
 After this step, the list of discretized m/z differences labels may be extracted:
@@ -223,11 +225,13 @@ Here, the graph D14 corresponds to the spectrum S14.
 The next step consists in **extracting the frequent subgraphs (i.e. the patterns) among the fragmentation graphs**.
 The **`mineClosedSubgraphs`** method has two main parameters:
 
--   `count`: minimum number of spectra containing the pattern
+-   `count`: minimum number of spectra in which a pattern is detected to be considered; should be at least 2 (default: `2`)
 
--   `sizeMin`: minimum size of the pattern
+-   `sizeMin`: minimum size of the pattern (default: `1`)
 
-Here we set `sizeMin` to 1 to include patterns containing a single m/z difference.
+Note that when the number of frequent m/z differences is high (above 600) and a `sizeMin` value of 1 has been selected, the value will be automatically increased to 2 to avoid computational overload (a warning is displayed)
+
+Here we use the default parameters:
 
 ```{r graph_mining}
 pnordicum.m2l <- mineClosedSubgraphs(pnordicum.m2l, count = 2, sizeMin = 1)
@@ -311,6 +315,19 @@ These results can be exported in pdf (one pdf file per pattern) by setting the `
 dir.create("phe_patterns")
 plotPatterns(pnordicum.m2l, phe_pattern.c, save_dir = "phe_patterns")
 ```
+
+# Selecting the mineMS2 parameter values
+
+The default parameter values gave the best results on the Penicillium-DB data, in terms of relevance with the GNPS network, respectively, and can thus be used as a good starting point. More specifically, the values of the most important parameters are discussed below [@Delabriere_2025_MineMS2AnnotationSpectral]:
+
+-   **`ppm`** Selecting a lower `ppm` tolerance tends to decrease the size of the patterns and their support, and thus, of the information they provide. For example, for the LIMS-DB dataset, when the tolerance was set to 7\~ppm, the average F1-score for the ChemOnt concepts was decreased to 0.47 (instead of 0.53 with the default tolerance of 15\~ppm). In addition, the patterns best explaining the ChemOnt concepts at 7~ppm contained 5.2\~m/z differences on average, versus 6.8\~m/z differences with the 15\~ppm tolerance.
+ It can be noted that the tolerance in `ppm`} is used to define the bandwidth of the kernel when aligning the m/z differences between the spectra. It also defines the bin width, that cannot be chosen independently by the user
+
+-   **`count`** Regarding the minimum size of the support (minimum number of spectra in which a pattern should be detected to be considered), the default value (2) enables very specific patterns to be extracted
+
+-   **`minSize`** The minimum size of the patterns is by default set to 1 in order to detect (frequent) single m/z differences. Note that this default value is automatically increased to 2 (generating a warning) when the number of frequent m/z differences is large (\> 600) in the spectral collection
+
+-   **`maxFrags`** The default maximum number of fragments is set to 15 as a compromise to extract most of the spectral information while avoiding computational overload. As an example, the mining of the LIMS-DB dataset (622 spectra) with a `maxFrags` value of 20 (instead of 15) increased the running time to 1.5\~h (instead of 20\~min) and resulted in a slight increase of concepts explained with F1-scores above 0.7.
 
 # Session info
 

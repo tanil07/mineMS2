@@ -58,7 +58,7 @@ setMethod("setComponents","ms2LibSplit",function(m2l,components){
 })
 
 
-setMethod("mineClosedSubgraphsByComponent","ms2LibSplit",function(m2l, count = 2, sizeMin = 2, precursor = FALSE){
+setMethod("mineClosedSubgraphsByComponent","ms2LibSplit",function(m2l, count = 2, sizeMin = 1, precursor = FALSE){
 
 	if(length(m2l@components)==0) stop("Components should be set using the setComponents methods before the mining for an ms2LibSplit object.")
 
@@ -77,9 +77,8 @@ setMethod("mineClosedSubgraphsByComponent","ms2LibSplit",function(m2l, count = 2
 		stop("No labels constructed, use the discretizeMzDifferences method first.")
 	}
 
-	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
-		###Wide variety of mass losses.
-		warning("Signle edges graphs allowed, risk of computational overhead.")
+	if(sizeMin == 1 & nrow(mm2EdgesLabels(m2l)) > 600){
+		warning("Large amount of m/z differences (> 600): risk of computational overload.")
 	}
 
 	###All the dags are converted before processing.

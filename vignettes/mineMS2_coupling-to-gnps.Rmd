@@ -328,6 +328,6 @@ knitr::include_graphics("images/pnordicum_ms2_gnps_mined_pattern_trp.png")
 
 In addition to the similarities of the spectra at m/z $532.09$, $548.28$ and $566.29$ detected by the molecular network, *mineMS2* therefore highlights 4 other metabolites which share the same pattern (circled in red in the figure above), including the $186.079$ loss.
 
-*mineMS2* thus enables to discover new similarities, common to multiple spectra and independent from molecular network threshold, and facilitates their interpretation as fragmentation graphs [@Delabriere].
+*mineMS2* thus enables to discover new similarities, common to multiple spectra and independent from molecular network threshold, and facilitates their interpretation as fragmentation graphs [@Delabriere_2025_MineMS2AnnotationSpectral].
 
 # References

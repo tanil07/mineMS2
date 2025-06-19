@@ -62,21 +62,18 @@ reorderAtom <- function(atoms){
 #' It also builds fragmentation graphs from MS/MS spectra using discretized m/z differences as edges.
 #'
 #' @param m2l The ms2 lib object to be discretized.
-#' @param ppm the maximum authorized deviation in ppm (parts per million).
-#' @param dmz The maximum authorized deviation in Da.
-#' @param count The minimum number of spectra in which the label needs to be found. Shall be greater or equal to 2.
-#' @param limMzFormula An interval giving the range in which the formula will be calculated.
-#' peaks with a m/z lower than the lower term will be ignored while peak with a mass higher than the
-#' higher term won't have formula check.
-#' @param maxFrags The maximum number of fragment allowed on the spectra.
-#' @param maxOverlap The degree of overlap allowed between bins. Bins which overlap more are fused.
-#' @param strictMatching Shall the formula matching be strict, or approximated.
-#' @param precPpm The ppm tolerance used ot match the precursor mz to the fragments.
-#' @param precDmz The minimum tolerance used to match the precursor mz to the fragments.
-#' @param atoms A list of the maximum number of atoms authorized during the formula generation process.
-#' If it is NULL, the default list the maximum of \emph{limMzFormula}/12, H:50, N:6 ,O:6.
-#' @param heteroAtoms a boolean,  ignored if a custom atoms is furnished, add heteroatoms P, Cl, S as possible atoms.
-#' @param mzDigits The number of decimals to write as an information in the graphs.
+#' @param ppm the maximum authorized deviation in ppm (parts per million) [default: 15]
+#' @param dmz The maximum authorized deviation in Da [default: 0.007]
+#' @param count The minimum number of spectra in which the label needs to be found. Shall be greater or equal to 2 [default: 2]
+#' @param limMzFormula An interval giving the range in which the formula will be calculated: peaks with a m/z lower than the lower term will be ignored while peak with a mass higher than the higher term won't have formula check [default: c(14.5, 200)]
+#' @param maxFrags The maximum number of fragment allowed on the spectra [default: 15]
+#' @param maxOverlap The degree of overlap allowed between bins. Bins with a higher overlap are fused [default: 0.05]
+#' @param strictMatching Shall the formula matching be strict, or approximated [default: TRUE]
+#' @param precPpm The ppm tolerance used to match the precursor mz to the fragments [default: 20]
+#' @param precDmz The minimum tolerance used to match the precursor mz to the fragments [default: 0.02]
+#' @param atoms A list of the maximum number of atoms authorized during the formula generation process. If set to NULL [default], the default list includes C:max(limMzFormula)/12, H:50, N:10, O:15, Cl:2, S:2, P:2 (if heteroAtoms is set to its default, TRUE), or C:max(limMzFormula)/12, H:50, N:10, O:15 otherwise
+#' @param heteroAtoms Should heteroatoms P, Cl, S be included as possible atoms (ignored if a custom list of atoms is provided) [default: TRUE]
+#' @param mzDigits The number of decimals to display on the graphs [default: 4]
 #'
 #' @return An ms2Lib object with filled fields and constructed dags.
 #' @export
@@ -84,29 +81,28 @@ reorderAtom <- function(atoms){
 #' @rdname discretizeMzDifferences
 #' 
 #' @examples
-#' #Loading the data
+#' # Loading the data
 #' data(m2l)
 #' 
-#' #Constructing edge labels
-#' m2l <- discretizeMzDifferences(m2l,ppm=15,dmz=0.007,count=2,
-#' precPpm=20,precDmz=0.03,maxFrags=15)
+#' # Constructing edge labels
+#' m2l <- discretizeMzDifferences(m2l)
 #' 
-#' #Constructing edge labels while including heteroatoms
-#' m2l <- discretizeMzDifferences(m2l,atoms = 
-#' list("C"=50,"H"=100,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2))
+#' # Setting the maximum number of atoms to specific values
+#' m2l <- discretizeMzDifferences(m2l, 
+#' atoms = list("C"=50,"H"=100,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2))
 setMethod("discretizeMzDifferences", "ms2Lib", function(m2l,
-                                                          ppm = 7,
-                                                          dmz = 0.002,
-                                                          count = 2,
-                                                          limMzFormula = c(14.5, 200),
-                                                          maxFrags = 15,
-                                                          maxOverlap = 0.05,
-                                                          strictMatching = TRUE,
-                                                          precPpm = 20,
-                                                          precDmz = 0.02,
-                                                          atoms = NULL,
-                                                          heteroAtoms = TRUE,
-                                                          mzDigits = 4) {
+                                                        ppm = 15,
+                                                        dmz = 0.007,
+                                                        count = 2,
+                                                        limMzFormula = c(14.5, 200),
+                                                        maxFrags = 15,
+                                                        maxOverlap = 0.05,
+                                                        strictMatching = TRUE,
+                                                        precPpm = 20,
+                                                        precDmz = 0.02,
+                                                        atoms = NULL,
+                                                        heteroAtoms = TRUE,
+                                                        mzDigits = 4) {
   
   message("Discretization of the m/z differences...")
   
@@ -143,7 +139,7 @@ setMethod("discretizeMzDifferences", "ms2Lib", function(m2l,
       #atoms <- list("C"=max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6,"S"=2,"Cl"=1,"P"=2)
       atoms <- list("C"=max(limMzFormula)%/%12,"H"=50,"N"=10,"O"=15,"Cl"=2,"S"=2,"P"=2)
     }else{
-      atoms <- list("C"= max(limMzFormula)%/%12,"H"=50,"N"=6,"O"=6)
+      atoms <- list("C"= max(limMzFormula)%/%12,"H"=50,"N"=10,"O"=15)
     }
   }
   
