@@ -6,8 +6,6 @@
 
 <!-- badges: end -->
 
-[![R-CMD-check](https://github.com/odisce/mineMS2/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/odisce/mineMS2/actions/workflows/R-CMD-check.yaml)
-
 ## Description
 
 The **search for similarities within a collection of MS/MS spectra** is a powerful approach to facilitate the identification of new metabolites (Beniddir *et al.*, 2021). *mineMS2* implements an innovative strategy to **extract frequent fragmentation patterns containing shared m/z differences** between subsets of the spectra (Delabrière *et al.*, 2025). This method is based on:
