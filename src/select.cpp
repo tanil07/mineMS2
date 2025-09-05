@@ -10,7 +10,7 @@ IntegerVector select_patterns_from_spectra(List pat_list, int sid){
 
 	for(int pi = 0;pi <pat_list.size();pi++){
 		S4 pat = pat_list[pi];
-		IntegerMatrix occs = pat.slot("occurences");
+		IntegerMatrix occs = pat.slot("occurrences");
 		IntegerVector gid = occs(_,0);
 		for(IntegerVector::iterator it=gid.begin();it!=gid.end();it++){
 			if((*it)==sid) (res).insert(pi+1);
@@ -38,7 +38,7 @@ List patterns_from_spectra(List pat_list,int num_spectra){
 		//Rcout << pi <<"_";
 		S4 pat = pat_list[pi];
 		//Rcout<<"pat_sel";
-		IntegerMatrix occs = pat.slot("occurences");
+		IntegerMatrix occs = pat.slot("occurrences");
 		IntegerVector gid = occs(_,0);
 		//Rcout << gid.size() <<"_";
 		for(IntegerVector::iterator it=gid.begin();it!=gid.end();it++){

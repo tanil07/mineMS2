@@ -8,16 +8,16 @@ fragPattern(rlist)
 }
 \arguments{
 \item{rlist}{rlist is a list containg 2 fields,
-\code{edges}: An edge list which includes the "from","to" and "lab" fileds, which by processed
+\code{edges}: An edge list which includes the "from","to" and "lab" fields, which be processed
 by the graph_from_data_frame function.
-\code{occurences}: A matrix with 2 column, the first giving the id in which the patterns are found
+\code{occurrences}: A matrix with 2 columns, the first giving the id in which the patterns are found
 and the second giving the nodes.}
 }
 \value{
 The constructed fragPattern object.
 }
 \description{
-This is an internal constructor which is used to pass form the rcpp
-output to a fragPattern object including the occurences. It should not be
+This is an internal constructor which is used to pass from the rcpp
+output to a fragPattern object including the occurrences. It should not be
 called directly by the user.
 }

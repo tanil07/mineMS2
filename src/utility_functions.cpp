@@ -1,10 +1,10 @@
 #include <iostream>
 
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_list.hpp>
-
 #include "utility_functions.h"
 #include "common.h"
+
+#include <boost/graph/graph_traits.hpp>
+#include <boost/graph/adjacency_list.hpp>
 
 //Function which take a vertex a visitorMap and return
 //the first values in the graph if necessary.

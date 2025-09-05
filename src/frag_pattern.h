@@ -5,11 +5,11 @@
 #include <fstream>
 #include <Rcpp.h>
 
-#include <boost/graph/graphml.hpp>
-
 #include "common.h"
 #include "k_path_tree.h"
 #include "adjacencyGraph.h"
+
+#include <boost/graph/graphml.hpp>
 
 class adjacencyGraph;
 class k_path_tree;
@@ -86,7 +86,7 @@ class frag_pattern
         //Attributes used for extension.
         //See if recalculating it speed up the process.
         std::unordered_set<short> dist_prec;
-        std::vector<occ> occurences;
+        std::vector<occ> occurrences;
 
         //This key is used for indexing by the data structure.
         patternKey key;

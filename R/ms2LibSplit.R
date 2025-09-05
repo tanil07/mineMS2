@@ -1,7 +1,7 @@
 ###The ms2LibSplit is similar to the ms2Lib object, except that it is made to compute patterns on components.
 
 
-##Checking the corectness of the found components.
+##Checking the correctness of the found components.
 checkComponent <- function(m2l,comp){
 	if(is.numeric(comp)|is.integer(comp)){
 		valid <- all(comp<length(mm2Spectra(m2l)))
@@ -58,28 +58,27 @@ setMethod("setComponents","ms2LibSplit",function(m2l,components){
 })
 
 
-setMethod("mineClosedSubgraphsByComponent","ms2LibSplit",function(m2l, count = 2, sizeMin = 2, precursor = FALSE){
+setMethod("mineClosedSubgraphsByComponent","ms2LibSplit",function(m2l, count = 2, sizeMin = 1, precursor = FALSE){
 
 	if(length(m2l@components)==0) stop("Components should be set using the setComponents methods before the mining for an ms2LibSplit object.")
 
 	if(count<2){
-		warning("'count' parameters set to ",count," it is therefore set to 2.")
+		warning("'count' parameter too low; value set to 2.")
 		count <- 2
 	}
 
 
-	###Get the data.frame correspoding to the sizes.
+	###Get the data.frame corresponding to the sizes.
 	processing <- sapply(mm2Dags(m2l),function(x){
 		ecount(x)>1
 	})
 
 	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("No labels constructed, use the DiscretizeMassLosses function first.")
+		stop("No labels constructed, use the discretizeMzDifferences method first.")
 	}
 
-	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
-		###Wide variety of mass losses.
-		warning("Signle edges graphs allowed, risk of computational overhead.")
+	if(sizeMin == 1 & nrow(mm2EdgesLabels(m2l)) > 600){
+		warning("Large amount of m/z differences (> 600): risk of computational overload.")
 	}
 
 	###All the dags are converted before processing.
@@ -145,9 +144,9 @@ setMethod("mineClosedSubgraphsByComponent","ms2LibSplit",function(m2l, count = 2
 #' @export
 setMethod("show","ms2LibSplit",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
-	cat("It has",nrow(mm2EdgesLabels(object)),"edges labels.\n")
+	cat("It has",nrow(mm2EdgesLabels(object)),"edge labels.\n")
 	cat("The available supplementary informations are:",colnames(mm2SpectraInfos(object)),"\n")
-	cat("It contains: ",length(mm2Patterns(object)),"patterns\n")
-	if(length(mm2ReducedPatterns(object))!=0) cat("It has been reduced to ",
+	cat("It contains:",length(mm2Patterns(object)),"patterns\n")
+	if(length(mm2ReducedPatterns(object))!=0) cat("It has been reduced to",
 											   length(mm2ReducedPatterns(object)),"patterns")
 })

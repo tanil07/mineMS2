@@ -1,37 +1,8 @@
 #' @include references.R
-#' @include LossFormula.R
+#' @include MzDiffFormula.R
 #' @include fragPattern.R
 
-
-
-####Return exact mass difference of all the labels for a given fragPattern.
-getMzDiff <- function(g,occs,mgs,loss_mz){
-  occs_gid <- occs[, 1]
-  occs_pos <- occs[, 2]
-  res_diff <- matrix(ncol=ecount(g),nrow=nrow(occs))
-  for (i in 1:length(occs_gid)) {
-    gid <- occs_gid[i]
-    pos <- occs_pos[i]
-    map <- get_mapping(mgs[[gid]], g, loss_mz, root = pos)
-    mzs <- vertex_attr(mgs[[gid]], "mz")
-    ids <- V(mgs[[gid]])
-    ###Matched peaks.
-    matched_peaks_idx <- match(map[2,], ids)
-    
-    ###
-    V_head <- head_of(g,es = E(g))
-    V_tail <- tail_of(g,es = E(g))
-    posh <- match(V_head,map[1,])
-    post <- match(V_tail,map[1,])
-    
-    diffv <- mzs[matched_peaks_idx[post]]-
-      mzs[matched_peaks_idx[posh]]
-    res_diff[i,] <- diffv
-  }
-  
-  
-  return(res_diff)
-}
+#####Labels.R
 
 getMinEdgeLabel <- function(g,v,lab="weight",maxsol=TRUE){
   ev <- incident(g,v,"in")
@@ -48,7 +19,7 @@ getSubformulaLossVertices_afg <- function(g,occs,dags,edge_labels,atoms,label_or
   uelabs <- unique(elabs)
   idm <- match(elabs,uelabs)
   
-  rlf <- sapply(formula_labels[uelabs],LossFormulaFromSingleString,ref=atoms,sep="|")
+  rlf <- sapply(formula_labels[uelabs],MzDiffFormulaFromSingleString,ref=atoms,sep="|")
   rlf_solo <- sapply(rlf,isKnown)
   
   #####Function body.
@@ -163,35 +134,34 @@ chooseVerticesLosses <- function(lf,oformula,dags,mzv,vrdbe,atoms,subformula = N
   
 }
 
-###allf is suppose dot be a set of LossFormula ocrresponding to the fuyl set of edge labels.
-annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,edge_label="lab",oformula=NULL){
+###allf is supposed to be a set of MzDiffFormula corresponding to the full set of edge labels.
+annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL, edge_label="lab",oformula=NULL){
   g <- mm2Graph(fp)
-  occs <- mm2Occurences(fp)
+  occs <- mm2Occurrences(fp)
 
   if(is.null(massdiff)){
     massdiff <- getMzDiff(g,occs,dags,elabs$mz)
     massdiff <- apply(massdiff,2,mean)
   }
 
-
   subformula <- getSubformulaLossVertices_afg(g,occs,dags,elabs,atoms,c(0,vlab))
   
   if(is.null(allf)){
     allf <- sapply(elabs$formula[vlab],function(x,atoms){
-      LossFormulaFromSingleString(x,ref = atoms,sep = "|")
+      MzDiffFormulaFromSingleString(x,ref = atoms,sep = "|")
     },atoms=atoms,simplify=TRUE)
   }
 
   
   vrdbe <- vecRDBE(allf[[1]]@formula)
   mzv <- massdiff[seq_along(vlab)]
-  
+
   # if(is.null(oformula)){
-  #   oformula <- sapply(getFormula(m2l)[occs[,1]],LossFormulaFromSingleString,ref=atoms,sep="|")
+  #   oformula <- sapply(getFormula(m2l)[occs[,1]],MzDiffFormulaFromSingleString,ref=atoms,sep="|")
   # }
   
   ####Each col correspond to a vertices.
-  res <- sapply(seq_along(vlab),function(x,l_origin,voformula,vatoms,subf,vdags,lformula,vmz,vrdbe){
+  res <- sapply(seq_along(vlab),function(x,l_origin,voformula,vatoms,subf,vdags,lformula,vmz, vrdbe){
     
     ####We build the formula corresponding to the loss
     lf <- lformula[[x]]
@@ -199,16 +169,17 @@ annotateVertices <- function(fp,vlab,dags,elabs,atoms,allf = NULL,massdiff=NULL,
       return(list(c(1,1),lf))
     }
     vrdbe <- vecRDBE(lf@formula)
-    rtemp <- chooseVerticesLosses(lf,oformula=voformula,dags,vmz[x],vrdbe=vrdbe,atoms=vatoms,subformula = subf[x+1,])
+    rtemp <- chooseVerticesLosses(lf,oformula=voformula,dags,vmz[x], vrdbe=vrdbe,atoms=vatoms,subformula = subf[x+1,])
+
     return(list(rtemp[2:3],lf[rtemp[1],,drop=FALSE]))
   },vdags=dags,voformula=oformula,l_origin=vlab,vatoms = atoms,subf = subformula,
-  lformula=allf,vmz = mzv,vrdbe=vrdbe)
+  lformula=allf,vmz = mzv, vrdbe=vrdbe)
   return(res)
 }
 
 
 
-#Return the formula subformula coherent with the most formula.
+#Return the subformula coherent with the most formula.
 makeEdgeLabelWithoutVertices <- function(lf,mzv,oformula,atoms,vrdbe){
   
   ###Solo
@@ -342,7 +313,7 @@ makeEdgeLabel <-
       
       if (length(non_coherent_edge) > 0) {
         ###mzv is the mass of the corresponding loss.
-        #oformula correspond to the et of molecular formula of the occurences.
+        #oformula correspond to the et of molecular formula of the occurrences.
         #atoms id the names of the atoms.
         #vrdbe represent the rdbe header.
         tempe <- mapply(
@@ -367,7 +338,7 @@ makeEdgeLabel <-
         }
         if(sum(pna)>0)
           for(cp in which(pna)){
-            lf[[p_non_root[non_coherent_edge[cp]]]] <- LossFormula(ref=atoms)
+            lf[[p_non_root[non_coherent_edge[cp]]]] <- MzDiffFormula(ref=atoms)
           }
        }
     }
@@ -375,14 +346,66 @@ makeEdgeLabel <-
                 coherent = coevec, multiple = multipleannot))
   }
 
+#' All the exact m/z differences for a given fragPattern object
+#'
+#' Return all the exact m/z differences for a given fragPattern object.
+#' Should not be used by the user.
+#'
+#' @param g fragPattern object
+#' @param occs list of occurrences in the fragPattern
+#' @param mgs list of fragmentation graphs (DAGs) contained in the fragPattern
+#' @param loss_mz list of all discreized the m/z differences
+#'
+#' @export
+getMzDiff <- function(g, occs, mgs, loss_mz){
+  occs_gid <- occs[, 1]
+  occs_pos <- occs[, 2]
+  res_diff <- matrix(ncol=ecount(g),nrow=nrow(occs))
+  for (i in 1:length(occs_gid)) {
+    gid <- occs_gid[i]
+    pos <- occs_pos[i]
+    map <- get_mapping(mgs[[gid]], g, loss_mz, root = pos)
+    mzs <- vertex_attr(mgs[[gid]], "mz")
+    ids <- V(mgs[[gid]])
+    ###Matched peaks.
+    matched_peaks_idx <- match(map[2,], ids)
+    
+    ###
+    V_head <- head_of(g,es = E(g))
+    V_tail <- tail_of(g,es = E(g))
+    posh <- match(V_head,map[1,])
+    post <- match(V_tail,map[1,])
+    
+    diffv <- mzs[matched_peaks_idx[post]]-
+      mzs[matched_peaks_idx[posh]]
+    res_diff[i,] <- diffv
+  }
+  
+  
+  return(res_diff)
+}
 
+#' Calculate labels (m/z differences) for vertices and edges of a pattern
+#' 
+#' For a specific pattern, this function calculates the labels (m/z differences) for vertices and edges.
+#' Labels for the vertices correspond to m/z differences from the root of the pattern (precursor parent).
+#' 
+#' This function should not be used by the user.
+#' @param fp id of the pattern
+#' @param atoms vector of atom names to consider (for example, CHNOPS)
+#' @param dags vector of the fragmentation graphs (DAGs) contained in the pattern
+#' @param elabs dataframe of all the discretized edge labels (m/z differences) in the dataset
+#' @param oformula vector of precursor formula for each spectra in the pattern, if given
+#' @param edge_label id of the field containing the m/z differences in elabs
+#' 
+#' @export
 annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
-  ###We first build a set of LossGrpah corresponding ot all the edge labels.
+  ###We first build a set of LossGraph corresponding to all the edge labels.
   g <- mm2Graph(fp)
-  occs <- mm2Occurences(fp)
+  occs <- mm2Occurrences(fp)
   atoms <- atoms
   
-  ####Getting tyhe vertices and the edges to pass, in the right order
+  ####Getting the vertices and the edges to pass, in the right order
   all_edges <- E(g)
   p_root <- tail_of(g,all_edges)==1
   e_origin <- all_edges[p_root]
@@ -390,32 +413,34 @@ annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
   
   pmm <- match(as.numeric(v_seq),as.numeric(V(g)))-1
   
-  ###LABL ORIGIN IS IN THE SAME ORDER THAN V, DO NOT MOVE.
+  ###LABEL ORIGIN IS IN THE SAME ORDER THAN V, DO NOT MOVE.
   label_origin <- edge_attr(g,name=edge_label,index = e_origin)[pmm]
   
   ###Building all the formula.
   all_edges_lab <- edge_attr(g,name = "lab")
   allf <- sapply(elabs$formula[all_edges_lab],function(x,atoms){
-    LossFormulaFromSingleString(x,ref = atoms,sep = "|")
+    MzDiffFormulaFromSingleString(x,ref = atoms,sep = "|")
   },atoms=atoms,simplify=FALSE)
   
-  massdiff <- getMzDiff(g,mm2Occurences(fp),dags,elabs$mz)
+  massdiff <- getMzDiff(g,mm2Occurrences(fp),dags,elabs$mz)
   massdiff <- apply(massdiff,2,mean)
+
+  ## mean values of mz diff on the full dataset
+  massdiff_ref <- elabs[edge_attr(g, name="lab"),"mz"]
   
   ###If there is an NA we replace the corresponding mz value by the lab value.
   pna <- is.na(massdiff)
   if(sum(pna)>0){
-    ###We get the conrrespodning value in the lab table?
+    ###We get the corresponding value in the lab table?
     massdiff[pna] <- elabs$mz[all_edges[pna]]
-    
   }
-  
+
   vannot <- annotateVertices(fp,label_origin,dags,elabs,atoms,allf = allf[pmm],
                              edge_label="lab",oformula = oformula,massdiff = massdiff[pmm])
   formula_vertices <- vector(mode="list",length=ncol(vannot))
   
   df_vertices <- do.call(rbind,vannot[1,])
-  
+
   for(i in seq_along(formula_vertices)){
     formula_vertices[i] <- vannot[2,i]
   }
@@ -428,11 +453,13 @@ annotateAFG <- function(fp,atoms,dags,elabs,oformula,edge_label="lab"){
                         atoms = atoms,
                         oformula = oformula,
                         vmass = massdiff) 
+  #return(list(vertices = list(formula=formula_vertices,info=df_vertices),edges=elab,
+  #            mz=list(v=massdiff[p_root][pmm],e=massdiff)))
   return(list(vertices = list(formula=formula_vertices,info=df_vertices),edges=elab,
-              mz=list(v=massdiff[p_root][pmm],e=massdiff)))
+              mz=list(v=massdiff_ref[p_root][pmm],e=massdiff_ref)))
 }
 
-makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
+makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4, print_formula=TRUE){
   annot <- annotateAFG(p,atoms,dags,elabs,oformula = oformula)
   g <- mm2Graph(p)
   
@@ -441,8 +468,7 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
   
   ####We build the vertices label.
   vert <- annot$vertices
-  
-  labvert <- paste("M -",sprintf(paste("%0.",mzdigit,"f",sep=""),
+  labvert <- paste("PP -",sprintf(paste("%0.",mzdigit,"f",sep=""),
                                  annot$mz$v),sep=" ")
   
   labvert_formula <- sapply(vert$formula,function(x,def){
@@ -451,13 +477,13 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
   },def=HIGH_MASS_LEGEND)
   
   ####If the formula is not solo or partial we add parenthesis
-  vpv <- apply(!vert$info[,1,drop=FALSE],1,any)
+  vpv <- apply(!vert$info[,1,drop=FALSE],1,any) ## vpv : logical vector : if TRUE : several formula
 
   
-  labvert_formula[vpv] <- paste("(",labvert_formula[vpv],")",sep="")
+  labvert_formula[vpv] <- paste("(",labvert_formula[vpv],")",sep="")  ## add parenthesis
   
-  labvert <- c("M",paste(labvert,labvert_formula,sep="\n"))
-  
+  if(print_formula) labvert <- c("PP",paste(labvert,labvert_formula,sep="\n")) ## to add formula to label edges
+  else labvert <- c("PP",labvert)
   
   
   #### We build the edges label.
@@ -473,11 +499,23 @@ makeLabelPattern <- function(p,atoms,dags,elabs,oformula,mzdigit=4){
   vp[1:(vcount(g)-1)] <- vpv
   pmz <-  labedge==HIGH_MASS_LEGEND
   labedge[pmz] <- sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[pmz])
-  
+
+  ## if several formula, put parenthesis or mz
   vp <- vp|((edg$multiple)&(!pmz))
   
-  labedge[vp] <- paste("(",labedge[vp],")",sep="")
-  
+  if(print_formula)
+  {
+    ## only one formula
+    labedge[!vp&(!pmz)] <- paste(sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[!vp&(!pmz)]), labedge[!vp&(!pmz)], sep="\n") ## mz + formula 
+
+    #several formula
+    labedge[vp] <- paste(sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e[vp]), paste("(",labedge[vp],")",sep=""), sep="\n") ## mz + parenthesis 
+  }
+  else{
+  ## mz for all edges
+    labedge <- sprintf(paste("%0.",mzdigit,"f",sep=""),annot$mz$e)
+  }
+
   ####For all the high mass label we put the mz diff over the formula.
   return(list(vertices=labvert,edges=labedge))
 }

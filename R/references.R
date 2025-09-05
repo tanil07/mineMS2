@@ -27,7 +27,7 @@ tabAtoms <- function(){
 					  stringsAsFactors = FALSE))
 }
 
-###Construct a reference table form a lsit of atoms.
+###Construct a reference table from a lisr of atoms.
 makeDfValidAtoms <- function (clist, mz = NULL)
 {
 	tAtoms <- tabAtoms()
@@ -40,7 +40,7 @@ makeDfValidAtoms <- function (clist, mz = NULL)
 	pRef <- match(ref[pok], tAtoms$name)
 	nmaxAtoms <- ceiling(mz/tAtoms$mass[pRef])
 	vnum <- NULL
-	if (class(clist) == "list") {
+	if (is.list(clist)) {
 		vnum <- unlist(clist)
 	}
 	else {

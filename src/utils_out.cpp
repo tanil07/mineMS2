@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string>
+#include <iostream>
 
 using namespace Rcpp;
 
@@ -174,14 +175,16 @@ List formulaFromString(std::string formula,std::vector<std::string> names_atoms)
 // [[Rcpp::export]]
 NumericVector disjointBins(NumericVector points, NumericVector lower_lim, NumericVector upper_lim, NumericVector mean_bin) {
 	int N = points.size();
-	NumericVector bins(N);
-	for(int j=0;j<N;j++) bins[j]=0;
+
+	NumericVector bins(N+1);
+	for(int j=0;j<(N+1);j++) bins[j]=0;
+
 	int pi = 0;
 	int pp = 0;
 	int num_match = 0;
 	int in_inter = 0;
 	while((pi < lower_lim.size())&(pp<N)){
-		if((points[pp]>=lower_lim[pi])&(points[pp]<upper_lim[pi])){
+		if((points[pp]>=lower_lim[pi])&&(points[pp]<upper_lim[pi])){
 			//We check if the value is already in a bin or not.
 			in_inter = 1;
 			num_match++;
@@ -211,7 +214,8 @@ NumericVector disjointBins(NumericVector points, NumericVector lower_lim, Numeri
 	if(bins[pp]!=0){
 		pp++;
 	}
-	for(int p=pp;p<N;p++){
+
+	for(int p=pp;p<(N+1);p++){
 		bins[p]=NA_REAL;
 	}
 	//Rprintf("Out");
@@ -241,13 +245,14 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 	int pb = 0;
 	int in_inter = 0;
 	while((pa < Na)&(pb<Nb)){
+		//printf("%d %d %d %d\n", pa, pb, Na, Nb);
 		//AAA*****
 		//****BBB*
 		if(a_max[pa]<=b_min[pb]){
 			pa++;
 			//*****AAA
 			//*BBB****
-		}else if(a_min[pa]>b_max[pb]){
+		}else if(a_min[pa]>=b_max[pb]){ // before, it was strictly superior, do not know why
 			//Last point was the last of an interval.
 			if(in_inter==1){
 				in_inter=0;
@@ -258,7 +263,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			//**AAA***
 			//***BBB**
 			//Case where there is an overlap to the left.
-		}else if((a_min[pa]<b_max[pb])&(a_min[pa]>=b_min[pb])){
+		}else if((a_min[pa]<b_max[pb])&&(a_min[pa]>=b_min[pb])){
 			if(in_inter==0){
 				bin_min[pb]=pa;
 				in_inter = 1;
@@ -266,7 +271,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			pa++;
 			//***AAA**
 			//*BBB****
-		}else if((a_max[pa]<b_max[pb])&(a_max[pa]>b_min[pb])){
+		}else if((a_max[pa]<b_max[pb])&&(a_max[pa]>b_min[pb])){
 			if(in_inter==0){
 				bin_min[pb]=pa;
 				in_inter = 1;
@@ -274,7 +279,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			pa++;
 			//***AA***
 			//**BBBB**
-		}else if((a_min[pa]>b_min[pb])&(a_max[pa]<b_max[pb])){
+		}else if((a_min[pa]>b_min[pb])&&(a_max[pa]<b_max[pb])){
 			if(in_inter==0){
 				bin_min[pb]=pa;
 				in_inter = 1;
@@ -282,13 +287,19 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 			pa++;
 			//**AAAA**
 			//***BB***
-		}else if((a_min[pa]<=b_min[pb])&(a_max[pa]>=b_max[pb])){
+		}else if((a_min[pa]<=b_min[pb])&&(a_max[pa]>=b_max[pb])){
 			if(in_inter==0){
 				bin_min[pb]=pa;
 				in_inter = 1;
 			}
 			pa++;
 		}
+		//else{
+			//printf("aaaaaaaaaaaahhhhh\n");
+			//printf("%f %f %f %f\n", a_min[pa], b_min[pb], a_max[pa], b_max[pb]);
+			//sleep(15);
+			//exit(0);
+		//}
 	}
 	if((pa==Na)&(in_inter==1)){
 		bin_max[pb]=pa-1;
@@ -300,7 +311,7 @@ List checkInter(NumericVector a_min, NumericVector a_max, NumericVector b_min, N
 		}
 		int beginning = 0;
 		for(int i=bin_min[j];i<=bin_max[j];i++){
-			if((mean_a[i]<=b_max[j])&(mean_a[i]>=b_min[j])){
+			if((mean_a[i]<=b_max[j])&&(mean_a[i]>=b_min[j])){
 				if(beginning==0){
 					hbin_min[j]=i;
 					beginning=1;
@@ -345,7 +356,7 @@ IntegerVector extend_match(double valmin, double valmax, int pos, NumericVector 
     pleft--; 
   }
   
-  while(intersect(valmin,valmax,bmin[pright],bmax[pright]) & (pright<bmin.size())){
+  while(intersect(valmin,valmax,bmin[pright],bmax[pright]) && (pright<bmin.size())){
     pright++; 
   }
   IntegerVector res;
@@ -360,7 +371,6 @@ IntegerVector bisect_search_borns(double valmin, double valmax, NumericVector bm
   //Rcout <<"in" << std::endl;
   int bleft = 0;
   int bright = bmin.size()-1;
-  int csize = bright - bleft;
   int mid = (bleft+bright)/2;
   
   IntegerVector resn;
@@ -390,7 +400,7 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
   int i = 0;
   int j = 0;
   
-  List to_return(bmin.size());
+  List to_return(N);
   for(int i=0;i<to_return.size();i++){
     
     IntegerVector v1(0);
@@ -402,13 +412,13 @@ List find_combinations_ranges(NumericVector bmin, NumericVector bmax,
   double mzmax = cmzmax[0];
   double hmax,hmin;
   IntegerVector res;
-  while( (bmax[i] < mzmax) & (i< bmin.size())){
+  while( (bmax[i] < mzmax) & (i< N)){
     j = i;
     
-    while(((hmin=(bmin[j]+bmin[i])) < mzmax)& (j <bmin.size())){
+    while(((hmin=(bmin[j]+bmin[i])) < mzmax)& (j <N)){
       
       //We calculate the borns
-      double hmax = bmax[j]+bmax[i];
+      hmax = bmax[j]+bmax[i];
       
       //We find the interval limit
       res = bisect_search_borns(hmin,hmax,bmin,bmax);

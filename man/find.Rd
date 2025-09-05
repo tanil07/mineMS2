@@ -2,25 +2,28 @@
 % Please edit documentation in R/select.R
 \name{find}
 \alias{find}
-\title{find patterns or spectra form a set of pattern or spectra ids}
+\title{Find the pattern with the best coverage given a set of spectra.}
 \usage{
 find(m2l, ids, vals = c("P", "S"), ...)
 }
 \arguments{
 \item{m2l}{an ms2Lib Object.}
 
-\item{ids}{A list of ids to be searched for.}
+\item{ids}{A list of ids to be searched for (for now, only spectra are implemented).}
 
-\item{vals}{The type of the returned values.}
+\item{vals}{The type of the returned values (for now, only patterns are implemented (P)).}
 
-\item{...}{supp arguments.}
+\item{...}{supplementary arguments.}
 }
 \value{
-The ids of the patterns or spectra cotaining all the ids.
+The ids of the patterns or spectra containing all the ids.
 }
 \description{
-find data of type "vals" containing all the ids listed in "ids"
+Find the pattern with the best coverage, which means that covered the most intensity, for a set of spectra.
 }
 \examples{
-print("examples to be put here")
+data(m2l)
+## The calculation of coverage must have been done before searching
+m2l <- calculateCoverage(m2l)
+find(m2l, "S7", "P")
 }

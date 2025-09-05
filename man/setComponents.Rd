@@ -2,7 +2,7 @@
 % Please edit documentation in R/allGenerics.R
 \name{setComponents}
 \alias{setComponents}
-\title{Set the componetns of an ms2 library object.}
+\title{Set the components of an ms2 library object.}
 \usage{
 setComponents(m2l, components, ...)
 }

@@ -1,12 +1,13 @@
 #ifndef K_PATH_TREE_H
 #define K_PATH_TREE_H
 
+#include "common.h"
+
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <boost/array.hpp>
 
 #include "mass_graph.h"
-#include "common.h"
 #include "adjacencyGraph.h"
 
 
@@ -75,7 +76,7 @@ class k_path_tree
         std::vector<std::vector<Vertext> > pos;
         ktree t;
 
-        //It stores the occurences under the form of a set of struct
+        //It stores the occurrences under the form of a set of struct
         MapOccurrences moccs;
 
         //List of traingles dependent of the graph too

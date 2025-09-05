@@ -1,0 +1,333 @@
+---
+title: 'Coupling mineMS2 to GNPS molecular networks'
+author: "Alexis Delabrière, Coline Gianfrotta and Etienne Thévenot"
+date: "`r Sys.Date()`"
+package: "`r BiocStyle::pkg_ver('mineMS2')`"
+vignette: >
+  %\VignetteIndexEntry{Coupling mineMS2 to GNPS molecular networks}
+  %\VignetteDepends{igraph}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteKeywords{Metabolomics, MS/MS, Fragmentation pattern, Frequent Subgraph Mining}
+  %\VignetteEngine{knitr::knitr}
+bibliography: "mineMS2_references.bib"
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 4
+    toc_float:
+      collapsed: false  
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.path = "figures/")
+```
+
+# Introduction
+
+This vignette describes how *mineMS2* can be **coupled to the GNPS MS/MS molecular networking** methodology [@Watrous2012] to **focus on patterns that best explain components** of the network.
+We strongly recommend to **compute the patterns and the GNPS network using the same .mgf input file** to avoid matching issues.
+In this example, the molecular network has been precomputed on the GNPS website and extracted in the *GraphML* format (file *pnordicum_ms2_gnps.graphml* inside the *dataset* subdirectory of the *mineMS2* installation folder).
+
+# Pre-requisites
+
+## Data set
+
+The dataset contains **51 MS/MS spectra** from secondary metabolites of *Penicillium nordicum* (one spectrum per compound) acquired on an HPLC system (Luna C18 column; Phenomenex) coupled to an LTQ Orbitrap XL hybrid (Thermo Fisher Scientific) operated in the positive ionization mode at a HCD20 collision energy and a resolution of 7,500 [@Hautbergue2019].
+
+## Initialization
+
+The 3 file names of the **spectra data, metadata, and molecular network** are:
+
+```{r path_gnps, message=FALSE, warning=FALSE}
+if (!require(mineMS2)) install_github("odisce/mineMS2")
+library(mineMS2)
+
+data_dir.c <- system.file("dataset",package = "mineMS2")
+spectra_file.c <- file.path(data_dir.c, "pnordicum_ms2_spectra.mgf")
+metadata_file.c <- file.path(data_dir.c, "pnordicum_ms2_info.tsv")
+network_file.c <- file.path(data_dir.c, "pnordicum_ms2_gnps.graphml")
+```
+
+An **`ms2Lib`** object is then initialized with the spectra data (and optionally, metadata).
+This object will be used throughout the workflow to compute and store the m/z differences, the fragmentation graphs, and the patterns.
+Note that two additional *mz.precursor* and *file* columns are automatically included in the metadata table stored in the `ms2Lib` object with the information from the *mgf* file.
+
+```{r ms2Lib_init}
+metadata.df <- read.table(metadata_file.c,
+                          header = TRUE,
+                          sep = "\t") 
+
+# Building the ms2Lib object and storing the spectra data (and metadata)
+pnordicum.m2l <- ms2Lib(spectra_file.c, suppInfos = metadata.df)
+head(getInfo(pnordicum.m2l, "S"))
+
+# Specifying the IDs of the spectra (optional, for display only)
+metadata.df <- getInfo(pnordicum.m2l,"S")
+ids <- paste(paste("MZ",metadata.df[,"mz"]), paste0("RT",metadata.df[,"rt"]), sep = "_")
+pnordicum.m2l <- setIds(pnordicum.m2l,ids)
+```
+
+## Mining patterns
+
+The mining of patterns (graphs of m/z differences) in the spectra data is detailed in the *mineMS2_main* vignette.
+Briefly,
+
+1.  Building the **fragmentation graph** of each spectrum (`discretizeMzDifferences`)
+
+    1.  computing and aligning **all m/z differences** within the spectra for the whole library
+
+    2.  building the fragmentation graphs
+
+2.  **Extracting common patterns** between fragmentation graphs (`mineClosedSubgraphs`)
+
+```{r pattern_mining, message=FALSE}
+# Building the fragmentation graphs
+pnordicum.m2l <- discretizeMzDifferences(pnordicum.m2l, dmz = 0.007, ppm = 15,
+                                         maxFrags = 15)
+
+# Extracting the patterns
+pnordicum.m2l <- mineClosedSubgraphs(pnordicum.m2l, sizeMin = 1, count = 2)
+```
+
+A total of `r length(mm2Patterns(pnordicum.m2l))` patterns are detected.
+The exploration of these patterns with the *mineMS2* methods (including `findMz`, `select`, `plotPatterns`) is described in the *mineMS2_main* vignette.
+
+Here we focus on **patterns that best explain components of the molecular network** from the same spectra.
+
+# Coupling mineMS2 to GNPS molecular networks
+
+## Loading the molecular network
+
+The **molecular network** is read using the *igraph* package:
+
+```{r gnps_network_reading, warning=FALSE, message=FALSE}
+library(igraph)
+
+molnet.igraph <- read_graph(network_file.c, "graphml")
+```
+
+Since self-edges (i.e. single loops) are automatically added by GNPS to single nodes, we use the `simplify` function from the *igraph* package to remove these edges.
+We also use the `as_undirected` function to remove edge directions.
+
+```{r simplify_network}
+molnet.igraph <- simplify(molnet.igraph, remove.multiple = FALSE,
+                          edge.attr.comb = "ignore")
+molnet.igraph <- as_undirected(molnet.igraph, mode = "each")
+```
+
+An overview of the GNPS network after this processing is shown below (as visualized with the [**Cytoscape**](https://cytoscape.org/) software [@Shannon2003]):
+
+```{r net_raw, out.width = "500px", fig.align = 'center', echo=FALSE}
+knitr::include_graphics("images/pnordicum_ms2_gnps.png")
+```
+
+Two clusters (of size 21 and 11, respectively) are detected by GNPS, in addition to 2 pairs.
+In the remainder of the vignette, we show how to **select and interpret patterns specific of components from the molecular network**.
+
+## Extracting components from the molecular network (`findGNPSComponents`)
+
+We consider 3 type of components of the network:
+
+-   the **connected components** of the graph (subgraphs in which any two nodes are connected by a path)
+
+-   the **cliques** (subgraphs in which any all pairs of nodes are connected)
+
+    Instead of computing all the cliques from the network, **mineMS2 selects a set of disjoint cliques** (i.e. cliques without any nodes in common) by decreasing number of size (nodes): the algorithm starts with the biggest clique, then searches for the biggest clique that does not contain any node of this first clique, and so on until no clique is left
+
+-   the **high similarity pairs of nodes** (pairs of spectra with a cosine score superior to a threshold)
+
+    Note that only similarity pairs out of the previous selected cliques are selected
+
+**All these components can be extracted** using the **`findGNPSComponents`** function, with the main parameters:
+
+1\.
+`minSize`: minimum size of the detected cliques
+
+2\.
+`pairThreshold`: threshold of the cosine score for high similarity pairs of nodes
+
+Note: the parameters `vname` and `eattr` indicate the names of the node ids and edge similarity measure in the molecular network according to the software used: these attributes are named *cluster index* and *EdgeScore* in GNPS networks, and *shared name* and *cosine_score* in MetGem [@Olivon2018].
+
+```{r gnps_components}
+molnet_comp.ls <- findGNPSComponents(molnet.igraph, minSize = 3, pairThreshold = 0.9,
+                                     vname = "cluster index", eattr = "EdgeScore")
+```
+
+Nine components have been selected:
+
+```{r molnet_comp}
+molnet_comp.ls
+```
+
+Components 6, 7, 8 and 9 are the connected components of the network (2 clusters and 2 pairs).
+Components 1, 3, and 4 are disjoint cliques from the component 6 (larger cluster).
+Components 2 and 5 are disjoint cliques from component 7 (smaller cluster).
+
+The m/z values of the precursors from these spectra can be retrieved with:
+
+```{r molnet_comp_mzprec}
+lapply(molnet_comp.ls,
+       function(spec_indices.vi)
+         getInfo(pnordicum.m2l, paste0("S", spec_indices.vi))[, "mz.precursor"])
+```
+
+## Finding patterns explaining the extracted components (`findPatternsExplainingComponents`)
+
+*mineMS2* then enables to select the pattern that best explain each of the extracted components according to 3 metrics (between 0 and 1).
+Let us call *explained spectrum* a spectrum that contains the pattern, and *component spectrum* a spectrum that belongs to the molecular network component.
+
+-   **recall**: proportion of *explained* spectra among the *component* spectra; the recall is 1 if all spectra from the component are explained
+
+-   **precision**: proportion of *component* spectra among the *explained* spectra; the precision is 1 if no spectrum outside of the component is explained
+
+-   **F1-score**: harmonic mean of the precision and recall; the F1-score is 1 if recall and precision are 1, i.e. if the pattern explains all spectra from the component and no other one
+
+Here, we set the metric argument to `c("recall","precision","size")` to indicate that a **pattern maximizing recall is extracted for each component, precision and size being then used to split ties**.
+This will result in a single explaining pattern in most cases.
+We can however choose to return the **top-*k* best explaining patterns** for each component instead (ordered by decreasing metric value) with the argument `top`, to get additional insight about fragmentation subgraphs of interest among spectra of the component.
+
+```{r patterns_explaining_components}
+molnet_patterns.ls <- findPatternsExplainingComponents(pnordicum.m2l, molnet_comp.ls,
+                                                       metric = c("recall", "precision","size"),
+                                                       top = 5)
+```
+
+The returned list contains the **metric values for the selected patterns**.
+For example, for the pair of spectra with precursor m/z values of $370.1283$ and $404.0891$ (component 8), the best explaining pattern P70 has an F1-score of 1, while the other patterns have still a recall of 1 but a lower precision (i.e. are less specific to this pair of spectra).
+
+```{r pattern_show}
+molnet_patterns.ls[[8]]
+```
+
+The **ids of the best pattern** for each components can then be extracted with:
+
+```{r best_pattern}
+sapply(molnet_patterns.ls,
+       function(patterns.df)
+         rownames(patterns.df)[1])
+```
+
+These patterns can be **visualized** using the `plot` (to display the pattern; with a `tkplot` argument available for interactivity) and `plotOccurrences` (to display the spectra containing the pattern, also called occurrences, or support as a whole) method, which are wrapped inside the **`plotPatterns`** method for convenience.
+This function also generates information about the spectra and the m/z differences in the pattern.
+The `infos_col` parameter is used to select the spectra information to be included (if `NULL`, all the available information will be displayed).
+The results can be **exported** in pdf (one pdf file per pattern) by setting the `save_dir` argument to the path of the target directory for saving (default to `"none"` for no export).
+
+Here we display the best explaining pattern P70 of component 8 (high similarity pair).
+We observe that the m/z values of the fragment ions are shifted between the two spectra.
+
+```{r pattern_plotting, fig.align='center', results = 'asis'}
+plotPatterns(pnordicum.m2l, molnet_patterns.ls[[8]][1, "id"],
+             infos_col = c("mz.precursor", "rt", "name"))
+```
+
+## Annotating the molecular network with the best explaining patterns (`annotateNetwork`)
+
+The information about each best explaining pattern (i.e. the explained component, the pattern id, the metric values) can be added to the network object and exported as a *GraphML* file for visualization in Cytoscape.
+
+```{r annotate_network}
+molnet_annot.igraph <- annotateNetwork(molnet_comp.ls, molnet.igraph,
+                                       molnet_patterns.ls)
+```
+
+The **annotated network** can be exported using the `write_graph` function from the *igraph* package.
+
+```{r export_graph,eval=FALSE}
+write_graph(graph = molnet_annot.igraph, format = "graphml",
+            file = file.path(getwd(),
+                             "pnordicum_ms2_gnps_mined.graphml"))
+```
+
+This network can be **visualized with Cytoscape** (note that the *GraphML* format is supported by Cytoscape 3: select 'File \> Import \> Network from file'; with Cytoscape 2, the GraphMLReader plugin is needed):
+
+```{r annotated_net, out.width = "500px",fig.align = 'center',echo=FALSE}
+knitr::include_graphics("images/pnordicum_ms2_gnps_mined.png")
+```
+
+To visualize the colors, the *enhancedGraphics* App from Cytoscape is required ('Apps \> Install Apps \> Search: enhanced Graphics').
+Then, in the *Style* tab from the *Control Panel*, select for the *Image/Chart 1* the *Column: colorComponents* and the *Mapping Type: Passthrough Mapping*.
+Each component is assigned a color: note that the node (i.e. the spectra) may belong to several components.
+
+## Interpreting the components in terms of fragmentation patterns
+
+We can now interpret the molecular network in terms of fragmentation patterns.
+
+We first investigate the pattern best explaining the largest component (`r which.max(sapply(molnet_comp.ls, length))` consisting of 21 spectra, including:
+
+-   data frame with the metrics values (single row)
+
+```{r P188_metrics}
+comp6_pattern_metrics.df <- molnet_patterns.ls[[6]][1, ]
+comp6_pattern_metrics.df
+```
+
+-   id of the pattern
+
+```{r P188_id}
+comp6_pattern_id.c <- comp6_pattern_metrics.df[, "id"]
+comp6_pattern_id.c
+```
+
+-   information about the pattern
+
+```{r P188_info}
+infoPatterns(pnordicum.m2l, comp6_pattern_id.c)
+```
+
+-   display of the pattern
+
+```{r P188_display, warning=FALSE, fig.align = "center", results = 'asis', fig.height = 6, fig.width = 7}
+plotPatterns(pnordicum.m2l, comp6_pattern_metrics.df[, "id"],
+             infos_col = c("mz.precursor", "rt", "name"))
+```
+
+We see that 19 out of the 21 fragmentation spectra share an m/z difference of $99.0683$, that is not present in any other spectra of the data set (precision = 1).
+The closest formula for this m/z difference, $C_5H_9ON$, could correspond to a loss of valine, which is consistent with the metabolites of this component are tetrapeptides including a valine residue.
+
+As another example within this cluster, the circled clique in the figure below (component 4) is explained by a larger pattern:
+
+```{r annotated_net_comp4, out.width = "500px",fig.align = 'center',echo=FALSE}
+knitr::include_graphics("images/pnordicum_ms2_gnps_mined_clique.png")
+```
+
+```{r comp4_pattern, results = 'asis', warning = FALSE}
+comp4_pattern_id.c <- molnet_patterns.ls[[4]][1, "id"]
+plotPatterns(pnordicum.m2l, comp4_pattern_id.c,
+             infos_col = c("mz.precursor", "rt", "name", "formula"))  
+```
+
+This pattern includes an m/z difference of $186.079$, with the possible formula $C_{11}H_{10}ON_2$, that may correspond to a loss of tryptophan, which is indeed included in the peptides.
+
+## Beyond molecular networks: discovering new similarities between spectra
+
+The patterns also help discovering new similarities between spectra.
+Getting back to the $186.079$ m/z difference above, it is now possible to look for this loss in other patterns using the `select` function:
+
+```{r tryptophan_patterns_select}
+tryptophan_dmz.vc <- findMz(pnordicum.m2l, mz = 186.079, ppm = 15, dmz = 0.01, type = "L")
+tryptophan_patterns.ls <- select(pnordicum.m2l, tryptophan_dmz.vc, "P")
+tryptophan_patterns.ls
+```
+
+A total of other `r length(tryptophan_patterns.ls[[1]])` patterns (including the P179 from the previous section) include this m/z difference.
+As an example, let us focus on the pattern `r tryptophan_patterns.ls[[1]][8]`:
+
+```{r tryptophan_pattern_view, fig.align="center", results = 'asis', warning = FALSE}
+plotPatterns(pnordicum.m2l, tryptophan_patterns.ls[[1]][8],
+             infos_col = c("mz.precursor", "rt", "name", "formula"))
+```
+
+Interestingly, this pattern is included in 7 spectra, that are not all linked together in the GNPS network, but that were identified by the authors of [@Hautbergue2019] as tetrapeptides containing a tryptophan residue.
+
+```{r tryptophan_pattern_discovery, out.width = "500px",fig.align = 'center',echo=FALSE}
+knitr::include_graphics("images/pnordicum_ms2_gnps_mined_pattern_trp.png")
+```
+
+In addition to the similarities of the spectra at m/z $532.09$, $548.28$ and $566.29$ detected by the molecular network, *mineMS2* therefore highlights 4 other metabolites which share the same pattern (circled in red in the figure above), including the $186.079$ loss.
+
+*mineMS2* thus enables to discover new similarities, common to multiple spectra and independent from molecular network threshold, and facilitates their interpretation as fragmentation graphs [@Delabriere_2025_MineMS2AnnotationSpectral].
+
+# References

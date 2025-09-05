@@ -35,6 +35,8 @@ lattice_node::lattice_node(lattice_node& fp,k_path_tree& kt,int iext,
 std::pair<bool,lattice_node> lattice_node::get_next(k_path_tree& kt,int fthreshold,std::ostream& os){
     bool created = false;
     //Now we split the value.
+    //search for the next vertex (in the extensions of the current vertex) in the k-path tree and
+    // calculate the extensions of this new vertex 
     while((current_ext<numExts()) & (!created)){
         lattice_node pchild(*this,kt,current_ext,fthreshold,created,os);
         current_ext++;

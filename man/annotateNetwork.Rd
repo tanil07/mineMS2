@@ -2,31 +2,47 @@
 % Please edit documentation in R/firstpassCoupling_gnps.R
 \name{annotateNetwork}
 \alias{annotateNetwork}
-\title{Annotation of GNPS network}
+\title{Annotation of a GNPS network with patterns for each detected component}
 \usage{
-annotateNetwork(components, net, patterns, copy = TRUE,
-  keepattr = c("Compound_Name", "SpectrumID", "DefaultGroups",
-  "cluster index", "precursor mass"), sep_infos = ",")
+annotateNetwork(
+  components,
+  net,
+  patterns,
+  copy = TRUE,
+  keepattr = c("precursor mass", "rt", "name", "cluster index"),
+  sep_infos = ","
+)
 }
 \arguments{
-\item{components}{The components of the GNPS network as integer.}
+\item{components}{The components of the GNPS network as integers.}
 
 \item{net}{The GNPS network as an igraph object}
 
-\item{patterns}{The set of patterns extract from an ms2Lib object.}
+\item{patterns}{The set of patterns extracted from an ms2Lib object.}
 
 \item{copy}{Shall the igraph object be copied (recommended)}
 
-\item{keepattr}{Which attributes sahll be kept on the ntwork}
+\item{keepattr}{Which attributes shall be kept on the network}
 
-\item{sep_infos}{The seprator used to separate the colors when multiple colors are associated ot a single node.}
+\item{sep_infos}{The separator used to separate the colors when multiple colors are associated to a single node.}
 }
 \value{
-The annotated netowrk.
+The annotated network as an igraph object.
 }
 \description{
-Annotation of GNPS network
+Annotation of a GNPS network with patterns for each detected component
 }
 \examples{
-print("Examples to be put here")
+data(m2l)
+data(molnet_df)
+
+molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges,
+                 directed = FALSE, vertices = molnet_df$vertices)
+components <- findGNPSComponents(molnet_igraph)
+print(length(components))
+patterns <- findPatternsExplainingComponents(m2l, components)
+print(patterns[[1]])
+
+molnet_annotated <- annotateNetwork(components, molnet_igraph, patterns)
+
 }

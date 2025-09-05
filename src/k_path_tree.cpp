@@ -78,7 +78,7 @@ Vertext k_path_tree::get_node(Vertext origin,int lab, int dist)
 //Modification to add only the frequent path.
 
 //Utility function used to add a node.
-//We add the the occurences values
+//We add the the occurrences values
 void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<int>& plabs,
                                  int lpath, IndexMap& idx_vertex, VisitMap& vm,int gid, graph& G)
 {
@@ -91,7 +91,7 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
     {
         if(pi>lpath) break;
 
-        //We check that this occurences needs to be added.
+        //We check that this occurrences needs to be added.
         boost::tie(e,pres)=boost::edge(pfr[lpath-pi],pfr[lpath],G);
         if(pres){
             elab = G[e].lab;
@@ -120,7 +120,7 @@ void k_path_tree::update_pos_adv(int lab, std::vector<Vertex>& pfr,std::vector<i
             Vertext vn = this->get_node(old_vertice,plabs[lpath-1],elab);
             pos[pi-1].push_back(vn);
 
-            //We create the occurence :
+            //We create the occurrence :
             occ oc = {short(gid),short(idx_vertex[pfr[lpath-pi]])};
             addOccs(moccs,vn,oc);
         }
@@ -311,6 +311,7 @@ void k_path_tree::filter_frequent_nodes(int noccs)
     std::vector<Vertext> to_rm;
     to_rm.reserve(1024);
 
+    int nb_rm = 0;
     Vertext root_v = get_root();
     boost::tie(vb,ve)=boost::vertices(t);
     //TODO pass this in one pass possibly if it's slow.
@@ -324,16 +325,17 @@ void k_path_tree::filter_frequent_nodes(int noccs)
         if(int(moccs[*vb].size())<noccs)
         {
             to_rm.push_back(*vb);
+            nb_rm = nb_rm+1;
         }
     }
     //Now we remove the chosen node.
-    for(int ir=0; ir<int(to_rm.size()); ir++)
+    for(int ir=0; ir<nb_rm; ir++)
     {
         Vertext v= to_rm[ir];
+        auto itpos = moccs.find(v);
         boost::clear_vertex(v,t);
         boost::remove_vertex(v,t);
-        auto itpos = moccs.find(v);
-        moccs.erase(itpos);
+        moccs.erase(itpos); 
     }
 
     //We get the remaining 0 exts en update the adjacency graph
@@ -385,17 +387,17 @@ std::vector<Vertext> k_path_tree::find_predecessors(Vertext v)
          std::vector<int> pstr(cpath.size());
          std::transform(cpath.begin(),cpath.end(),pstr.begin(),
                         [this](Vertext v) -> int {return t[v].lab;});
-         for(int ist=0;ist<pstr.size();ist++){
+         for(long long unsigned int ist=0;ist<pstr.size();ist++){
              of << pstr[ist];
              if(ist<pstr.size()-1) of << "_";
          }
-         //We the number of occurences
+         //We the number of occurrences
          of << " noccs : " << moccs[*bv].size()<<std::endl;
          of << "occs : ";
          for(auto it=(moccs[*bv]).begin();it!=(moccs[*bv]).end();it++) of<<(*it).gid<<"_"<<(*it).idx<<" ";
          of << std::endl;
 
-         //TODO add the occurences enveutally.
+         //TODO add the occurrences enveutally.
      }
  }
 

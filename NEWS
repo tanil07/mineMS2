@@ -1,0 +1,150 @@
+CHANGES VERSION 1.0.0
+---------------
+RELEASE
+    - release associated to the revised manuscript
+
+CHANGES VERSION 0.10.2
+---------------
+MINOR UPDATE
+    - updating dependency from Spec2Annot
+
+CHANGES VERSION 0.10.0
+---------------
+RELEASE
+    - release associated to the preprint version 1
+
+CHANGES VERSION 0.9.30
+---------------
+MINOR UPDATE
+    - deal with check warnings
+
+CHANGES VERSION 0.9.29
+---------------
+MINOR UPDATE
+    - add changes in man directory
+
+CHANGES VERSION 0.9.28
+---------------
+MINOR UPDATE
+    - add some tests for mzDiff exports, patterns filtering, some plottings and separate main tests and main with metadata tests
+    - errors in checking but only for ubuntu (for now, remove ubuntu from R CMD CHECK)
+
+
+CHANGES VERSION 0.9.27
+---------------
+MINOR UPDATE
+    - add some tests for plotting and discretization step
+    - warnings remain in the checking, but should have no error
+
+CHANGES VERSION 0.9.26
+---------------
+MINOR UPDATE
+    - resolve the majority of warnings and erros in checking
+    - tests should pass
+
+CHANGES VERSION 0.9.25
+---------------
+MINOR UPDATE
+    - try to include the test-coverage with codecov and the R CMD CHECK
+
+CHANGES VERSION 0.9.24
+---------------
+MINOR UPDATE
+    - resolve small problem of deleted pointer in k_path_tree.cpp 
+    - update the required version of R (to read file m2l.rda)
+
+CHANGES VERSION 0.9.23
+---------------
+MINOR UPDATE
+    - dealing with the warnings during compilation of the package (mostly because of boost package)
+
+CHANGES VERSION 0.9.22
+---------------
+MINOR UPDATE
+    - update of the vignette about the coupling with molecular networks
+
+CHANGES VERSION 0.9.20
+---------------
+MINOR UPDATE
+    - update of the main vignette
+
+CHANGES VERSION 0.9.19
+---------------
+MINOR UPDATE
+    - figures changes in second vignette
+    - small changes in README
+
+CHANGES VERSION 0.9.18
+---------------
+MINOR UPDATE
+    - second vignettte for GNPS use with necessary graphml and png files
+    - small changes
+
+CHANGES VERSION 0.9.17
+---------------
+MINOR UPDATE
+    - add some tests (plotting and selection)
+    - update functions description
+
+CHANGES VERSION 0.9.16
+---------------
+MINOR UPDATE
+    - remove old .Rmd and .html for the first vignette
+
+CHANGES VERSION 0.9.15
+---------------
+MINOR UPDATE
+    - add figures to README.md
+
+CHANGES VERSION 0.9.14
+---------------
+MINOR UPDATE
+    - add README.md
+    - main vignette updated (with P.nordicum for now)
+    - m2l.rda updated in data folder 
+
+CHANGES VERSION 0.9.13
+----------------
+MINOR UPDATE 
+    - change the mgf et csv files for the main vignette (*P. nordicum* version 2024)
+    - changes search for cliques in GNPS network: consider all the cliques and all the high similarity edges instead of all the cliques in one particular cover of the graph (one vertex belongs to only one clique)
+    - when search for better pattern explaining a component: make possible to return more than one pattern (parameter *top* in *findPatternsExplainingComponents* function)
+    - changes for plotting patterns:
+         possible export in PDF
+         possible to color some edges in the pattern (ids of edges to color in the parameter *colored_edges* to give to the plot function)
+         some changes in the function *plot_pattern_ggplot* to have title and colors for peaks
+    - add some comments in the main algorithm part
+
+
+CHANGES VERSION 0.9.12
+----------------
+MINOR UPDATE
+    - plotPatterns now print more information about patterns (molecules information, mass differences information...)
+        (export possible in PDF)
+    - changes in the pattern graph display: PP instead of M and total mz mean
+
+CHANGES VERSION 0.9.11
+----------------
+MINOR UPDATE
+    - new plotting of patterns occurrences with ggplot (plotPatterns parameters: v_ggplot=TRUE, export_pdf=FALSE)
+    (includes mz values of peaks and images of 2D structures if known)
+    - add column N in supplementary information and names of molecules if column name or compound in the supplementary file
+
+CHANGES VERSION 0.9.10
+----------------
+MINOR UPDATE
+    - add a function in export.R to generate the table of losses with information about the patterns
+
+CHANGES VERSION 0.9.8
+----------------
+MINOR UPDATE
+    - debug some execution errors (in formula generation)
+    - make possible to display formula or not in the DAG plots and pattern plots
+    - make possible to display dynamic or static graph plots
+
+VERSION 0.9.7
+----------------
+Version of the package in 2019
+    - Discretization of mass losses
+    - FSM algorithm for pattern detection
+    - Comparison with connected components in GNPS network

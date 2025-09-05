@@ -4,11 +4,18 @@
 \alias{getExtendedSpec}
 \title{Return the spectrum considered by mineMS2 when building the graph.}
 \usage{
-getExtendedSpec(spec, ppm = 5, dmz = 0.02, removeSup = TRUE,
-  addPrecursor = TRUE, maxNum = NULL, relInt = TRUE)
+getExtendedSpec(
+  spec,
+  ppm = 5,
+  dmz = 0.02,
+  removeSup = TRUE,
+  addPrecursor = TRUE,
+  maxNum = NULL,
+  relInt = TRUE
+)
 }
 \arguments{
-\item{spec}{A "Spectrum2" object as defined in msnBase}
+\item{spec}{A "Spectrum2" object as defined in MSnBase}
 
 \item{ppm}{A ppm parameter to match the precursor}
 

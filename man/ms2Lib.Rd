@@ -5,45 +5,50 @@
 \alias{ms2Lib-constructor}
 \title{ms2Lib constructor}
 \usage{
-ms2Lib(x, suppInfos = NULL, ids = NULL, intThreshold = NULL,
-  infosFromFiles = FALSE)
+ms2Lib(
+  x,
+  suppInfos = NULL,
+  ids = NULL,
+  intThreshold = NULL,
+  infosFromFiles = FALSE
+)
 }
 \arguments{
 \item{x}{May be one of the following
 \itemize{
-\item A character vector giving the path to a drictory full of readable format.
-\item A list of spectrum2 object which will be integrated directly.
-\item A single .mgfspectrum regrouping multiple files.
+\item A character vector giving the path to a directory full of readable format.
+\item A list of Spectrum2 objects which will be integrated directly.
+\item A single .mgf file regrouping multiple spectra.
 }}
 
-\item{suppInfos}{Supplementary information to be associated to the spectra.
-It should be of the same size as the number of spectra. If there is a "file" column, this
-column is used to match the filenames. A "composition" or "formula" fields may also be present, and is then used to set the
+\item{suppInfos}{Data frame containing the metadata to be associated to the spectra.
+It should be of the same size as the number of spectra. If there is a 'file' column, this
+column is used to match the file names. A 'formula' fields may also be present, and is then used to set the
 formula of the molecules.}
 
 \item{ids}{A supplementary vector giving a set of ids to design the spectra. It may be any character vector which
 does not start with \code{'P', 'L', 'S'} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
-and it contains an id fields, it will be used. If no ids are furnished, an id will be generated for each spectra in the form \code{'S1', 'S2', ..., 'SN'}
+and if it contains an id fields, it will be used. If no ids are furnished, an id will be generated for each spectra in the form \code{'S1', 'S2', ..., 'SN'}
 where N is the number of furnished spectra.}
 
 \item{intThreshold}{The intensity threshold used to filter out the peaks.}
 
-\item{infosFromFiles}{Shall the other informations present in the files be added to the supplementary infos.}
+\item{infosFromFiles}{Shall the other information present in the files be added to the supplementary data (default: FALSE)}
 }
 \description{
-Create a ms2Lib object from file sin the correct format. Eventually add some supplementary informations given in a file. These supplementary informations
-may notably include the composition or the ofrmula of the molecules, which will then be used to plot the created graphs..
+Create a ms2Lib object from files in the correct format. Eventually add some supplementary data given in a tsv file. 
+This supplementary information may notably include the 'name' and the 'formula' of the molecules.
 }
 \examples{
 #We locate the example file
 path_demo <- system.file("dataset",package="mineMS2")
-path_mgf <- file.path(path_demo,"ex_mgf.mgf")
+path_mgf <- file.path(path_demo,"pnordicum_ms2_spectra.mgf")
 
 #Simple import
 m2l <- ms2Lib(path_mgf)
 
-#Import inculding some file formula
-supp_infos_path <- file.path(path_demo,"ex_supp_infos.csv")
+#Import including some file formula
+supp_infos_path <- file.path(path_demo,"pnordicum_ms2_info.tsv")
 supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
 m2l <- ms2Lib(path_mgf,suppInfos = supp_infos)
 }

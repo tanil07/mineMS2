@@ -22,9 +22,7 @@ std::string int_to_string(int val){
 Rcpp::List subgraph_container::exportMinedPatternsRcpp(){
 
   //We generate the ids, on for the datasets, one for the nodes.
-  int count_M = 0;
-  int count_I = 0;
-  int tot_count = 0;
+
   //Rcpp::Rcerr << "IN";
   //We iterate on the full vector.
   int num_patterns = numPatterns();

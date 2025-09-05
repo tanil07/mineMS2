@@ -2,31 +2,38 @@
 % Please edit documentation in R/firstpassCoupling_gnps.R
 \name{findGNPSComponents}
 \alias{findGNPSComponents}
-\title{Find the annotable component of a GNPS network.}
+\title{Extract the components of a molecular network}
 \usage{
-findGNPSComponents(net, minSize = 3, pairThreshold = 0.9,
-  vname = "cluster index", eattr = "cosine_score",
-  convert_component = TRUE)
+findGNPSComponents(
+  net,
+  minSize = 3,
+  pairThreshold = 0.9,
+  vname = "cluster index",
+  eattr = "cosine_score"
+)
 }
 \arguments{
-\item{net}{A gnps network}
+\item{net}{A GNPS network}
 
 \item{minSize}{The minimum size of the detected clique.}
 
 \item{pairThreshold}{A threshold used to discard the edges to detect components.}
 
-\item{vname}{The name of the exported index of the component as verte attribute.}
+\item{vname}{The name of the exported index of the component as vertex attribute.}
 
 \item{eattr}{The name of the considered similarity measure on the network.}
-
-\item{convert_component}{Shall the components be}
 }
 \value{
-A list of the componets to be checked.
+A list of the components to be checked.
 }
 \description{
-Extract the annotated compoents of a network, at the moment, the extracted compoents are limited ot the clique.
+Extract the components of a molecular network (the cliques, the connected components and the high similarity pairs)
 }
 \examples{
-print("Examples to be put here")
+data(molnet_df)
+molnet_igraph <- igraph::graph_from_data_frame(molnet_df$edges,
+                 directed = FALSE, vertices = molnet_df$vertices)
+list_components <- findGNPSComponents(molnet_igraph, minSize = 3,
+                    pairThreshold = 0.9)
+print(list_components)
 }

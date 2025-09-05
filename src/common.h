@@ -3,10 +3,33 @@
 
 #include <tuple>
 
+#define BOOST_NO_AUTO_PTR
 
-#include <boost/graph/graph_traits.hpp>
-#include <boost/graph/adjacency_list.hpp>
+#ifdef __APPLE__
+    _Pragma("clang diagnostic push")
+    _Pragma("clang diagnostic ignored \"-Wnonnull\"")
+    _Pragma("clang diagnostic ignored \"-Wparentheses\"")
+    _Pragma("clang diagnostic ignored \"-Wconditional-uninitialized\"")
+
+    #include <boost/graph/graph_traits.hpp>
+    #include <boost/graph/adjacency_list.hpp>
+
+    _Pragma("clang diagnostic pop")
+#else
+    _Pragma("GCC diagnostic push")
+    _Pragma("GCC diagnostic ignored \"-Wnonnull\"")
+    _Pragma("GCC diagnostic ignored \"-Wparentheses\"")
+    _Pragma("GCC diagnostic ignored \"-Wmaybe-uninitialized\"")
+
+    #include <boost/graph/graph_traits.hpp>
+    #include <boost/graph/adjacency_list.hpp>
+
+    _Pragma("GCC diagnostic pop")
+#endif 
+
+
 #include <boost/functional/hash.hpp>
+
 
 #define K_PATH_ROOT -1
 #define NULL_LABEL -1
@@ -77,7 +100,7 @@ typedef boost::adjacency_list<
 typedef boost::graph_traits<ktree> graphTraitst;
 typedef boost::graph_traits<ktree>::vertex_descriptor Vertext;
 
-//Occurences list
+//Occurrences list
 typedef std::map<Vertext, std::set<occ> > MapOccurrences;
 
 
@@ -164,7 +187,7 @@ struct less_than
 {
     inline bool operator() (const Extension& ext1, const Extension& ext2)
     {
-        return ((std::get<0>(ext1) < std::get<0> (ext2)) |
+        return ((std::get<0>(ext1) < std::get<0> (ext2)) ||
                 (std::get<2> (ext1) < std::get<2> (ext2)));
     }
 };

@@ -1,0 +1,19 @@
+comment: false
+
+coverage:
+  range: 50...70 # custom range of coverage colors from red -> yellow -> green
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+        informational: true
+    patch:
+      default:
+        target: auto
+        threshold: 1%
+        informational: true
+
+codecov:
+  token: 13978ecb-5fcc-4b91-b3fd-39925653ed12
+

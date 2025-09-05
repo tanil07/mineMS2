@@ -4,21 +4,33 @@
 \alias{select}
 \title{Selection function}
 \usage{
-select(m2l, ids, vals = c("P", "S", "L"))
+select(m2l, ids, vals = c("P", "S"))
 }
 \arguments{
 \item{m2l}{An ms2Lib object.}
 
-\item{ids}{Valid IDs of objects.}
+\item{ids}{Valid IDs of objects (spectra or m/z differences)}
 
-\item{vals}{the type of value to be returned. Only certain combinations are allowed.}
+\item{vals}{the type of values to be returned. Only certain combinations are allowed: we can search for spectra (S) in patterns (P), or m/z differences (L) in spectra (S) or patterns (P)}
 }
 \value{
-The objects of the correspodning type.
+The objects of the corresponding type.
 }
 \description{
-Selection function
+Return spectra objects, that contain particular patterns, or m/z differences objects that are present in particular patterns or spectra.
 }
 \examples{
-print("Examples to be put here")
+data(m2l)
+
+## Search for the patterns in which appear the spectrum S1
+select(m2l, "S1", "P")
+
+## Search for the patterns in which appear the m/z difference L1
+select(m2l, "L1", "P")
+
+## Search for the spectra in which appear the m/z difference L1
+select(m2l, "L1", "S")
+
+## can be combined with the findMz function
+select(m2l, findMz(m2l, mz=147, "L", ppm=8, dmz=0.3), "P")
 }

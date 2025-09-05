@@ -2,31 +2,37 @@
 % Please edit documentation in R/formulaGeneration.R
 \name{findFormula}
 \alias{findFormula}
-\title{findFormula function}
+\title{Fast formula generator}
 \usage{
-findFormula(mz, tol, atoms = list(H = 50, C = 25, N = 10, O = 20),
-  rules = rep(TRUE, 7), mgraph = TRUE, scomp)
+findFormula(
+  mz,
+  tol,
+  atoms = list(H = 50, C = 25, N = 10, O = 20),
+  rules = rep(TRUE, 7),
+  mgraph = TRUE,
+  scomp
+)
 }
 \arguments{
-\item{mz}{The mass to b decomposed.}
+\item{mz}{The mass to be decomposed.}
 
 \item{tol}{The tolerance in ppm.}
 
-\item{atoms}{A of constraint on the number of atoms.}
+\item{atoms}{A set of constraint on the number of atoms.}
 
-\item{rules}{Which of the seven golden rules should be respected}
+\item{rules}{Which of the seven golden rules should be respected (by default, all)}
 
 \item{mgraph}{Shall the molecular formula possible admit a molecular graph.}
 
-\item{scomp}{Shall only single component molecular grpah be generated (Not H4O2 for example)}
+\item{scomp}{Shall only single component molecular graph be generated (Not H4O2 for example)}
 }
 \value{
 A list of the valid formula.
 }
 \description{
-Fast formula generator using the algoirthm described by Bocker
-2010. 100 times faster than rcdk.
+Fast formula generator using the algorithm described by Bocker, 2010
+100 times faster than rcdk.
 }
 \examples{
-findFormula(34,tol=0.1,scomp=FALSE)
+findFormula(mz = 34, tol = 0.1, scomp = FALSE)
 }

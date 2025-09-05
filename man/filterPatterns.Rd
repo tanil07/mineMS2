@@ -2,11 +2,20 @@
 % Please edit documentation in R/filters.R
 \name{filterPatterns}
 \alias{filterPatterns}
-\title{Title}
+\title{Filter the patterns with intensity coverage}
 \usage{
-filterPatterns(m2l, filter_function = function(x, threshold, num) {    
-  return(sum(x@occurences[, "coverage"] > threshold) >= num) },
-  args = list(threshold = 0.2, num = 2))
+filterPatterns(
+  m2l,
+  filter_function = function(x, threshold, num) {
+     if (!("coverage" \%in\%
+    colnames(x@occurrences))) 
+        
+    stop("Please run calculateCoverage before filtering patterns")
+    
+    return(sum(x@occurrences[, "coverage"] > threshold) >= num)
+ },
+  args = list(threshold = 0.2, num = 2)
+)
 }
 \arguments{
 \item{m2l}{The ms2Lib object ot be filtered}
@@ -16,11 +25,17 @@ filterPatterns(m2l, filter_function = function(x, threshold, num) {
 \item{args}{A list of supplementary argument to filter_function}
 }
 \value{
-The supplementary ms2Lib arguments.
+The supplementary ms2Lib arguments (reducedPatterns argument)
 }
 \description{
-Title
+A function to filter the patterns according to their coverage of the dataset. 
+If less than two spectra in the pattern have a coverage above a threshold of 0.2, then the pattern is discarded.
 }
 \examples{
-print("Exmaples to be put here.")
+## the coverage must have been calculated before (if not, an error occurs)
+m2l <- calculateCoverage(m2l)
+
+m2l <- filterPatterns(m2l)
+print(length(mm2Patterns(m2l)))
+print(length(mm2ReducedPatterns(m2l)))
 }

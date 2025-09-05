@@ -2,7 +2,7 @@
 % Please edit documentation in R/allGenerics.R
 \name{vrange}
 \alias{vrange}
-\title{Set the componetns of an ms2 library object.}
+\title{Set the components of an ms2 library object.}
 \usage{
 vrange(m2l, type, ...)
 }
@@ -14,7 +14,7 @@ vrange(m2l, type, ...)
 \item{...}{supplementary argument passed to the methods}
 }
 \description{
-`vrange` return the range of the differnet elemnts of an ms2Lib object.
+`vrange` return the range of the different elements of an ms2Lib object.
 }
 \details{
 This is a generic function: methods can be defined for it directly

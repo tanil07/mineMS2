@@ -1,33 +1,72 @@
-#' @include LossFormula.R
+#' @include MzDiffFormula.R
 
 
 ###CORRESPONDANCE TABLE
 CORR_TABLE <- list("D"="dags","S"="spectra","P"="patterns","L"="losses")#"F"="fragments"
 UNKNOWN_FORMULA <- NA_character_
 
-
-
 ###Accessors
+
+#' Methods on ms2lib objects
+#' 
+#' Different atttributes from a ms2Lib object can be accessed using methods.
+#' 
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' spectra <- mm2Spectra(m2l)
 setMethod("mm2Spectra","ms2Lib",function(m2l){
 	return(m2l@spectra)
 })
 
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' infos <- mm2SpectraInfos(m2l)
 setMethod("mm2SpectraInfos","ms2Lib",function(m2l){
 	return(m2l@spectraInfo)
 })
 
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' dags <- mm2Dags(m2l)
 setMethod("mm2Dags","ms2Lib",function(m2l){
 	return(m2l@dags)
 })
 
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples
+#' 
+#' ids <- mm2Ids(m2l)
 setMethod("mm2Ids","ms2Lib",function(m2l){
 	return(m2l@ids)
 })
 
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' atoms <- mm2Atoms(m2l)
 setMethod("mm2Atoms","ms2Lib",function(m2l){
   return(m2l@atoms)
 })
 
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' edge_labels <- mm2EdgesLabels(m2l)
 setMethod("mm2EdgesLabels","ms2Lib",function(m2l){
 	return(m2l@losses)
 })
@@ -36,34 +75,49 @@ setMethod("mm2NodesLabels","ms2Lib",function(m2l){
 	return(m2l@fragments)
 })
 
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' patterns <- mm2Patterns(m2l)
 setMethod("mm2Patterns","ms2Lib",function(m2l){
 	return(m2l@patterns)
 })
 
+#' @rdname ms2Lib-methods
+#' 
+#' @export
+#' @examples 
+#' 
+#' reduced_patterns <- mm2ReducedPatterns(m2l)
 setMethod("mm2ReducedPatterns","ms2Lib",function(m2l){
 	return(m2l@reducedPatterns)
 })
 
 
 ###Setter
+
 setMethod("mm2Spectra<-","ms2Lib",function(m2l,value){
 	m2l@spectra <- value
 	m2l
 })
+
 
 setMethod("mm2SpectraInfos<-","ms2Lib",function(m2l,value){
 	m2l@spectraInfo <- value
 	m2l
 })
 
-setMethod("mm2Ids<-","ms2Lib",function(m2l,value,check=TRUE){
-	if(check & any(startsWith(value,names(CORR_TABLE)))){
-		stop("Forbidden prefixes for ids: ",paste(names(CORR_TABLE),collapse = ", "),
-			 " found in ",value[startsWith(value,names(CORR_TABLE))])
-	}
+
+setMethod("mm2Ids<-","ms2Lib",function(m2l,value){
+	# if(check & any(startsWith(value,names(CORR_TABLE)))){
+	# 	stop("Forbidden prefixes for ids: ",paste(names(CORR_TABLE),collapse = ", "),
+	# 		 " found in ",value[startsWith(value,names(CORR_TABLE))])
+	# }
 
 	if(length(value) != length(mm2Spectra(m2l))){
-		stop("Number of furnished ids (",paste(length(value)),
+		stop("Number of provided ids (",paste(length(value)),
 			 ") should equal to spectra number (",paste(length(mm2Spectra(m2l))),")")
 	}
 	m2l@ids <- value
@@ -71,29 +125,28 @@ setMethod("mm2Ids<-","ms2Lib",function(m2l,value,check=TRUE){
 	m2l
 })
 
-#' Change the id of spectrum of an ms2Lib object
-#'
-#' Return an ms2Lib object with the new ids
-#'
-#' @details Changing the ids of spectra, which can be useful to plot them.
+
+
+#' @details For the `setIds` method, changing the ids of spectra can be useful to plot them.
 #'
 #' @param m2l An m2Lib object.
 #' @param ids The new ids of an ms2Lib objects
 #'
-#' @return An ms2Lib object with modified ids
 #' @export
+#' 
+#' @rdname ms2Lib-methods
 #'
 #' @examples
 #' #Loading the data
 #' data(m2l)
 #' 
 #' #Plot with all ids
-#' plotOccurences(m2l,"P15")
+#' plotOccurrences(m2l,"P15")
 #' 
-#' m2l <- setIds(m2l,paste("spectrum n",1:length(m2l@spectra),sep=""))
+#' m2l <- setIds(m2l,paste("spectrum n",1:length(mm2Spectra(m2l)),sep=""))
 #' 
 #' #Plot with the new ids
-#' plotOccurences(m2l,"P15")
+#' plotOccurrences(m2l,"P15")
 setMethod("setIds","ms2Lib",function(m2l,ids){
 	mm2Ids(m2l) <- ids
 	m2l
@@ -106,20 +159,24 @@ setMethod("mm2Dags<-","ms2Lib",function(m2l,value){
 	m2l
 })
 
+
 setMethod("mm2EdgesLabels<-","ms2Lib",function(m2l,value){
 	m2l@losses <- value
 	m2l
 })
+
 
 setMethod("mm2NodesLabels<-","ms2Lib",function(m2l,value){
 	m2l@fragments <- value
 	m2l
 })
 
+
 setMethod("mm2Patterns<-","ms2Lib",function(m2l,value){
 	m2l@patterns<- value
 	m2l
 })
+
 
 setMethod("mm2ReducedPatterns<-","ms2Lib",function(m2l,value){
 	m2l@reducedPatterns<- value
@@ -136,11 +193,10 @@ isLoss <- function(m2l){
 	m2l@loss
 }
 
-##List of the recognised format currently
 
-#' Get the supported input forma for mineMS2
-#'
-#' @return A character vector lsiting the supported format
+#' Get the supported input format for mineMS2
+#' For now, the only supported format is mgf.
+#' @return A character vector listing the supported format
 #' @export
 #'
 #' @examples
@@ -150,7 +206,7 @@ recognisedFormat <- function(){
 }
 
 
-###Parse an mgf and return a list of the Spectrum2 object
+###Parse an mgf and return a list of the Spectrum2 objects
 parse_mgf_spectrum2 <- function(filename){
 	msnexp <- MSnbase::readMgfData(filename)
 	lspec <- vector(mode="list",length=length(msnexp))
@@ -165,7 +221,7 @@ parse_mgf_spectrum2 <- function(filename){
 	return(rlist)
 }
 
-###Check the format fo a list of files.
+###Check the format of a list of files.
 checkFormat <- function(x){
 	rf <- recognisedFormat()
 	splitted <- strsplit(x,".",fixed=TRUE)
@@ -181,12 +237,12 @@ parseMS2file_line <- function(x){
 
 make_initial_title <- function(spec_infos){
 	mz_str <- sprintf("%0.3f",spec_infos[,"mz.precursor"])
-	paste("Precursor : ",mz_str," (S",1:nrow(spec_infos),")",sep="")
+	paste("precursor mz: ",mz_str," (S",1:nrow(spec_infos),")",sep="")
 }
 
 
 convert_formula <- function(form_vec){
-  ###We remoe the whitespaces and the special character
+  ###We remove the white spaces and the special character
   form_vec <- trimws(str_replace(form_vec,"\\?|\\-|\\+|\\-",""))
   
   pnf <- which(is.na(form_vec)|(nchar(form_vec)==0))
@@ -196,41 +252,39 @@ convert_formula <- function(form_vec){
   form_vec
 }
 
-
-
 #' ms2Lib constructor
 #'
-#' Create a ms2Lib object from file sin the correct format. Eventually add some supplementary informations given in a file. These supplementary informations
-#' may notably include the composition or the ofrmula of the molecules, which will then be used to plot the created graphs..
+#' Create a ms2Lib object from files in the correct format. Eventually add some supplementary data given in a tsv file. 
+#' This supplementary information may notably include the 'name' and the 'formula' of the molecules.
 #'
 #' @export
 #' @param x May be one of the following
 #' \itemize{
-#' \item A character vector giving the path to a drictory full of readable format.
-#' \item A list of spectrum2 object which will be integrated directly.
-#' \item A single .mgfspectrum regrouping multiple files.
+#' \item A character vector giving the path to a directory full of readable format.
+#' \item A list of Spectrum2 objects which will be integrated directly.
+#' \item A single .mgf file regrouping multiple spectra.
 #' }
-#' @param suppInfos Supplementary information to be associated to the spectra.
-#' It should be of the same size as the number of spectra. If there is a "file" column, this
-#' column is used to match the filenames. A "composition" or "formula" fields may also be present, and is then used to set the
+#' @param suppInfos Data frame containing the metadata to be associated to the spectra.
+#' It should be of the same size as the number of spectra. If there is a 'file' column, this
+#' column is used to match the file names. A 'formula' fields may also be present, and is then used to set the
 #' formula of the molecules.
 #' @param ids A supplementary vector giving a set of ids to design the spectra. It may be any character vector which
 #' does not start with \code{'P', 'L', 'S'} as they are used internally by mineMS2. Alternatively if a suppInfos table is furnished
-#' and it contains an id fields, it will be used. If no ids are furnished, an id will be generated for each spectra in the form \code{'S1', 'S2', ..., 'SN'}
+#' and if it contains an id fields, it will be used. If no ids are furnished, an id will be generated for each spectra in the form \code{'S1', 'S2', ..., 'SN'}
 #' where N is the number of furnished spectra.
 #' @param intThreshold The intensity threshold used to filter out the peaks.
-#' @param infosFromFiles Shall the other informations present in the files be added to the supplementary infos.
+#' @param infosFromFiles Shall the other information present in the files be added to the supplementary data (default: FALSE)
 #' @aliases ms2Lib ms2Lib-constructor
 #' @examples
 #' #We locate the example file
 #' path_demo <- system.file("dataset",package="mineMS2")
-#' path_mgf <- file.path(path_demo,"ex_mgf.mgf")
+#' path_mgf <- file.path(path_demo,"pnordicum_ms2_spectra.mgf")
 #' 
 #' #Simple import
 #' m2l <- ms2Lib(path_mgf)
 #' 
-#' #Import inculding some file formula
-#' supp_infos_path <- file.path(path_demo,"ex_supp_infos.csv")
+#' #Import including some file formula
+#' supp_infos_path <- file.path(path_demo,"pnordicum_ms2_info.tsv")
 #' supp_infos <- read.table(supp_infos_path,header=TRUE,sep=";")
 #' m2l <- ms2Lib(path_mgf,suppInfos = supp_infos)
 ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFromFiles = FALSE){
@@ -242,19 +296,19 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 
 	suppMetadata <- NULL
 	###The kind of the acquisition is assessed there.
-	if(class(x)=="list"){
+	if(is.list(x)){
 		if(all(sapply(x,class) == "Spectrum2")){
 			mm2Spectra(m2l) <- x
 		}else{
 			message("Unrecognized input, use one of the constructor described in the ms2Lib doc.")
 		}
 
-	}else if(class(x)=="character"){
+	}else if(is.character(x)){
 		origin <- "file"
 		if(length(x)==1){
 		###Single mgf file or dir
 			if(dir.exists(x)){
-				lfiles <- list.files(x,full.names = TRUE)
+				lfiles <- list.files(x,full.names = TRUE) ## full path
 				exts <- checkFormat(lfiles)
 				message("Reading ",length(exts)," files with format(s): ",unique(exts))
 				
@@ -270,24 +324,24 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 				
 			}
 		}else{
-			###Case of multiples singles spectra
+			###Case of multiple individual spectra
 			exts <- checkFormat(x)
 			message("Reading ",length(exts)," files with format(s): ",unique(exts))
+			
 			mm2Spectra(m2l) <- apply(matrix(c(x,exts),ncol=2,byrow = FALSE),1,parseMS2file_line)
+			
 		}
 	}
 
 	mm2Spectra(m2l) <- do.call("c",mm2Spectra(m2l))
 	
-	if(length(mm2Spectra(m2l))>1000){
-	  stop("At the moment it is impossible ot process more than 1000 spectra at the same time.")
-	}
+	#if(length(mm2Spectra(m2l))>2000){
+	#  stop("At the moment it is impossible ot process more than 2,000 spectra at the same time.")
+	#}
 
-
-	###data.frame is initialized. With the mass of the precusors
+	###data.frame is initialized. With the mass of the precursors
 	temp_df <- data.frame("mz.precursor" = sapply(mm2Spectra(m2l),function(x){
 												  precursorMz(x)}))
-
 
 	if(!is.null(intThreshold)){
 		message("Removing peaks with an intensity lower than ",intThreshold)
@@ -310,34 +364,52 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	}
 
 	temp_df$title <- make_initial_title(temp_df)
-
-	##Adding the supplementary information if necessary while check for an id fileds.
+	
+	##Adding the supplementary information if necessary while check for an id fields.
 	if(!is.null(suppInfos)){
 		if(nrow(suppInfos)!= length(m2l@spectra)){
 			stop("The number of suppInfos rows (",nrow(suppInfos),
 				 ") do not match the number of spectra (",
 				 length(m2l@spectra),")furnished")
 		}else{
+			## add a N column if not
+			if(!("N" %in% colnames(suppInfos)))
+			{	
+				df_N <- data.frame(N = seq(1, nrow(suppInfos)))
+				suppInfos <- cbind(suppInfos, df_N)
+			}
+			# ## if name or compounds column
+			# if("name" %in% colnames(suppInfos))
+			# {
+			# 	colnames(suppInfos)[which(colnames(suppInfos) == "name")] <- "name"
+			# }
+			# if("compound" %in% colnames(suppInfos))
+			# {
+			# 	colnames(suppInfos)[which(colnames(suppInfos) == "compound")] <- "name"
+			# }
+			# if("Compound" %in% colnames(suppInfos))
+			# {
+			# 	colnames(suppInfos)[which(colnames(suppInfos) == "Compound")] <- "name"
+			# }
+
 			if("file" %in% colnames(suppInfos)){
 				pm <- match(temp_df$file,suppInfos$file)
-				if(any(is.na(pm))) stop('"file" column furnished, but there was an error matching it against files.')
+				if(any(is.na(pm))) stop('"file" column provided, but there was an error matching it against files.')
 
 				temp_df <- cbind(temp_df,suppInfos[pm,])
 			}else{
 				temp_df <- cbind(temp_df,suppInfos)
 			}
-
 			if(("id" %in% colnames(suppInfos)) &
 			   (is.null(ids))){
-				mm2Ids(m2l) <- suppInfos[,"id"]
+				mm2Ids(m2l) <- as.character(suppInfos[,"id"])
 			}
 		}
-
 	}else{
 		if(!is.null(ids)){
 			mm2Ids(m2l) <- ids
 		}else{
-			mm2Ids(m2l,check=FALSE) <- paste("S",1:length(mm2Spectra(m2l)),sep="")
+			mm2Ids(m2l) <- paste("S",1:length(mm2Spectra(m2l)),sep="")
 		}
 	}
 	
@@ -361,10 +433,27 @@ ms2Lib <- function(x, suppInfos = NULL,ids = NULL, intThreshold = NULL, infosFro
 	m2l
 }
 
-
+#' Get all the precursor formulas of the spectra in the dataset
+#' 
+#' If given as supplementary information, this function returns all
+#' the precursor formulas of the spectra in the dataset
+#' 
+#' @param m2l a ms2Lib object
+#' 
+#' @export
+#' 
+#' @examples 
+#' data(m2l)
+#' 
+#' get_formula(m2l)
 get_formula <- function(m2l){
   vf <- match("formula",tolower(trimws(colnames(m2l@spectraInfo))))
   return(m2l@spectraInfo[,vf])
+}
+
+getFormula <- function(m2l){
+  vnames <- tolower(colnames(m2l@spectraInfo))
+  return(as.character(m2l@spectraInfo[,match("formula",vnames)]))
 }
 
 #' Show an ms2Lib object.
@@ -383,15 +472,15 @@ get_formula <- function(m2l){
 setMethod("show","ms2Lib",function(object){
 	cat("An ms2Lib object containing",length(object),"spectra.\n")
   if(length(mm2Atoms(object))!=0){
-	  cat("It has",nrow(mm2EdgesLabels(object)),"edges labels built with atoms",paste(names(mm2Atoms(object)),collapse=","),".\n")
+	  cat("It has",nrow(mm2EdgesLabels(object)),"edge labels built with atoms",paste(names(mm2Atoms(object)),collapse=","),".\n")
   }
-  cat("The available supplementary informations are:",colnames(mm2SpectraInfos(object)),"\n")
-	cat("It contains: ",length(mm2Patterns(object)),"patterns\n")
-	if(length(mm2ReducedPatterns(object))!=0) cat("It has been reduced to ",
-											   length(mm2ReducedPatterns(object)),"patterns")
+  cat("The available spectral metadata are:",colnames(mm2SpectraInfos(object)),"\n")
+	cat("It contains:",length(mm2Patterns(object)),"patterns\n")
+	if(length(mm2ReducedPatterns(object))!=0) cat("It has been reduced to",
+											   length(mm2ReducedPatterns(object)), "patterns")
 })
 
-#' Number of patterns of an mss2Lib object
+#' Number of patterns of an ms2Lib object
 #'
 #' Return the number of mined patterns of an ms2Lib object
 #'
@@ -408,45 +497,42 @@ setMethod("length","ms2Lib",function(x){
 	return(length(mm2Spectra(x)))
 })
 
-getFormula <- function(m2l){
-  vnames <- tolower(colnames(m2l@spectraInfo))
-  return(as.character(m2l@spectraInfo[,match("formula",vnames)]))
-}
 
 
-
-#' Mine recurrent subgraph from a set of graphs.
+#' Mine recurrent subgraphs from a set of graphs.
 #'
-#' Mine all the complete closed subgraphs from a set of preconstructed mass graphs objects.
+#' Mine all the complete closed subgraphs from a set of preconstructed fragmentation graphs objects.
 #'
-#' @param m2l An m2Lib object to be processed.
-#' @param count The number of spectra in which the spectrum need to be sampled.
-#' @param sizeMin The minimum size of the mined patterns.
-#' @param precursor Should only pattern coming from the root be mined.
+#' @param m2l ms2Lib object to be processed
+#' @param count Minimum number of spectra in which a pattern is found; must be at least 2 [default: 2]
+#' @param sizeMin Minimum size of the mined patterns [default: 1]
+#' @param precursor Should only patterns coming from the root be mined? [default: FALSE]
 #'
-#' @return The filled ms2Lib object.
+#' @return The updated ms2Lib object with the mined patterns.
 #' @export
+#' 
+#' @rdname mineClosedSubgraphs
 #'
 #' @examples
 #' #Loading the data
 #' data(m2l)
 #' 
 #' #Mining the subgraphs
-#' m2l <- m2l <- mineClosedSubgraphs(m2l,count=2,sizeMin = 1)
-setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, precursor = FALSE){
+#' m2l <- mineClosedSubgraphs(m2l)
+setMethod("mineClosedSubgraphs", "ms2Lib", function(m2l, count = 2, sizeMin = 1, precursor = FALSE){
 	if(count<2){
-		warning("'count' parameters set to ",count," it is therefore set to 2.")
+		warning("'count' parameter too low; value set to 2.")
 		count <- 2
 	}
 
 
-	###Get the data.frame correspoding to the sizes.
+	###Get the data.frame corresponding to the sizes.
 	processing <- sapply(mm2Dags(m2l),function(x){
 		ecount(x)>1
 	})
 
 	if(nrow(mm2EdgesLabels(m2l))==0){
-		stop("No labels constructed, use the DiscretizeMassLosses function first.")
+		stop("No labels constructed, use the discretizeMzDifferences method first.")
 	}
 
 
@@ -457,12 +543,11 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 		kTree <- 1
 	}
 
-	if(sizeMin==1&nrow(mm2EdgesLabels(m2l))>600){
-		###Wide variety of mass losses.
-		warning("sizeMin parameters set to ",sizeMin," risk of computational overhead.")
+	if (sizeMin == 1 & nrow(mm2EdgesLabels(m2l)) > 600) {
+		warning("Large amount of m/z differences (> 600): sizeMin parameter set to 2 to avoid computational overload.")
 	}
 	
-	###WE select the non empty graph to mine the patterns.
+	###We select the non empty graph to mine the patterns.
 	sel_g <- which(sapply(mm2Dags(m2l),ecount)!=0)
 	if(length(sel_g)==0) stop("No non-empty dags found.")
 
@@ -476,7 +561,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 	###Construction via fragPatternc constructor.
 	mm2Patterns(m2l) <- sapply(resRcpp$patterns,function(x,sel_idx){
 	  temp <- canonicalForm(fragPattern(x))
-	  temp@occurences[,1] <- sel_idx[temp@occurences[,1]]
+	  temp@occurrences[,1] <- sel_idx[temp@occurrences[,1]]
 	  return(temp)
 	 },USE.NAMES = FALSE,sel_idx=sel_g)
 
@@ -484,7 +569,7 @@ setMethod("mineClosedSubgraphs","ms2Lib",function(m2l, count = 2, sizeMin = 2, p
 	for(i in 1:length(m2l@patterns)) mm2Name(m2l@patterns[[i]]) <- paste("P",i,sep="")
 	m2l@reducedPatterns <- seq_along(m2l@patterns)
 
-	message("Processing finished, ",length(mm2Patterns(m2l))," patterns mined.")
+	message("Processing completed: ", length(mm2Patterns(m2l)), " patterns mined.")
 	m2l
 })
 
@@ -519,24 +604,23 @@ parseId <- function(m2l,idx){
 }
 
 mm2get <- function(m2l,arglist){
-	if(class(slot(m2l,arglist[[1]]))=="data.frame"){
+	if(is.data.frame(slot(m2l,arglist[[1]]))){
 		return(slot(m2l,arglist[[1]])[arglist[[2]],])
 	}
 	(slot(m2l,arglist[[1]]))[[arglist[[2]]]]
 }
 
-#' Return the dag correspodning to a spectra or the modif.
-#'
-#' Indexing function.
-#'
-#' @param x An ms2Lib oject.
-#' @param i The index, a string starting by S if it a spectrum, P if it's a pattern D if it's a dag, L if it's a loss
-#' F if it's a fragment.
+#' Indexing function
+#' 
+#' Return an object given its index: can be a spectrum, a pattern, a DAG or a m/z difference.
+#' 
+#' @param x An ms2Lib object.
+#' @param i The index, a string starting by S if it is a spectrum, P if it is a pattern D if it is a DAG, L if it is a m/z difference label
 #' @param j unused.
 #' @param drop unused.
 #' @param ... unused.
 #'
-#' @return A list containg the object.
+#' @return A list containing the object.
 #' @export
 #'
 #' @examples
@@ -552,9 +636,8 @@ mm2get <- function(m2l,arglist){
 #' #Extraction of a pattern
 #' m2l["P54"]
 #' 
-#' #Extraction of loss informations
+#' #Extraction of m/z difference information
 #' m2l["L20"]
-
 setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 	if(length(i)==1){
 		 temp <- mm2get(x,parseId(x,i))
@@ -570,17 +653,19 @@ setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 
 #' Plot an element given an idx
 #'
-#' The method depends of the type of the ID furnished. The following prefixes are supported:
-#' \code{'P'} A pattern is called plot method of fragPattern object.
-#' \code{'S'} A spectrum is plotted calling the Plot method of spectrum 2 object.
+#' The method depends of the type of the index furnished. The following prefixes are supported:
+#' \code{'P'} for a pattern, the plot method of fragPattern object is called (using the package igraph).
+#' \code{'D'} for a DAG, the plot_dag method is called using the package igraph.
+#' \code{'S'} for a spectrum, a spectrum is plotted calling the Plot method of Spectrum2 object.
 #' Any other value will be removed.
 #'
 #' @param x An ms2Lib oject.
 #' @param y The index, a string starting by S if it a spectrum, P if it's a pattern or D if it's a dag.
-#' @param title The title of the plot, only used for dag and spectrum.
+#' @param title The title of the plot. If null, a title is automatically furnished.
+#' @param tkplot if TRUE, for fragmentation graphs ("D"), the plot is dynamic and displayed using tkplot, otherwise it is static.
 #' @param ... supplementary arguments to be passed by the method.
 #'
-#' @return a fragPattern object of an igraph graph object.
+#' @return a fragPattern object or nothing
 #' @export
 #'
 #' @examples
@@ -597,7 +682,7 @@ setMethod('[','ms2Lib',function(x,i,j=NULL,...,drop=TRUE){
 #' plot(m2l,"P53")
 setMethod("plot", "ms2Lib",
 		  function(x,
-		  		 y,title=NULL,
+		  		 y,title=NULL,tkplot=FALSE,
 		  		 ...) {
 		  	if(length(y)>1){
 		  		warning("A single if may be plotted on each call, plotting the first element only")
@@ -605,16 +690,15 @@ setMethod("plot", "ms2Lib",
 		  	}
 		  	rid <- parseId(x,y)
 		  	if(rid[[1]]=="patterns"){
-		  	  toccs <- x[y]@occurences[,1]
+		  	  toccs <- x[y]@occurrences[,1]
 		  	  if(is.null(title)) title <- y
 				return(plot(x[y],title = title,dags=mm2Dags(x),edgeLabels=(mm2EdgesLabels(x)),
-				     atoms=names(x@atoms),formula=get_formula(x)[toccs],...))
+				     atoms=names(x@atoms),formula=get_formula(x)[toccs],tkplot=tkplot,...))
 		  	}else if(rid[[1]]=="spectra"){
 		  		MSnbase:::plot_Spectrum2(x[y],full=TRUE,...)
 		  	}else if(rid[[1]]=="dags"){
 		  	  if(is.null(title)) title="Fragmentation Graph"
-		  		plot_dag(x[y],idx=y,edgeLabels=(mm2EdgesLabels(x)),atoms=x@atoms,title=title,...)
-		  		# stop("DAGS plotting not implemented at the moment.")
+		  		plot_dag(x[y],idx=y,edgeLabels=(mm2EdgesLabels(x)),atoms=x@atoms,title=title,tkplot=tkplot,...)
 		  	}else if(rid[[1]]=="losses"){
 		  		stop("Impossible to plot a loss")
 		  	}else if(rid[[1]]=="fragments"){
@@ -622,9 +706,7 @@ setMethod("plot", "ms2Lib",
 		  	}
 })
 
-#
 # setMethod('[[','MSMSacquisition',function(x,i,j,...,drop=TRUE){
-
 
 ####Search and info functions
 findMz.S <- function(m2l,mz,tol){
@@ -641,30 +723,30 @@ findMz.L <- function(m2l,mz,tol){
 	paste("L",matched,sep="")
 }
 
-#' Search in an ms2Lib object?
-#'
-#' Search an ms2Lib object givena tolerance in ppm or dmz.
+#' Finding a spectrum or a m/z difference
+#' 
+#' Search for a spectrum (S) or a m/z difference (L) in an ms2Lib object given a tolerance in ppm or dmz.
 #'
 #' @param m2l ms2Lib object
 #' @param mz A double giving the mass to be searched.
-#' @param type The data to be search, "S" for spectra and "L" for losses
+#' @param type The data to be search, "S" for spectra and "L" for m/z differences
 #' @param ppm The tolerance in ppm
 #' @param dmz The minimum tolerance in Da, if the ppm tolerance is lower in Da than this threshold, this threshold is selected.
 #'
-#' @return A character vector giving the IDs of the found losses or elements.
+#' @return A character vector giving the IDs of the found m/z differences or elements.
 #' @export
 #'
 #' @examples
 #' #' #Loading the data
 #' data(m2l)
 #' 
-#' #Finding pattern with a precusor mass of 391.1398 with a tolerance of 0.01
-#' findMz(m2l,391.1398,dmz=0.01)
+#' #Finding a spectrum (or several spectra) with a precusor mass of 391.1398 with a tolerance of 0.01
+#' findMz(m2l, 391.1398, "S", dmz=0.01)
 #' 
-#' #Fidning a loss with a tolerance of 0.01
-#' findMz(m2l,147,"L",dmz=0.1)
+#' #Finding an m/z difference of 147 with a tolerance of 0.01
+#' findMz(m2l, 147, "L",dmz=0.1)
 findMz <- function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
-	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
+	if(!is(m2l,"ms2Lib")) stop("m2l should be an 'ms2Lib' object.")
 	type <- match.arg(type)
 	tol <- max(dmz,mz*ppm*1e-6)
 	if(type=="S"){
@@ -672,11 +754,14 @@ findMz <- function(m2l,mz,type=c("S","L"),ppm=15,dmz=0.01){
 			return(sapply(mz,findMz.S,m2l=m2l,tol=tol,simplify=FALSE))
 		}
 		return(findMz.S(m2l,mz,tol))
-	}else{
+	}else if(type == "L"){
 		if(length(mz)>1){
 			return(sapply(mz,findMz.L,m2l=m2l,tol=tol,simplify=FALSE))
 		}
 		return(findMz.L(m2l,mz,tol))
+	}
+	else{
+		stop("The type of data to search must be a spectrum (S) or an m/z difference (L)")
 	}
 }
 
@@ -686,10 +771,6 @@ getInfo.L <- function(num,m2l){
 	titles <- titles[!(titles %in% 	c("sig", "fused",
 									  "adv_loss", "pen_loss", "carb_only", "nitrogen_only", "ch_only",
 									  "full_labels", "labs"))]
-
-
-
-
 	return(mm2EdgesLabels(m2l)[
 		num,titles,drop=FALSE])
 
@@ -702,13 +783,15 @@ getInfo.S <- function(num,m2l){
 		num,c(titles),drop=FALSE])
 }
 
-#' Return the available informations on a component of in an ms2Lib object.
+#' Available information 
+#' 
+#' Return the available information on an element of an ms2Lib object.
 #'
 #' @param m2l An ms2Lib object
-#' @param ids A vector of IDs should be a spectrum or a losses.
-#' @param ... Supplementary information ot be passed to the getInfo function.
+#' @param ids A vector of IDs should be spectra or a m/z differences.
+#' @param ... Supplementary information to be passed to the getInfo function.
 #'
-#' @return A data.frame giving informations about the queried elements.
+#' @return A data.frame giving information about the queried elements.
 #' @export
 #'
 #' @examples
@@ -718,13 +801,16 @@ getInfo.S <- function(num,m2l){
 #' #Infos on 2 spectra
 #' getInfo(m2l,c("S10","S25"))
 #' 
+#' #Infos on all the spectra
+#' getInfo(m2l, "S")
+#' 
 #' #Infos on multiple losses
 #' getInfo(m2l,c("L12","L42"))
 #' 
 #' #Example combined with the findMz 
 #' getInfo(m2l,findMz(m2l,391.1398,dmz=0.01))
-getInfo <- function(m2l,ids){
-	if(class(m2l)!="ms2Lib") stop("m2l should be an 'ms2Lib' object.")
+getInfo <- function(m2l,ids,...){
+	if(!is(m2l,"ms2Lib")) stop("m2l should be an 'ms2Lib' object.")
 	authorizedValue <- c("losses","spectra")
 
 	if((length(ids)==1) && (nchar(ids)==1)){
@@ -763,14 +849,14 @@ getInfo <- function(m2l,ids){
 }
 
 
-#' Return The Range Of Iteration Of MS2Lib Object
+#' Calculate the range of iterations
 #' 
-#' Return the full range of iteration for different objects for an MS2lib object.
+#' Return the full range of iterations for different objects for an MS2lib object.
 #'
-#' @param m2l AN ms2Lib object
-#' @param type "S","L" or "P"
+#' @param m2l An ms2Lib object
+#' @param type "S" for spectra,"L" for m/z differences or "P" for patterns
 #' @param reduced Used only if "type" is set to "P", shall the filtered pattern set be returned.
-#' @param as.number If as number is selected integer are returned without the prefix.
+#' @param as.number If as.number is selected integer are returned without the prefix.
 #'
 #' @return A character vector giving the existing ids in the ms2Lib object,
 #' @export
@@ -816,7 +902,7 @@ hasPatterns <- function(m2l){
 
 setMethod("hasCoverage","ms2Lib",function(x){
   if(hasPatterns(x)){
-    return(COVERAGE_NAME %in% colnames(x@patterns[[1]]@occurences))
+    return(COVERAGE_NAME %in% colnames(x@patterns[[1]]@occurrences))
   }else{
     stop(paste("Patterns need to be computed before obtaining coverage.",sep=""))
   }
@@ -824,15 +910,13 @@ setMethod("hasCoverage","ms2Lib",function(x){
 })
 
 
-#' Calculate the coverage of all the patterns in the dataset.
+#' Calculate the coverage
 #' 
-#' Calculate the coverage, the total intensity covered by the patterns on the mass graphs.
-#'  This calculation can be qute long.
+#' @param x The ms2Lib to be computed.
 #'
-#' @param x The ms2Lib to bo computed.
-#'
-#' @return The m2l object with all the coverage calculated.
 #' @export
+#' 
+#' @rdname calculateCoverage
 #'
 #' @examples
 #' #Loading the data
